@@ -1,0 +1,44 @@
+﻿@{
+    
+    var controllerName = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+ 
+} 
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupPrint";
+    settings.CallbackRouteValues = new { Controller = controllerName, Action = "Print_PopupListLoadOnDemandPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.Modal = true;
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowMaximizeButton = true;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+
+    settings.HeaderText = "Choose Layout";
+
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("~/Views/_CrystalReport/Layout/Print_List_Partial.cshtml");
+
+    });
+
+}).GetHtml()

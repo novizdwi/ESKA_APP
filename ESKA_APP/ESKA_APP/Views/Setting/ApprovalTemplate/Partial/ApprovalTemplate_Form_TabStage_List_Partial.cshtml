@@ -1,0 +1,126 @@
+﻿@using Models;
+
+@{
+    var Id = Convert.ToInt32(Request["cbId"]);
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+    var readOnly = true;
+    if (Id != 0 && (IsAjax))
+    {
+        readOnly = false;
+    }
+}
+
+@*@model Models.Setting.ApprovalTemplate.ApprovalTemplateModel*@
+
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvApprovalTemplateStageDetail";
+    settings.KeyFieldName = "DetId";
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.CallbackRouteValues = new { Controller = "ApprovalTemplate", Action = "TabStagesListPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.Width = 80;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "SortCode";
+        column.Name = "SortCode";
+        column.Caption = "Sort";
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 100;
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.SpinButtons.ShowIncrementButtons = false;
+        txt.MinValue = 1;
+        txt.MaxValue = 99999;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "StageId";
+        column.Name = "StageId";
+        column.Caption = "Stage";
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 300;
+
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = Models._Utils.GeneralGetList.GetApprovalStages();
+        cbo.TextField = "StageName";
+        cbo.ValueField = "Id";
+        cbo.ValueType = typeof(int);
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Step";
+    //    column.Name = "Step";
+    //    column.Caption = "Step";
+    //    column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+    //    column.Settings.AllowSort = DefaultBoolean.False;
+
+    //    column.Width = 50;
+
+    //    var txt = column.PropertiesEdit as SpinEditProperties;
+    //    txt.SpinButtons.ShowIncrementButtons = false;
+    //    txt.MinValue = 1;
+    //    txt.MaxValue = 99999;
+    //    txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    //});
+
+
+
+
+    settings.ClientSideEvents.BeginCallback = "gvApprovalTemplateStageDetailOnBeginCallback";
+
+    settings.ClientSideEvents.BatchEditStartEditing = "gvApprovalTemplateStageDetail_BatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvApprovalTemplateStageDetail_BatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvApprovalTemplateStageDetail_BatchEditRowValidating";
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+    //settings.InitNewRow = (sender, e) =>
+    //{
+
+    //    e.NewValues["Step"] = 1;
+    //};
+
+
+
+}).Bind(Model).GetHtml()

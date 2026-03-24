@@ -1,0 +1,41 @@
+﻿
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupTemplateUpload";
+    settings.CallbackRouteValues = new { Controller = "TransferRequest", Action = "TemplateUpload_PopupListLoadOnDemandPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;
+
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.Modal = true;
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowMaximizeButton = true;
+    settings.ShowRefreshButton = true;
+
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+
+    settings.HeaderText = "Template Upload";
+
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("Partial/TemplateUpload/TemplateUpload_Partial");
+
+    });
+
+}).GetHtml()

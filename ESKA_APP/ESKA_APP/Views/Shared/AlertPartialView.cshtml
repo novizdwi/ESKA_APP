@@ -1,0 +1,196 @@
+@if (false)
+{ 
+<script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery-2.2.0.intellisense.js"></script>
+} 
+
+@*
+----------------------------------------------------------------------------
+Alert
+----------------------------------------------------------------------------
+Logic :
+1. System akan menjalan kan di cron sp SpSysRefreshAlert :
+    sp ini ber fungsi untuk mengupdate table Tp_UserAlert: table yg digunakan menyimpan mana ajah alert yg akan muncul 
+2. Ketika user click buton alert untuk memunculkan list alert apa saja yg sedang aktif :
+    ketika itu pula system akan menandai bahwa alert sudah di tampilan sehingga tidak perlu muncul lagi
+3. penanda alert akan di refresh ketika :
+    a. form web di buka
+    b. timer tiap 5 menit
+
+*@
+
+
+@{
+    
+    var controllerName = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+
+    
+    var strUrlServiceAlert = System.Configuration.ConfigurationManager.AppSettings["UrlServiceAlert"];
+    
+    if(string.IsNullOrEmpty(strUrlServiceAlert)) {
+        strUrlServiceAlert = Url.Action("AjaxAlert", "_Alert"); 
+    }
+        
+}
+
+
+@{
+    
+    string DivAlert = ""; ;
+
+    if ((controllerName != "ReportAlert") && (Session["userId"] != null))
+    {
+        var userId = (int)Session["userId"];
+
+        var str = Controllers._Alert._AlertController.GetAjaxAlert(userId);
+
+
+        if (str == "Y")
+        {
+            DivAlert = "DivAlertActive";
+        }
+        else
+        {
+            DivAlert = "DivAlertNonActive";
+        }
+    }
+}
+
+
+@if ((controllerName != "ReportAlert") && (Session["userId"] != null))
+{   
+<span>&nbsp;&nbsp;</span>                                                                  
+<span @*class="@(DivAlert)"*@ id="DivAlert">Alert
+</span>
+    
+@*   
+@Html.Partial("~/Views/_Alert/_Alert/Partial/_Alert_Panel_List_Partial.cshtml") 
+*@
+
+<script type="text/javascript">
+
+    $("#DivAlert").click(function () {
+        var gv = ASPxClientGridView.Cast('gvUserAlertList');
+        if (gv != null) {
+            pcUserAlert.PerformCallback();
+        }
+
+
+        if (pcUserAlert.IsVisible()) {
+            pcUserAlert.SetVisible(false);
+        } else {
+            pcUserAlert.ShowAtElementByID('DivAlert');
+        }
+
+
+    });
+
+    function OnClickDetailAlert(Id) {
+
+        var guid = CreateGuid();
+        window.open('', guid);
+        SubmitForm(guid, '@Url.Action("Detail", "ReportAlert")', 'post', {
+            Id: Id
+        });
+    }
+
+
+    $(document).ready(function () {
+
+
+        var cls = '@(DivAlert)';
+        $("#DivAlert").addClass(cls);
+
+        window.setInterval(function () {
+            AlertAjax();
+        }, 60 * 60 * 1000);
+
+        //AlertAjax();
+
+    });
+
+    @{
+    var userId = Session["userId"];
+    }
+
+    function AlertAjax() {
+
+        $.ajax({
+            type: "POST",
+            data: { userId: '@(userId)' },
+            url: "@(strUrlServiceAlert)",
+            beforeSend: function () {
+
+            },
+
+            success: function (response) {
+
+                var Old_Class = $("#DivAlert").attr('class');
+
+                if (response == "Y") {
+                    if (Old_Class == 'DivAlertNonActive') {
+                        $("#DivAlert").removeClass(Old_Class);
+                        $("#DivAlert").addClass('DivAlertActive');
+                    }
+                }
+                else {
+                    if (Old_Class == 'DivAlertActive') {
+                        $("#DivAlert").removeClass(Old_Class);
+                        $("#DivAlert").addClass('DivAlertNonActive');
+                    }
+                }
+
+
+                //$('#DivAlert').text(Old_Class)
+            },
+
+            error: function (jqXhr, textStatus, errorThrown) {
+
+            },
+
+            complete: function () {
+
+            }
+        });
+
+    }
+
+
+    function AjaxAlertNonActive() {
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AjaxAlertNonActive", "_Alert")",
+            beforeSend: function () {
+
+            },
+
+            success: function (response) {
+
+                var Old_Class = $("#DivAlert").attr('class');
+
+                if (response == "Y") {
+                    if (Old_Class == 'DivAlertActive') {
+                        $("#DivAlert").removeClass(Old_Class);
+                        $("#DivAlert").addClass('DivAlertNonActive');
+                    }
+                }
+
+                //$('#DivAlert').text(Old_Class)
+            },
+
+            error: function (jqXhr, textStatus, errorThrown) {
+
+            },
+
+            complete: function () {
+
+            }
+        });
+
+    }
+
+
+</script>
+
+}

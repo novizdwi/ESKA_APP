@@ -1,0 +1,25 @@
+﻿@using (Ajax.BeginForm("mantap", "GoodsReceiptPO", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "ViewApproval_contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "ViewApproval_formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="ApprovalCreditLimit_contentForm">
+        @Html.Partial("Partial/ViewApproval/ViewApproval_Panel_Partial")
+
+    </div>
+}

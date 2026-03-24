@@ -1,0 +1,25 @@
+﻿@using (Ajax.BeginForm("mantap", "PurchaseOrderScan", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "ItemTag_contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "ItemTag_formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="ItemTag_contentForm">
+        @Html.Partial("Partial/ItemTag/ItemTag_Panel_Partial")
+
+    </div>
+}

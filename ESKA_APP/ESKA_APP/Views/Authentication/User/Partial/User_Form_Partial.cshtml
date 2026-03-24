@@ -1,0 +1,351 @@
+﻿@using Models.Authentication.User;
+
+@model Models.Authentication.User.UserModel
+@{
+    int id = Model.Id;
+}
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).Bind(Model.Id).GetHtml()
+
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.ColorTranslator.FromHtml("#F20056");
+
+
+    });
+
+    groupItem.Items.AddEmptyItem().Height = 25;
+
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col3 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "UserName";
+        itemSettings.FieldName = "UserName";
+        itemSettings.Width = Unit.Percentage(100);
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "UserName";
+        //txt.ReadOnly = (Model._FormMode == Models.FormModeEnum.New) ? false : true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        //txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "First Name";
+        itemSettings.FieldName = "FirstName";
+        itemSettings.Width = Unit.Percentage(100);
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "FirstName";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Midle Name";
+        itemSettings.FieldName = "MidleName";
+        itemSettings.Width = Unit.Percentage(100);
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "MidleName";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Last Name";
+        itemSettings.FieldName = "LastName";
+        itemSettings.Width = Unit.Percentage(100);
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "LastName";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+
+
+    groupItem_Col1.Items.Add(m => Model.RoleId, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Role";
+        itemSettings.Width = Unit.Percentage(100);
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "RoleId";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "RoleName";
+        cbo.Properties.ValueField = "Id";
+        cbo.Properties.ValueType = typeof(int);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+        cbo.Properties.DataSource =  Models._Utils.GeneralGetList.GetRoles();
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+    groupItem_Col1.Items.Add(m => Model.EmpId, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Employee";
+        itemSettings.Width = Unit.Percentage(100);
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "EmpId";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "firstName";
+        cbo.Properties.ValueField = "empID";
+        cbo.Properties.ValueType = typeof(int);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+        cbo.Properties.Columns.Add("firstName", "First Name");
+        cbo.Properties.Columns.Add("lastName", "Last Name");
+        cbo.Properties.Columns.Add("middleName", "Middle Name");
+
+        cbo.Properties.Columns.Add("empID", "empID").Visible = false;
+
+        cbo.Properties.TextFormatString = "{0}";
+
+        cbo.Properties.DataSource =  Models._Utils.GeneralGetList.GetEmployees();
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+
+        cbo.Properties.ClientSideEvents.ValueChanged = "EmpIdOnValueChange";
+
+
+    });
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Email";
+        itemSettings.FieldName = "Email";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Email";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+
+    //groupItem_Col2.Items.AddGroupItem(itemSettings =>
+    //{
+
+
+    //});
+
+    groupItem_Col2.Items.Add(m => Model.Position, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Position";
+        itemSettings.Width = Unit.Percentage(100);
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "Position";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "Code";
+        cbo.Properties.ValueField = "Name";
+        cbo.Properties.ValueType = typeof(string);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetPositions();
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+    groupItem_Col2.Items.Add(m => Model.DefaultWhsCode, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Default Warehouse";
+        itemSettings.Width = Unit.Percentage(100);
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "DefaultWhsCode";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "Code";
+        cbo.Properties.ValueField = "Name";
+        cbo.Properties.ValueType = typeof(string);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetDefaultWhsCodes(id);
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+    groupItem_Col2.Items.Add(m => Model.IsActive, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+        itemSettings.Name = "IsActive";
+        itemSettings.FieldName = "IsActive";
+        itemSettings.Caption = "Active";
+        //itemSettings.FieldName = "IsComparisonLowerComparisonFare";
+
+        var chk = (CheckBoxSettings)itemSettings.NestedExtensionSettings; 
+        chk.Name = "IsActive";
+        chk.Properties.ValueType = typeof(string);
+        chk.Properties.ValueChecked = "Y";
+        chk.Properties.ValueUnchecked = "N";
+        chk.ShowModelErrors = true;
+        chk.ControlStyle.CssClass = "editor";
+        chk.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        chk.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+    });
+
+    //groupItem_Col3.Items.AddGroupItem(itemSettings =>
+    //{
+
+
+    //});
+
+    groupItem_Col3.Items.Add(m => Model.isSetPassword, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+        itemSettings.Caption = "Set";
+        var txt = (CheckBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "isSetPassword";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    groupItem_Col3.Items.Add(m => Model.Password, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Password";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Password";
+        txt.ShowModelErrors = true;
+        txt.Properties.Password = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    groupItem_Col3.Items.Add(m => Model.Password_Confirm, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Confirm Password";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Password_Confirm";
+        txt.ShowModelErrors = true;
+        txt.Properties.Password = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabUserWhs";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+
+        group.PageControl.ContentStyle.Paddings.Padding = 3;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabWarehouse";
+            item.Caption = "Warehouse";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                      Html.Partial("Partial/User_TabWarehouse_List_Partial", Model.ListWarehouses_)
+                  );
+
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+
+    });
+}).GetHtml()
+
+
+

@@ -1,0 +1,1 @@
+<%@ Application Codebehind="Global.asax.cs" Inherits="ESKA_APP.MvcApplication" Language="C#" %>

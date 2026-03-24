@@ -1,0 +1,302 @@
+﻿@using Models.Setting.Layout;
+
+@model Models.Setting.Layout.LayoutModel
+
+
+
+@Html.DevExpress().TextBox(
+    settings =>
+    {
+        settings.Name = "Id";
+        settings.ControlStyle.CssClass = "editor";
+        settings.ClientVisible = false;
+        settings.ShowModelErrors = true;
+        settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    } 
+).Bind(Model.Id).GetHtml()
+
+@Html.DevExpress().TextBox(
+    settings =>
+    {
+        settings.Name = "_HiddenUid"; 
+        
+        settings.ControlStyle.CssClass = "editor";
+        settings.ClientVisible = false;
+        settings.ShowModelErrors = true;
+        settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    } 
+).Bind(Model._HiddenUid).GetHtml()
+
+@Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.ColCount = 1;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 0;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.Color.Orange;
+
+    });
+
+
+    groupItem.Items.AddEmptyItem().Height = 0;
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+    var groupItem_3 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+        //itemSettings.Width = Unit.Percentage(33.33);
+    });
+
+
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+        //itemSettings.Width = Unit.Percentage(33.33);
+    });
+
+    var groupItem_Col3 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+
+        //itemSettings.Width = Unit.Percentage(33.33);
+    });
+
+    groupItem_Col1.Items.Add(m => Model.LayoutFormCode, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Form Layout";
+
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "LayoutFormCode";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "LayoutFormName";
+        cbo.Properties.ValueField = "LayoutFormCode";
+        cbo.Properties.ValueType = typeof(string);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetLayoutForms();
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Layout Name";
+        itemSettings.FieldName = "LayoutName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "LayoutName";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+        itemSettings.Caption = "Description";
+        itemSettings.FieldName = "Description";
+        //itemSettings.Width = groupItem_Col1_CaptionWidth;
+
+        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Description";
+        //txt.ReadOnly = true;// (Model.FormMode == Models.FormModeEnum.New) ? false : true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Height = 40;
+    });
+
+
+    if ((Model.LayoutName != "") && (Model.LayoutName != null))
+    {
+        groupItem_Col1.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.HyperLink;
+
+
+            itemSettings.Caption = "Files";
+            itemSettings.FieldName = "Files";
+            var txt = (HyperLinkSettings)itemSettings.NestedExtensionSettings;
+            txt.Name = "Download";
+            txt.Properties.Text = Model.LayoutName+".rpt";
+            txt.NavigateUrl = Url.Action("DownloadRpt", "Layout", new { Id = Model.Id }); //;
+            DevExpressHelper.GetUrl( new { controller = "Layout", Action = "DownloadRpt" } );// Url.RouteUrl("Layout","",);
+
+        });
+
+    }
+
+    if (!string.IsNullOrEmpty(Model.LayoutName))
+    {
+        groupItem_Col1.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = "";
+
+            var btn = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btn.Name = "btnDownloadRpt";
+            btn.Text = "Download RPT";
+            btn.Width = 150;
+
+            btn.ImagePosition = ImagePosition.Left;
+            btn.Images.Image.Url = "~/Content/Images/button/download.png";
+
+            btn.ClientSideEvents.Click =
+                "function(s,e){ window.location.href = '" +
+                Url.Action("DownloadRpt", "Layout", new { Id = Model.Id }) +
+                "'; }";
+        });
+    }
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.UploadControl;
+
+
+        itemSettings.Caption = "Source Files Rpt";
+        itemSettings.FieldName = "Files";
+        var txt = (UploadControlSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Files";
+
+        txt.CallbackRouteValues = new { Controller = "Layout", Action = "CallbacksUpload" };
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.ValidationSettings.Assign(Controllers.Setting.LayoutUploadControlHelper.ValidationSettings);
+
+        txt.ClientSideEvents.FileUploadComplete = "function(s,e){ Files_FileUploadComplete(s,e); }";
+
+    });
+        
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.RadioButtonList;
+        itemSettings.Caption = "Output";
+        itemSettings.FieldName = "OutputType";
+        var rb = (RadioButtonListSettings)itemSettings.NestedExtensionSettings;
+        rb.Properties.RepeatDirection = RepeatDirection.Horizontal;
+        rb.Name = "OutputType";
+        rb.ShowModelErrors = true;
+        rb.Properties.TextField = "Name";
+        rb.Properties.ValueField = "Code";
+        rb.Properties.ValueType = typeof(string);
+        rb.ControlStyle.CssClass = "editor";
+        rb.Properties.DataSource = Models._Utils.GeneralGetList.GetList("CrystalReportOutputType");
+        rb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        rb.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.RadioButtonList;
+        itemSettings.Caption = "Active";
+        itemSettings.FieldName = "IsActive";
+        var rb = (RadioButtonListSettings)itemSettings.NestedExtensionSettings;
+        rb.Properties.RepeatDirection = RepeatDirection.Horizontal;
+        rb.Name = "IsActive";
+        rb.ShowModelErrors = true;
+        rb.Properties.TextField = "Name";
+        rb.Properties.ValueField = "Code";
+        rb.Properties.ValueType = typeof(string);
+        rb.ControlStyle.CssClass = "editor";
+        rb.Properties.DataSource = Models._Utils.GeneralGetList.GetList("Boolean");
+        rb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        rb.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+    });
+
+
+    groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabUser";
+            item.Caption = "User";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Layout_Form_TabUser_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabRole";
+            item.Caption = "Role";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Layout_Form_TabRole_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+    });
+
+
+}).GetHtml()
+
+

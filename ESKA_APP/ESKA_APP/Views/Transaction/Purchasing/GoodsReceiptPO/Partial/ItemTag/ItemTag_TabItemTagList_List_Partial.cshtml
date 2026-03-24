@@ -1,0 +1,79 @@
+﻿@using Models;
+@using Models.Transaction.Purchasing;
+
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "GoodsReceiptPO_gvContentItemTagList";
+    settings.KeyFieldName = "DetDetId";
+    settings.CommandColumn.Visible = false;
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Width = Unit.Percentage(100);
+    settings.CommandColumn.Width = 70;
+
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+    settings.SettingsBehavior.AllowSort = false;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
+    settings.Columns.Add("RowNo", "No.").Width = 40;
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TagId";
+        column.Name = "TagId";
+        column.Caption = "Tag Id";
+        column.Width = 200;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "EventType";
+        column.Name = "EventType";
+        column.Caption = "Event Type";
+        column.Width = 100;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Name = "Status";
+        column.Caption = "Status";
+        column.Width = 80;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.HtmlDataCellPrepared = (s, e) =>
+    {
+        if (e.VisibleIndex >= 0)
+        {
+            ASPxGridView gridView = (ASPxGridView)s;
+            var Status = Convert.ToString(gridView.GetRowValues(e.VisibleIndex, "Status"));
+            if (Status == "Invalid")
+            {
+                e.Cell.BackColor = System.Drawing.Color.IndianRed;
+                e.Cell.ForeColor = System.Drawing.Color.White;
+            }
+        }
+    };
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+}).Bind(Model).GetHtml()

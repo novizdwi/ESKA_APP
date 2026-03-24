@@ -1,0 +1,55 @@
+﻿
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).Bind(ViewBag.Id).GetHtml()
+
+
+@Html.DevExpress().HyperLink(settingsHL =>
+{
+    settingsHL.Name = "Attachment_btnUpload";
+    settingsHL.NavigateUrl = "javascript:void(0)";
+    settingsHL.Properties.Text = "Upload";
+    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ Attachment_OnClickBtnUpload(s, e) }";
+    settingsHL.Height = 20;
+}).GetHtml()
+ &nbsp;&nbsp;
+@Html.DevExpress().HyperLink(settingsHL =>
+{
+    settingsHL.Name = "Attachment_btnCancel";
+    settingsHL.NavigateUrl = "javascript:void(0)";
+    settingsHL.Properties.Text = "Cancel";
+    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ Attachment_OnClickBtnCancel(s, e) }";
+    settingsHL.Height = 20;
+}).GetHtml()
+
+
+
+@Html.DevExpress().UploadControl(
+settings =>
+{
+    settings.Name = "UploadMultiFile";
+    settings.CallbackRouteValues = new { Controller = "AdjustmentOut", Action = "Attachment_Upload" };
+    settings.AddUploadButtonsHorizontalPosition = AddUploadButtonsHorizontalPosition.Left;
+    settings.FileInputCount = 1;
+    settings.ShowAddRemoveButtons = true;
+    settings.AddButton.Text = "New File";
+    //settings.ValidationSettings.Assign(Controllers.Transaction.Sales.SalesOrderUploadControlHelper.ValidationSettings);
+    settings.ValidationSettings.Assign(ESKA_APP.CommonFileHelper.ValidationSettings);
+    settings.ClientSideEvents.FileUploadComplete = "function(s,e){   Attachment_FileUploadComplete(s,e); }";
+}).GetHtml()
+
+
+
+
+<br /><br />
+<div class="editorArea text">
+    Allowed file types: xls, xlsx, doc, docx, pdf, txt, csv, jpg, jpeg, jpe, gif, png, msg<br />
+    Maximum file size: 2MB
+</div>

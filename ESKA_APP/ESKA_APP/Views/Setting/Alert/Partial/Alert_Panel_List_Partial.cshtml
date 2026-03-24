@@ -1,0 +1,67 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupList";
+    settings.CallbackRouteValues = new { Controller = "Alert", Action = "PopupListLoadOnDemandPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;  
+    
+   
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowMaximizeButton = true;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+    
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true;
+    //settings.Width = System.Web.UI.WebControls.Unit.Percentage(100); 
+    
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "List Alert";
+   
+    settings.SetContent(() =>
+    {
+
+        //Html.DevExpress().HyperLink(settingsHL =>
+        //{
+        //    settingsHL.Name = "gvAlertList_GvExportTo";
+        //    settingsHL.NavigateUrl = "javascript:void(0)";
+        //    settingsHL.Properties.Text = "Excel";
+        //    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ GvExportTo(gvAlertList, '{0}'); }}", @Url.Action("ExportTo", "Alert"));
+        //    settingsHL.Height = 20;
+        //}).GetHtml();
+
+        Html.DevExpress().HyperLink(settingsChoose =>
+        {
+            settingsChoose.Name = "gvPanelListCancel";
+            settingsChoose.NavigateUrl = "javascript:void(0)";
+            settingsChoose.Properties.Text = "Cancel";
+            settingsChoose.Height = 20;
+            settingsChoose.Properties.ClientSideEvents.Click = "function(s, e) { popupList.Hide(); }";
+        }).GetHtml(); 
+        
+        Html.RenderPartial("Partial/Alert_List_Partial");
+        
+    });
+
+    settings.ClientSideEvents.Resize = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(popupList,gvAlertList); }}", "");
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(popupList,gvAlertList); }}", "");
+
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender;
+        popup.Width = 1000;
+        popup.Height = 500;
+    };
+    
+}).GetHtml()

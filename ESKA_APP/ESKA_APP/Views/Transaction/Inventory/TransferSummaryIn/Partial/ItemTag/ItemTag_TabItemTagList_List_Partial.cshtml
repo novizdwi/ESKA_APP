@@ -1,0 +1,65 @@
+﻿@using Models;
+@using Models.Transaction.Inventory;
+
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "TransferSummaryIn_gvContentItemTagList";
+    settings.KeyFieldName = "DetDetId";
+    settings.CommandColumn.Visible = false;
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Width = Unit.Percentage(100);
+    settings.CommandColumn.Width = 70;
+
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+    settings.SettingsBehavior.AllowSort = false;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
+    settings.Columns.Add("RowNo", "No.").Width = 40;
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TagId";
+        column.Name = "TagId";
+        column.Caption = "Tag Id";
+        column.Width = 400;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "EventType";
+        column.Name = "EventType";
+        column.Caption = "Event Type";
+        column.Width = 150;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Name = "Status";
+        column.Caption = "Status";
+        column.Width = 80;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+}).Bind(Model).GetHtml()

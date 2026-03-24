@@ -1,0 +1,353 @@
+@using System.Data;
+@*@{
+        //ViewBag.Title = "Home";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+@functions{
+
+    //menambahkan style di node
+    protected void StyleNodeDetail(MVCxTreeViewNode node)
+    {
+        if (node.NavigateUrl != "")
+        {
+            node.NodeStyle.ForeColor = System.Drawing.Color.FromName("#e2e2e2");
+            node.NodeStyle.BackColor = System.Drawing.Color.FromName("#292a2d");
+            node.NodeStyle.Font.Underline = true;
+            node.NodeStyle.HoverStyle.ForeColor = System.Drawing.Color.White;
+            node.NodeStyle.HoverStyle.BackColor = System.Drawing.Color.FromName("#FF8800");
+
+            node.NodeStyle.SelectedStyle.ForeColor = System.Drawing.Color.White;
+            node.NodeStyle.SelectedStyle.BackColor = System.Drawing.Color.FromName("#116959");
+            node.Image.Url = "~/Content/Images/button/menu_default.png";
+            node.Image.Height = 15;
+            node.Image.UrlSelected = "~/Content/Images/button/menu_selected.png";
+        }
+
+        for (int i = 0; i < node.Nodes.Count; i++)
+        {
+            StyleNodeDetail(node.Nodes[i]);
+        }
+
+    }
+
+    protected void StyleMenuNode(MVCxTreeViewNode node, string imageUrl)
+    {
+        if (node.NavigateUrl != "")
+        {
+            //node.NodeStyle.ForeColor = System.Drawing.Color.White;
+            //node.NodeStyle.SelectedStyle.ForeColor = System.Drawing.Color.Black;
+
+            //node.Image.Url = "~/Content/Images/menus/" + imageUrl + "-putih.png";
+
+            //node.Image.Height = 15;
+
+            //node.Image.UrlSelected = "~/Content/Images/menus/" + imageUrl + "-putih.png";
+        }
+
+        for (int i = 0; i < node.Nodes.Count; i++)
+        {
+            StyleMenuNode(node.Nodes[i], node.Nodes[i].Name);
+        }
+    }
+
+
+    //meremove note folder jika empty
+    protected void RemoveNodeFolderEmpty(MVCxTreeViewNode node)
+    {
+        if ((node.NavigateUrl) == "" || (node.NavigateUrl == null))
+        {
+            var j = node.Nodes.Count - 1;
+            for (int i = j; i >= 0; i--)
+            {
+                RemoveNodeFolderEmpty(node.Nodes[i]);
+            }
+
+            if (node.Nodes.Count == 0)
+            {
+                node.Parent.Nodes.Remove(node);
+
+            }
+        }
+
+    }
+
+
+    protected void AddNode(System.Data.DataTable dtMenuUrls, MVCxTreeViewNode node, string text, string name = "")
+    {
+        if (Session["isAdmin"] == "Y")
+        {
+            if (name != "")
+            {
+                //string find = "Url = '" + name + "/Detail'";
+                //DataRow[] foundRows = dtMenuUrls.Select(find);
+                //if (foundRows.Length != 0)
+                //{
+                node.Nodes.Add(new MVCxTreeViewNode[] {
+                new MVCxTreeViewNode(text,"mn" +  name,null,DevExpressHelper.GetUrl( new { controller = name, Action = "Detail" } ))
+            });
+                //}
+            }
+
+
+            else
+            {
+                node.Nodes.Add(new MVCxTreeViewNode[] {
+                new MVCxTreeViewNode(text)
+            });
+            }
+
+        }
+        else
+        {
+            if (name != "")
+            {
+                string find = "Url = '" + name + "/Detail'";
+                DataRow[] foundRows = dtMenuUrls.Select(find);
+                if (foundRows.Length != 0)
+                {
+                    node.Nodes.Add(new MVCxTreeViewNode[] {
+                    new MVCxTreeViewNode(text,"mn" +  name,null,DevExpressHelper.GetUrl( new { controller = name, Action = "Detail" } ))
+                });
+                }
+            }
+        }
+
+    }
+
+
+    //- fungsi untuk mendapatkan object treeview
+    //- agar load nya lebih cepat treeview.nodes nya akan di simpan di session :
+    //  scenario nya : ketika pertamakali treeview di load akan langsung di simpan di session  "MenuNodes".
+    //                  load selanjutnya tidak akan mengenerate treeview.nodes lagu, cukup mengambil dari session.
+    //                  ketika logout session MenuNodes harus di destroy
+    //- NOTES : Selama develop "MenuNodes" belum di aktifin dulu
+
+    protected TreeViewExtension getTreeView()
+    {
+        var tv = Html.DevExpress().TreeView(settings =>
+        {
+
+            settings.Name = "tableOfContentsTreeView";
+            settings.EnableNodeTextWrapping = true;
+            settings.AllowSelectNode = true;
+            settings.Width = Unit.Percentage(100);
+            //settings.ShowExpandButtons = false;
+            settings.ControlStyle.ForeColor = System.Drawing.Color.FromName("#e2e2e2");
+            settings.SyncSelectionMode = SyncSelectionMode.None;
+            settings.NodeLinkMode = ItemLinkMode.ContentBounds;
+            settings.Styles.Node.CssClass = "tree-view-node";
+            settings.Styles.Node.HoverStyle.CssClass = "hovered";
+            settings.Styles.Elbow.CssClass = "tree-view-elbow";
+            settings.ClientSideEvents.NodeClick = "function(s, e) { e.node.SetExpanded(!e.node.GetExpanded());}";
+            if (Session["MenuNodes"] == null)
+            {
+
+                DataTable dataTable = null;
+                if (Session["isAdmin"] == "Y")
+                {
+                    dataTable = new DataTable();
+                }
+                else
+                {
+                    dataTable = Models._Utils.GeneralGetList.GetMenuUrls((int)Session["userId"]);
+                }
+
+
+
+                settings.Nodes.Add(node1 =>
+                {
+                    node1.Text = "Master";
+
+                    node1.Nodes.Add(node2 =>
+                    {
+                        //node2.Text = "Monitoring";
+                        //AddNode(dataTable, node2, "Status Permintaan User", "MaterialRequestStatus");
+
+                        node2.Text = "Item";
+                        AddNode(dataTable, node2, "Item Master", "ItemMaster");
+                        AddNode(dataTable, node2, "RFID List", "RfidMonitoring");
+                        AddNode(dataTable, node2, "Deactive Tag", "DeactiveTag");
+                        AddNode(dataTable, node2, "Change Item RFID", "ChangeItem");
+                    });
+                });
+
+                settings.Nodes.Add(node1 =>
+                {
+                    node1.Text = "Transaction";
+
+                    node1.Nodes.Add(node3 =>
+                    {
+                        node3.Text = "Adjustment";
+                        AddNode(dataTable, node3, "Adjustment In", "AdjustmentIn");
+                        AddNode(dataTable, node3, "Adjustment Out", "AdjustmentOut");
+                    });
+
+                    node1.Nodes.Add(node3 =>
+                    {
+                        node3.Text = "Inventory";
+                        AddNode(dataTable, node3, "Transfer Request", "TransferRequest");
+
+                        AddNode(dataTable, node3, "Transfer Out Scan", "TransferOut");
+                        AddNode(dataTable, node3, "Transfer Out Summary ", "TransferSummaryOut");
+
+                        AddNode(dataTable, node3, "Transfer In Scan", "TransferIn");
+                        AddNode(dataTable, node3, "Transfer In Summary ", "TransferSummaryIn");
+                    });
+
+                    node1.Nodes.Add(node3 =>
+                    {
+                        node3.Text = "Stock Opname";
+                        AddNode(dataTable, node3, "Stock Opname Request ", "RequestStockOpname");
+                        AddNode(dataTable, node3, "Stock Opname Scan List", "StockOpnameScan");
+                        AddNode(dataTable, node3, "Stock Opname Summary", "StockSummaryOpname");
+                    });
+
+                    node1.Nodes.Add(node3 =>
+                    {
+                        node3.Text = "Purchasing";
+                        AddNode(dataTable, node3, "PO Scan List", "PurchaseOrderScan");
+                        AddNode(dataTable, node3, "GRPO Summary", "GoodsReceiptPO");
+                    });
+
+                });
+
+                settings.Nodes.Add(node1 =>
+                {
+
+                    node1.Text = "Report";
+
+                    //AddNode(dataTable, node1, "Alert", "ReportAlert");
+                    AddNode(dataTable, node1, "Query", "ReportQuery");
+                    AddNode(dataTable, node1, "Report", "ReportCustom");
+                });
+
+                settings.Nodes.Add(node1 =>
+                {
+                    node1.Text = "Setting";
+
+                    AddNode(dataTable, node1, "General Setting", "GeneralSetting");
+
+                    node1.Nodes.Add(node2 =>
+                    {
+                        node2.Text = "Report";
+                        AddNode(dataTable, node2, "Form Layout", "Layout");
+                        AddNode(dataTable, node2, "Report Group", "ReportGroup");
+                        AddNode(dataTable, node2, "Report", "Report");
+
+                    });
+
+                    node1.Nodes.Add(node2 =>
+                    {
+                        node2.Text = "Query";
+                        AddNode(dataTable, node2, "Query Group", "QueryGroup");
+                        AddNode(dataTable, node2, "Query", "Query");
+
+                    });
+
+                    node1.Nodes.Add(node2 =>
+                    {
+                        node2.Text = "Approval";
+                        AddNode(dataTable, node2, "Stages", "ApprovalStage");
+                        AddNode(dataTable, node2, "Templates", "ApprovalTemplate");
+
+                    });
+                });
+                /*
+                settings.Nodes.Add(node1 =>
+                {
+                    node1.Text = "Approval";
+
+                    AddNode(dataTable, node1, "Approval Decision", "ApprovalDecision");
+                    AddNode(dataTable, node1, "Approval Monitoring", "ApprovalStatus");
+
+                });
+                */
+                settings.Nodes.Add(node1 =>
+                {
+                    node1.Text = "Authentication";
+
+                    AddNode(dataTable, node1, "Role", "Role");
+                    AddNode(dataTable, node1, "User", "User");
+                    AddNode(dataTable, node1, "Change Password", "ChangePassword");
+
+                });
+
+                Session["MenuNodes"] = settings.Nodes;
+            }
+            else
+            {
+                settings.Nodes.Assign((MVCxTreeViewNodeCollection)Session["MenuNodes"]);
+            }
+
+
+            settings.PreRender = (s, e) =>
+            {
+                var treeView = s as MVCxTreeView;
+
+
+                //remove jika node folder empty
+                var j = treeView.Nodes.Count;
+                if (Session["isAdmin"] == "Y")
+                {
+
+                }
+                else
+                {
+                    for (int i = j - 1; i >= 0; i--)
+                    {
+                        var node1 = (MVCxTreeViewNode)treeView.Nodes[i];
+                        RemoveNodeFolderEmpty(node1);
+                    }
+                }
+
+
+                //tambahkan style di
+                j = treeView.Nodes.Count;
+                for (int i = 0; i < j; i++)
+                {
+                    var node1 = (MVCxTreeViewNode)treeView.Nodes[i];
+                    //StyleNodeDetail(node1);
+
+                    StyleMenuNode(node1, node1.Name);
+                }
+
+
+                TreeViewNode node = null;
+
+                node = treeView.Nodes.FindByName("mn" + ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString());
+                if (node == null)
+                {
+                    node = treeView.Nodes.FindByName("mn" + ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString());
+                }
+                else
+                {
+                    //Models.Authentication.User.UserGetList.UpdateLastController((int)Session["userId"], ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString());
+                }
+
+
+                if (node != null)
+                {
+                    treeView.SelectedNode = node;
+                    treeView.ExpandToNode(node);
+                }
+
+            };
+
+
+        });
+
+        return tv;
+    }
+
+}
+
+@{
+    <h3 class="section-caption contents-caption">Menu</h3>
+    TreeViewExtension tv;
+    tv = getTreeView();
+    tv.GetHtml();
+}
+
+
+

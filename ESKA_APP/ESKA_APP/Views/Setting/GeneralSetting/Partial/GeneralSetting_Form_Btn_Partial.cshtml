@@ -1,0 +1,78 @@
+﻿@Html.DevExpress().Panel(settings => {
+    settings.Name = "pageToolbarPanel";
+    settings.ControlStyle.CssClass = "page-toolbar-wrapper";
+    settings.ClientSideEvents.Init = "onPageToolbarInit";
+    settings.SetContent(() =>
+    {
+        @Html.DevExpress().Menu(menuSettings =>
+        {
+            menuSettings.Name = "pageToolbar";
+            menuSettings.ItemAutoWidth = false;
+            menuSettings.AllowSelectItem = false;
+            menuSettings.ApplyItemStyleToTemplates = true;
+            menuSettings.SettingsAdaptivity.Enabled = true;
+            menuSettings.SettingsAdaptivity.EnableAutoHideRootItems = true;
+            menuSettings.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+            menuSettings.SettingsAdaptivity.CollapseRootItemsToIconsAtWindowInnerWidth = 600;
+            menuSettings.Width = Unit.Percentage(100);
+            menuSettings.ControlStyle.SeparatorWidth = Unit.Pixel(0);
+            menuSettings.ControlStyle.CssClass = "page-toolbar";
+            menuSettings.Styles.Item.CssClass = "item";
+            menuSettings.Styles.Item.VerticalAlign = VerticalAlign.Middle;
+            menuSettings.Images.Item.Width = Unit.Pixel(16);
+            menuSettings.Images.Item.Height = Unit.Pixel(16);
+            menuSettings.Items.Add(item =>
+            {
+                item.Enabled = false;
+                item.SetTemplateContent(template => ViewContext.Writer.Write("<h1><b>General Setting</b></h1>"));
+                item.ItemStyle.Width = Unit.Percentage(100);
+            });
+
+        }).GetHtml();
+
+        @Html.DevExpress().FormLayout(panelBtnsettings =>
+        {
+            panelBtnsettings.Name = "formLayouBtn";
+            panelBtnsettings.EncodeHtml = false;
+            panelBtnsettings.ControlStyle.CssClass = "under-toolbar";
+            panelBtnsettings.Height = Unit.Pixel(16);
+            panelBtnsettings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+            var groupBtn = panelBtnsettings.Items.AddGroupItem(groupBtnSettings =>
+            {
+                groupBtnSettings.Caption = "";
+                groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+                groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                groupBtnSettings.ColCount = 2;
+                groupBtnSettings.Width = Unit.Pixel(350);
+                groupBtnSettings.SettingsItems.ShowCaption = DefaultBoolean.False;
+                groupBtnSettings.CellStyle.Paddings.Padding = 0;
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.Name = "grpBtnUpdate";
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnUpdate";
+                    btnSettings.Text = "Save";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnUpdate";
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnRefresh";
+                    btnSettings.Text = "Refresh";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnRefresh";
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/refresh.png";
+                });
+            });
+
+        }).GetHtml();
+    });
+}).GetHtml()

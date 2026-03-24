@@ -1,0 +1,27 @@
+﻿@{
+    var avatarUrl = "~/Content/Images/user.svg";
+}
+@{
+    var user = (Session["userName"] == null ? " " : (string)Session["userName"]);
+    var roleName = (Session["roleName"] == null ? " " : (string)Session["roleName"]);
+
+    var controllerName = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+}
+
+<div class="user-info">
+    <div class="avatar">
+        <img id="AvatarUrl" src="@Url.Content(avatarUrl)" />
+    </div>
+    <div class="text-container">
+        @Html.DevExpress().Label(labelSettings => {
+           labelSettings.Name = "userNameLabel";
+           labelSettings.Text = user;
+           labelSettings.ControlStyle.CssClass = "user-name";
+        }).GetHtml()
+        @Html.DevExpress().Label(labelSettings => {
+           labelSettings.Name = "emailLabel";
+           labelSettings.Text = roleName;
+           labelSettings.ControlStyle.CssClass = "email";
+        }).GetHtml()
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@using (Ajax.BeginForm("mantap", "TransferSummaryOut", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "Approval_contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "Approval_formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="Approval_contentForm">
+        @Html.Partial("Partial/Approval/Approval_Panel_Partial")
+
+    </div>
+}
+

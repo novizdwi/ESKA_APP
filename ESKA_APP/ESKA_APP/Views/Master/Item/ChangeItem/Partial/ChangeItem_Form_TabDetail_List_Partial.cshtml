@@ -1,0 +1,122 @@
+﻿@using Models;
+@using Models._Cfl;
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+    if (ViewBag.ReadOnly == null)
+    {
+        ViewBag.ReadOnly = false;
+        string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_ChangeItem\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+        if (status != "Draft")
+        {
+            ViewBag.ReadOnly = true;
+        }
+    }
+
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvChangeItemDetail";
+    settings.KeyFieldName = "DetId";
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    //settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.CallbackRouteValues = new { Controller = "ChangeItem", Action = "TabDetailListPartial" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+
+    settings.CommandColumn.ShowDeleteButton = false;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.Enabled = true;
+
+    settings.CommandColumn.Width = 50;
+
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton() { ID = "deleteButton", Text = "Delete" };
+    settings.CommandColumn.CustomButtons.Add(customButton);
+
+    settings.ClientSideEvents.CustomButtonClick = "gvChangeItemDetailOnCustomButtonClick";
+
+
+    settings.Enabled = true;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TagId";
+        column.Name = "TagId";
+        column.Caption = "Tag Id";
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 250;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvChangeItemDetail_ItemCode";
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Comments";
+        column.Name = "Comments";
+        column.Caption = "Free Text";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 300;
+
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        if (ViewBag.ReadOnly)
+        {
+
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.ForeColor = System.Drawing.Color.Black;
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+        }
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvChangeItemDetail_Comments";
+
+    });
+
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvChangeItemDetailOnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvChangeItemDetailOnEndCallback";
+
+    settings.ClientSideEvents.BatchEditStartEditing = "gvChangeItemDetailOnBatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvChangeItemDetailOnBatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvChangeItemDetailOnBatchEditRowValidating";
+
+}).Bind(Model).GetHtml()
+

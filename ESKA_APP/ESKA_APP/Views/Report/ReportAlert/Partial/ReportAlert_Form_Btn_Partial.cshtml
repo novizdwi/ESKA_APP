@@ -1,0 +1,73 @@
+﻿<br /><br /> 
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayouBtn";
+    settings.EncodeHtml = false;
+
+    var groupBtn = settings.Items.AddGroupItem(groupBtnSettings =>
+    {
+
+        groupBtnSettings.CellStyle.Paddings.Padding = 0;
+        groupBtnSettings.Caption = "";
+        groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupBtnSettings.ColCount = 10;
+
+     
+  
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnRefresh";
+            btnSettings.Text = "Refresh";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnRefresh";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/button/b_refresh.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0; 
+        });
+
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnFilter";
+            btnSettings.Text = "Filter";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnFilter";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/button/b_filter.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+        
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnExcel";
+            btnSettings.Text = "Excel";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnExcel";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/button/b_excel.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+        
+       
+
+    });
+
+
+}).GetHtml()

@@ -1,0 +1,49 @@
+@if (false)
+{ 
+<script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery-2.2.0.intellisense.js"></script>
+}
+
+<div class="headerTop">
+<div class="templateTitle">
+ <table>
+     <tr>
+         <td>
+            <a href="@DevExpressHelper.GetUrl(new { controller = "Home", Action = "Index" })" >
+            <img src="~/Content/Images/logoBBS.png" height="15px" />
+            @*<img src="~/Content/Images/HDR1.png" height="45px"  />*@
+            </a>
+         </td>
+        <td>
+             &nbsp;&nbsp;&nbsp<font size="3" color="black">ESKA Corperation</font>
+         </td>
+     </tr>
+ </table>
+</div>
+@*<div>
+     &nbsp;&nbsp;&nbsp;&nbsp;<font size="5" color ="white";>PT Sinar Alam Duta Perdana</font> 
+</div>*@
+
+
+
+
+@{
+    var controllerName = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString(); 
+}
+
+<div class="loginControl">
+
+@if (controllerName != "Login")
+{ 
+@: @Html.Partial("LogOnPartialView")
+}
+
+</div>
+</div>
+
+@*@if ((controllerName != "Login") && (controllerName != "ReportAlert") && (Session["userId"] != null))
+{     
+@Html.Partial("~/Views/_Alert/_Alert/Partial/_Alert_Panel_List_Partial.cshtml") 
+
+} *@
+

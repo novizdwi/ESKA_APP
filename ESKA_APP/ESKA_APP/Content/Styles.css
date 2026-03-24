@@ -1,0 +1,1478 @@
+﻿/*#region Scrollbar*/
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+/*#endregion */
+.groupCol{
+    width : 98% !important;
+}
+/* #region Header*/
+.headerPane {
+}
+
+div#MainSplitter_0_CC {
+    position: relative;
+    -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+    -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    padding: 10px;
+    background: white;
+}
+
+.loginControl span {
+    color: black;
+}
+
+.loginControl a:visited {
+    color: red;
+}
+
+.loginControl a:before {
+    color: black;
+}
+
+.dxsplControl_Metropolis .loginControl a, .dxsplControl_Metropolis .templateTitle a {
+    color: red;
+}
+
+.templateTitle {
+    width: 20%;
+    height: inherit;
+    margin-left: 20px;
+}
+
+/* #endregion */
+
+/* #region Left Pane*/
+
+/* #region Separator*/
+#ASPxSplitter1_1_S {
+    background-color: black;
+    position: relative;
+    border-color: #e4e4e4;
+    -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+    -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    background: white;
+}
+
+#ASPxSplitter1_1_S_CB.dxsplVSeparatorButton_Metropolis:hover {
+    background-color: red;
+}
+
+#ASPxSplitter1_1_S_CF.dxsplVSeparatorButton_Metropolis:hover {
+    background-color: red;
+}
+/* #endregion */
+
+/* #region Template*/
+
+#ASPxSplitter1_0i0.dxsplPane_Metropolis {
+    background-color: #363640;
+}
+
+.dxpcLite_Metropolis a.dxpc-link,
+.dxdpLite_Metropolis a.dxpc-link {
+    color: #F20056;
+}
+
+.dxtvControl_Metropolis .dxtv-ndHov {
+    /*background-color: #F20056;*/
+    cursor: pointer;
+    color: #F20056;
+    background: linear-gradient(to right,#363640 80%,#F20056 100%);
+}
+
+.dxtcLite_Metropolis > .dxtc-stripContainer .dxtc-tabHover {
+    background: #F20056 /*url('tcTabBack.gif')*/ repeat-x bottom;
+}
+
+/* #endregion*/
+/*#region Treeview*/
+#MailFilter {
+    color: white;
+}
+
+    #MailFilter li {
+        margin-bottom: 5px;
+    }
+
+    #MailFilter.dxtvControl_Metropolis a {
+        color: white;
+    }
+
+    #MailFilter .dxtv-elbNoLn {
+        margin-bottom: -50px;
+    }
+
+    #MailFilter .dxtv-nd {
+        width: -webkit-fill-available;
+        margin-left: 30px;
+    }
+
+    #MailFilter div.dxtv-nd.dxtv-ndSel {
+        margin-left: 13px;
+        /*background-position-x: 20px;*/
+    }
+
+        #MailFilter div.dxtv-nd.dxtv-ndSel span {
+            margin-left: 20px;
+        }
+
+    #MailFilter .dxtv-nd.dxtv-ndHov {
+        background-color: #F20056;
+        color: #F20056 !important;
+    }
+
+    #MailFilter.dxtvControl_Metropolis .dxtv-ndHov
+    .dxtv-ndTxt .dx-vam {
+        color: #F20056 !important;
+    }
+
+    #MailFilter .dxtv-nd.dxtv-ndSel {
+        /*background-color: white;*/
+        color: #F20056 !important;
+        background: linear-gradient(to right,#363640 80%,#F20056 100%);
+    }
+
+        #MailFilter .dxtv-nd.dxtv-ndSel.dxtv-ndHov {
+            /*background-color: white;*/
+            color: #F20056 !important;
+            background: linear-gradient(to right,#363640 80%,#F20056 100%);
+        }
+
+    #MailFilter a.dxtv-nd {
+        width: -webkit-fill-available;
+        margin-left: 5px;
+    }
+
+/* #endregion */
+
+/* #region Menu */
+
+/* #region Master */
+/*div#MailFilter_N0_0,
+a#MailFilter_N0_0 {
+    background-image: url("Images/menu/divisi-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N0_0 {
+    color: black;
+    background-image: url("Images/menu/divisi.png");
+}
+
+div#MailFilter_N0_1,
+a#MailFilter_N0_1 {
+    background-image: url("Images/menu/departemen-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N0_1 {
+    color: black;
+    background-image: url("Images/menu/departemen.png");
+}
+
+div#MailFilter_N0_2,
+a#MailFilter_N0_2 {
+    background-image: url("Images/menu/TypeofWork-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N0_2 {
+    color: black;
+    background-image: url("Images/menu/TypeofWork.png");
+}*/
+
+/*div#MailFilter_N0_3,
+a#MailFilter_N0_3 {
+    background-image: url("Images/menu/audit-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N0_3 {
+    color: black;
+    background-image: url("Images/menu/audit.png");
+}
+
+div#MailFilter_N0_4,
+a#MailFilter_N0_4 {
+    background-image: url("Images/menu/pic-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N0_4 {
+    color: black;
+    background-image: url("Images/menu/pic.png");
+}*/
+
+/* #endregion */
+
+/* #region Data Entry */
+
+/* #region Pre Registration */
+
+/*div#MailFilter_N1_0_0,
+a#MailFilter_N1_0_0,
+div#MailFilter_N1_0_1,
+a#MailFilter_N1_0_1,
+div#MailFilter_N1_0_2,
+a#MailFilter_N1_0_2 {
+    background-image: url("Images/menu/reqcon-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_0_0,
+div#MailFilter_N1_0_1,
+div#MailFilter_N1_0_2 {
+    color: black;
+    background-image: url("Images/menu/reqcon.png");
+}*/
+
+/*div#MailFilter_N1_0_3,
+a#MailFilter_N1_0_3,
+div#MailFilter_N1_0_4,
+a#MailFilter_N1_0_4,
+div#MailFilter_N1_0_5,
+a#MailFilter_N1_0_5 {
+    background-image: url("Images/menu/reqtow-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_0_3,
+div#MailFilter_N1_0_4,
+div#MailFilter_N1_0_5 {
+    color: black;
+    background-image: url("Images/menu/reqtow.png");
+}*/
+
+/*div#MailFilter_N1_0_6,
+a#MailFilter_N1_0_6,
+div#MailFilter_N1_0_7,
+a#MailFilter_N1_0_7 {
+    background-image: url("Images/menu/site-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_0_6,
+div#MailFilter_N1_0_7 {
+    color: black;
+    background-image: url("Images/menu/KontrakRegister.png");
+}*/
+
+/* #endregion */
+
+/* #region Contractor/ Supplier */
+
+/*div#MailFilter_N1_1_0,
+a#MailFilter_N1_1_0 {
+    background-image: url("Images/menu/KontrakRegister-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_1_0 {
+    color: black;
+    background-image: url("Images/menu/KontrakRegister.png");
+}
+
+div#MailFilter_N1_1_1,
+a#MailFilter_N1_1_1,
+div#MailFilter_N1_1_2,
+a#MailFilter_N1_1_2 {
+    background-image: url("Images/menu/KontrakAproval-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_1_1,
+div#MailFilter_N1_1_2 {
+    color: black;
+    background-image: url("Images/menu/KontrakAproval.png");
+}
+
+div#MailFilter_N1_1_3,
+a#MailFilter_N1_1_3,
+div#MailFilter_N1_1_4,
+a#MailFilter_N1_1_4,
+div#MailFilter_N1_1_5,
+a#MailFilter_N1_1_5,
+div#MailFilter_N1_1_6,
+a#MailFilter_N1_1_6,
+div#MailFilter_N1_1_7,
+a#MailFilter_N1_1_7 {
+    background-image: url("Images/menu/KontrakAudit-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_1_3,
+div#MailFilter_N1_1_4,
+div#MailFilter_N1_1_5,
+div#MailFilter_N1_1_6,
+div#MailFilter_N1_1_7 {
+    color: black;
+    background-image: url("Images/menu/KontrakAudit.png");
+}*/
+
+/* #endregion */
+
+/*div#MailFilter_N1_2,
+a#MailFilter_N1_2 {
+    background-image: url("Images/menu/ToWMaster-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_2 {
+    color: black;
+    background-image: url("Images/menu/ToWMaster.png");
+}*/
+
+/*div#MailFilter_N1_3,
+a#MailFilter_N1_3 {
+    background-image: url("Images/menu/Aproval-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_3 {
+    color: black;
+    background-image: url("Images/menu/Aproval.png");
+}*/
+
+/*div#MailFilter_N1_4,
+a#MailFilter_N1_4 {
+    background-image: url("Images/menu/KontrakCert-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_4 {
+    color: black;
+    background-image: url("Images/menu/KontrakCert.png");
+}*/
+
+/*div#MailFilter_N1_5,
+a#MailFilter_N1_5 {
+    background-image: url("Images/menu/sendemail-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N1_5 {
+    color: black;
+    background-image: url("Images/menu/sendemail.png");
+}*/
+
+/* #endregion */
+
+/* #region Document and Records */
+/*div#MailFilter_N2_0_0,
+a#MailFilter_N2_0_0{
+    background-image: url("Images/menu/AddDocContractor-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_0_0{
+    color: black;
+    background-image: url("Images/menu/AddDocContractor.png");
+}
+
+div#MailFilter_N2_0_1,
+a#MailFilter_N2_0_1{
+    background-image: url("Images/menu/ViewDoc-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_0_1{
+    color: black;
+    background-image: url("Images/menu/ViewDoc.png");
+}
+
+div#MailFilter_N2_1_0,
+a#MailFilter_N2_1_0 {
+    background-image: url("Images/menu/AddDoc-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_1_0 {
+    color: black;
+    background-image: url("Images/menu/AddDoc.png");
+}
+
+div#MailFilter_N2_1_1,
+a#MailFilter_N2_1_1 {
+    background-image: url("Images/menu/ViewDoc-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_1_1 {
+    color: black;
+    background-image: url("Images/menu/ViewDoc.png");
+}*/
+
+/*
+div#MailFilter_N2_0_1,
+a#MailFilter_N2_0_1 {
+    background-image: url("Images/menu/ViewDoc-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_0_1 {
+    color: black;
+    background-image: url("Images/menu/ViewDoc.png");
+}
+
+div#MailFilter_N2_1_0,
+a#MailFilter_N2_1_0 {
+    background-image: url("Images/menu/AddDoc-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_1_0 {
+    color: black;
+    background-image: url("Images/menu/AddDoc.png");
+}
+
+div#MailFilter_N2_1_1,
+a#MailFilter_N2_1_1 {
+    background-image: url("Images/menu/ViewDoc-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N2_1_1 {
+    color: black;
+    background-image: url("Images/menu/ViewDoc.png");
+}*/
+
+/* #endregion */
+
+/* #region Report */
+/*div#MailFilter_N3_0,
+a#MailFilter_N3_0 {
+    background-image: url("Images/menu/alert-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N3_0 {
+    color: black;
+    background-image: url("Images/menu/alert.png");
+}*/
+
+/*div#MailFilter_N3_1,
+a#MailFilter_N3_1 {
+    background-image: url("Images/menu/Query-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N3_1 {
+    color: black;
+    background-image: url("Images/menu/Query.png");
+}*/
+
+/*div#MailFilter_N3_2,
+a#MailFilter_N3_2 {
+    background-image: url("Images/menu/Report-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N3_2 {
+    color: black;
+    background-image: url("Images/menu/Report.png");
+}*/
+
+/*div#MailFilter_N3_3,
+a#MailFilter_N3_3 {
+    background-image: url("Images/menu/EmailQueue-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N3_3 {
+    color: black;
+    background-image: url("Images/menu/EmailQueue.png");
+}*/
+
+/*div#MailFilter_N3_3_0,
+a#MailFilter_N3_3_0 {
+    background-image: url("Images/menu/Aproval-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N3_3_0 {
+    color: black;
+    background-image: url("Images/menu/Aproval.png");
+}
+
+div#MailFilter_N3_3_1,
+a#MailFilter_N3_3_1 {
+    background-image: url("Images/menu/AprovalStat-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N3_3_1 {
+    color: black;
+    background-image: url("Images/menu/AprovalStat.png");
+}*/
+
+/* #endregion */
+
+/* #region Setting */
+/*div#MailFilter_N4_0,
+a#MailFilter_N4_0 {
+    background-image: url("Images/menu/Setting-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_0 {
+    color: black;
+    background-image: url("Images/menu/Setting.png");
+}*/
+
+/*div#MailFilter_N4_1,
+a#MailFilter_N4_1 {
+    background-image: url("Images/menu/Email-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_1 {
+    color: black;
+    background-image: url("Images/menu/Email.png");
+}*/
+
+/*div#MailFilter_N4_2_0,
+a#MailFilter_N4_2_0 {
+    background-image: url("Images/menu/Layout-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_2_0 {
+    color: black;
+    background-image: url("Images/menu/Layout.png");
+}
+
+div#MailFilter_N4_2_1,
+a#MailFilter_N4_2_1 {
+    background-image: url("Images/menu/ReportGroup-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_2_1 {
+    color: black;
+    background-image: url("Images/menu/ReportGroup.png");
+}*/
+
+/*div#MailFilter_N4_2_2,
+a#MailFilter_N4_2_2 {
+    background-image: url("Images/menu/Report-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_2_2 {
+    color: black;
+    background-image: url("Images/menu/Report.png");
+}*/
+
+/*div#MailFilter_N4_3_0,
+a#MailFilter_N4_3_0 {
+    background-image: url("Images/menu/alertgroup-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_3_0 {
+    color: black;
+    background-image: url("Images/menu/alertgroup.png");
+}
+
+div#MailFilter_N4_3_1,
+a#MailFilter_N4_3_1 {
+    background-image: url("Images/menu/alert-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_3_1 {
+    color: black;
+    background-image: url("Images/menu/alert.png");
+}*/
+
+/*div#MailFilter_N4_4_0,
+a#MailFilter_N4_4_0 {
+    background-image: url("Images/menu/QueryGroup-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_4_0 {
+    color: black;
+    background-image: url("Images/menu/QueryGroup.png");
+}
+
+div#MailFilter_N4_4_1,
+a#MailFilter_N4_4_1 {
+    background-image: url("Images/menu/Query-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_4_1 {
+    color: black;
+    background-image: url("Images/menu/Query.png");
+}*/
+
+/*div#MailFilter_N4_5_0,
+a#MailFilter_N4_5_0 {
+    background-image: url("Images/menu/Stages-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_5_0 {
+    color: black;
+    background-image: url("Images/menu/Stages.png");
+}
+
+div#MailFilter_N4_5_1,
+a#MailFilter_N4_5_1 {
+    background-image: url("Images/menu/Template-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N4_5_1 {
+    color: black;
+    background-image: url("Images/menu/Template.png");
+}*/
+
+/* #endregion */
+
+/* #region Authentification */
+/*div#MailFilter_N5_0,
+a#MailFilter_N5_0 {
+    background-image: url("Images/menu/Role-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N5_0 {
+    color: black;
+    background-image: url("Images/menu/Role.png");
+}
+
+div#MailFilter_N5_1,
+a#MailFilter_N5_1 {
+    background-image: url("Images/menu/Bio-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N5_1 {
+    color: black;
+    background-image: url("Images/menu/Bio.png");
+}*/
+
+/*div#MailFilter_N5_2,
+a#MailFilter_N5_2 {
+    background-image: url("Images/menu/Authentication-putih.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding-left: 20px;
+    background-position-y: 3px;
+    display: block;
+}
+
+div#MailFilter_N5_2 {
+    color: black;
+    background-image: url("Images/menu/Authentication.png");
+}*/
+
+/* #endregion */
+
+/* #endregion */
+
+/* #endregion */
+
+/* #region Main Content*/
+
+/* #region Separator*/
+#ContentSplitter_1_S.dxsplHSeparator_Metropolis {
+    border: 1px solid #e4e4e4;
+    -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    background: white;
+}
+
+#ContentSplitter_1_S_CF.dxsplHSeparatorButton_Metropolis:hover {
+    background-color: red;
+}
+
+#ContentSplitter_1_S_CB.dxsplHSeparatorButton_Metropolis:hover {
+    background-color: red;
+}
+
+/* #endregion*/
+
+/* #region Template */
+
+#ASPxSplitter1_1 {
+    background-color: #F5FAFA;
+}
+
+#ContentSplitter_0 {
+    background-color: #F5FAFA;
+}
+
+div#ASPxSplitter1_1_CC {
+    padding: 5px 0px 0px 0px;
+}
+
+.dxtcLite_Metropolis > .dxtc-stripContainer .dxtc-tabHover {
+    background: #F20056 /*url('tcTabBack.gif')*/ repeat-x bottom;
+}
+
+.dxgvHeader_Metropolis a {
+    color: #F20056;
+}
+/* #endregion*/
+
+/* #region Control Button */
+
+div#formLayouBtn {
+    width: 100%;
+}
+
+.dxflGroup_Metropolis.dxflGroupSys.dxflAGSys {
+    table-layout: auto;
+    width: 100px;
+}
+
+#formLayouBtn .dxflVATSys {
+    vertical-align: middle !important;
+}
+
+.dxbButton_Metropolis {
+    color: white;
+    font-weight:600;
+    height: 35px;
+    background-color: #F20056;
+    border: none;
+    padding: 0 10px 0 10px;
+    border-radius: 5px;
+    outline: none !important;
+    outline-offset: unset !important;
+}
+
+    .dxbButton_Metropolis.dxbButtonSys.dxbTSys .dxb {
+        padding: 0 15px 0 15px;
+    }
+
+    .dxbButton_Metropolis div.dxb {
+        border: none;
+    }
+
+.dxbButtonHover_Metropolis {
+    color: white;
+    height: 35px;
+    /*box-shadow: 0 0 0 3px rgba(54, 54, 64, 0.4);*/
+    box-shadow: 0 0 0 3px rgba(245, 188, 83, 0.4);
+    /*box-shadow: 0 0 20px #B6B6B4 inset;*/
+}
+
+/* #endregion*/
+
+/* #region Nested Button */
+
+
+/*.dxm-item.dxm-subMenu.dxm-hovered {
+    box-shadow: 0px 0px 0px 1px #F20056;
+}
+.dxm-item.dxm-hovered {
+    box-shadow: 0px 0px 0px 1px #F20056;
+}*/
+
+#formLayouBtn .dxm-item {
+    /*color: #363640;*/
+    /*background-color: #F20056 !important;*/
+
+}
+
+    /*#formLayouBtn .dxm-item.dxm-hovered {
+        background-color: #F20056 !important;
+    }*/
+
+#formLayouBtn .dxm-popup {
+    /*background-color: #F20056 !important;*/
+    border-radius: 5px;
+    border:none;
+    /*border: 1px #F20056;*/
+}
+
+#formLayouBtn .dxm-popup:hover {
+    /*box-shadow: 0 0 5px #B6B6B4 inset;*/
+    /*background-color: red;*/
+    /*background-color: #F20056 !important;*/
+    /*box-shadow: 0 0 0 3px rgba(245, 188, 83, 0.4);*/
+    box-shadow: 0 0 0 2px rgba(54, 54, 64, 0.2);
+}
+
+/* #endregion*/
+
+/* #region Button Image */
+#btnNew img.dx-vam {
+    content: url(Images/buttonnew/new.png);
+    height: 20px;
+}
+
+#btnAdd img.dx-vam,
+#btnUpdate img.dx-vam,
+#btnChangePassword img.dx-vam {
+    content: url(Images/buttonnew/save.png);
+    height: 20px;
+}
+
+#btnDelete img.dx-vam {
+    content: url(Images/buttonnew/delete.png);
+    height: 20px;
+}
+
+#btnNavFirst img.dx-vam {
+    content: url(Images/buttonnew/first.png);
+    height: 20px;
+}
+
+#btnNavPrevious img.dx-vam {
+    content: url(Images/buttonnew/previous.png);
+    height: 20px;
+}
+
+#btnNavNext img.dx-vam {
+    content: url(Images/buttonnew/next.png);
+    height: 20px;
+}
+
+#btnNavLast img.dx-vam {
+    content: url(Images/buttonnew/last.png);
+    height: 20px;
+}
+
+#btnRefresh img.dx-vam {
+    content: url(Images/buttonnew/refresh.png);
+    height: 20px;
+}
+
+#btnListFind img.dx-vam {
+    content: url(Images/buttonnew/find.png);
+    height: 20px;
+}
+
+#btnMenuOther img.dx-vam {
+    content: url(Images/buttonnew/other.png);
+    height: 20px;
+}
+
+#btnExcel img.dx-vam {
+    content: url(Images/buttonnew/excel.png);
+    height: 20px;
+}
+
+#btnExcelAllPage img.dx-vam {
+    content: url(Images/buttonnew/excelall.png);
+    height: 20px;
+}
+
+#btnPrint img.dx-vam {
+    content: url(Images/buttonnew/print.png);
+    height: 20px;
+}
+
+#btnSend img.dx-vam {
+    content: url(Images/buttonnew/email.png);
+    height: 20px;
+}
+
+#btnPost img.dx-vam {
+    content: url(Images/buttonnew/post.png);
+    height: 20px;
+}
+
+#btnCancel img.dx-vam {
+    content: url(Images/buttonnew/cancel.png);
+    height: 20px;
+}
+
+.dxeButtonEditSys.dxeButtonEdit_Metropolis.editor.dxeReadOnly_Metropolis:not(#EntryDate) img {
+    content: url(Images/buttonnew/find-hitam.png);
+    padding: 3px;
+    height: 15px;
+    background-color: #E5E4E2 !important;
+}
+
+#ContractNo_B0 img {
+    content: url(Images/buttonnew/find-hitam.png);
+    padding: 3px;
+    height: 15px;
+    background-color: #E5E4E2 !important;
+}
+
+#Contractor_B0 img {
+    content: url(Images/buttonnew/find-hitam.png);
+    padding: 3px;
+    height: 15px;
+    background-color: #E5E4E2 !important;
+}
+
+.dxeButton.dxeButtonEditButton_Metropolis {
+    background-color: #E5E4E2 !important;
+}
+
+/* #endregion*/
+
+/* #region Form*/
+#formLayout .dxflGroup_Metropolis.dxflGroupSys.dxflAGSys {
+    width: 100%;
+    table-layout: auto;
+    margin-top: 3px;
+}
+
+.dxflGroupBox_Metropolis {
+    padding: 0 0 20px 0 !important;
+}
+
+    .dxflGroupBox_Metropolis.dxflHeadingLineGroupBoxSys {
+        border: none;
+    }
+
+.dxflHeadingLineGroupBoxSys > .dxflGroupBoxCaption_Metropolis {
+    top: -30px;
+    left: 0px;
+    background: none;
+}
+
+#formLayout td {
+    text-align: left;
+}
+
+.dxICBFocused_Metropolis {
+    outline: 1px dotted #F20056;
+}
+
+.dxWeb_edtCheckBoxChecked_Metropolis, .dxWeb_edtCheckBoxCheckedDisabled_Metropolis,
+.dxWeb_edtCheckBoxGrayed_Metropolis, .dxWeb_edtCheckBoxGrayedDisabled_Metropolis,
+.dxWeb_edtCheckBoxUnchecked_Metropolis, .dxWeb_edtCheckBoxUncheckedDisabled_Metropolis {
+    background-color: #F20056;
+}
+
+.dxflGroupBoxCaption_Metropolis {
+    background-color: #F7F7FC;
+}
+
+.dxeButtonEditSys.dxeButtonEdit_Metropolis.dxeReadOnly_Metropolis {
+    background-color: #E5E4E2 !important;
+}
+
+.dxeEditArea_Metropolis.dxeEditAreaSys:read-only {
+    background-color: #E5E4E2 !important;
+}
+
+.editor .dxeEditArea_Metropolis.dxeEditAreaSys:read-only {
+    background-color: #E5E4E2 !important;
+}
+
+.editornoimage .dxeEditArea_Metropolis.dxeEditAreaSys:read-only {
+    background-color: #E5E4E2 !important;
+}
+
+.dxeMemoEditArea_Metropolis.dxeMemoEditAreaSys:read-only {
+    background-color: #E5E4E2 !important;
+}
+
+.dxeTextBoxSys.dxeTextBox_Metropolis.editor.dxeReadOnly_Metropolis {
+    background-color: #E5E4E2 !important;
+}
+
+.dxeTextBoxSys.dxeTextBox_Metropolis.editornoimage.dxeReadOnly_Metropolis {
+    background-color: #E5E4E2 !important;
+}
+
+.dxucBrowseButtonHover_Metropolis {
+    background-color: #F20056 !important;
+}
+
+.dxeFocused_Metropolis.dxeTBVSys.dxeFocusedMDHSys.dxEditors_edtTBMainDH_Metropolis,
+.dxeFocused_Metropolis.dxeTBVSys.dxeFocusedMDHSys.dxEditors_edtTBMainDHHover_Metropolis,
+.dxeFocused_Metropolis.dxeTBVSys.dxeFocusedMDHSys.dxEditors_edtTBMainDHPressed_Metropolis,
+.dxeFocused_Metropolis .dxeTBVSys .dxeFocusedSDHSys .dxEditors_edtTBSecondaryDH_Metropolis,
+.dxeFocused_Metropolis .dxeTBVSys .dxeFocusedSDHSys .dxEditors_edtTBSecondaryDHHover_Metropolis,
+.dxeFocused_Metropolis .dxeTBVSys .dxeFocusedSDHSys .dxEditors_edtTBSecondaryDHPressed_Metropolis,
+.dxeFocused_Metropolis .dxeTBHSys .dxeFocusedMDHSys .dxEditors_edtTBMainDH_Metropolis,
+.dxeFocused_Metropolis .dxeTBHSys .dxeFocusedMDHSys .dxEditors_edtTBMainDHHover_Metropolis,
+.dxeFocused_Metropolis .dxeTBHSys .dxeFocusedMDHSys .dxEditors_edtTBMainDHPressed_Metropolis,
+.dxeFocused_Metropolis .dxeTBHSys .dxeFocusedSDHSys .dxEditors_edtTBSecondaryDH_Metropolis,
+.dxeFocused_Metropolis .dxeTBHSys .dxeFocusedSDHSys .dxEditors_edtTBSecondaryDHHover_Metropolis,
+.dxeFocused_Metropolis .dxeTBHSys .dxeFocusedSDHSys .dxEditors_edtTBSecondaryDHPressed_Metropolis,
+.dxeTBVSys .dxEditors_edtTBMainDHHover_Metropolis, .dxeTBVSys .dxEditors_edtTBMainDHPressed_Metropolis,
+.dxeTBVSys .dxEditors_edtTBSecondaryDHHover_Metropolis, .dxeTBVSys .dxEditors_edtTBSecondaryDHPressed_Metropolis,
+.dxeTBHSys .dxEditors_edtTBMainDHHover_Metropolis, .dxeTBHSys .dxEditors_edtTBMainDHPressed_Metropolis,
+.dxeTBHSys .dxEditors_edtTBSecondaryDHHover_Metropolis, .dxeTBHSys .dxEditors_edtTBSecondaryDHPressed_Metropolis,
+.dxEditors_edtTBDecBtnHover_Metropolis, .dxEditors_edtTBDecBtnPressed_Metropolis, .dxEditors_edtTBIncBtnHover_Metropolis,
+.dxEditors_edtTBIncBtnPressed_Metropolis, .dxEditors_edtRadioButtonChecked_Metropolis, .dxEditors_edtRadioButtonCheckedDisabled_Metropolis,
+.dxEditors_edtRadioButtonUnchecked_Metropolis, .dxEditors_edtRadioButtonUncheckedDisabled_Metropolis {
+    background-color: #F20056;
+}
+
+.dxeIRBFocused_Metropolis {
+    outline: 1px dotted #F20056;
+}
+
+.dxeButtonEditSys.dxeButtonEdit_Metropolis.editor.dxeReadOnly_Metropolis {
+    background-color: #E5E4E2 !important;
+}
+
+.dxeButtonEditSys.dxeButtonEdit_Metropolis.editornoimage.dxeReadOnly_Metropolis {
+    background-color: #E5E4E2 !important;
+}
+
+
+/* #region Combo Box*/
+.dxeFocused_Metropolis {
+    border: 1px solid #F20056;
+}
+
+.dxeCalendarButtonHover_Metropolis, .dxeButtonEditButtonHover_Metropolis,
+.dxeSpinIncButtonHover_Metropolis, .dxeSpinDecButtonHover_Metropolis,
+.dxeSpinLargeIncButtonHover_Metropolis, .dxeSpinLargeDecButtonHover_Metropolis,
+.dxeColorEditButton_Metropolis:hover {
+    background-color: #F20056;
+    color: white;
+}
+
+.dxeListBoxItemSelected_Metropolis {
+    color: White;
+    background-color: #F20056;
+}
+/* #endregion*/
+
+/* #endregion*/
+
+/* #region Pop Up*/
+.dxpc-contentWrapper {
+    background-color: #F5FAFA;
+}
+
+.dxgvControl_Metropolis a {
+    color: #F20056;
+}
+
+.dxgvFocusedRow_Metropolis a,
+.dxgvFocusedRow_Metropolis .dxgvCommandColumn_Metropolis a {
+    color: white;
+}
+
+.dxeHyperlink_Metropolis {
+    color: #F20056;
+}
+
+    .dxeHyperlink_Metropolis img {
+        content: url(Images/buttonnew/find-hitam.png);
+        padding: 3px;
+        background-color: #E5E4E2 !important;
+        height: 13px !important;
+        width: 14px !important;
+        border: 1px solid #BFBFBF;
+    }
+
+.dxgvFocusedRow_Metropolis {
+    background-color: #F20056 !important;
+    color: white;
+}
+
+.dxpLite_Metropolis .dxp-current {
+    background-color: #F20056;
+}
+
+.dxpLite_Metropolis .dxp-hoverDropDownButton {
+    background-color: #F20056;
+}
+
+.dxmLite_Metropolis .dxm-popup .dxm-hovered, .dxmLite_Metropolis .dxm-popup .dxm-hovered a.dx {
+    color: white;
+    background-color: #F20056;
+}
+
+.dxeTextBoxSys.dxeTextBox_Metropolis.dxeFocused_Metropolis.dxh0 {
+    border-color: #F20056;
+}
+
+/* #endregion*/
+
+/* #region Datetime*/
+
+.dxeCalendarHeader_Metropolis {
+    color: #F20056;
+}
+
+.dxeCalendarSelected_Metropolis {
+    background-color: #F20056;
+}
+
+.dxeCalendarToday_Metropolis {
+    border: #F20056;
+}
+
+.dxeCalendarButtonHover_Metropolis, .dxeColorEditButton_Metropolis:hover {
+    border: #F20056;
+}
+/* #endregion*/
+
+/* #region TV Report*/
+
+#tvReport .dxtv-elbNoLn {
+    margin-bottom: -50px;
+}
+
+#tvReport .dxtv-subnd .dxtv-nd {
+    margin-left: 8px;
+}
+
+#tvReport img.dxtv-ndImg.dx-vam {
+    content: url(Images/menu/report.png);
+    height: 20px;
+}
+
+#tvReport .dxtv-nd.dxtv-ndHov img.dxtv-ndImg.dx-vam,
+#tvReport .dxtv-nd.dxtv-ndSel img {
+    content: url(Images/menu/report-putih.png);
+    height: 20px;
+}
+
+#tvReport a.dxtv-nd {
+    width: -webkit-fill-available;
+    margin-left: 30px;
+}
+
+#tvReport .dxtv-nd {
+    width: -webkit-fill-available;
+    margin-left: 30px;
+}
+/* #endregion*/
+
+/* #region Report Page */
+#formLayoutParam .dxflGroupBoxCaption_Metropolis {
+    margin-top: 20px;
+}
+
+div#splResizingReport_1_CC {
+    -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+    -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+}
+
+/* #endregion*/
+
+/* #region Separator Report */
+#splResizingReport_1_S {
+    background-color: #F5FAFA;
+    border: none;
+}
+
+#splResizingReport_1_S_CB.dxsplVSeparatorButton_Metropolis:hover {
+    background-color: red;
+}
+
+#splResizingReport_1_S_CF.dxsplVSeparatorButton_Metropolis:hover {
+    background-color: red;
+}
+/* #endregion */
+
+/* #region Tab*/
+.dxtcLite_Metropolis.dxtc-left > .dxtc-stripContainer .dxtc-tabHover {
+    background: #363640 repeat-y;
+}
+
+/* #endregion */
+
+/* #region Email */
+.dxheDesignViewArea_Metropolis.dxheViewArea_Metropolis {
+    border: none !important;
+}
+
+.dxmLite_Metropolis .dxm-main .dxm-hovered {
+    background-color: #363640;
+}
+
+/* #endregion */
+
+/* #endregion */
+
+/* #region Footer*/
+#ContentSplitter_1_CC {
+    background-color: #363640;
+}
+
+#MessageText {
+    
+}
+/* #endregion*/
+
+/* #region Etc*/
+
+/*.gridRow-static-height{ 
+    height: 52px !important;
+}
+.dxgvDataRow_Metropolis td[style]
+{
+    height: 200px !important;
+}*/
+/* #endregion*/
+
+/* ganti icon panah node
+span.dxtv-elbNoLn {
+    background-image:url("Images/company-logo.png");
+    background-repeat:repeat-x;
+    background-size:50px;
+}
+
+    .dxtv-elbNoLn img {
+        visibility: hidden !important;
+    }  
+ ganti icon panah node*/
+
+/*by rizki*/
+@media only screen and (max-width: 768px) {
+    div.dxb > span.dx-vam {
+        display: none !important;
+    }
+
+    img.dx-vam{
+        margin-right: 0px;
+    }
+}
+.btn-shadow {
+    box-shadow: 0px 2px 5px 0 rgb(0 0 0 / 25%);
+}
+.dxm-disabled {
+    color: #A2A2A2 !important;
+    background-color: #ddd;
+}
+.dxmLite_Office365White .dxm-horizontal .dxm-image-l .dxm-content {
+    padding: 5px 13px 5px;
+    color: white;
+}
+.dxbButton_Office365White div.dxb {
+    padding: 5px 5px 5px;
+}
+
+.dxflGroup_Office365White {
+    padding: 0; 
+    width: 100%;
+}
+.dxpcLite_Office365White .dxpc-footer {
+    min-height: 0;
+}
+.tree-view-node{
+    padding-top:10px !important;
+    padding-bottom:11px !important;
+}
+.tree-view-elbow {
+    padding-top: 10px !important;
+    /*padding-bottom: 5px !important;*/
+}
+/*.page-toolbar{
+    position: fixed;
+}*/
+.under-toolbar {
+    background-color: rgb(221 221 221) !important;
+}
+.dxbButtonSys.dxbTSys {
+    border-radius: .25rem;
+}
+.btn-other{
+    font-size: 12px !important;
+    color: white;
+}
+
+.dx-treeview .dx-treeview-toggle-item-visibility {
+    right: 10px;
+    left: auto;
+}
+
+.dxtvControl_Office365White .dxtv-ndHov {
+    background-color: #666;
+}
+.dxtv-control.dxtv-wrap-text .dxtv-nd{
+    border-radius: .25rem;
+}
+#linkAddBatchDetail img.dx-vam {
+    content: url(Images/buttonnew/save.png);
+    height: 20px;
+}
+#linkDelete img.dx-vam {
+    content: url(Images/buttonnew/delete.png);
+    height: 20px;
+}
+.btn-margin{
+    margin-right: 10px;
+}

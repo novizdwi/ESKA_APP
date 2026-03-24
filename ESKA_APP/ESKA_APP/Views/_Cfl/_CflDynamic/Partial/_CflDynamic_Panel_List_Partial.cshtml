@@ -1,0 +1,103 @@
+﻿@model Models._Cfl.CflDynamic_ParamModel 
+
+@{
+    GridViewModel viewModel=new GridViewModel();
+    if(ViewBag.viewModel!=null) {
+        viewModel = ViewBag.viewModel;
+    }
+
+}
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "CflDynamicPopupList" + Model.Code;
+    settings.CallbackRouteValues = new { Controller = "_CflDynamic", Action = "PopupListLoadOnDemandPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter  ;
+
+    settings.CloseAnimationType = AnimationType.Fade; 
+    settings.PopupAnimationType = AnimationType.Fade;
+    
+    settings.ShowFooter = true; 
+    settings.AllowDragging = true;
+    settings.AllowResize = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowMaximizeButton = true;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+   
+    
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true; 
+    
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "Choose "+Model.Description;
+   
+    settings.SetContent(() =>
+    {
+    
+        //Html.DevExpress().HyperLink(settingsHL =>
+        //{
+        //    settingsHL.Name = "gvCflDynamic_GvExportTo" + Model.Code;
+        //    settingsHL.NavigateUrl = "javascript:void(0)";
+        //    settingsHL.Properties.Text = "Excel";
+        //    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ GvCflDynamicExportTo(gvCflDynamic{1}, '{0}'); }}", @Url.Action("ExportTo", "_CflDynamic"), Model.Code);
+        //    settingsHL.Height = 20;
+        //}).GetHtml();
+
+        if (Model.IsMulti =="Y")
+        {
+            //ViewContext.Writer.Write("&nbsp;&nbsp;");
+            Html.DevExpress().HyperLink(settingsHL =>
+             {
+                 settingsHL.Name = "gvCflDynamic" + Model.Code + "Choose";
+                 settingsHL.NavigateUrl = "javascript:void(0)";
+                 settingsHL.Properties.Text = "Choose";
+                 settingsHL.Height = 20;
+                 settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose_CflDynamic{0}(s, e); }}", Model.Code);
+             }).GetHtml();
+
+            ViewContext.Writer.Write("&nbsp;|&nbsp;");
+            
+        }
+
+
+        Html.DevExpress().HyperLink(settingsHL =>
+        {
+            settingsHL.Name = "gvCflDynamic" + Model.Code + "Cancel";
+            settingsHL.NavigateUrl = "javascript:void(0)";
+            settingsHL.Properties.Text = "Cancel";
+            settingsHL.Height = 20;
+            settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ CflDynamicPopupList{0}.Hide(); }}", Model.Code);
+        }).GetHtml();
+
+        Html.RenderPartial("Partial/_CflDynamic_List_Partial", viewModel);
+        
+    });
+
+    settings.CustomJSProperties = (sender, e) =>
+    {
+        e.Properties["cpPopupFind_CflDynamicCode"] = Model.Code;
+        e.Properties["cpPopupFind_CflDynamicDescription"] = Model.Description;
+        e.Properties["cpPopupFind_CflDynamicSql"] = Model.Sql;
+        e.Properties["cpPopupFind_CflDynamicIsMulti"] = Model.IsMulti.ToString(); 
+    };
+
+   
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender;
+        popup.Width = 1000;
+        popup.Height = 500;
+    };
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{   e.customArgs['hidden_CflDynamicCode']=s.cpPopupFind_CflDynamicCode; e.customArgs['hidden_CflDynamicDescription']=s.cpPopupFind_CflDynamicDescription; e.customArgs['hidden_CflDynamicSql']=s.cpPopupFind_CflDynamicSql;e.customArgs['hidden_CflDynamicIsMulti']=s.cpPopupFind_CflDynamicIsMulti; }}");
+    settings.ClientSideEvents.Resize = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(CflDynamicPopupList{0},gvCflDynamic{0}); }}", Model.Code);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(CflDynamicPopupList{0},gvCflDynamic{0}); }}", Model.Code);
+
+    
+}).GetHtml()

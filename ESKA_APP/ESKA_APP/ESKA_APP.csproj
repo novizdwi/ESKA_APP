@@ -1,0 +1,1261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A234E79F-C351-476C-B497-A6C88205C594}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ESKA_APP</RootNamespace>
+    <AssemblyName>ESKA_APP</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <IncludeIisSettings>false</IncludeIisSettings>
+    <IncludeAppPool>true</IncludeAppPool>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>
+    </RuntimeIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\CrystalDecisions.CrystalReports.Engine\v4.0_13.0.4000.0__692fbea5521e1304\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\CrystalDecisions.Shared\v4.0_13.0.4000.0__692fbea5521e1304\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\CrystalDecisions.Web\v4.0_13.0.4000.0__692fbea5521e1304\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.BonusSkins.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.BonusSkins.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Charts.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.CodeParser.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Dashboard.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v20.1.Web, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Dashboard.v20.1.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v20.1.Web.Mvc5, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Dashboard.v20.1.Web.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Dashboard.v20.1.Web.WebForms, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Dashboard.v20.1.Web.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.Desktop.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Data.Desktop.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Data.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.DataAccess.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Images.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Images.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Map.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Map.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Office.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Office.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Pdf.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v20.1.Drawing, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Pdf.v20.1.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.PivotGrid.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.PivotGrid.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Printing.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.RichEdit.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v20.1.Export, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.RichEdit.v20.1.Export.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Sparkline.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Sparkline.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.SpellChecker.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.SpellChecker.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Spreadsheet.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Spreadsheet.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.TreeMap.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.TreeMap.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Utils.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v20.1.UI, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Utils.v20.1.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxDiagram.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxDiagram.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxGantt.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxGantt.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxHtmlEditor.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxPivotGrid.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxRichEdit.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxRichEdit.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxScheduler.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxScheduler.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxSpellChecker.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxSpellChecker.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxSpreadsheet.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxSpreadsheet.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxThemes.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxThemes.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.ASPxTreeList.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.ASPxTreeList.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.Mvc5.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.Mvc5.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.Resources.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.Resources.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Web.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Web.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.Xpo.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraBars.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraCharts.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v20.1.Extensions, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraCharts.v20.1.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v20.1.UI, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraCharts.v20.1.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v20.1.Web, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraCharts.v20.1.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v20.1.Wizard, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraCharts.v20.1.Wizard.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraEditors.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraGauges.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraNavBar.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraPrinting.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraReports.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v20.1.Web, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraReports.v20.1.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v20.1.Web.WebForms, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraReports.v20.1.Web.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v20.1.Core, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraScheduler.v20.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v20.1, Version=20.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\DevExpress.XtraTreeList.v20.1.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Office365White">
+      <HintPath>..\..\..\..\..\Theme\Office365White.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Sap.Data.Hana.v4.5, Version=2.17.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\sap\hdbclient\ado.net\v4.5\Sap.Data.Hana.v4.5.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\Article.html" />
+    <Content Include="App_Data\ArticleContents.xml" />
+    <Content Include="App_Data\Overview.html" />
+    <Content Include="App_Data\OverviewContents.xml" />
+    <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="Content\dx.material.custom-scheme.css" />
+    <Content Include="Content\Images\bell.svg" />
+    <Content Include="Content\Images\bell_amber.svg" />
+    <Content Include="Content\Images\buttonnew\back.png" />
+    <Content Include="Content\Images\buttonnew\clear.jpg" />
+    <Content Include="Content\Images\buttonnew\clear.png" />
+    <Content Include="Content\Images\buttonnew\date.png" />
+    <Content Include="Content\Images\buttonnew\Delete.png" />
+    <Content Include="Content\Images\buttonnew\down.png" />
+    <Content Include="Content\Images\buttonnew\excel.png" />
+    <Content Include="Content\Images\buttonnew\excelall.png" />
+    <Content Include="Content\Images\buttonnew\find-hitam.png" />
+    <Content Include="Content\Images\buttonnew\Find.png" />
+    <Content Include="Content\Images\buttonnew\first.png" />
+    <Content Include="Content\Images\buttonnew\last.png" />
+    <Content Include="Content\Images\buttonnew\new.png" />
+    <Content Include="Content\Images\buttonnew\Next.png" />
+    <Content Include="Content\Images\buttonnew\other.png" />
+    <Content Include="Content\Images\buttonnew\Previous.png" />
+    <Content Include="Content\Images\buttonnew\print.png" />
+    <Content Include="Content\Images\buttonnew\refresh.png" />
+    <Content Include="Content\Images\buttonnew\save.png" />
+    <Content Include="Content\Images\buttonnew\up.png" />
+    <Content Include="Content\Content.css" />
+    <Content Include="Content\GridView.css" />
+    <Content Include="Content\GridView.js" />
+    <Content Include="Content\Images\adaptive-menu.svg" />
+    <Content Include="Content\Images\add.svg" />
+    <Content Include="Content\Images\application.svg" />
+    <Content Include="Content\Images\Article-white.svg" />
+    <Content Include="Content\Images\Article.svg" />
+    <Content Include="Content\Images\back.svg" />
+    <Content Include="Content\Images\delete.svg" />
+    <Content Include="Content\Images\double-close.svg" />
+    <Content Include="Content\Images\double.svg" />
+    <Content Include="Content\Images\edit.svg" />
+    <Content Include="Content\Images\export.svg" />
+    <Content Include="Content\Images\eye-button-hide.svg" />
+    <Content Include="Content\Images\eye-button.svg" />
+    <Content Include="Content\Images\GridView-white.svg" />
+    <Content Include="Content\Images\GridView.svg" />
+    <Content Include="Content\Images\Home-white.svg" />
+    <Content Include="Content\Images\Home.svg" />
+    <Content Include="Content\Images\image-sample.png" />
+    <Content Include="Content\Images\kind1-white.svg" />
+    <Content Include="Content\Images\kind1.svg" />
+    <Content Include="Content\Images\kind2-white.svg" />
+    <Content Include="Content\Images\kind2.svg" />
+    <Content Include="Content\Images\login-wp.jpg" />
+    <Content Include="Content\Images\logo-small.svg" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\logo.svg" />
+    <Content Include="Content\Images\logoESKA.png" />
+    <Content Include="Content\Images\menu.svg" />
+    <Content Include="Content\Images\mjl.svg" />
+    <Content Include="Content\Images\Overview\article.png" />
+    <Content Include="Content\Images\Overview\demo.png" />
+    <Content Include="Content\Images\Overview\grid.png" />
+    <Content Include="Content\Images\Overview\login.gif" />
+    <Content Include="Content\Images\Overview\login.png" />
+    <Content Include="Content\Images\Overview\menu.gif" />
+    <Content Include="Content\Images\Overview\scheduler.png" />
+    <Content Include="Content\Images\Overview\sidebar.gif" />
+    <Content Include="Content\Images\Overview\sticky-footer.gif" />
+    <Content Include="Content\Images\Overview\toolbar.gif" />
+    <Content Include="Content\Images\print.svg" />
+    <Content Include="Content\Images\priority1-white.svg" />
+    <Content Include="Content\Images\priority1.svg" />
+    <Content Include="Content\Images\priority2-white.svg" />
+    <Content Include="Content\Images\priority2.svg" />
+    <Content Include="Content\Images\priority3-white.svg" />
+    <Content Include="Content\Images\priority3.svg" />
+    <Content Include="Content\Images\Scheduler-white.svg" />
+    <Content Include="Content\Images\Scheduler.svg" />
+    <Content Include="Content\Images\search-selected.svg" />
+    <Content Include="Content\Images\search.svg" />
+    <Content Include="Content\Images\sign-out.svg" />
+    <Content Include="Content\Images\user.svg" />
+    <Content Include="Content\Layout.css" />
+    <Content Include="Content\Rpt.css" />
+    <Content Include="Content\Scheduler.css" />
+    <Content Include="Content\Scheduler.js" />
+    <Content Include="Content\Script.js" />
+    <Content Include="Content\SignInRegister.css" />
+    <Content Include="Content\SignInRegister.js" />
+    <Content Include="Content\Styles.css" />
+    <Content Include="Global.asax" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Rpts\Rpt.aspx" />
+    <Content Include="Scripts\ASPxScriptIntelliSense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\globalize.cultures.js" />
+    <Content Include="Scripts\Idu.js" />
+    <Content Include="Content\icons\dxiconsmaterial.ttf" />
+    <Content Include="Content\icons\dxiconsmaterial.woff" />
+    <Content Include="Content\icons\dxiconsmaterial.woff2" />
+    <Content Include="Rpts\Report1.rpt" />
+    <Content Include="Rpts\Report2.rpt" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.0.js" />
+    <Content Include="Scripts\jquery-2.2.0.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.globalize.js" />
+    <Content Include="Scripts\jquery.validate.globalize.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\SQLs\Create Schema.sql" />
+    <Content Include="Scripts\SQLs\Insert Into.sql" />
+    <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
+    <Content Include="Scripts\Test\DXR.js" />
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\ApplicationMenuDataSource.sitemap" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\LeftPanelPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <None Include="packages.config" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Authentication\Login\Login.cshtml" />
+    <Content Include="Views\Shared\_Layout_login.cshtml" />
+    <Content Include="Scripts\jquery-2.2.0.min.map" />
+    <Content Include="Views\Shared\LogonPartial.cshtml" />
+    <Content Include="Views\Shared\_rootLayout.cshtml" />
+    <Content Include="Views\Shared\_mainLayout2_0.cshtml" />
+    <Content Include="Views\Shared\_mainLayout2_1.cshtml" />
+    <Content Include="Views\Shared\AlertPartialView.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\FooterPartialView.cshtml" />
+    <Content Include="Views\Shared\HeaderPartialView.cshtml" />
+    <Content Include="Views\Shared\LogOnPartialView.cshtml" />
+    <Content Include="Views\Shared\_LayoutX.cshtml" />
+    <Content Include="Views\Authentication\ChangePassword\ChangePassword.cshtml" />
+    <Content Include="Views\Authentication\ChangePassword\Partial\ChangePassword_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Authentication\ChangePassword\Partial\ChangePassword_Form_Partial.cshtml" />
+    <Content Include="Views\Authentication\User\Partial\User_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Authentication\User\Partial\User_Form_Partial.cshtml" />
+    <Content Include="Views\Authentication\User\Partial\User_List_Partial.cshtml" />
+    <Content Include="Views\Authentication\User\Partial\User_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Authentication\User\User.cshtml" />
+    <Content Include="Views\_Cfl\_CflBp\Partial\_CflBp_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflBp\Partial\_CflBp_Panel_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflCoa\Partial\_CflCoa_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflCoa\Partial\_CflCoa_Panel_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflDynamic\Partial\_CflDynamic_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflDynamic\Partial\_CflDynamic_Panel_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflItem\Partial\_CflItem_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflItem\Partial\_CflItem_Panel_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflWarehouse\Partial\_CflWarehouse_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflWarehouse\Partial\_CflWarehouse_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Report\ReportAlert\Partial\ReportAlert_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Report\ReportAlert\Partial\ReportAlert_Form_Partial.cshtml" />
+    <Content Include="Views\Report\ReportAlert\Partial\ReportAlert_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Report\ReportAlert\Partial\ReportAlert_ListDetail_Partial.cshtml" />
+    <Content Include="Views\Report\ReportAlert\ReportAlert.cshtml" />
+    <Content Include="Views\Report\ReportCustom\Partial\ReportCustom_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Report\ReportCustom\Partial\ReportCustom_Form_Partial.cshtml" />
+    <Content Include="Views\Report\ReportCustom\Partial\ReportCustom_Form_TabDetail_Param_Partial.cshtml" />
+    <Content Include="Views\Report\ReportCustom\Partial\ReportCustom_ParamDetail_Partial.cshtml" />
+    <Content Include="Views\Report\ReportCustom\ReportCustom.cshtml" />
+    <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_Form_Partial.cshtml" />
+    <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_ListDetail_Partial.cshtml" />
+    <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_ParamDetail_Partial.cshtml" />
+    <Content Include="Views\Report\ReportQuery\ReportQuery.cshtml" />
+    <Content Include="Views\Setting\AlertGroup\AlertGroup.cshtml" />
+    <Content Include="Views\Setting\AlertGroup\Partial\AlertGroup_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\AlertGroup\Partial\AlertGroup_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\AlertGroup\Partial\AlertGroup_List_Partial.cshtml" />
+    <Content Include="Views\Setting\AlertGroup\Partial\AlertGroup_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Alert.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_Form_TabSql_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Alert\Partial\Alert_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\GeneralSetting\GeneralSetting.cshtml" />
+    <Content Include="Views\Setting\GeneralSetting\Partial\GeneralSetting_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\GeneralSetting\Partial\GeneralSetting_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\GeneralSetting\Partial\GeneralSetting_TabItem_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Layout\Layout.cshtml" />
+    <Content Include="Views\Setting\Layout\Partial\Layout_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\Layout\Partial\Layout_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\Layout\Partial\Layout_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Layout\Partial\Layout_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Layout\Partial\Layout_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Layout\Partial\Layout_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\Partial\QueryGroup_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\Partial\QueryGroup_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\Partial\QueryGroup_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\Partial\QueryGroup_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\Partial\QueryGroup_List_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\Partial\QueryGroup_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\QueryGroup\QueryGroup.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Form_TabParam_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Form_TabSql_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Partial\Query_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Query\Query.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\Partial\ReportGroup_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\Partial\ReportGroup_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\Partial\ReportGroup_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\Partial\ReportGroup_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\Partial\ReportGroup_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\Partial\ReportGroup_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ReportGroup\ReportGroup.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_Form_TabParam_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Partial\Report_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Report\Report.cshtml" />
+    <Content Include="Views\_CrystalReport\Layout\Print_List_Partial.cshtml" />
+    <Content Include="Views\_CrystalReport\Layout\Print_Panel_Partial.cshtml" />
+    <Content Include="Views\_CrystalReport\Rpt.cshtml" />
+    <Content Include="Views\Authentication\Role\Partial\Role_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Authentication\Role\Partial\Role_Form_Partial.cshtml" />
+    <Content Include="Views\Authentication\Role\Partial\Role_List_Partial.cshtml" />
+    <Content Include="Views\Authentication\Role\Partial\Role_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Authentication\Role\Partial\Role_TreeView_Partial.cshtml" />
+    <Content Include="Views\Authentication\Role\Role.cshtml" />
+    <Content Include="Views\Shared\_rootRpt.cshtml" />
+    <Content Include="Views\Authentication\User\Partial\User_TabWarehouse_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\PurchaseOrderScan_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\PurchaseOrderScan_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\PurchaseOrderScan_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\PurchaseOrderScan_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\PurchaseOrderScan_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScan.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPO.cshtml" />
+    <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TransferRequest_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TransferRequest_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TransferRequest_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TransferRequest_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TransferRequest_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\TransferRequest.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_Panel_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\TransferOut_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\TransferOut_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\TransferOut_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\TransferOut_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\TransferOut_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\TransferOut.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\TransferIn_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\TransferIn_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\TransferIn_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\TransferIn_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\TransferIn_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\TransferIn.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\TransferSummaryOut.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\TransferSummaryIn.cshtml" />
+    <Content Include="Views\_Cfl\_CflTransferRequest\Partial\_CflTransferRequest_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflTransferRequest\Partial\_CflTransferRequest_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\AdjustmentIn.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_Form_TabAttachment_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Attachment\Attachment_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Attachment\Attachment_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Attachment\Attachment_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\AdjustmentOut.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_Form_TabAttachment_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Attachment\Attachment_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Attachment\Attachment_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Attachment\Attachment_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\RequestStockOpname_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\RequestStockOpname_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\RequestStockOpname_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\RequestStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\RequestStockOpname.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\StockOpnameScan_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\StockOpnameScan_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\StockOpnameScan_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\StockOpnameScan_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\StockOpnameScan_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\StockOpnameScan.cshtml" />
+    <Content Include="Views\Setting\GeneralSetting\Partial\GeneralSetting_TabAdjustmentCoa_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\ApprovalStage.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\ApprovalTemplate.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_TabDepartment_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_TabSql_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_TabStage_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Approval\Approval.cshtml" />
+    <Content Include="Views\Setting\Approval\Partial\Approval_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Setting\Approval\Partial\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Setting\Approval\Partial\Approval_Form_TabRole_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Approval\Partial\Approval_Form_TabUser_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Approval\Partial\Approval_List_Partial.cshtml" />
+    <Content Include="Views\Setting\Approval\Partial\Approval_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpname.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflStockOpname\Partial\_CflStockOpname_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflStockOpname\Partial\_CflStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_Form_TabRef_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_Form_TabRef_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_TabReference_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\RfidMonitoring.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_Form_TabRef_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_Form_TabRef_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflTransferSummaryOut\Partial\_CflTransferSummaryOut_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflTransferSummaryOut\Partial\_CflTransferSummaryOut_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Partial.cshtml" />
+    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflCostCenter\Partial\_CflCostCenter_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflCostCenter\Partial\_CflCostCenter_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\GoodsReceiptPO_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\PurchaseOrderScan\Partial\PurchaseOrderScan_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\TransferSummaryOut_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\TransferSummaryIn_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TransferRequest_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferOut\Partial\TransferOut_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferIn\Partial\TransferIn_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\StockSummaryOpname_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockOpnameScan\Partial\StockOpnameScan_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\RequestStockOpname\Partial\RequestStockOpname_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\AdjustmentOut_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\AdjustmentIn_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Notification\Notification.cshtml" />
+    <Content Include="Views\Notification\Partial\_Notification_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Notification\Partial\_Notification_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TemplateUpload\TemplateUpload_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TemplateUpload\TemplateUpload_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\TemplateUpload\TemplateUpload_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\ChangeItem.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ItemMaster\ItemMaster.cshtml" />
+    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentIn\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Adjustment\AdjustmentOut\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferRequest\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryIn\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Inventory\TransferSummaryOut\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\Purchasing\GoodsReceiptPO\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\StockSummaryOpname\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\DeactiveTag.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ElmahController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InfoController.cs" />
+    <Compile Include="Code\AuthHelper.cs" />
+    <Compile Include="Code\DBContext.cs" />
+    <Compile Include="Controllers\Authentication\ChangePassword\ChangePasswordController.cs" />
+    <Compile Include="Controllers\Authentication\Login\LoginController.cs" />
+    <Compile Include="Controllers\Authentication\Logout\LogoutController.cs" />
+    <Compile Include="Controllers\Authentication\Role\RoleController.cs" />
+    <Compile Include="Controllers\Authentication\Role\RoleController.List.cs" />
+    <Compile Include="Controllers\Authentication\Role\RoleController.List.Export.cs" />
+    <Compile Include="Controllers\Authentication\Role\RoleController.Nav.cs" />
+    <Compile Include="Controllers\Authentication\User\UserController.cs" />
+    <Compile Include="Controllers\Authentication\User\UserController.List.cs" />
+    <Compile Include="Controllers\Authentication\User\UserController.List.Export.cs" />
+    <Compile Include="Controllers\Authentication\User\UserController.Nav.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CommonFileHelper.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Approval.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.CancelReason.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.List.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Nav.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.ViewApproval.cs" />
+    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.cs" />
+    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.List.cs" />
+    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.Nav.cs" />
+    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.cs" />
+    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.Tab.Reference.cs" />
+    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.CancelReason.cs" />
+    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.cs" />
+    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.List.cs" />
+    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.Nav.cs" />
+    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Notification\_NotificationController.List.cs" />
+    <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
+    <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
+    <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
+    <Compile Include="Controllers\Report\ReportCustom\ReportCustomController.cs" />
+    <Compile Include="Controllers\Report\ReportCustom\ReportCustomController.Print.cs" />
+    <Compile Include="Controllers\Report\ReportQuery\ReportQueryController.cs" />
+    <Compile Include="Controllers\Report\ReportQuery\ReportQueryController.ListDetail.cs" />
+    <Compile Include="Controllers\Report\ReportQuery\ReportQueryController.ListDetail.Export.cs" />
+    <Compile Include="Controllers\Setting\AlertGroup\AlertGroupController.cs" />
+    <Compile Include="Controllers\Setting\AlertGroup\AlertGroupController.List.cs" />
+    <Compile Include="Controllers\Setting\AlertGroup\AlertGroupController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\AlertGroup\AlertGroupController.Nav.cs" />
+    <Compile Include="Controllers\Setting\Alert\AlertController.cs" />
+    <Compile Include="Controllers\Setting\Alert\AlertController.List.cs" />
+    <Compile Include="Controllers\Setting\Alert\AlertController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\Alert\AlertController.Nav.cs" />
+    <Compile Include="Controllers\Setting\ApprovalStage\ApprovalStageController.cs" />
+    <Compile Include="Controllers\Setting\ApprovalStage\ApprovalStageController.List.cs" />
+    <Compile Include="Controllers\Setting\ApprovalStage\ApprovalStageController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\ApprovalStage\ApprovalStageController.Nav.cs" />
+    <Compile Include="Controllers\Setting\ApprovalTemplate\ApprovalTemplateController.cs" />
+    <Compile Include="Controllers\Setting\ApprovalTemplate\ApprovalTemplateController.List.cs" />
+    <Compile Include="Controllers\Setting\ApprovalTemplate\ApprovalTemplateController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\ApprovalTemplate\ApprovalTemplateController.Nav.cs" />
+    <Compile Include="Controllers\Setting\ApprovalTemplate\ApprovalTemplateController.Tab.Stage.cs" />
+    <Compile Include="Controllers\Setting\Approval\ApprovalController.cs" />
+    <Compile Include="Controllers\Setting\Approval\ApprovalController.List.cs" />
+    <Compile Include="Controllers\Setting\Approval\ApprovalController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\Approval\ApprovalController.Nav.cs" />
+    <Compile Include="Controllers\Setting\GeneralSetting\GeneralSettingController.cs" />
+    <Compile Include="Controllers\Setting\Layout\LayoutController.cs" />
+    <Compile Include="Controllers\Setting\Layout\LayoutController.DownloadRpt.cs" />
+    <Compile Include="Controllers\Setting\Layout\LayoutController.List.cs" />
+    <Compile Include="Controllers\Setting\Layout\LayoutController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\Layout\LayoutController.Nav.cs" />
+    <Compile Include="Controllers\Setting\QueryGroup\QueryGroupController.cs" />
+    <Compile Include="Controllers\Setting\QueryGroup\QueryGroupController.List.cs" />
+    <Compile Include="Controllers\Setting\QueryGroup\QueryGroupController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\QueryGroup\QueryGroupController.Nav.cs" />
+    <Compile Include="Controllers\Setting\Query\QueryController.cs" />
+    <Compile Include="Controllers\Setting\Query\QueryController.List.cs" />
+    <Compile Include="Controllers\Setting\Query\QueryController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\Query\QueryController.Nav.cs" />
+    <Compile Include="Controllers\Setting\ReportGroup\ReportGroupController.cs" />
+    <Compile Include="Controllers\Setting\ReportGroup\ReportGroupController.List.cs" />
+    <Compile Include="Controllers\Setting\ReportGroup\ReportGroupController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\ReportGroup\ReportGroupController.Nav.cs" />
+    <Compile Include="Controllers\Setting\Report\ReportController.cs" />
+    <Compile Include="Controllers\Setting\Report\ReportController.DownloadRpt.cs" />
+    <Compile Include="Controllers\Setting\Report\ReportController.List.cs" />
+    <Compile Include="Controllers\Setting\Report\ReportController.List.Export.cs" />
+    <Compile Include="Controllers\Setting\Report\ReportController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.List.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.Tab.Attachment.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.Tab.Attachment.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentIn\AdjustmentInController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.List.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.Tab.Attachment.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.Tab.Attachment.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Adjustment\AdjustmentOut\AdjustmentOutController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferIn\TransferInController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferIn\TransferInController.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferIn\TransferInController.List.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferIn\TransferInController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferIn\TransferInController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferIn\TransferInController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferOut\TransferOutController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferOut\TransferOutController.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferOut\TransferOutController.List.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferOut\TransferOutController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferOut\TransferOutController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferOut\TransferOutController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.List.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.TemplateUpload.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferRequest\TransferRequestController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.List.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.Tab.Ref.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryIn\TransferSummaryInController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.List.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.Tab.Ref.cs" />
+    <Compile Include="Controllers\Transaction\Inventory\TransferSummaryOut\TransferSummaryOutController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.List.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.Tab.Ref.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\GoodsReceiptPO\GoodsReceiptPOController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScanController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScanController.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScanController.List.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScanController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScanController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\Purchasing\PurchaseOrderScan\PurchaseOrderScanController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.Tab.Ref.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.List.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockSummaryOpname\StockSummaryOpnameController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameScan\StockOpnameScanController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameScan\StockOpnameScanController.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameScan\StockOpnameScanController.List.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameScan\StockOpnameScanController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameScan\StockOpnameScanController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameScan\StockOpnameScanController.ViewItemTag.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\RequestStockOpname\RequestStockOpnameController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\RequestStockOpname\RequestStockOpnameController.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\RequestStockOpname\RequestStockOpnameController.List.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\RequestStockOpname\RequestStockOpnameController.Nav.cs" />
+    <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCoa\_CflCoaController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCoa\_CflCoaController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItem\_CflItemController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItem\_CflItemController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflStockOpname\_CflStockOpnameController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflStockOpname\_CflStockOpnameController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflTransferRequest\_CflTransferRequestController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflTransferRequest\_CflTransferRequestController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflPurchaseOrder\_CflPurchaseOrderController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflPurchaseOrder\_CflPurchaseOrderController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflToWarehouse\_CflToWarehouseController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflToWarehouse\_CflToWarehouseController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflTransferSummaryOut\_CflTransferSummaryOutController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflTransferSummaryOut\_CflTransferSummaryOutController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflWarehouse\_CflWarehouseController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflWarehouse\_CflWarehouseController.List.Export.cs" />
+    <Compile Include="Controllers\_CrystalReport\_CrystalReportController.cs" />
+    <Compile Include="Controllers\_ViewJe\_ViewJeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="IduRazorViewEngine.cs" />
+    <Compile Include="Rpts\Rpt.aspx.cs">
+      <DependentUpon>Rpt.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Rpts\Rpt.aspx.designer.cs">
+      <DependentUpon>Rpt.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Elmah\" />
+    <Folder Include="Areas\Admin\Views\Info\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Content\Attachment\CleaningTank\" />
+    <Folder Include="Content\Attachment\MaterialRequest\" />
+    <Folder Include="Content\Attachment\PerawatanEngine\" />
+    <Folder Include="Content\Attachment\Perawatan\" />
+    <Folder Include="Content\Attachment\Ship\" />
+    <Folder Include="Content\Images\menu\" />
+    <Folder Include="Content\Temp\" />
+    <Folder Include="Rpts\Layout\" />
+    <Folder Include="Rpts\Models\" />
+    <Folder Include="Views\Authentication\Login\Partial\" />
+    <Folder Include="Views\GeneralSetting\" />
+    <Folder Include="Views\Logout\" />
+    <Folder Include="Views\_Notification\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ESKA_DI\ESKA_DI.csproj">
+      <Project>{e939a90b-5f9b-41ba-ab6f-7a28f5999f36}</Project>
+      <Name>ESKA_DI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SAPbobsCOM">
+      <Guid>{FC8030BE-F5D2-4B8E-8F92-44228FE30100}</Guid>
+      <VersionMajor>10</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1109</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/ESKA</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

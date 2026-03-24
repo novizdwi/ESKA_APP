@@ -1,0 +1,185 @@
+﻿@using Models;
+
+@model Models.Transaction.Inventory.TransferRequestApprovalView___
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(Model.Id).GetHtml()
+ 
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "ViewApproval_formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "View Approval";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+
+        itemSettings.ColCount = 1;
+
+    });
+
+    var groupItem_Col1 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = 100;
+    });
+
+    var groupItem_Col2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1; 
+    });
+
+
+    var groupItem_Col3 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 2; 
+        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    });
+
+    var groupItem_1 = groupItem_Col1.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 2;
+    });
+
+    var groupItem_Col11 = groupItem_1.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col12 = groupItem_1.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    });
+
+    groupItem_Col11.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "FirstName";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Originator";
+        itemSettings.FieldName = "FirstName";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "FirstName";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+    groupItem_Col11.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+        itemSettings.Caption = "Request Date";
+        itemSettings.FieldName = "CreatedDate";
+
+        var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "CreatedDate";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.NullText = "dd/MM/yyyy";
+        txt.Properties.EditFormat = EditFormat.Custom;
+        txt.Properties.EditFormatString = "dd/MM/yyyy";
+        txt.Properties.EditFormat = EditFormat.Date;
+
+        txt.Width = 150;
+    });
+
+    groupItem_Col12.Items.Add(m => Model.ApprovalMessages, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+        itemSettings.Caption = "Approval Messages";
+        itemSettings.FieldName = "ApprovalMessages";
+
+        MemoSettings txt = (MemoSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ApprovalMessages";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Height = 55;
+        txt.Width = 230;
+        txt.ReadOnly = true;
+    });
+
+
+    groupItem_Col2.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "ViewApproval_TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+
+        group.PageControl.ContentStyle.Paddings.Padding = 0;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+        // group.ClientVisible = false;
+
+        group.Items.Add(item =>
+        {
+            item.Name = "ViewApproval_TabContent";
+            item.Caption = "Approval List";
+
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    Html.Partial("Partial/ViewApproval/ViewApproval_TabContent_List_Partial", Model.ApprovalStepList__)
+                );
+            });
+        });
+
+    });
+
+    groupItem_Col3.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+
+        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+        btnSettings.Name = "btnCancelViewApproval";
+        btnSettings.Text = "Close";
+        btnSettings.Width = 120;
+        btnSettings.ClientVisible = true;
+        btnSettings.ClientSideEvents.Click = "ViewApproval_OnClickBtnCancel";
+        btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
+        btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
+
+    });
+}).GetHtml()
+
+
+

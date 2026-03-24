@@ -1,0 +1,226 @@
+﻿@using Models;
+@using Models._Cfl;
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+    ViewBag.ReadOnly = false;
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_TransferRequest\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    if (status != "Draft")
+    {
+        ViewBag.ReadOnly = true;
+    }
+}
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvDetail";
+    settings.KeyFieldName = "DetId";
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    /* ===== FIX FOOTER ALIGNMENT ===== */
+    settings.Settings.UseFixedTableLayout = true;
+    settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    /* ================================= */
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+
+    settings.CallbackRouteValues = new { Controller = "TransferSummaryIn", Action = "TabDetailListPartial" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Columns.Add("Id").Visible = false;
+    settings.Columns.Add("DetId").Visible = false;
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Caption = "Item Code";
+        column.Width = 150;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.SetDataItemTemplateContent(c =>
+        {
+            if (c.ItemIndex >= 0)
+            {
+                string itemCode = Convert.ToString(DataBinder.Eval(c.DataItem, "ItemCode"));
+                string detId = Convert.ToString(DataBinder.Eval(c.DataItem, "DetId"));
+
+                Html.DevExpress().HyperLink(settingsHL =>
+                {
+                    settingsHL.Name = "ChooseDocument_" + Guid.NewGuid().ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = itemCode;
+
+                    settingsHL.Properties.ClientSideEvents.Click =
+                        string.Format("function(s, e) {{ OnClickChooseItem(s, e, '{0}'); }}", detId);
+
+                    settingsHL.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+                }).Render();
+            }
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Caption = "Item Name";
+        column.Width = 200;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "FromWhsCode";
+        column.Caption = "Whse Code";
+        column.Width = 100;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "FromWhsName";
+        column.Caption = "Whse Name";
+        column.Width = 150;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ToWhsCode";
+        column.Caption = "To Whse Code";
+        column.Width = 100;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ToWhsName";
+        column.Caption = "To Whse Name";
+        column.Width = 150;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransitWhsCode";
+        column.Caption = "Transit";
+        column.Width = 100;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransitWhsName";
+        column.Caption = "Transit Whse Name";
+        column.Width = 200;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Caption = "Qty";
+        column.Width = 80;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = column.FieldName;
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityOpen_";
+        column.Caption = "Quantity Open";
+        column.Width = 100;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = "QuantityOpen_";
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityScan";
+        column.Caption = "Qty Scan";
+        column.Width = 80;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = "QuantityScan";
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityValid";
+        column.Caption = "Qty Valid";
+        column.Width = 80;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = "QuantityValid";
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Comments";
+        column.Caption = "Free Text";
+        column.Width = 200;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        if (ViewBag.ReadOnly)
+        {
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
+    });
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvDetailOnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvDetailOnEndCallback";
+    settings.ClientSideEvents.BatchEditStartEditing = "gvDetailOnBatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvDetailOnBatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvDetailOnBatchEditRowValidating";
+
+}).Bind(Model).GetHtml()

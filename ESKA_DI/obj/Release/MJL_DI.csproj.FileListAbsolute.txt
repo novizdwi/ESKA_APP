@@ -1,0 +1,111 @@
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\MJL_DI.dll.config
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\MJL_DI.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\MJL_DI.pdb
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.CrystalReports.Engine.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.ReportSource.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.Shared.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.Web.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Data.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.Mvc5.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\EntityFramework.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\log4net.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\LumenWorks.Framework.IO.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\Sap.Data.Hana.v4.5.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxHtmlEditor.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraCharts.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxDiagram.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraCharts.v20.1.Web.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Printing.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Charts.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxGantt.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxTreeList.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxSpellChecker.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxPivotGrid.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.PivotGrid.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraReports.v20.1.Web.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraReports.v20.1.Web.WebForms.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraReports.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.DataAccess.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxRichEdit.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.RichEdit.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxScheduler.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraScheduler.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.SpellChecker.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxSpreadsheet.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Spreadsheet.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Office.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\stdole.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.Resources.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Pdf.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Pdf.v20.1.Drawing.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Sparkline.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraGauges.v20.1.Core.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Xpo.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.CodeParser.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Images.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Data.Desktop.v20.1.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\bin\Release\log4net.xml
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\Interop.SAPbobsCOM.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csproj.ResolveComReference.cache
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csproj.CoreCompileInputs.cache
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csproj.CopyComplete
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.dll
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.pdb
+D:\IDU Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csprojAssemblyReference.cache
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\MJL_DI.dll.config
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\MJL_DI.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\MJL_DI.pdb
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.CrystalReports.Engine.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.ReportSource.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.Shared.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\CrystalDecisions.Web.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Data.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.Mvc5.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\EntityFramework.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\log4net.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\LumenWorks.Framework.IO.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\Sap.Data.Hana.v4.5.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxHtmlEditor.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraCharts.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxDiagram.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraCharts.v20.1.Web.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Printing.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Charts.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxGantt.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxTreeList.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxSpellChecker.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxPivotGrid.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.PivotGrid.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraReports.v20.1.Web.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraReports.v20.1.Web.WebForms.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraReports.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.DataAccess.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxRichEdit.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.RichEdit.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxScheduler.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraScheduler.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.SpellChecker.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.ASPxSpreadsheet.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Spreadsheet.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Office.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Web.Resources.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Pdf.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Pdf.v20.1.Drawing.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Sparkline.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.XtraGauges.v20.1.Core.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Xpo.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.CodeParser.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Images.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\DevExpress.Data.Desktop.v20.1.dll
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\log4net.xml
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\Sap.Data.Hana.v4.5.xml
+D:\Project\masada\WEBAPP\MJL_DI\bin\Release\Sap.Data.Hana.v4.5.dll.config
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csprojAssemblyReference.cache
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\Interop.SAPbobsCOM.dll
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csproj.ResolveComReference.cache
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csproj.CoreCompileInputs.cache
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.csproj.CopyComplete
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.dll
+D:\Project\masada\WEBAPP\MJL_DI\obj\Release\MJL_DI.pdb

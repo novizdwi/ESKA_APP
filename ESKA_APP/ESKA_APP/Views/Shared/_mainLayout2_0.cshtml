@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Views/Shared/_rootLayout.cshtml";
+}
+@Html.DevExpress().Splitter(settings => {
+    settings.Name = "ASPxSplitter1";
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.Styles.Pane.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+
+    settings.Panes.Add(pane => {
+        pane.Name = "LeftPane";
+        pane.ShowCollapseBackwardButton = DefaultBoolean.True;
+
+        //pane.Size = System.Web.UI.WebControls.Unit.Pixel(110);
+        pane.Size = System.Web.UI.WebControls.Unit.Percentage(25);
+        pane.PaneStyle.CssClass = "LeftPane";
+
+        //pane.PaneStyle.BackColor = System.Drawing.Color.FromName("#f8f2f2");
+        pane.Panes.Add(subpane => {
+            subpane.Name = "FilterPane";
+            //subpane.ScrollBars = ScrollBars.Both;
+            subpane.ScrollBars = ScrollBars.Auto;
+            subpane.SetContent(() => {
+                RenderSection("Left").ToHtmlString();
+            });
+        });
+
+    });
+
+
+    settings.Panes.Add(pane => {
+        pane.Name = "ContentPane";
+        pane.Separator.Visible = DefaultBoolean.True;
+        pane.Separator.SeparatorStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        pane.Separator.SeparatorStyle.BorderTop.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        pane.SetContent(RenderBody().ToHtmlString());
+    });
+
+    settings.SaveStateToCookies = true;
+
+}).GetHtml()
+
+

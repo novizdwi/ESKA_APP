@@ -1,0 +1,137 @@
+﻿@using Models;
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvGeneralSettingItemDetail";
+    settings.KeyFieldName = "DetId";
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 300;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.Width = Unit.Percentage(100);
+    //settings.Height = Unit.Percentage(100);
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.Width = 50;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "ItemGroupCode";
+    //    column.Name = "ItemGroupCode";
+    //    column.Caption = "Item Group Code";
+    //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+    //    column.Settings.AllowSort = DefaultBoolean.False;
+
+    //    column.Width = 200;
+
+    //    var txt = column.PropertiesEdit as TextBoxProperties;
+    //    txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemGroupCode";
+        column.Name = "ItemGroupCode";
+        column.Caption = "Item Group Code";
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+
+        column.Width = 200;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ClientInstanceName = "ItemGroupCode";
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+        //var cbo = column.PropertiesEdit as ComboBoxProperties;
+        //cbo.ClientInstanceName = "ItemGroupCode";
+        //cbo.DataSource = Models.Setting.GeneralSetting.GeneralSettingGetList.GetItemList("ReportTypeChoose");
+        //cbo.TextField = "Code";
+        //cbo.ValueField = "Code";
+        //cbo.ValueType = typeof(string);
+        //cbo.DropDownStyle = DropDownStyle.DropDownList;
+        //cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        //cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        //cbo.ClientSideEvents.SelectedIndexChanged = "CboItemGroupCodeOnChange";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemGroupName";
+        column.Name = "ItemGroupName";
+        column.Caption = "Item Group Name";
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        //column.ReadOnly = true;
+
+        column.Width = 200;
+
+        //var txt = column.PropertiesEdit as TextBoxProperties;
+        //txt.ClientInstanceName = "ItemGroupName";
+        //txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.ClientInstanceName = "ItemGroupName";
+        cbo.DataSource = Models.Setting.GeneralSetting.GeneralSettingGetList.GetItemList("ReportTypeChoose");
+        cbo.TextField = "Name";
+        cbo.ValueField = "Name";
+        cbo.ValueType = typeof(string);
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        cbo.ClientSideEvents.SelectedIndexChanged = "CboItemGroupCodeOnChange";
+
+    });
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "ItemGroupName";
+    //    column.Name = "ItemGroupName";
+    //    column.Caption = "Item Group Name";
+    //    column.ColumnType = MVCxGridViewColumnType.ComboBox;
+    //    column.Settings.AllowSort = DefaultBoolean.False;
+
+    //    column.Width = 300;
+
+    //    var cbo = column.PropertiesEdit as ComboBoxProperties;
+    //    cbo.DataSource = Models.Setting.GeneralSetting.GeneralSettingGetList.GetItemList("ReportTypeChoose");
+    //    cbo.TextField = "Name";
+    //    cbo.ValueField = "Name";
+    //    cbo.ValueType = typeof(string);
+    //    cbo.DropDownStyle = DropDownStyle.DropDownList;
+    //    cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    //    cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    //    cbo.ClientSideEvents.SelectedIndexChanged = "CboItemGroupNameOnChange";
+
+    //    //txt.Properties.ClientSideEvents.ButtonClick = "BtnCflItemPopupListSolarOnClick";
+
+    //});
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+
+}).Bind(Model).GetHtml()

@@ -1,0 +1,171 @@
+﻿ 
+@model List<Models.Report.ReportCustom.ReportCustomModel>
+
+ 
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Report_Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).GetHtml()
+
+ 
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.ColorTranslator.FromHtml("#F20056");
+
+        itemSettings.Width = Unit.Percentage(100);
+
+    });
+
+    groupItem.Items.AddEmptyItem().Height = 25;
+
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+
+
+
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+    });
+
+
+
+    groupItem_Col1.Items.Add(groupItem1 =>
+    {
+
+        groupItem1.Caption = "Custom Report";
+        groupItem1.ShowCaption = DefaultBoolean.False;
+
+        groupItem1.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                 @Html.DevExpress().Splitter(
+                   settingsSplitter =>
+                   {
+                       settingsSplitter.Name = "splResizingReport"; 
+                       settingsSplitter.SaveStateToCookies = true;
+                       //settingsSplitter.Height = 400;
+                       //settingsSplitter.Width = Unit.Percentage(100);
+                       settingsSplitter.Styles.Pane.Paddings.Padding = 0;
+                       settingsSplitter.ControlStyle.Border.BorderWidth = 0;
+
+                       settingsSplitter.ControlStyle.Spacing = 0;
+ 
+
+                       settingsSplitter.Panes.Add(tvBoxPane =>
+                       {
+                           tvBoxPane.Name = "tvBoxContainer";
+                           tvBoxPane.Size = Unit.Percentage(15);
+                           tvBoxPane.ShowCollapseBackwardButton = DefaultBoolean.True;
+
+                           tvBoxPane.CollapsedStyle.Border.BorderStyle = BorderStyle.None;
+                           tvBoxPane.CollapsedStyle.Border.BorderWidth = 0;
+
+                           tvBoxPane.Separator.SeparatorStyle.Border.BorderStyle = BorderStyle.None;
+                           tvBoxPane.Separator.SeparatorStyle.Border.BorderWidth = 0;
+
+                           //tvBoxPane.PaneStyle.Border.BorderStyle = BorderStyle.Double;
+                           tvBoxPane.PaneStyle.Border.BorderWidth = 1;
+                           tvBoxPane.PaneStyle.Border.BorderColor = System.Drawing.Color.FromName("#C0C0C0");
+
+                           tvBoxPane.ScrollBars = System.Web.UI.WebControls.ScrollBars.Auto;
+
+                           tvBoxPane.AutoHeight = true;
+                           tvBoxPane.SetContent(() =>
+                           {
+                               @Html.DevExpress().TreeView(
+                               tvSettings =>
+                               {
+                                   tvSettings.Name = "tvReport";
+                                   tvSettings.Width = 300;
+                                   tvSettings.Height = 500;
+                                   tvSettings.ClientSideEvents.NodeClick = "tvReportOnNodeClick";// "function(s, e) { alert(e.node.name);}";
+
+
+                                   tvSettings.AllowSelectNode = true;
+                             
+                                   Controllers.Report.ReportCustomController.CreateTreeViewNodesRecursive(Model, tvSettings.Nodes, "");
+
+
+                               }).Render();
+
+                           });
+
+                       });
+
+
+
+                       settingsSplitter.Panes.Add(contentPane =>
+                       {
+                           contentPane.MinSize = 350; 
+
+                           contentPane.CollapsedStyle.Border.BorderStyle = BorderStyle.None;
+                           contentPane.CollapsedStyle.Border.BorderWidth = 0;
+
+                           contentPane.Separator.SeparatorStyle.Border.BorderStyle = BorderStyle.None;
+                           contentPane.Separator.SeparatorStyle.Border.BorderWidth = 0;
+
+                           contentPane.PaneStyle.Border.BorderStyle = BorderStyle.None;
+                           contentPane.PaneStyle.Border.BorderWidth = 0;
+
+                           contentPane.Panes.Add(paramPane =>
+                           {
+                               paramPane.Name = "paramContainer";
+                               paramPane.Size = Unit.Percentage(60);
+                               paramPane.MinSize = 100;
+                               paramPane.SetContent(() =>
+                               {
+                                   ViewContext.Writer.Write(
+                                         @Html.Partial("Partial/ReportCustom_Form_TabDetail_Param_Partial")
+                                   );
+                               });
+                           });
+                       });
+
+                       
+                       
+                   }).GetHtml()
+                );
+            });
+
+    }); 
+ 
+
+
+}).GetHtml()
+
+
+

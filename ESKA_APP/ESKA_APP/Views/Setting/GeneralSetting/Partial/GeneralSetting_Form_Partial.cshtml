@@ -1,0 +1,166 @@
+﻿ 
+@using Models.Setting.GeneralSetting
+
+@model Models.Setting.GeneralSetting.GeneralSettingModel
+
+@{
+    ViewBag.Id=Model.Id;
+ 
+}
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).Bind(Model.Id).GetHtml()
+
+
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = string.Empty;
+        //itemSettings.Caption = "Series Reservation";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.ColCount = 1;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 0;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.ColorTranslator.FromHtml("#F20056");
+        //itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.Color.FromName("#dccb3f");
+        //itemSettings.GroupBoxStyle.Caption.BackColor = System.Drawing.Color.FromName("#116959");
+
+    });
+
+
+    groupItem.Items.AddEmptyItem().Height = 25;
+
+
+    groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(70);
+        group.Height = Unit.Percentage(80);
+        group.PageControl.ContentStyle.Paddings.Padding = 0;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabGeneral";
+            item.Caption = "General ";
+            item.SetNestedContent(() =>
+            {
+                @Html.DevExpress().FormLayout(settingtab =>
+                {
+                    settingtab.Name = "formLayoutTabGeneral";
+                    settingtab.EncodeHtml = false;
+
+                    //settingtab.Width = Unit.Percentage(100);
+                    settingtab.AlignItemCaptionsInAllGroups = true;
+                    settingtab.ShowItemCaptionColon = false;
+
+                    var groupItemtab = settingtab.Items.AddGroupItem(itemSettings =>
+                    {
+                        itemSettings.Caption = "";
+                        itemSettings.ShowCaption = DefaultBoolean.False;
+                        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+                        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                        itemSettings.ColCount = 1;
+
+
+                    });
+
+                    var groupItemTab_Col1 = groupItemtab.Items.AddGroupItem(itemSettings =>
+                    {
+
+                        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Top;
+                        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                        itemSettings.ShowCaption = DefaultBoolean.False;
+                        itemSettings.ColCount = 1;
+
+                    });
+
+
+                    groupItemTab_Col1.Items.Add(itemSettings =>
+                    {
+
+                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+                        itemSettings.Caption = "Stock Opname Coa Code";
+                        itemSettings.FieldName = "StockOpnameCoaCode";
+                        var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+                        txt.Name = "StockOpnameCoaCode";
+                        txt.ShowModelErrors = true;
+
+                        txt.ControlStyle.CssClass = "editor";
+                        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                        txt.Width = 100;
+
+                        // Hide the default DropDown button
+                        txt.Properties.DropDownButton.Visible = false;
+                        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+                        EditButton lookUpButton = new EditButton();
+                        lookUpButton.Text = "";
+                        lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                        lookUpButton.Image.Width = 15;
+
+                        txt.Properties.Buttons.Add(lookUpButton);
+                        txt.Properties.ClientSideEvents.ButtonClick = "BtnCflStockOpnameCoaCodePopupListOnClick";
+
+                    });
+
+
+                    groupItemTab_Col1.Items.Add(itemSettings =>
+                    {
+                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                        itemSettings.Caption = "Stock Opname Coa Name";
+                        itemSettings.FieldName = "StockOpnameCoaName";
+                        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                        txt.Name = "StockOpnameCoaName";
+                        txt.ReadOnly = true;
+                        txt.ShowModelErrors = true;
+
+                        txt.ControlStyle.CssClass = "editor";
+                        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                        txt.Width = 300;
+                    });
+
+                }).GetHtml();
+            });
+        });
+
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabAdjustmentCoa";
+            item.Caption = " Adjustment COA ";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                     Html.Partial("Partial/GeneralSetting_TabAdjustmentCoa_List_Partial", Model.ListCoas_)
+                 );
+            });
+
+        });
+
+    });
+
+}).GetHtml()
+

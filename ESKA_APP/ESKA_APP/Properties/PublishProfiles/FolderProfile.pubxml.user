@@ -1,0 +1,2188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\LegionShared\Project\Deploy</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="App_Data/ApplicationMenuDataSource.sitemap">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="App_Data/Article.html">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="App_Data/ArticleContents.xml">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="App_Data/Overview.html">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="App_Data/OverviewContents.xml">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="App_Readme/Elmah.txt">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/web.config">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="bin/BBS_APP.dll">
+      <publishTime>12/18/2025 10:22:12</publishTime>
+    </File>
+    <File Include="bin/BBS_APP.pdb">
+      <publishTime>12/18/2025 10:22:12</publishTime>
+    </File>
+    <File Include="bin/BBS_DI.dll">
+      <publishTime>12/18/2025 10:22:11</publishTime>
+    </File>
+    <File Include="bin/BBS_DI.dll.config">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="bin/BBS_DI.pdb">
+      <publishTime>12/18/2025 10:22:11</publishTime>
+    </File>
+    <File Include="bin/CrystalDecisions.CrystalReports.Engine.dll">
+      <publishTime>10/31/2025 10:05:52</publishTime>
+    </File>
+    <File Include="bin/CrystalDecisions.Shared.dll">
+      <publishTime>10/31/2025 10:05:52</publishTime>
+    </File>
+    <File Include="bin/CrystalDecisions.Web.dll">
+      <publishTime>10/31/2025 10:05:52</publishTime>
+    </File>
+    <File Include="bin/de/DevExpress.DataAccess.v20.1.UI.resources.dll">
+      <publishTime>09/22/2025 16:03:47</publishTime>
+    </File>
+    <File Include="bin/de/DevExpress.Diagram.v20.1.Core.resources.dll">
+      <publishTime>09/22/2025 16:03:48</publishTime>
+    </File>
+    <File Include="bin/de/DevExpress.XtraGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/de/DevExpress.XtraLayout.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/de/DevExpress.XtraRichEdit.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/de/DevExpress.XtraVerticalGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/DevExpress.BonusSkins.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Charts.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.CodeParser.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Dashboard.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Dashboard.v20.1.Web.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Dashboard.v20.1.Web.Mvc5.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Dashboard.v20.1.Web.WebForms.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Data.Desktop.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Data.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.DataAccess.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.DataAccess.v20.1.UI.dll">
+      <publishTime>09/22/2025 16:03:47</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Diagram.v20.1.Core.dll">
+      <publishTime>09/22/2025 16:03:48</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Images.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Map.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Office.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Pdf.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Pdf.v20.1.Drawing.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.PivotGrid.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Printing.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.RichEdit.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.RichEdit.v20.1.Export.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Sparkline.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.SpellChecker.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Spreadsheet.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.TreeMap.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Utils.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Utils.v20.1.UI.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxDiagram.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxGantt.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxHtmlEditor.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxPivotGrid.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxRichEdit.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxScheduler.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxSpellChecker.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxSpreadsheet.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxThemes.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.ASPxTreeList.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.Mvc5.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.Resources.v20.1.dll">
+      <publishTime>12/08/2025 09:07:35</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Web.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.Xpo.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraBars.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraCharts.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraCharts.v20.1.Extensions.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraCharts.v20.1.UI.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraCharts.v20.1.Web.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraCharts.v20.1.Wizard.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraDiagram.v20.1.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraEditors.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraGauges.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraGrid.v20.1.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraLayout.v20.1.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraNavBar.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraPrinting.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraReports.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraReports.v20.1.Web.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraReports.v20.1.Web.WebForms.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraRichEdit.v20.1.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraScheduler.v20.1.Core.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraTreeList.v20.1.dll">
+      <publishTime>12/08/2025 09:07:36</publishTime>
+    </File>
+    <File Include="bin/DevExpress.XtraVerticalGrid.v20.1.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/Elmah.dll">
+      <publishTime>04/12/2012 19:19:36</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>04/16/2020 20:38:42</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>04/16/2020 20:38:56</publishTime>
+    </File>
+    <File Include="bin/es/DevExpress.DataAccess.v20.1.UI.resources.dll">
+      <publishTime>09/22/2025 16:03:47</publishTime>
+    </File>
+    <File Include="bin/es/DevExpress.Diagram.v20.1.Core.resources.dll">
+      <publishTime>09/22/2025 16:03:48</publishTime>
+    </File>
+    <File Include="bin/es/DevExpress.XtraGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/es/DevExpress.XtraLayout.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/es/DevExpress.XtraRichEdit.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/es/DevExpress.XtraVerticalGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/ja/DevExpress.DataAccess.v20.1.UI.resources.dll">
+      <publishTime>09/22/2025 16:03:47</publishTime>
+    </File>
+    <File Include="bin/ja/DevExpress.Diagram.v20.1.Core.resources.dll">
+      <publishTime>09/22/2025 16:03:48</publishTime>
+    </File>
+    <File Include="bin/ja/DevExpress.XtraGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/ja/DevExpress.XtraLayout.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/ja/DevExpress.XtraRichEdit.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/ja/DevExpress.XtraVerticalGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/log4net.dll">
+      <publishTime>01/06/2011 21:24:28</publishTime>
+    </File>
+    <File Include="bin/LumenWorks.Framework.IO.dll">
+      <publishTime>11/03/2025 16:05:29</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Owin.dll">
+      <publishTime>02/13/2018 16:28:04</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>07/25/2012 11:48:56</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>08/03/2014 20:33:56</publishTime>
+    </File>
+    <File Include="bin/Office365White.dll">
+      <publishTime>11/03/2025 16:05:23</publishTime>
+    </File>
+    <File Include="bin/Owin.dll">
+      <publishTime>11/13/2012 12:19:34</publishTime>
+    </File>
+    <File Include="bin/ru/DevExpress.DataAccess.v20.1.UI.resources.dll">
+      <publishTime>09/22/2025 16:03:47</publishTime>
+    </File>
+    <File Include="bin/ru/DevExpress.Diagram.v20.1.Core.resources.dll">
+      <publishTime>09/22/2025 16:03:48</publishTime>
+    </File>
+    <File Include="bin/ru/DevExpress.XtraGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/ru/DevExpress.XtraLayout.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:00</publishTime>
+    </File>
+    <File Include="bin/ru/DevExpress.XtraRichEdit.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/ru/DevExpress.XtraVerticalGrid.v20.1.resources.dll">
+      <publishTime>09/22/2025 16:04:01</publishTime>
+    </File>
+    <File Include="bin/Sap.Data.Hana.v4.5.dll">
+      <publishTime>07/19/2023 04:08:30</publishTime>
+    </File>
+    <File Include="bin/Sap.Data.Hana.v4.5.dll.config">
+      <publishTime>07/19/2023 04:08:21</publishTime>
+    </File>
+    <File Include="bin/Sap.Data.Hana.v4.5.pdb">
+      <publishTime>07/19/2023 04:08:27</publishTime>
+    </File>
+    <File Include="bin/stdole.dll">
+      <publishTime>09/15/2025 13:32:26</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>01/28/2015 04:02:42</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>01/28/2015 04:02:54</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>01/28/2015 04:03:46</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>01/28/2015 04:02:18</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>01/28/2015 04:02:32</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/WebMatrix.Data.dll">
+      <publishTime>01/28/2015 04:04:00</publishTime>
+    </File>
+    <File Include="Content/Content.css">
+      <publishTime>12/05/2025 11:09:20</publishTime>
+    </File>
+    <File Include="Content/dx.material.custom-scheme.css">
+      <publishTime>09/30/2025 13:36:46</publishTime>
+    </File>
+    <File Include="Content/GridView.css">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/GridView.js">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/icons/dxiconsmaterial.ttf">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/icons/dxiconsmaterial.woff">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/icons/dxiconsmaterial.woff2">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/adaptive-menu.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/add.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/application.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Article-white.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Article.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/back.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/back.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/clear.jpg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/clear.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/date.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/Delete.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/down.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/excel.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/excelall.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/find-hitam.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/Find.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/first.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/last.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/new.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/Next.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/other.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/Previous.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/print.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/refresh.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/save.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/buttonnew/up.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/delete.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/double-close.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/double.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/edit.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/export.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/eye-button-hide.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/eye-button.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/GridView-white.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/GridView.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Home-white.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Home.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/image-sample.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/kind1-white.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/kind1.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/kind2-white.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/kind2.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/logo-small.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/logo.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/logo.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/logoBBS.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/menu.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/mjl.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/article.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/demo.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/grid.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/login.gif">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/login.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/menu.gif">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/scheduler.png">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/sidebar.gif">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/sticky-footer.gif">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Overview/toolbar.gif">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/print.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/priority1-white.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/priority1.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/priority2-white.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/priority2.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/priority3-white.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/priority3.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/Scheduler-white.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/Scheduler.svg">
+      <publishTime>09/23/2025 22:38:44</publishTime>
+    </File>
+    <File Include="Content/Images/search-selected.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/search.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/sign-out.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Images/user.svg">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Layout.css">
+      <publishTime>12/15/2025 10:29:34</publishTime>
+    </File>
+    <File Include="Content/Rpt.css">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Scheduler.css">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Scheduler.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Script.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/SignInRegister.css">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/SignInRegister.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Content/Styles.css">
+      <publishTime>12/06/2025 08:50:52</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>12/18/2025 10:10:34</publishTime>
+    </File>
+    <File Include="Rpts/Report1.rpt">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Rpts/Report2.rpt">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Rpts/Rpt.aspx">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Scripts/ASPxScriptIntelliSense.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/globalize.cultures.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/Idu.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.min.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.min.map">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.unobtrusive-ajax.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.unobtrusive-ajax.min.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.globalize.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.globalize.min.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.min.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.min.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/MicrosoftAjax.debug.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/MicrosoftAjax.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/MicrosoftMvcAjax.debug.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/MicrosoftMvcAjax.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/MicrosoftMvcValidation.debug.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/MicrosoftMvcValidation.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/modernizr-2.6.2.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Scripts/SQLs/Create Schema.sql">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Scripts/SQLs/Insert Into.sql">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Scripts/SQLs/Insert Ts_Menu.sql">
+      <publishTime>12/18/2025 10:17:33</publishTime>
+    </File>
+    <File Include="Scripts/Test/DXR.js">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/ChangePassword/ChangePassword.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/ChangePassword/Partial/ChangePassword_Form_Btn_Partial.cshtml">
+      <publishTime>10/17/2025 13:23:09</publishTime>
+    </File>
+    <File Include="Views/Authentication/ChangePassword/Partial/ChangePassword_Form_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/Login/Login.cshtml">
+      <publishTime>09/30/2025 13:52:13</publishTime>
+    </File>
+    <File Include="Views/Authentication/Role/Partial/Role_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/Role/Partial/Role_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Authentication/Role/Partial/Role_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/Role/Partial/Role_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/Role/Partial/Role_TreeView_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/Role/Role.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/User/Partial/User_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/User/Partial/User_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Authentication/User/Partial/User_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/User/Partial/User_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Authentication/User/Partial/User_TabWarehouse_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Authentication/User/User.cshtml">
+      <publishTime>09/25/2025 13:19:28</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/03/2025 21:51:44</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/03/2025 21:51:44</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/03/2025 21:51:44</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/RfidMonitoring_Form_Btn_Partial.cshtml">
+      <publishTime>12/03/2025 21:51:44</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/RfidMonitoring_Form_Partial.cshtml">
+      <publishTime>12/16/2025 10:26:48</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/Partial/RfidMonitoring_Form_TabReference_List_Partial.cshtml">
+      <publishTime>12/12/2025 17:05:56</publishTime>
+    </File>
+    <File Include="Views/Master/Item/RfidMonitoring/RfidMonitoring.cshtml">
+      <publishTime>12/05/2025 10:43:46</publishTime>
+    </File>
+    <File Include="Views/Notification/Notification.cshtml">
+      <publishTime>12/15/2025 10:29:34</publishTime>
+    </File>
+    <File Include="Views/Notification/Partial/Notification_Grid_Partial.cshtml">
+      <publishTime>12/15/2025 10:29:34</publishTime>
+    </File>
+    <File Include="Views/Notification/Partial/Notification_PopupContent_Partial.cshtml">
+      <publishTime>12/15/2025 10:29:34</publishTime>
+    </File>
+    <File Include="Views/Report/ReportAlert/Partial/ReportAlert_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportAlert/Partial/ReportAlert_Form_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportAlert/Partial/ReportAlert_Form_TabDetail_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportAlert/Partial/ReportAlert_ListDetail_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportAlert/ReportAlert.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportCustom/Partial/ReportCustom_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportCustom/Partial/ReportCustom_Form_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportCustom/Partial/ReportCustom_Form_TabDetail_Param_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportCustom/Partial/ReportCustom_ParamDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Report/ReportCustom/ReportCustom.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportQuery/Partial/ReportQuery_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportQuery/Partial/ReportQuery_Form_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportQuery/Partial/ReportQuery_Form_TabDetail_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportQuery/Partial/ReportQuery_ListDetail_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Report/ReportQuery/Partial/ReportQuery_ParamDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Report/ReportQuery/ReportQuery.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Alert.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_Form_TabRole_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_Form_TabSql_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_Form_TabUser_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Alert/Partial/Alert_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/AlertGroup/AlertGroup.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/AlertGroup/Partial/AlertGroup_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/AlertGroup/Partial/AlertGroup_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/AlertGroup/Partial/AlertGroup_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/AlertGroup/Partial/AlertGroup_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Approval.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Partial/Approval_Form_Btn_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Partial/Approval_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Partial/Approval_Form_TabRole_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Partial/Approval_Form_TabUser_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Partial/Approval_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/Approval/Partial/Approval_Panel_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/ApprovalStage.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/Partial/ApprovalStage_Form_Btn_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/Partial/ApprovalStage_Form_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/Partial/ApprovalStage_Form_TabRole_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/Partial/ApprovalStage_Form_TabUser_List_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/Partial/ApprovalStage_List_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalStage/Partial/ApprovalStage_Panel_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/ApprovalTemplate.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_Btn_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_TabDepartment_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_TabRole_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_TabSql_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_TabStage_List_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Form_TabUser_List_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_List_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Setting/ApprovalTemplate/Partial/ApprovalTemplate_Panel_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/GeneralSetting/GeneralSetting.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/Setting/GeneralSetting/Partial/GeneralSetting_Form_Btn_Partial.cshtml">
+      <publishTime>11/03/2025 14:40:10</publishTime>
+    </File>
+    <File Include="Views/Setting/GeneralSetting/Partial/GeneralSetting_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/GeneralSetting/Partial/GeneralSetting_TabAdjustmentCoa_List_Partial.cshtml">
+      <publishTime>11/03/2025 10:05:27</publishTime>
+    </File>
+    <File Include="Views/Setting/GeneralSetting/Partial/GeneralSetting_TabItem_List_Partial.cshtml">
+      <publishTime>10/17/2025 10:24:36</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Layout.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Partial/Layout_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Partial/Layout_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Partial/Layout_Form_TabRole_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Partial/Layout_Form_TabUser_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Partial/Layout_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Layout/Partial/Layout_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Form_TabParam_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Form_TabRole_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Form_TabSql_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Form_TabUser_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Partial/Query_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Query/Query.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/Partial/QueryGroup_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/Partial/QueryGroup_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/Partial/QueryGroup_Form_TabRole_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/Partial/QueryGroup_Form_TabUser_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/Partial/QueryGroup_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/Partial/QueryGroup_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/QueryGroup/QueryGroup.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_Form_TabParam_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_Form_TabRole_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_Form_TabUser_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Partial/Report_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/Report/Report.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/Partial/ReportGroup_Form_Btn_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/Partial/ReportGroup_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/Partial/ReportGroup_Form_TabRole_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/Partial/ReportGroup_Form_TabUser_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/Partial/ReportGroup_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/Partial/ReportGroup_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Setting/ReportGroup/ReportGroup.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/AlertPartialView.cshtml">
+      <publishTime>12/17/2025 07:16:02</publishTime>
+    </File>
+    <File Include="Views/Shared/Error.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/FooterPartialView.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/HeaderPartialView.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/LeftPanelPartial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Shared/LogonPartial.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/LogOnPartialView.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>12/18/2025 10:18:25</publishTime>
+    </File>
+    <File Include="Views/Shared/_LayoutX.cshtml">
+      <publishTime>12/18/2025 10:18:23</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout_login.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/_mainLayout2_0.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/_mainLayout2_1.cshtml">
+      <publishTime>12/11/2025 15:39:06</publishTime>
+    </File>
+    <File Include="Views/Shared/_rootLayout.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Shared/_rootRpt.cshtml">
+      <publishTime>09/23/2025 22:38:46</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/AdjustmentIn.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_Partial.cshtml">
+      <publishTime>12/18/2025 10:17:33</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_TabAttachment_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/Attachment/Attachment_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/Attachment/Attachment_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/Attachment/Attachment_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/AdjustmentOut.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_Partial.cshtml">
+      <publishTime>12/18/2025 10:17:33</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_TabAttachment_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/11/2025 15:39:06</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/Attachment/Attachment_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/Attachment/Attachment_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/Attachment/Attachment_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/TransferIn_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/TransferIn_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/TransferIn_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/TransferIn_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/TransferIn_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/Partial/TransferIn_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferIn/TransferIn.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/TransferOut_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/TransferOut_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/TransferOut_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/TransferOut_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/TransferOut_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/Partial/TransferOut_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferOut/TransferOut.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/TransferRequest_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/TransferRequest_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/TransferRequest_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/TransferRequest_Form_TabDetail_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/TransferRequest_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/Partial/TransferRequest_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferRequest/TransferRequest.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/12/2025 13:30:26</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_TabRef_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryIn/TransferSummaryIn.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/Approval/Approval_Form_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/Approval/Approval_Panel_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/Approval/Approval_Partial.cshtml">
+      <publishTime>12/12/2025 13:50:02</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_TabRef_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Inventory/TransferSummaryOut/TransferSummaryOut.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/GoodsReceiptPO.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_Partial.cshtml">
+      <publishTime>12/17/2025 11:55:46</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/16/2025 09:38:04</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_TabRef_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/Purchasing/PurchaseOrderScan/PurchaseOrderScan.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/RequestStockOpname_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/RequestStockOpname_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/RequestStockOpname_Form_Partial.cshtml">
+      <publishTime>12/18/2025 10:17:33</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/RequestStockOpname_List_Partial.cshtml">
+      <publishTime>12/11/2025 15:39:06</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/Partial/RequestStockOpname_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/RequestStockOpname/RequestStockOpname.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:27:39</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/StockOpnameScan_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/StockOpnameScan_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/StockOpnameScan_Form_Partial.cshtml">
+      <publishTime>12/18/2025 10:17:33</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/StockOpnameScan_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/StockOpnameScan_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/Partial/StockOpnameScan_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockOpnameScan/StockOpnameScan.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_Form_BtnBottom_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_Form_Btn_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_Form_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_Form_TabDetail_Partial.cshtml">
+      <publishTime>12/17/2025 07:16:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_Form_TabRef_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_List_Partial.cshtml">
+      <publishTime>12/09/2025 16:19:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/Partial/StockSummaryOpname_Panel_List_Partial.cshtml">
+      <publishTime>12/10/2025 14:01:14</publishTime>
+    </File>
+    <File Include="Views/Transaction/StockOpname/StockSummaryOpname/StockSummaryOpname.cshtml">
+      <publishTime>12/11/2025 15:39:06</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/AdjustmentIn.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_TabAttachment_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/AdjustmentIn_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/AdjustmentIn_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/Attachment/Attachment_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/Attachment/Attachment_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/Attachment/Attachment_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentIn/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/AdjustmentOut.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_TabAttachment_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/AdjustmentOut_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/AdjustmentOut_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/Attachment/Attachment_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/Attachment/Attachment_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/Attachment/Attachment_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Adjustment/AdjustmentOut/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/RequestStockOpname_Form_Btn_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/RequestStockOpname_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/RequestStockOpname_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/Partial/RequestStockOpname_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/RequestStockOpname/RequestStockOpname.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/StockOpname_Form_Btn_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/StockOpname_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/StockOpname_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/StockOpname_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/Partial/StockOpname_Panel_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/StockOpnameScan/StockOpnameScan.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/TransferIn_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/TransferIn_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/TransferIn_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/TransferIn_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/Partial/TransferIn_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferIn/TransferIn.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/TransferOut_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/TransferOut_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/TransferOut_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/TransferOut_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/Partial/TransferOut_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferOut/TransferOut.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:31:57</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:31:57</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/TransferRequest_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:31:57</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/TransferRequest_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/TransferRequest_Form_TabDetail_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/TransferRequest_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:31:57</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/Partial/TransferRequest_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:31:57</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferRequest/TransferRequest.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/Partial/TransferSummaryIn_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryIn/TransferSummaryIn.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_Btn_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/Partial/TransferSummaryOut_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Inventory/TransferSummaryOut/TransferSummaryOut.cshtml">
+      <publishTime>10/31/2025 16:59:00</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/GoodsReceiptPO.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/07/2025 16:20:23</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/07/2025 16:20:35</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_Btn_Partial.cshtml">
+      <publishTime>10/03/2025 13:51:34</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/GoodsReceiptPO_Panel_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/08/2025 16:18:37</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/08/2025 16:18:51</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/GoodsReceiptPO/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:46:19</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/CancelReason/CancelReason_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/CancelReason/CancelReason_Panel_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/CancelReason/CancelReason_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_Panel_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/ItemTag/ItemTag_TabItemTagList_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_Btn_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Form_TabDetail_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/Partial/PurchaseOrderScan_Panel_List_Partial.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Transaction/Web/Purchasing/PurchaseOrderScan/PurchaseOrderScan.cshtml">
+      <publishTime>10/31/2025 16:55:32</publishTime>
+    </File>
+    <File Include="Views/Web.config">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflBp/Partial/_CflBp_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflBp/Partial/_CflBp_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflCoa/Partial/_CflCoa_List_Partial.cshtml">
+      <publishTime>12/01/2025 10:48:15</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflCoa/Partial/_CflCoa_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflCostCenter/Partial/_CflCostCenter_List_Partial.cshtml">
+      <publishTime>12/04/2025 21:07:04</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflCostCenter/Partial/_CflCostCenter_Panel_List_Partial.cshtml">
+      <publishTime>12/04/2025 21:07:04</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflDynamic/Partial/_CflDynamic_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflDynamic/Partial/_CflDynamic_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflItem/Partial/_CflItem_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflPurchaseOrder/Partial/_CflPurchaseOrder_List_Partial.cshtml">
+      <publishTime>11/25/2025 11:11:33</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflPurchaseOrder/Partial/_CflPurchaseOrder_Panel_List_Partial.cshtml">
+      <publishTime>11/14/2025 21:08:33</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflStockOpname/Partial/_CflStockOpname_List_Partial.cshtml">
+      <publishTime>11/25/2025 15:17:35</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflStockOpname/Partial/_CflStockOpname_Panel_List_Partial.cshtml">
+      <publishTime>11/25/2025 15:17:35</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflToWarehouse/Partial/_CflToWarehouse_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflToWarehouse/Partial/_CflToWarehouse_Panel_List_Partial.cshtml">
+      <publishTime>10/30/2025 11:48:56</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflTransferRequest/Partial/_CflTransferRequest_List_Partial.cshtml">
+      <publishTime>11/27/2025 13:13:19</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflTransferRequest/Partial/_CflTransferRequest_Panel_List_Partial.cshtml">
+      <publishTime>11/27/2025 13:13:19</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflTransferSummaryOut/Partial/_CflTransferSummaryOut_List_Partial.cshtml">
+      <publishTime>12/01/2025 10:48:15</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflTransferSummaryOut/Partial/_CflTransferSummaryOut_Panel_List_Partial.cshtml">
+      <publishTime>11/27/2025 13:13:19</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_Panel_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_CrystalReport/Layout/Print_List_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_CrystalReport/Rpt.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Views/_ViewStart.cshtml">
+      <publishTime>09/23/2025 22:38:48</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>12/18/2025 10:22:14</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

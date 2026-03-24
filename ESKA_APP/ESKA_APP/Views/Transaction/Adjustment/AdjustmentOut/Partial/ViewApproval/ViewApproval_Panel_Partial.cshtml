@@ -1,0 +1,47 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupViewApproval";
+    settings.CallbackRouteValues = new { Controller = "AdjustmentOut", Action = "ViewApproval_PopupListOnDemandPartial" };
+    settings.CloseAction = CloseAction.CloseButton;
+
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.Modal = true;
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = false;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.ClientSideEvents.EndCallback = "popupViewApproval_EndCallback";
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "View Approval";
+
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("Partial/ViewApproval/ViewApproval_Form_Partial");
+
+    });
+
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender;
+        //popup.Width = 1000;
+        //popup.Height = 690;
+
+        popup.Width = 600;
+        popup.Height = 350;
+    };
+
+
+}).GetHtml()

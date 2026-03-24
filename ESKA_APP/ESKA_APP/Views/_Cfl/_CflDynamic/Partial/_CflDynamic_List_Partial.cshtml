@@ -1,0 +1,275 @@
+﻿@using Models;
+@using Models._Utils;
+
+@using Models._Cfl;
+
+
+@{
+    GridViewModel viewModel = Model;
+
+    var cpGvFind_FilterExpression = GetSqlFromGridViewModelState.getHanaCriteria(viewModel);
+    var cpGvFind_SortExpression = GetSqlFromGridViewModelState.getHanaSort(viewModel);
+    var cpGvFind_PageIndex = viewModel.Pager.PageIndex;
+    var cpGvFind_PageSize = viewModel.Pager.PageSize;
+
+    string cpGvFind_CflDynamicCode = "";
+    string cpGvFind_CflDynamicDescription = "";
+    string cpGvFind_CflDynamicSql = "";
+    string cpGvFind_CflDynamicIsMulti = "N";
+
+
+    if (Request["hidden_CflDynamicCode"] != null)
+    {
+        cpGvFind_CflDynamicCode = Request["hidden_CflDynamicCode"];
+    }
+
+    if (Request["hidden_CflDynamicDescription"] != null)
+    {
+        cpGvFind_CflDynamicDescription = Request["hidden_CflDynamicDescription"];
+    }
+
+    if (Request["hidden_CflDynamicSql"] != null)
+    {
+        cpGvFind_CflDynamicSql = Request["hidden_CflDynamicSql"];
+    }
+
+
+    if (Request["hidden_CflDynamicIsMulti"] != null)
+    {
+        cpGvFind_CflDynamicIsMulti = Request["hidden_CflDynamicIsMulti"];
+    }
+
+
+    System.Data.DataTable datatable=new System.Data.DataTable() ;
+    if (ViewBag.dataTable != null)
+    {
+        datatable = ViewBag.dataTable;
+    }
+    
+ 
+}
+
+
+
+@* 
+---------------------------------
+Filter builder atau Filter control :
+tidak bisa mem passing parameter pada saat click ok, 
+jadi untuk melempar parameternya saya ikutkan di name gridview nya,
+semuanya harus dibuat otomatis
+---------------------------------
+ *@
+@Html.DevExpress().GridView(settings =>
+   {
+       settings.Name = "gvCflDynamic" + cpGvFind_CflDynamicCode;
+       settings.KeyFieldName = "Key";
+       settings.CallbackRouteValues = new { Controller = "_CflDynamic", Action = "ListPartial" };
+
+       //settings.Width = Unit.Percentage(100);
+       settings.Settings.ShowFilterRow = true;
+       settings.Settings.ShowFilterRowMenu = true;
+       //settings.SettingsCookies.Enabled = false;
+
+
+       if (cpGvFind_CflDynamicIsMulti == "N")
+       {
+
+           settings.Columns.Add(column =>
+           {
+               column.Caption = "#";
+               column.FieldName = "__mantap__"; //ngasal saja kerena kalau data kosong tidak di isi error
+
+               column.SetDataItemTemplateContent(c =>
+               {
+
+                   ViewContext.Writer.Write(
+
+                    Html.DevExpress().HyperLink(settingsHL =>
+                    {
+                        settingsHL.Name = "gvCflDynamic" + cpGvFind_CflDynamicCode + "Choose_" + c.KeyValue.ToString() + "_" + Guid.NewGuid().ToString();
+                        settingsHL.NavigateUrl = "javascript:void(0)";
+                        settingsHL.Properties.Text = "Choose";
+                        settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose_CflDynamic{1}(s, e, {0}); }}", new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(c.DataItem), cpGvFind_CflDynamicCode);
+                    }).GetHtml()
+
+
+                );
+               });
+               column.SetHeaderTemplateContent(c =>
+               {
+                   ViewContext.Writer.Write(
+                      "#Action#"
+                   );
+               });
+
+               column.Settings.AllowDragDrop = DefaultBoolean.False;
+               column.Settings.AllowSort = DefaultBoolean.False;
+               column.Width = 70;
+           });
+
+       }
+       else
+       {
+           settings.CommandColumn.Visible = true;
+           settings.CommandColumn.ShowSelectCheckbox = true;
+
+           settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+           settings.CommandColumn.Width = 70;
+
+           //settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e) {{ OnSelectionChanged_CflDynamic{0}(s, e); }}", cpGvFind_CflDynamicCode);
+
+       }
+       
+       for (int i = 0; i < datatable.Columns.Count; i++)
+       {
+           switch (datatable.Columns[i].DataType.ToString())
+           {
+               case "System.Decimal":
+               case "System.Double":
+                   settings.Columns.Add(column =>
+                   {
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+
+                       column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                       var txt = column.PropertiesEdit as SpinEditProperties;
+                       txt.NumberType = SpinEditNumberType.Float;
+                       txt.DisplayFormatString = "#,###.00";
+                       txt.DisplayFormatInEditMode = true;
+                       txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                       txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                   });
+
+                   break;
+               case "System.Int16":
+               case "System.Int32":
+               case "System.Int64":
+                   settings.Columns.Add(column =>
+                   {
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+
+                       column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                       //column.Width = 100;
+                       var txt = column.PropertiesEdit as SpinEditProperties;
+                       txt.NumberType = SpinEditNumberType.Float;
+                       txt.DisplayFormatString = "#,###";
+                       txt.DisplayFormatInEditMode = true;
+                       txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                       txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                   });
+                   break;
+               case "System.DateTime":
+                   settings.Columns.Add(column =>
+                   {
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                       //column.Width = 100;
+                       var txt = column.PropertiesEdit as DateEditProperties;
+                       txt.UseMaskBehavior = true;
+                       txt.DisplayFormatString = "dd/MM/yyyy";
+                       txt.EditFormatString = "dd/MM/yyyy";
+
+
+                       var arr = datatable.Columns[i].ColumnName.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                       if (arr.Length > 1)
+                       {
+                           column.Caption = arr[0];
+                           if (arr[1].ToUpper() == "DATETIME")
+                           {
+                               txt.DisplayFormatString = "dd/MM/yyyy HH:mm:ss";
+                               txt.EditFormatString = "dd/MM/yyyy  HH:mm:ss";
+
+                               txt.TimeSectionProperties.Visible = true;
+                               txt.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
+                               txt.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm:ss";
+                           }
+
+                       }
+
+
+                   });
+                   break;
+               default: 
+                  
+                   settings.Columns.Add(datatable.Columns[i].ColumnName, datatable.Columns[i].ColumnName.Replace("*", "."));
+
+                   break;
+           }
+
+
+       }
+
+       settings.Columns["Key"].Visible = false;
+
+       settings.SettingsPager.Position = PagerPosition.Bottom;
+       settings.SettingsPager.FirstPageButton.Visible = true;
+       settings.SettingsPager.LastPageButton.Visible = true;
+       settings.SettingsPager.AlwaysShowPager = true;
+       //settings.Width = System.Web.UI.WebControls.Unit.Percentage(70); 
+
+
+       if (cpGvFind_PageIndex == 0)
+       {
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+       }
+
+
+       settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100", "200", "500", "1000", "2000", "5000", "10000" };
+
+       settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+       settings.Settings.VerticalScrollableHeight = 400;
+
+       settings.SettingsBehavior.AllowFocusedRow = true;
+       //settings.Settings.ShowFilterBar = GridViewStatusBarMode.Visible;
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Paging,
+           new { Controller = "_CflDynamic", Action = "ListPaging" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Filtering,
+           new { Controller = "_CflDynamic", Action = "ListFiltering" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Sorting,
+           new { Controller = "_CflDynamic", Action = "ListSorting" }
+       );
+
+
+       settings.CustomJSProperties = (sender, e) =>
+       {
+           e.Properties["cpGvFind_FilterExpression"] = cpGvFind_FilterExpression;
+           e.Properties["cpGvFind_SortExpression"] = cpGvFind_SortExpression;
+           e.Properties["cpGvFind_PageIndex"] = cpGvFind_PageIndex;
+           e.Properties["cpGvFind_PageSize"] = cpGvFind_PageSize;
+           e.Properties["cpGvFind_CflDynamicCode"] = cpGvFind_CflDynamicCode;
+           e.Properties["cpGvFind_CflDynamicDescription"] = cpGvFind_CflDynamicDescription;
+           e.Properties["cpGvFind_CflDynamicSql"] = cpGvFind_CflDynamicSql;
+           e.Properties["cpGvFind_CflDynamicIsMulti"] = cpGvFind_CflDynamicIsMulti;
+
+       };
+
+       settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{  e.customArgs['hidden_CflDynamicCode']=s.cpGvFind_CflDynamicCode; e.customArgs['hidden_CflDynamicDescription']=s.cpGvFind_CflDynamicDescription; e.customArgs['hidden_CflDynamicSql']=s.cpGvFind_CflDynamicSql;e.customArgs['hidden_CflDynamicIsMulti']=s.cpGvFind_CflDynamicIsMulti; }}");
+
+
+       foreach (GridViewDataColumn column in settings.Columns)
+       {
+           column.Settings.AllowAutoFilterTextInputTimer = DevExpress.Utils.DefaultBoolean.False;
+       }
+
+       settings.BeforeGetCallbackResult = (sender, e) =>
+       {
+           MVCxGridView gridView = sender as MVCxGridView;
+           Models._Utils.General.GridViewFilterExpression(gridView, settings);
+       };
+
+   }).BindToCustomData(Model).GetHtml()

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6293d835dee9458aaa7ac63c8a695517" Name="Diagram1" ZoomLevel="56">
+        <EntityTypeShape EntityType="Model1.Tm_Alert" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Alert_Role" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Alert_User" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_AlertGroup" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Approval" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Approval_Role" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Approval_User" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalStage" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalStage_Role" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalStage_User" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalTemplate" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalTemplate_Position" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalTemplate_Role" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalTemplate_Stage" Width="1.5" PointX="6.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ApprovalTemplate_User" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_GeneralSetting" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_GeneralSetting_Coa" Width="1.5" PointX="10.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_GeneralSetting_Item" Width="1.5" PointX="10.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Item" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Item_Warehouse" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Item_Warehouse_Tag" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Item_Warehouse_Tag_Log" Width="1.5" PointX="4.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Item_Warehouse_Tag_Replace" Width="1.5" PointX="12.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Layout" Width="1.5" PointX="6.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Layout_Role" Width="1.5" PointX="8.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Layout_User" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model1.Tm_MasterSetting" Width="1.5" PointX="10.75" PointY="13.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Query" Width="1.5" PointX="12.75" PointY="13.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Query_Param" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Query_Role" Width="1.5" PointX="14.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Query_User" Width="1.5" PointX="14.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model1.Tm_QueryGroup" Width="1.5" PointX="14.75" PointY="13.75" />
+        <EntityTypeShape EntityType="Model1.Tm_QueryGroup_Role" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_QueryGroup_User" Width="1.5" PointX="16.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Report" Width="1.5" PointX="16.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Report_Param" Width="1.5" PointX="8.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Report_Role" Width="1.5" PointX="16.75" PointY="13.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Report_User" Width="1.5" PointX="0.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ReportGroup" Width="1.5" PointX="10.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ReportGroup_Role" Width="1.5" PointX="12.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Model1.Tm_ReportGroup_User" Width="1.5" PointX="14.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Role" Width="1.5" PointX="16.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Role_Auth" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_User" Width="1.5" PointX="2.75" PointY="18.75" />
+        <EntityTypeShape EntityType="Model1.Tm_User_Warehouse" Width="1.5" PointX="18.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model1.Tp_Approval" Width="1.5" PointX="4.75" PointY="18.75" />
+        <EntityTypeShape EntityType="Model1.Tp_Approval_User" Width="1.5" PointX="18.75" PointY="7.75" />
+        <EntityTypeShape EntityType="Model1.Ts_FormatNumbering" Width="1.5" PointX="18.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Model1.Ts_LayoutForm" Width="1.5" PointX="18.75" PointY="14.75" />
+        <EntityTypeShape EntityType="Model1.Ts_List" Width="1.5" PointX="18.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Model1.Ts_Menu" Width="1.5" PointX="20.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Ts_ObjectApproval" Width="1.5" PointX="20.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentIn" Width="1.5" PointX="20.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentIn_Approval" Width="1.5" PointX="20.75" PointY="14.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentIn_Attachment" Width="1.5" PointX="18.75" PointY="20.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentIn_Item" Width="1.5" PointX="20.75" PointY="19.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentIn_Item_Tag" Width="1.5" PointX="6.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentIn_Location" Width="1.5" PointX="8.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentOut" Width="1.5" PointX="10.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentOut_Approval" Width="1.5" PointX="12.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentOut_Attachment" Width="1.5" PointX="14.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentOut_Item" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentOut_Item_Tag" Width="1.5" PointX="22.75" PointY="7.75" />
+        <EntityTypeShape EntityType="Model1.Tx_AdjustmentOut_Location" Width="1.5" PointX="22.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.Tx_ChangeItem" Width="1.5" PointX="22.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Model1.Tx_ChangeItem_Tag" Width="1.5" PointX="22.75" PointY="22.75" />
+        <EntityTypeShape EntityType="Model1.Tx_DeactiveTag" Width="1.5" PointX="24.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_DeactiveTag_Approval" Width="1.5" PointX="0.75" PointY="24.75" />
+        <EntityTypeShape EntityType="Model1.Tx_DeactiveTag_Item" Width="1.5" PointX="2.75" PointY="24.75" />
+        <EntityTypeShape EntityType="Model1.Tx_DeactiveTag_Log" Width="1.5" PointX="24.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Model1.Tx_GoodIssue" Width="1.5" PointX="24.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO" Width="1.5" PointX="24.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Approval" Width="1.5" PointX="16.75" PointY="24.75" />
+        <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Item" Width="1.5" PointX="24.75" PointY="23.75" />
+        <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Item_Tag" Width="1.5" PointX="26.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Ref" Width="1.5" PointX="4.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_PurchaseOrder" Width="1.5" PointX="26.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Model1.Tx_PurchaseOrder_Item" Width="1.5" PointX="6.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_PurchaseOrder_Item_Tag" Width="1.5" PointX="26.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Model1.Tx_Request_StockOpname" Width="1.5" PointX="12.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname" Width="1.5" PointX="26.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Approval" Width="1.5" PointX="18.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item" Width="1.5" PointX="20.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item_Tag" Width="1.5" PointX="26.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockSummaryOpname" Width="1.5" PointX="26.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockSummaryOpname_Approval" Width="1.5" PointX="28.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockSummaryOpname_Item" Width="1.5" PointX="28.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockSummaryOpname_Item_Tag" Width="1.5" PointX="28.75" PointY="13.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockSummaryOpname_Ref" Width="1.5" PointX="28.75" PointY="18.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferIn" Width="1.5" PointX="28.75" PointY="23.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferIn_Item" Width="1.5" PointX="0.75" PointY="29.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferIn_Item_Tag" Width="1.5" PointX="8.75" PointY="29.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferOut" Width="1.5" PointX="14.75" PointY="29.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferOut_Item" Width="1.5" PointX="30.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferOut_Item_Tag" Width="1.5" PointX="30.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferRequest" Width="1.5" PointX="30.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferRequest_Approval" Width="1.5" PointX="30.75" PointY="19.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferRequest_Item" Width="1.5" PointX="22.75" PointY="30.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryIn" Width="1.5" PointX="30.75" PointY="24.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryIn_Approval" Width="1.5" PointX="2.75" PointY="31.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryIn_Item" Width="1.5" PointX="10.75" PointY="31.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryIn_Item_Tag" Width="1.5" PointX="16.75" PointY="31.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryIn_Ref" Width="1.5" PointX="18.75" PointY="31.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut" Width="1.5" PointX="32.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut_Approval" Width="1.5" PointX="4.75" PointY="32.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut_Item" Width="1.5" PointX="32.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" Width="1.5" PointX="32.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut_Ref" Width="1.5" PointX="32.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="32.75" PointY="26.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

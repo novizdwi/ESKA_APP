@@ -1,0 +1,268 @@
+﻿@if (false)
+{ <script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script> }
+
+@model List<Models.Report.ReportAlert.ReportAlertModel>
+
+
+@{
+    ViewBag.Title = "Report Alert";
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        SetBtnStatus();
+    }
+    );
+
+</script>
+
+<script type="text/javascript">
+
+
+    $.ajaxSetup({
+        cache: false
+    });
+
+    function OnBegin() {
+        loadingPanel.Show();
+    }
+
+    function SetBtnStatus() {
+        if (Alert_Id.GetValue() != null) {
+            btnFilter.SetEnabled(true);
+            btnExcel.SetEnabled(true);
+        } else {
+            btnFilter.SetEnabled(false);
+            btnExcel.SetEnabled(false);
+        }
+
+    }
+
+    var msgCount = 0;
+    function OnSuccess() {
+
+        $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + 'Action success</p>' + $("#MessageText").html());
+
+    }
+
+
+    function OnSuccessMsgBox() {
+
+        $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + 'Action success</p>' + $("#MessageText").html());
+        loadingPanel.Hide();
+        alert('Success');
+
+    }
+
+    function OnFailure(jqXhr, textStatus, errorThrown) {
+
+        if (jqXhr.responseText.substring(0, 12) == "[VALIDATION]") {
+            $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + jqXhr.responseText + '</p>' + $("#MessageText").html());
+
+            loadingPanel.Hide()
+            alert(jqXhr.responseText);
+        }
+        else {
+            // untuk error yg tidak ter capture di validation
+            var doc = jqXhr.responseText.match(/.*<title>([\s\S]*)<\/title>.*/);
+            $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + doc[1] + '</p>' + $("#MessageText").html());
+
+            loadingPanel.Hide();
+            alert(doc[1]);
+        }
+
+    }
+
+    function OnComplete() {
+        loadingPanel.Hide();
+    }
+
+    function OnClickBtnRefresh(s, e) {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DetailPartial", "ReportAlert")',
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                $("#contentForm").html(response);
+                $.validator.unobtrusive.parse("#formDetail");
+                MVCxClientUtils.FinalizeCallback();
+                SetBtnStatus();
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+
+    function OnClickBtnFilter(s, e) {
+
+        var gvDetail = ASPxClientGridView.Cast('gvDetail|' + Alert_Id.GetValue() + '|');
+        gvDetail.ShowFilterControl();
+
+    }
+
+    function OnClickBtnExcel(s, e) {
+        var gvDetail = ASPxClientGridView.Cast('gvDetail|' + Alert_Id.GetValue() + '|');
+
+        SubmitForm('', '@Url.Action("ExportTo", "ReportAlert")', 'post', {
+            hidden_CpGvFind_FilterExpression: gvDetail.cpGvFind_FilterExpression,
+            hidden_CpGvFind_SortExpression: gvDetail.cpGvFind_SortExpression,
+            hidden_CpGvFind_PageIndex: gvDetail.cpGvFind_PageIndex,
+            hidden_CpGvFind_PageSize: gvDetail.cpGvFind_PageSize,
+            Alert_Id: gvDetail.cpAlert_Id
+        });
+
+    }
+
+
+
+
+
+
+</script>
+
+<script type="text/javascript">
+
+    function tvAlertOnNodeClick(s, e) {
+        //alert(e.node.name);
+
+        var arr = e.node.name.split('_')
+        if (arr[0] != 'TvAlert') {
+            $("#contentGvDetail").html('');
+            Alert_Id.SetValue(null);
+            SetBtnStatus();
+            return;
+        }
+
+        var alertId = arr[1];
+        //alert(queryId);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ListDetailPartial", "ReportAlert")',
+            data: { Alert_Id: alertId },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                Alert_Id.SetValue(alertId);
+
+
+                $("#contentGvDetail").html(response);
+                $.validator.unobtrusive.parse("#formDetail");
+                MVCxClientUtils.FinalizeCallback();
+                SetBtnStatus();
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+
+    }
+
+   @* function Alert_IdValueChanged(s, e) {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ListDetailPartial", "ReportAlert")',
+            data: { Alert_Id: Alert_Id.GetValue() },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                $("#contentGvDetail").html(response);
+                $.validator.unobtrusive.parse("#formDetail");
+                MVCxClientUtils.FinalizeCallback();
+                SetBtnStatus();
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+
+    }*@
+
+
+    function gvDetailBeginCallback(s, e) {
+        e.customArgs['Alert_Id'] = Alert_Id.GetValue();
+
+
+    }
+
+
+</script>
+
+<script type="text/javascript">
+
+    function OnClickColumnLink(s, e, url, Id) {
+
+        var guid = CreateGuid();
+        window.open('', guid);
+        SubmitForm(guid, url, 'post', {
+            Id: Id
+        });
+    }
+
+
+</script>
+
+
+@Html.Partial("Partial/ReportAlert_Form_Btn_Partial")
+
+
+@using (Ajax.BeginForm("mantap", "ReportAlert", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{ 
+<div id="contentForm">
+
+@Html.Partial("Partial/ReportAlert_Form_Partial")
+</div> 
+}
+
+
+@Html.DevExpress().LoadingPanel(
+    settings =>
+    {
+        settings.Name = "loadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = "contentGvDetail";
+        settings.Styles.LoadingDiv.BackColor = System.Drawing.Color.White;
+    }).GetHtml()

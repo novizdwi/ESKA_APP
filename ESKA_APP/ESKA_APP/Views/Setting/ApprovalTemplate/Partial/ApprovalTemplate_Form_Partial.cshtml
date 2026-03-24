@@ -1,0 +1,251 @@
+﻿@using Models.Setting.ApprovalTemplate;
+
+@model Models.Setting.ApprovalTemplate.ApprovalTemplateModel
+@{ 
+    ViewBag.ReadOnly = Model.Id == 0 ? true : false;
+    ViewBag.ObjectCode = Model.ObjectCode;
+}
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        }
+
+    ).Bind(Model.Id).GetHtml()
+
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.Color.Orange;
+
+        itemSettings.Width = Unit.Percentage(100);
+
+
+    });
+
+    groupItem.Items.AddEmptyItem().Height = 25;
+
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 2;
+
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = 450;
+    });
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+    });
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Template Name";
+        itemSettings.FieldName = "TemplateName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "TemplateName";
+        txt.ShowModelErrors = true;
+        txt.Width = 300;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    //groupItem_Col1.Items.Add(m => Model.DocType, itemSettings =>
+    //{
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+    //    itemSettings.Caption = "Document Type";
+
+    //    ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+    //    cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    //    cbo.Name = "DocType";
+    //    cbo.ShowModelErrors = true;
+    //    cbo.Properties.TextField = "Text";
+    //    cbo.Properties.ValueField = "Value";
+    //    cbo.Properties.ValueType = typeof(string); 
+    //    cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+    //    cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetDocType();
+
+    //    cbo.ControlStyle.CssClass = "editor";
+    //    cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    //});
+
+    groupItem_Col1.Items.Add(m => Model.ObjectCode, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Transaction";
+
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "ObjectCode";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "ObjectName";
+        cbo.Properties.ValueField = "ObjectCode";
+        cbo.Properties.ValueType = typeof(string);
+        cbo.ReadOnly = !ViewBag.ReadOnly;
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetObjectApprovals();
+
+        cbo.ControlStyle.CssClass = "editor";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+    groupItem_Col1.Items.Add(m => Model.IsActive, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+        itemSettings.Caption = "Active";
+
+        var chk = (CheckBoxSettings)itemSettings.NestedExtensionSettings;
+        chk.Name = "IsActive";
+        chk.Properties.ValueType = typeof(string);
+        chk.Properties.ValueChecked = "Y";
+        chk.Properties.ValueUnchecked = "N";
+        chk.ShowModelErrors = true;
+        chk.ControlStyle.CssClass = "editor";
+        chk.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        chk.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+
+    groupItem_2.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 2;
+
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+        group.PageControl.ContentStyle.Paddings.Padding = 3;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+
+
+
+
+        //group.Items.Add(item =>
+        //{
+        //    item.Name = "TabRole";
+        //    item.Caption = "   Role (Originator)    ";
+        //    item.SetNestedContent(() =>
+        //    {
+        //        ViewContext.Writer.Write(
+        //     @Html.Partial("Partial/ApprovalTemplate_Form_TabRole_List_Partial")
+        //  );
+        //    });
+        //    item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+        //    item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        //});
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabDepartment";
+            item.Caption = "   Department    ";
+            item.ClientVisible = false;
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/ApprovalTemplate_Form_TabDepartment_List_Partial", Model.ListDepts_)
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabUser";
+            item.Caption = "   User (Originator)    ";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/ApprovalTemplate_Form_TabUser_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabStage";
+            item.Caption = "   Stages   ";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/ApprovalTemplate_Form_TabStage_List_Partial", Model.ListStages_)
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabSql";
+            item.Caption = "    SQL    ";
+            item.ClientVisible = false;
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/ApprovalTemplate_Form_TabSql_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+    });
+
+
+
+}).GetHtml()
+
+
+

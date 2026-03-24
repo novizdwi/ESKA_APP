@@ -1,0 +1,116 @@
+﻿@using Models._Utils; 
+        
+@{
+    GridViewModel viewModel = Model;
+
+    var cpGvFind_FilterExpression = GetSqlFromGridViewModelState.getHanaCriteria(viewModel);
+    var cpGvFind_SortExpression = GetSqlFromGridViewModelState.getHanaSort(viewModel);
+    var cpGvFind_PageIndex = viewModel.Pager.PageIndex;
+    var cpGvFind_PageSize = viewModel.Pager.PageSize;
+}
+
+
+@Html.DevExpress().GridView(settings=>
+   {
+       settings.Name ="gvAlertGroupList";
+       settings.KeyFieldName = "Id";
+       settings.CallbackRouteValues = new { Controller = "AlertGroup", Action = "ListPartial" };
+  
+       settings.Columns.Add(column =>
+       {
+           column.Caption = "#";
+           
+           column.SetDataItemTemplateContent(c =>
+           {
+               
+               ViewContext.Writer.Write( 
+                
+                Html.DevExpress().HyperLink(settingsHL => {
+                    settingsHL.Name = "Choose_" + DataBinder.Eval(c.DataItem, "Id") + "_" + Guid.NewGuid().ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = "Choose";
+                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "Id"));
+                }).GetHtml()
+               
+               
+            );
+           });
+           column.SetHeaderTemplateContent(c =>
+           {
+               ViewContext.Writer.Write(
+                  "#Action#"
+               );
+           });  
+           
+           column.Settings.AllowDragDrop = DefaultBoolean.False;
+           column.Settings.AllowSort = DefaultBoolean.False;
+           column.Width = 70;
+       }); 
+            
+       settings.Settings.ShowFilterRow = true;
+       settings.Settings.ShowFilterRowMenu = true;
+
+       settings.Columns.Add("Id", "Id").Visible=false;
+       settings.Columns.Add("GroupName", "Group Name");
+       settings.Columns.Add("SortCode", "Sort Code"); 
+       settings.SettingsPager.Position = PagerPosition.Bottom;
+       settings.SettingsPager.FirstPageButton.Visible = true;
+       settings.SettingsPager.LastPageButton.Visible = true;
+       settings.SettingsPager.AlwaysShowPager = true;
+       //settings.Width = System.Web.UI.WebControls.Unit.Percentage(70); 
+    
+
+       if (cpGvFind_PageIndex == 0)
+       {
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+       }
+      
+       
+       settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+
+       settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+       settings.Settings.VerticalScrollableHeight = 400;
+
+       settings.SettingsBehavior.AllowFocusedRow = true;
+      settings.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden; 
+       
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Paging,
+           new { Controller = "AlertGroup", Action = "ListPaging" }
+       ); 
+       
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Filtering,
+           new { Controller = "AlertGroup", Action = "ListFiltering" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Sorting,
+           new { Controller = "AlertGroup", Action = "ListSorting" }
+       ); 
+       
+
+       settings.CustomJSProperties = (sender, e) =>
+       {
+           e.Properties["cpGvFind_FilterExpression"] = cpGvFind_FilterExpression;
+           e.Properties["cpGvFind_SortExpression"] =cpGvFind_SortExpression;
+           e.Properties["cpGvFind_PageIndex"] = cpGvFind_PageIndex;
+           e.Properties["cpGvFind_PageSize"] = cpGvFind_PageSize;
+       };
+
+       foreach (GridViewDataColumn column in settings.Columns)
+       {
+           column.Settings.AllowAutoFilterTextInputTimer = DevExpress.Utils.DefaultBoolean.False;
+       }
+
+       settings.BeforeGetCallbackResult = (sender, e) =>
+       {
+           MVCxGridView gridView = sender as MVCxGridView;
+           Models._Utils.General.GridViewFilterExpression(gridView, settings);
+       };
+       
+
+      
+       
+      
+   }).BindToCustomData(Model).GetHtml()

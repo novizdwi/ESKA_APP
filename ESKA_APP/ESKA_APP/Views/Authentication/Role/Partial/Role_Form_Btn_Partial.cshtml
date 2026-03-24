@@ -1,0 +1,432 @@
+﻿
+@Html.DevExpress().Panel(settings => {
+    settings.Name = "pageToolbarPanel";
+    settings.ControlStyle.CssClass = "page-toolbar-wrapper";
+    settings.ClientSideEvents.Init = "onPageToolbarInit";
+    settings.SetContent(() =>
+    {
+        @Html.DevExpress().Menu(menuSettings =>
+        {
+            menuSettings.Name = "pageToolbar";
+
+            menuSettings.ItemAutoWidth = false;
+            menuSettings.AllowSelectItem = false;
+            menuSettings.ApplyItemStyleToTemplates = true;
+
+            menuSettings.SettingsAdaptivity.Enabled = true;
+            menuSettings.SettingsAdaptivity.EnableAutoHideRootItems = true;
+            menuSettings.SettingsAdaptivity.EnableCollapseRootItemsToIcons = true;
+            menuSettings.SettingsAdaptivity.CollapseRootItemsToIconsAtWindowInnerWidth = 600;
+
+            menuSettings.Width = Unit.Percentage(100);
+            menuSettings.ControlStyle.SeparatorWidth = Unit.Pixel(0);
+            menuSettings.ControlStyle.CssClass = "page-toolbar";
+
+            menuSettings.Styles.Item.CssClass = "item";
+            menuSettings.Styles.Item.VerticalAlign = VerticalAlign.Middle;
+
+            menuSettings.Images.Item.Width = Unit.Pixel(16);
+            menuSettings.Images.Item.Height = Unit.Pixel(16);
+
+            menuSettings.Items.Add(item =>
+            {
+                item.Enabled = false;
+                item.SetTemplateContent(template => ViewContext.Writer.Write("<h1>Role</h1>"));
+                item.ItemStyle.Width = Unit.Percentage(100);
+            });
+
+        }).GetHtml();
+
+        @Html.DevExpress().FormLayout(panelBtnsettings =>
+        {
+            panelBtnsettings.Name = "formLayouBtn";
+            panelBtnsettings.EncodeHtml = false;
+            panelBtnsettings.ControlStyle.CssClass = "under-toolbar";
+            panelBtnsettings.Height = Unit.Pixel(16);
+            panelBtnsettings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+            var groupBtn = panelBtnsettings.Items.AddGroupItem(groupBtnSettings =>
+            {
+
+
+                groupBtnSettings.Caption = "";
+                groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+                groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                groupBtnSettings.ColCount = 12;
+                groupBtnSettings.SettingsItems.ShowCaption = DefaultBoolean.False;
+                groupBtnSettings.CellStyle.Paddings.Padding = 0;
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnNew";
+                    btnSettings.Text = "New";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnNew";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/new.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+
+                });
+
+
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    itemSettings.Name = "grpBtnAdd";
+
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnAdd";
+                    btnSettings.Text = "Save";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnAdd";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    itemSettings.Name = "grpBtnUpdate";
+
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnUpdate";
+                    btnSettings.Text = "Save";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnUpdate";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnDelete";
+                    btnSettings.Text = "Delete";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnDelete";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Delete.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnNavFirst";
+                    btnSettings.Text = "First";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnNavFirst";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/first.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnNavPrevious";
+                    btnSettings.Text = "Prev";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnNavPrevious";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/previous.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnNavNext";
+                    btnSettings.Text = "Next";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnNavNext";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/next.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnNavLast";
+                    btnSettings.Text = "Last";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnNavLast";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/last.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnRefresh";
+                    btnSettings.Text = "Refresh";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnRefresh";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/refresh.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnListFind";
+                    btnSettings.Text = "Find";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ popupList.ShowAtPos(250, 100); }";
+
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Find.png";
+                    //btnSettings.Images.Image.Height = 20;
+                    //btnSettings.Styles.Style.ImageSpacing = 1;
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                });
+
+
+            });
+
+
+        }).GetHtml();
+    });
+}).GetHtml()
+
+
+@*<br /><br />
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayouBtn";
+    settings.EncodeHtml = false;
+
+    var groupBtn = settings.Items.AddGroupItem(groupBtnSettings =>
+    {
+
+        groupBtnSettings.CellStyle.Paddings.Padding = 0;
+        groupBtnSettings.Caption = "";
+        groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupBtnSettings.ColCount = 10;
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnNew";
+            btnSettings.Text = "New";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnNew";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/new.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+
+        });
+
+
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+            itemSettings.Name = "grpBtnAdd";
+
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnAdd";
+            btnSettings.Text = "Save";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnAdd";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+            itemSettings.Name = "grpBtnUpdate";
+
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnUpdate";
+            btnSettings.Text = "Save";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnUpdate";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnDelete";
+            btnSettings.Text = "Delete";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnDelete";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Delete.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnNavFirst";
+            btnSettings.Text = "First";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnNavFirst";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/first.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnNavPrevious";
+            btnSettings.Text = "Prev";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnNavPrevious";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/previous.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnNavNext";
+            btnSettings.Text = "Next";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnNavNext";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/next.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnNavLast";
+            btnSettings.Text = "Last";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnNavLast";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/last.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnRefresh";
+            btnSettings.Text = "Refresh";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnRefresh";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/refresh.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnListFind";
+            btnSettings.Text = "Find";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "function(s, e){ popupList.ShowAtPos(250, 100); }";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Find.png";
+            //btnSettings.Images.Image.Height = 20;
+            //btnSettings.Styles.Style.ImageSpacing = 1;
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+    });
+
+
+}).GetHtml()*@

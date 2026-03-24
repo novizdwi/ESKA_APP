@@ -1,0 +1,261 @@
+﻿@using Models;
+
+@{ 
+    var Id = Convert.ToInt64(Request["cbId"]);
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvRfidMonitoringReferenceDetail";
+    settings.KeyFieldName = "TagId";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 300;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.CallbackRouteValues = new { Controller = "RfidMonitoring", Action = "TabTransListPartial" };
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+
+    settings.Columns.Add(column =>
+    {
+        column.Caption = "Action";
+        column.Name = "Action";
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.SetDataItemTemplateContent(c =>
+        {
+            if (c.ItemIndex >= 0)
+            {
+                Html.DevExpress().HyperLink(settingsHL =>
+                {
+                    settingsHL.Name = "ChooseRenewal_" + DataBinder.Eval(c.DataItem, "TagId") + "_" + Guid.NewGuid().ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = "View History";
+                    settings.ClientVisible = true;
+                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChooseItem(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "TagId"));
+                    settingsHL.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+                }).Render();
+            }
+
+        });
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TagId";
+        column.Name = "TagId";
+        column.Caption = "Tag Id";
+        column.Width = 260;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+        column.Width = 150;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+        column.Width = 300;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsCode";
+        column.Name = "WhsCode";
+        column.Caption = "Whs Code";
+        column.Width = 100;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsName";
+        column.Name = "WhsName";
+        column.Caption = "Whs Name";
+        column.Width = 200;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Caption = "Status";
+        column.Width = 100;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Equals;
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = Models._Utils.GeneralGetList.GetList("ItemTagStatus");
+        cbo.TextField = "Name";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);
+
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+    });
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Status";
+    //    column.Name = "Status";
+    //    column.Caption = "Status";
+    //    column.EditFormSettings.Visible = DefaultBoolean.False;
+
+    //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+    //    column.Width = 100;
+    //    column.ReadOnly = true;
+    //    column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+    //    column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    column.CellStyle.ForeColor = System.Drawing.Color.Black;
+    //    //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+    //    var txt = column.PropertiesEdit as TextBoxProperties;
+    //    txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransactionCode";
+        column.Name = "TransactionCode";
+        column.Caption = "Last Transaction";
+        column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 150;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Equals;
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = Models._Utils.GeneralGetList.GetList("RFIDTransType");
+        cbo.TextField = "Name";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);
+
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "CreatedDate";
+        column.Name = "CreatedDate";
+        column.Caption = "Date Entry";
+        column.ReadOnly = true;
+        column.Width = 125;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //column.Settings.AllowSort = DefaultBoolean.False;
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "LastModifiedDate";
+        column.Name = "LastModifiedDate";
+        column.Caption = "Last Modified";
+        column.ReadOnly = true;
+        column.Width = 125;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        //column.Settings.AllowSort = DefaultBoolean.False;
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+
+    });
+
+    settings.Settings.ShowFooter = true;
+
+    settings.SettingsPager.Position = PagerPosition.Bottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.AlwaysShowPager = true;
+
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvRfidMonitoringReferenceDetailBeginCallback";
+
+}).Bind(Model).GetHtml()
+
+
+

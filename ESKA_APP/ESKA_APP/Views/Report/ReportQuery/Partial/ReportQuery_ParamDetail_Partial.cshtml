@@ -1,0 +1,1023 @@
+﻿@using Models;
+@using Models._Utils;
+@using Models.Report.ReportQuery;
+@using Models._Cfl;
+@using System.Globalization;
+
+@if (false)
+{ 
+<script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery-2.2.0.intellisense.js"></script>
+}
+
+
+@{
+    
+    
+    
+
+    int Query_Id = 0;
+
+    if (ViewBag.Query_Id != null)
+    {
+        Query_Id = ViewBag.Query_Id;
+    }
+    else if (Request["Query_Id"] != null)
+    {
+        Query_Id = int.Parse(Request["Query_Id"]);
+    }
+    
+    ReportQuery_QueryModel reportModel;
+
+    reportModel = Controllers.Report.ReportQueryController.GetQueryModel(Query_Id);
+
+
+    var userId = (int)Session["userId"];
+}
+
+@if (reportModel != null)
+{  
+@Html.DevExpress().FormLayout(settings =>
+    {
+        settings.Name = "formLayoutParam";
+        settings.EncodeHtml = false;
+        settings.Width = Unit.Percentage(100);
+        settings.AlignItemCaptionsInAllGroups = true;
+        settings.ShowItemCaptionColon = false;
+
+
+        var groupItem = settings.Items.AddGroupItem(itemSettings =>
+        {
+            itemSettings.Caption = reportModel.QueryName;
+            itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Auto;
+            itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+            itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+            itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+            //itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.ColorTranslator.FromHtml("#F20056");
+
+            itemSettings.GroupBoxStyle.Caption.Paddings.PaddingTop = Unit.Pixel(70);
+
+        });
+
+       
+        
+        int p = -1;
+        foreach (ReportQuery_Query_ParamModel paramModel in reportModel.ListParams_)
+        {
+            p++;
+
+            groupItem.Items.Add(itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                itemSettings.Caption = paramModel.Caption;
+                itemSettings.Name = "IsMandatory_Params[" + p.ToString() + "]";
+
+                var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                txt.ControlStyle.CssClass = "editor";
+
+                txt.Text = paramModel.IsMandatory;
+
+            }).ClientVisible = false;
+
+            groupItem.Items.Add(m => paramModel.ParamName, itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                itemSettings.Caption = paramModel.Caption;
+
+                var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                txt.Name = "Params[" + p.ToString() + "].ParamName";
+                txt.ControlStyle.CssClass = "editor";
+                 
+
+            }).ClientVisible = false;
+
+            groupItem.Items.Add(m => paramModel.TypeData, itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                itemSettings.Caption = paramModel.Caption;
+
+                var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                txt.Name = "Params[" + p.ToString() + "].ParamTypeData";
+                txt.ControlStyle.CssClass = "editor";
+               
+
+            }).ClientVisible = false; 
+                
+
+            groupItem.Items.Add(itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                itemSettings.Caption = paramModel.Caption;
+
+                var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                txt.Name = "Params[" + p.ToString() + "].ParamTypeChoose";
+                txt.ControlStyle.CssClass = "editor"; 
+                txt.Text = paramModel.TypeChoose;
+
+            }).ClientVisible = false;
+            
+            //groupItem.Items.Add(itemSettings =>
+            //{
+            //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+            //    itemSettings.Caption = paramModel.Caption;
+
+            //    var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+            //    txt.Name = "Params[" + p.ToString() + "].ParamValues";
+            //    txt.ControlStyle.CssClass = "editor";
+            //    txt.Width = 400;
+
+            //}).ClientVisible = false;
+
+
+
+            switch (paramModel.TypeChoose)
+            {
+                case "-":
+                case "Single":
+                    switch (paramModel.TypeControl)
+                    {
+                        case "TextBox":
+                            switch (paramModel.TypeData)
+                            {
+                                case "String":
+
+
+                                    groupItem.Items.Add(itemSettings =>
+                                    {
+                                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                                        itemSettings.Caption = paramModel.Caption;
+                                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+                                        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+                                        txt.ControlStyle.CssClass = "editor";
+                                        txt.Width = 400;
+
+                                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                        if (paramModel.IsMandatory == "Y")
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                        }
+                                        else
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            if (paramModel.DefaultValue.ToUpper() == "{USERID}")
+                                            {
+                                                txt.Text = userId.ToString();
+                                            }
+                                            else
+                                            {
+                                                txt.Text = paramModel.DefaultValue;
+                                            }
+                                        }
+
+
+                                    });
+                                    break;
+
+                                case "Integer":
+
+
+                                    groupItem.Items.Add(itemSettings =>
+                                    {
+                                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+                                        itemSettings.Caption = paramModel.Caption;
+                                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+                                        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+                                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+                                        txt.Properties.DisplayFormatString = "#,##0";
+                                        txt.ControlStyle.CssClass = "editornoimage";
+                                        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                                        txt.Width = 100;
+
+                                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                        if (paramModel.IsMandatory == "Y")
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                        }
+                                        else
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            if (paramModel.DefaultValue.ToUpper() == "{USERID}")
+                                            {
+                                                txt.Number = decimal.Parse(userId.ToString());
+                                            }
+                                            else
+                                            {
+                                                txt.Number = decimal.Parse(paramModel.DefaultValue);
+                                            }
+                                        }
+                                        
+                                    });
+
+                                    break;
+
+                                case "Amount":
+
+
+                                    groupItem.Items.Add(itemSettings =>
+                                    {
+                                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+                                        itemSettings.Caption = paramModel.Caption;
+                                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+                                        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+                                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+                                        txt.Properties.DisplayFormatString = "#,###.00";
+                                        txt.ControlStyle.CssClass = "editornoimage";
+                                        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                                        txt.Width = 150;
+
+                                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                        if (paramModel.IsMandatory == "Y")
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                        }
+                                        else
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            if (paramModel.DefaultValue.ToUpper() == "{USERID}")
+                                            {
+                                                txt.Number = decimal.Parse(userId.ToString());
+                                            }
+                                            else
+                                            {
+                                                txt.Number = decimal.Parse(paramModel.DefaultValue);
+                                            }
+                                        }
+                                        
+                                    });
+                                    break;
+
+                                case "Date":
+
+                                    groupItem.Items.Add(itemSettings =>
+                                    {
+                                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                                        itemSettings.Caption = paramModel.Caption;
+                                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+                                        var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+                                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+
+                                        txt.ControlStyle.CssClass = "editornoimage";
+                                        txt.Properties.NullText = "dd/MM/yyyy";
+                                        txt.Properties.EditFormat = EditFormat.Custom;
+                                        txt.Properties.EditFormatString = "dd/MM/yyyy";
+                                        txt.Properties.DisplayFormatInEditMode = true;
+                                        txt.Width = 100;
+
+                                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                        if (paramModel.IsMandatory == "Y")
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                        }
+                                        else
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            if (paramModel.DefaultValue.ToUpper() == "{NOW}")
+                                            {
+                                                txt.Date = DateTime.Now.Date;
+                                            }
+                                            else
+                                            {
+                                                string inputFormat = "yyyy-MM-dd";
+                                                var dateTime = DateTime.ParseExact(paramModel.DefaultValue, inputFormat, CultureInfo.InvariantCulture);
+
+                                                txt.Date = dateTime;
+                                            }
+                                        }
+                                        
+                                    });
+                                    break;
+
+                                case "DateTime":
+
+
+                                    groupItem.Items.Add(itemSettings =>
+                                    {
+                                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                                        itemSettings.Caption = paramModel.Caption;
+                                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+                                        var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+                                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+
+                                        txt.ControlStyle.CssClass = "editornoimage";
+                                        txt.Properties.NullText = "dd/MM/yyyy HH:mm:ss";
+                                        txt.Properties.EditFormat = EditFormat.Custom;
+                                        txt.Width = 200;
+
+                                        txt.Properties.DisplayFormatString = "dd/MM/yyyy HH:mm:ss";
+                                        txt.Properties.EditFormatString = "dd/MM/yyyy  HH:mm:ss";
+                                        txt.Properties.DisplayFormatInEditMode = true;
+
+                                        txt.Properties.TimeSectionProperties.Visible = true;
+                                        txt.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
+                                        txt.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm:ss";
+
+                                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                        if (paramModel.IsMandatory == "Y")
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                        }
+                                        else
+                                        {
+                                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            if (paramModel.DefaultValue.ToUpper() == "{NOW}")
+                                            {
+                                                txt.Date = DateTime.Now;
+                                            }
+                                            else
+                                            {
+                                                string inputFormat = "yyyy-MM-dd hh:mm:ss";
+                                                var dateTime = DateTime.ParseExact(paramModel.DefaultValue, inputFormat, CultureInfo.InvariantCulture);
+
+                                                txt.Date = dateTime;
+                                            }
+                                        }
+                                        
+                                    });
+
+                                    break;
+
+                            }
+                            break;
+
+                        case "ComboBox":
+                            System.Data.DataTable dataTable = ReportQueryGetList.GetDataTable(paramModel.Sql, (int)Session["userId"]);
+
+
+                            groupItem.Items.Add(itemSettings =>
+                            {
+                                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+                                itemSettings.Caption = paramModel.Caption;
+                                itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+
+                                ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+                                cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                                cbo.Name = "Params[" + p.ToString() + "].ParamValue";
+
+                                switch (paramModel.TypeData)
+                                {
+                                    case "String":
+                                        cbo.Properties.ValueType = typeof(string);
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            cbo.PreRender = (s, e) =>
+                                            {
+                                                var cbo1 = s as ASPxComboBox;
+                                                cbo1.Value = paramModel.DefaultValue;
+                                            };
+                                        }
+                                        
+                                        break;
+                                    case "Integer":
+                                        cbo.Properties.ValueType = typeof(long);
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            cbo.PreRender = (s, e) =>
+                                            {
+                                                var cbo1 = s as ASPxComboBox;
+                                                cbo1.Value = paramModel.DefaultValue;
+                                            };
+                                        }
+                                        
+                                        break;
+                                    case "Amount":
+                                        cbo.Properties.ValueType = typeof(decimal);
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            cbo.PreRender = (s, e) =>
+                                            {
+                                                var cbo1 = s as ASPxComboBox;
+                                                cbo1.Value = paramModel.DefaultValue;
+                                            };
+                                        }
+                                        
+                                        break;
+                                    case "Date":
+                                        cbo.Properties.ValueType = typeof(DateTime);
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            cbo.PreRender = (s, e) =>
+                                            {
+                                                var cbo1 = s as ASPxComboBox;
+                                                cbo1.Value = paramModel.DefaultValue;
+                                            };
+                                        }
+                                        
+                                        break;
+                                    case "DateTime":
+                                        cbo.Properties.ValueType = typeof(DateTime);
+                                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                        {
+                                            cbo.PreRender = (s, e) =>
+                                            {
+                                                var cbo1 = s as ASPxComboBox;
+                                                cbo1.Value = paramModel.DefaultValue;
+                                            };
+                                        }
+                                        
+                                        break;
+                                }
+
+
+                                cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+
+                                 cbo.ControlStyle.CssClass = "editornoimage";
+
+                                if (dataTable != null)
+                                {
+                                    cbo.Properties.DataSource = dataTable;
+
+                                    if (dataTable.Columns.Count > 0)
+                                    {
+                                        cbo.Properties.ValueField = dataTable.Columns[0].ColumnName;
+
+                                        if ((dataTable.Columns[0].ColumnName.ToUpper() == "KEY") && (dataTable.Columns.Count > 1))
+                                        {
+                                            var j = 0;
+                                            for (int i = 1; i < dataTable.Columns.Count; i++)
+                                            {
+                                                cbo.Properties.Columns.Add(dataTable.Columns[i].ColumnName);
+
+                                                j = i - 1;
+                                                if (j == 0)
+                                                {
+                                                    cbo.Properties.TextFormatString = "{" + j.ToString() + "}";
+                                                }
+                                                else
+                                                {
+                                                    cbo.Properties.TextFormatString = cbo.Properties.TextFormatString + " - {" + j.ToString() + "}";
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < dataTable.Columns.Count; i++)
+                                            {
+                                                cbo.Properties.Columns.Add(dataTable.Columns[i].ColumnName);
+
+                                                if (i == 0)
+                                                {
+                                                    cbo.Properties.TextFormatString = "{" + i.ToString() + "}";
+                                                }
+                                                else
+                                                {
+                                                    cbo.Properties.TextFormatString = cbo.Properties.TextFormatString + " - {" + i.ToString() + "}";
+                                                }
+                                            }
+                                        }
+
+                                        
+
+                                    }
+
+                                }
+
+
+                                cbo.Properties.ValidationSettings.Display = Display.Dynamic;
+                                if (paramModel.IsMandatory == "Y")
+                                {
+                                    cbo.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                    cbo.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                }
+                                else
+                                {
+                                    cbo.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                }
+
+
+                            });
+                            break;
+                        case "Cfl":
+
+
+                            //---------------------------------------------
+                            // Mcv akan me-render (render&gethtml) semua di view mekipun di "if" tetep akan di baca : 
+                            // sehingga akan terjadi error jika ada yg name yg sama
+                            // variable di bawah untuk membuat hanya yg di butuhkan yg akan di kasih name yg benar lain nya akan di isi denga guid
+                            //---------------------------------------------
+                            string strCflString = Guid.NewGuid().ToString();
+                            string strCflInteger = Guid.NewGuid().ToString();
+                            string strCflAmount = Guid.NewGuid().ToString();
+                            string strCflDate = Guid.NewGuid().ToString();
+                            string strCflDateTime = Guid.NewGuid().ToString();
+
+                            string StrName = "";
+                            switch (paramModel.TypeData)
+                            {
+                                case "String":
+                                    strCflString = "Params[" + p.ToString() + "].ParamValue";
+                                    StrName = strCflString;
+                                    break;
+                                case "Integer":
+                                    strCflInteger = "Params[" + p.ToString() + "].ParamValue";
+                                    StrName = strCflInteger;
+
+                                    break;
+                                case "Amount":
+                                    strCflAmount = "Params[" + p.ToString() + "].ParamValue";
+                                    StrName = strCflAmount;
+
+                                    break;
+                                case "Date":
+                                    strCflDate = "Params[" + p.ToString() + "].ParamValue";
+                                    StrName = strCflDate;
+
+                                    break;
+                                case "DateTime":
+                                    strCflDateTime = "Params[" + p.ToString() + "].ParamValue";
+                                    StrName = strCflDateTime;
+
+                                    break;
+
+                            }
+
+                            CflDynamic_ParamModel dynamicParamModel = new CflDynamic_ParamModel();
+                            dynamicParamModel.Code = paramModel.DetId.ToString();
+                            dynamicParamModel.Description = paramModel.Caption;
+                            dynamicParamModel.Sql = paramModel.Sql;
+                            dynamicParamModel.IsMulti = "N";
+
+                            groupItem.Items.Add(itemSettings =>
+                                    {
+                                        itemSettings.Caption = paramModel.Caption + (paramModel.IsMandatory == "Y" ? "&nbsp;<em class='dxflRequired_Metropolis'>*</em>" : "");
+
+                                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+                                    })
+                                   .SetNestedContent(() =>
+                                   {
+
+                                       string StrJs = "<script type='text/javascript'> " +
+                                                        " function OnClickChoose_CflDynamic" + paramModel.DetId.ToString() + "(s, e,data) { " +
+                                                        "    var txt = ASPxClientTextBox.Cast('" + StrName + "'); " +
+                                                        "    txt.SetValue(data[0].Value);  " +
+                                                        "    CflDynamicPopupList" + paramModel.DetId.ToString() + ".Hide(); " +
+                                                        " }  " +
+                                                   " </script>";
+
+
+                                       ViewContext.Writer.Write(
+                                              StrJs
+                                      );
+
+
+                                       ViewContext.Writer.Write(
+                                                @Html.Partial("~/Views/_Cfl/_CflDynamic/Partial/_CflDynamic_Panel_List_Partial.cshtml", dynamicParamModel)
+                                       );
+
+                                       ViewContext.Writer.Write("<table  cellspacing=\"0\" cellpadding=\"0\" >");
+                                       ViewContext.Writer.Write("<tr><td >");
+
+                                       switch (paramModel.TypeData)
+                                       {
+                                           case "String":
+
+                                               Html.DevExpress().TextBox(txt =>
+                                               {
+                                                   txt.Name = strCflString;
+                                                   txt.ControlStyle.CssClass = "editor";
+                                                   txt.Width = 150;
+
+                                                   txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                                   if (paramModel.IsMandatory == "Y")
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                                   }
+                                                   else
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                                   }
+
+                                                   if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                                   {
+                                                       if (paramModel.DefaultValue.ToUpper() == "{USERID}")
+                                                       {
+                                                           txt.Text = userId.ToString();
+                                                       }
+                                                       else
+                                                       {
+                                                           txt.Text = paramModel.DefaultValue;
+                                                       }
+                                                   }
+
+                                               }).Render();
+
+
+                                               break;
+                                           case "Integer":
+                                               Html.DevExpress().SpinEdit(txt =>
+                                               {
+                                                   txt.Name = strCflInteger;
+                                                   txt.ControlStyle.CssClass = "editor";
+                                                   txt.Properties.DisplayFormatString = "#,##0";
+                                                   txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                                                   txt.Width = 100;
+
+                                                   txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                                   if (paramModel.IsMandatory == "Y")
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                                   }
+                                                   else
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                                   }
+
+                                                   if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                                   {
+                                                       if (paramModel.DefaultValue.ToUpper() == "{USERID}")
+                                                       {
+                                                           txt.Number = decimal.Parse(userId.ToString());
+                                                       }
+                                                       else
+                                                       {
+                                                           txt.Number = decimal.Parse(paramModel.DefaultValue);
+                                                       }
+                                                   }
+
+                                               }).Render();
+                                               break;
+                                           case "Amount":
+                                               Html.DevExpress().SpinEdit(txt =>
+                                               {
+                                                   txt.Name = strCflAmount;
+                                                   txt.ControlStyle.CssClass = "editor";
+                                                   txt.Properties.DisplayFormatString = "#,###.00";
+                                                   txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                                                   txt.Width = 150;
+
+                                                   txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                                   if (paramModel.IsMandatory == "Y")
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                                   }
+                                                   else
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                                   }
+
+                                               }).Render();
+                                               break;
+                                           case "Date":
+                                               Html.DevExpress().DateEdit(txt =>
+                                               {
+                                                   txt.Name = strCflDate;
+                                                   txt.ControlStyle.CssClass = "editor";
+                                                   txt.Properties.NullText = "dd/MM/yyyy";
+                                                   txt.Properties.EditFormat = EditFormat.Custom;
+                                                   txt.Properties.EditFormatString = "dd/MM/yyyy";
+                                                   txt.Width = 100;
+
+                                                   txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                                   if (paramModel.IsMandatory == "Y")
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                                   }
+                                                   else
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                                   }
+
+                                                   if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                                   {
+                                                       string inputFormat = "yyyy-MM-dd";
+                                                       var dateTime = DateTime.ParseExact(paramModel.DefaultValue, inputFormat, CultureInfo.InvariantCulture);
+
+                                                       txt.Date = dateTime;
+
+                                                   }
+
+                                               }).Render();
+                                               break;
+                                           case "DateTime":
+                                               Html.DevExpress().DateEdit(txt =>
+                                               {
+                                                   txt.Name = strCflDateTime;
+                                                   txt.ControlStyle.CssClass = "editor";
+                                                   txt.ControlStyle.CssClass = "editor";
+                                                   txt.Properties.NullText = "dd/MM/yyyy HH:mm:ss";
+                                                   txt.Properties.EditFormat = EditFormat.Custom;
+                                                   txt.Width = 200;
+
+                                                   txt.Properties.DisplayFormatString = "dd/MM/yyyy HH:mm:ss";
+                                                   txt.Properties.EditFormatString = "dd/MM/yyyy  HH:mm:ss";
+
+                                                   txt.Properties.TimeSectionProperties.Visible = true;
+                                                   txt.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
+                                                   txt.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm:ss";
+
+                                                   txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                                   if (paramModel.IsMandatory == "Y")
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                                                   }
+                                                   else
+                                                   {
+                                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                                   }
+                                                   
+                                                   if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                                                   {
+                                                       string inputFormat = "yyyy-MM-dd hh:mm:ss";
+                                                       var dateTime = DateTime.ParseExact(paramModel.DefaultValue, inputFormat, CultureInfo.InvariantCulture);
+
+                                                       txt.Date = dateTime;
+
+                                                   }
+
+                                               }).Render();
+                                               break;
+                                       }
+
+                                       ViewContext.Writer.Write("</td> <td>");
+
+                                       Html.DevExpress().HyperLink(settingsHL =>
+                                       {
+                                           settingsHL.Name = "btnCfl_" + Guid.NewGuid().ToString();
+                                           settingsHL.NavigateUrl = "javascript:void(0)";
+                                           settingsHL.Properties.Text = "[Find]";
+                                           settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ CflDynamicPopupList{0}.ShowAtPos(250, 100);  }}", paramModel.DetId.ToString());
+                                           settingsHL.Properties.ImageUrl = "~/Content/Images/buttonnew/find-hitam.png";
+                                           settingsHL.Properties.ImageWidth = 15;
+                                           settingsHL.ControlStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+                                           settingsHL.Height = 22;
+                                           settingsHL.Width = 22;
+                                           settingsHL.ControlStyle.VerticalAlign = VerticalAlign.Middle;
+                                           settingsHL.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
+
+                                       }).GetHtml();
+
+
+                                       ViewContext.Writer.Write("</td></tr></table>");
+                                   });
+
+
+                            break;
+
+                    }
+                    break;
+
+                case "Multi":
+
+                    //groupItem.Items.Add(itemSettings =>
+                    //{
+                    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                    //    itemSettings.Caption = paramModel.Caption;
+
+                    //    var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                    //    txt.Name = "Params[" + p.ToString() + "].ParamValues";
+                    //    txt.ControlStyle.CssClass = "editor";
+                    //    txt.Width = 400;
+                        
+                    //    if (paramModel.IsMandatory == "Y")
+                    //    {
+                    //        txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                    //        txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                    //    }
+                    //    else
+                    //    {
+                    //        txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                    //    }
+
+                    //}).ClientVisible = false;
+
+                    groupItem.Items.Add(itemSettings =>
+                    {
+                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                        itemSettings.Caption = paramModel.Caption;
+                        itemSettings.Width = 200;
+
+                        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+                        txt.ControlStyle.CssClass = "editor";
+                        
+                      
+                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                        if (paramModel.IsMandatory == "Y")
+                        {
+                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                        }
+                        else
+                        {
+                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                        }
+
+                        txt.Width = 0;
+                        
+                    }).ClientVisible = false;
+
+
+                    //ini agak aneh kalau tidak di define sebagai variable P di StrJs2 akan selalu terisi p+1 
+                    var temp_p = p.ToString();
+
+                    CflDynamic_ParamModel dynamicParamModel2 = new CflDynamic_ParamModel();
+                    dynamicParamModel2.Code = paramModel.DetId.ToString();
+                    dynamicParamModel2.Description = paramModel.Caption;
+                    dynamicParamModel2.Sql = paramModel.Sql;
+                    dynamicParamModel2.IsMulti = "Y";
+
+
+                    groupItem.Items.Add(itemSettings =>
+                            {
+                                itemSettings.Caption = paramModel.Caption + (paramModel.IsMandatory == "Y" ? "&nbsp;<em class='dxflRequired_Metropolis'>*</em>" : "");
+
+                                itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+                            }).SetNestedContent(() =>
+                           {
+
+                               string StrJs2 = "<script type='text/javascript'> " +
+                                              " function OnClickChoose_CflDynamic" + paramModel.DetId.ToString() + "(s, e) { " +
+                                              "    CflDynamicPopupList" + paramModel.DetId.ToString() + ".Hide(); " +
+                                                "  gvCflDynamic" + paramModel.DetId.ToString() + ".GetSelectedFieldValues('Key', GetSelectedFieldValuesCallback" + paramModel.DetId.ToString() + ");" +
+                                                " }  " +
+                                                " function GetSelectedFieldValuesCallback" + paramModel.DetId.ToString() + "(values) { " +
+                                                "    var txt = ASPxClientTextBox.Cast('Params[" + temp_p + "].ParamValues');" +
+                                                "    var temp=JSON.stringify(values);  " +
+                                                "    if(temp=='[]') { temp=''; }   " +
+                                                "    txt.SetValue(temp);" +
+                                                " }  " +
+                                                " </script>";
+
+
+                               ViewContext.Writer.Write(
+                                      StrJs2
+                              );
+
+
+
+                               ViewContext.Writer.Write(
+                                        @Html.Partial("~/Views/_Cfl/_CflDynamic/Partial/_CflDynamic_Panel_List_Partial.cshtml", dynamicParamModel2)
+                               );
+
+                               ViewContext.Writer.Write("<table  cellspacing=\"0\" cellpadding=\"0\" >");
+                               ViewContext.Writer.Write("<tr><td >");
+                               Html.DevExpress().Button(btn =>
+                               {
+                                   btn.Name = "btnCflMulti" + paramModel.ParamName;
+                                   btn.Text = "[...]";
+                                   //btn.ControlStyle.CssClass = "editor";
+                                   btn.ClientSideEvents.Click = string.Format("function(s, e) {{ CflDynamicPopupList{0}.ShowAtPos(250, 100);  }}", paramModel.DetId.ToString());
+                                   btn.Styles.Style.Paddings.Padding = 0;
+                               }).Render();
+
+                               ViewContext.Writer.Write("</td>");
+                               ViewContext.Writer.Write("<td>&nbsp;</td>");
+                               ViewContext.Writer.Write("<td>");
+                               
+                               Html.DevExpress().TextBox(txt =>
+                               {
+
+                                   txt.Name = "Params[" + temp_p.ToString() + "].ParamValues";
+                                   txt.ControlStyle.CssClass = "editor";
+                                   txt.Width = 400;
+                                   txt.ReadOnly = true;
+                                   txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+
+                                   txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                                   if (paramModel.IsMandatory == "Y")
+                                   {
+                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                       txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+                                       txt.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Left;
+
+                                   }
+                                   else
+                                   {
+                                       txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                                   }
+
+                               }).Render();
+
+                               
+
+                               ViewContext.Writer.Write("</td></tr></table>");
+
+                           });
+
+                  
+                    break;
+
+                default:
+
+
+                    groupItem.Items.Add(itemSettings =>
+                    {
+                        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                        itemSettings.Caption = paramModel.Caption;
+                        itemSettings.Width = 200;
+                        itemSettings.ClientVisible = (paramModel.IsHide == "Y") ? false : true;
+
+                        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                        txt.Name = "Params[" + p.ToString() + "].ParamValue";
+                        txt.ControlStyle.CssClass = "editor";
+
+                        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+                        if (paramModel.IsMandatory == "Y")
+                        {
+                            txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                            txt.Properties.ValidationSettings.RequiredField.ErrorText = "Required";
+
+                        }
+                        else
+                        {
+                            txt.Properties.ValidationSettings.RequiredField.IsRequired = false;
+                        }
+
+
+                        if (!string.IsNullOrEmpty(paramModel.DefaultValue))
+                        {
+                            if (paramModel.DefaultValue.ToUpper() == "{USERID}")
+                            {
+                                txt.Text = userId.ToString();
+                            }
+                            else
+                            {
+                                txt.Text = paramModel.DefaultValue;
+                            }
+                        }
+
+                    });
+                    break;
+            }
+
+        }
+
+
+       
+
+        groupItem.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = "Show";
+            itemSettings.Name = "btnShowReport";
+            itemSettings.ShowCaption = DefaultBoolean.False;
+            //itemSettings.Width = 500;
+
+            var btn = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btn.Name = "btnShowReport";
+            btn.Text = "Show";
+            btn.ControlStyle.CssClass = "editor";
+            btn.ClientSideEvents.Click = "OnClickBtnShow";
+
+        });
+
+      
+
+    }).GetHtml() 
+
+}
+
+
+ 

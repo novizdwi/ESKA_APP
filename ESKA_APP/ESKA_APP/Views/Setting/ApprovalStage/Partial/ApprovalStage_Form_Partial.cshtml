@@ -1,0 +1,207 @@
+﻿@using Models.Setting.ApprovalStage;
+@using DevExpress.Web.Mvc;
+@using DevExpress.Web;
+@using System.Web.UI.WebControls;
+
+@model Models.Setting.ApprovalStage.ApprovalStageModel
+@{
+    ViewBag.ReadOnly = Model.Id == 0 ? true : false;
+}
+
+@Html.DevExpress().TextBox(
+    settings =>
+    {
+        settings.Name = "Id";
+        settings.ControlStyle.CssClass = "editor";
+        settings.ClientVisible = false;
+        settings.ShowModelErrors = true;
+        settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    }
+).Bind(Model.Id).GetHtml()
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = Unit.Percentage(100);
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.Color.Orange;
+
+    });
+
+    groupItem.Items.AddEmptyItem().Height = 8;
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+    var groupItem_3 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col3 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    // ===================== FIELD-FIELD FORM =====================
+
+    // Stage Name
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Stage Name";
+        itemSettings.FieldName = "StageName";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "StageName";
+        txt.ShowModelErrors = true;
+        txt.Width = 300;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    // Description
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Description";
+        itemSettings.FieldName = "Description";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Description";
+        txt.ShowModelErrors = true;
+        txt.Width = 300;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+    // Min Approve
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Min Approve";
+        itemSettings.FieldName = "MinApprove";
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "MinApprove";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.MinValue = 1;
+        txt.Properties.MaxValue = int.MaxValue;
+        txt.Width = 50;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Properties.AllowMouseWheel = false;
+    });
+
+    // Min Reject
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Min Reject";
+        itemSettings.FieldName = "MinReject";
+        itemSettings.ClientVisible = false;
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "MinReject";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.MinValue = 1;
+        txt.Properties.MaxValue = int.MaxValue;
+        txt.Width = 50;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Properties.AllowMouseWheel = false;
+    });
+
+    // ===================== TAB DETAIL (disamakan dengan Transfer Request) =====================
+    groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+        group.PageControl.ContentStyle.Paddings.Padding = 3;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+        // Tab User
+        group.Items.Add(item =>
+        {
+            item.Name = "TabUser";
+            item.Caption = "   User    ";
+            item.SetNestedContent(() =>
+            {
+                // Jangan pakai @Html di dalam lambda C#
+                ViewContext
+                    .Writer
+                    .Write(Html.Partial("Partial/ApprovalStage_Form_TabUser_List_Partial"));
+            });
+
+            // Optional: style tab caption
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+        });
+
+        //// Kalau nanti mau tambahkan Tab Role, tinggal buka lagi blok ini
+        //group.Items.Add(item =>
+        //{
+        //    item.Name = "TabRole";
+        //    item.Caption = "   Role    ";
+        //    item.SetNestedContent(() =>
+        //    {
+        //        ViewContext.Writer.Write(
+        //            Html.Partial("Partial/ApprovalStage_Form_TabRole_List_Partial")
+        //        );
+        //    });
+        //    item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+        //    item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+        //});
+    });
+
+}).GetHtml()

@@ -1,0 +1,500 @@
+﻿@using Models._Cfl;
+
+
+
+@if (false)
+{
+    <script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-2.2.0.intellisense.js"></script>
+    <script src="~/Scripts/Test/DXR.js"></script>
+}
+
+
+
+
+@model Models.Setting.GeneralSetting.GeneralSettingModel
+
+
+@{
+    ViewBag.Title = "General Setting";
+}
+
+
+<script type="text/javascript">
+    var beforeSaveActiveTabName = '';
+    var beforeSaveActiveTabIndex = 0;
+
+
+    $(document).ready(function () {
+
+        SetBtnStatus('new');
+    }
+    );
+
+</script>
+
+
+
+<script type="text/javascript">
+
+
+    $.ajaxSetup({
+        cache: false
+    });
+
+    function OnBegin() {
+        loadingPanel.Show();
+    }
+
+    function SetBtnStatus(formMode) {
+
+
+    }
+
+    var msgCount = 0;
+    function OnSuccess() {
+
+        $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + 'Action success</p>' + $("#MessageText").html());
+
+    }
+
+
+    function OnSuccessMsgBox() {
+
+        $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + 'Action success</p>' + $("#MessageText").html());
+        loadingPanel.Hide();
+
+        popupSuccess.Show();
+        setTimeout(function () { popupSuccess.Hide(); }, 1000);
+
+    }
+
+    function OnFailure(jqXhr, textStatus, errorThrown) {
+        if (beforeSaveActiveTabName != '') {
+            var tab = ASPxClientTabControl.Cast(beforeSaveActiveTabName);
+            tab.SetActiveTabIndex(beforeSaveActiveTabIndex);
+            beforeSaveActiveTabName = '';
+        }
+
+        if (jqXhr.responseText.substring(0, 12) == "[VALIDATION]") {
+            $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + jqXhr.responseText + '</p>' + $("#MessageText").html());
+
+            loadingPanel.Hide()
+            alert(jqXhr.responseText);
+        }
+        else {
+            // untuk error yg tidak ter capture di validation
+            var doc = jqXhr.responseText.match(/.*<title>([\s\S]*)<\/title>.*/);
+            if (doc != null) {
+                $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + doc[1] + '</p>' + $("#MessageText").html());
+
+                loadingPanel.Hide();
+                alert(doc[1]);
+            }
+
+        }
+
+    }
+
+    function OnComplete() {
+        loadingPanel.Hide();
+    }
+
+
+    function BeforeSave() {
+        var tab = ASPxClientTabControl.Cast("TabDetail");
+
+        beforeSaveActiveTabName = 'TabDetail';
+        beforeSaveActiveTabIndex = tab.GetActiveTabIndex();
+
+        var tab = ASPxClientTabControl.Cast("TabDetail");
+
+        var tabPageCount = tab.GetTabCount();
+        for (var i = 0; i < tabPageCount; i++) {
+            tab.SetActiveTabIndex(i);
+            if (!($("#formDetail").valid())) {
+                var validator = $("#formDetail").validate();
+                var errors = validator.numberOfInvalids();
+                if (errors) {
+                    // alert( validator.errorList[0].message);
+                    validator.errorList[0].element.focus();
+
+                }
+                return false;
+            }
+
+        }
+
+
+    }
+
+    //function BtnCflItemPopupListSegelOnClick(s, e) {
+    //    cflItemPopupListSegel.Show();
+    //}
+
+    function CboItemGroupNameOnChange(s, e) {
+        ItemGroupCode.SetValue(data.ItemCode);
+    }
+
+    function BtnCflItemPopupListSolarOnClick(s, e) {
+        cflItemPopupListSolar.Show();
+    }
+
+    function BtnCflItemPopupListJasaAngkutDaratOnClick(s, e) {
+        cflItemPopupListJasaAngkutDarat.Show();
+    }
+
+    function BtnCflItemPopupListJasaAngkutLautOnClick(s, e) {
+        cflItemPopupListJasaAngkutLaut.Show();
+    }
+
+
+    //function BtnCflItemPopupListBiayaKirimOnClick(s, e) {
+    //    cflItemPopupListBiayaKirim.Show();
+    //}
+
+    //function BtnCflBpPopupListSadp2OnClick(s, e) {
+    //    cflBpPopupListSadp2.Show();
+    //}
+
+    //function BtnCflWarehousePopupListTransitOnClick(s, e) {
+    //    cflWarehousePopupListTransit.Show();
+    //}
+
+    function gvGeneralSettingCoaDetail_ClickBtnFindCoaCode(s, e) {
+        cflCoaPopupListCoa.Show();
+
+    }
+
+    function RefreshAfterSuccess(response) {
+
+
+        $("#contentForm").html(response);
+
+        $.validator.unobtrusive.parse("#formDetail");
+
+        MVCxClientUtils.FinalizeCallback();
+
+        if (beforeSaveActiveTabName != '') {
+            var tab = ASPxClientTabControl.Cast(beforeSaveActiveTabName);
+            tab.SetActiveTabIndex(beforeSaveActiveTabIndex);
+            beforeSaveActiveTabName = '';
+        }
+    }
+
+
+
+    function OnClickBtnUpdate(s, e) {
+
+        if (BeforeSave() == false) {
+            return;
+        }
+
+        var formData = $('#formDetail').serializeObject();
+        //var DetailCoas_ = GetGvDetails('gvGeneralSettingCoaDetail');
+        //var DetailItems_ = GetGvDetails('gvGeneralSettingItemDetail');
+        //$.extend(formData, { DetailCoas_: DetailCoas_ }, { DetailItems_: DetailItems_ });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Update", "GeneralSetting")',
+            data: formData,
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+
+                OnSuccessMsgBox();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+
+
+
+    }
+
+
+    function OnClickBtnRefresh(s, e) {
+
+        var tab = ASPxClientTabControl.Cast("TabDetail");
+
+        beforeSaveActiveTabName = 'TabDetail';
+        beforeSaveActiveTabIndex = tab.GetActiveTabIndex();
+
+        key = Id.GetValue();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DetailPartial", "GeneralSetting")',
+            data: { Id: key },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+    function CboItemGroupCodeOnChange(s, e) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ItemGroupName", "GeneralSetting")',
+            data: { docNum: s.GetSelectedItem().text },
+            success: function (data) {
+                console.log(data.ItemGroupCode);
+                ItemGroupCode.SetValue(data.ItemGroupCode);
+            }
+        });
+    }
+
+
+</script>
+
+
+<script type="text/javascript">
+    function BtnCflStockOpnameCoaCodePopupListOnClick(s, e) {
+        cflCoaPopupListStockOpname.Show();
+    }
+
+
+</script>
+
+
+@Html.Partial("Partial/GeneralSetting_Form_Btn_Partial")
+
+@*
+    --------------------------------------------------------------------------------------------
+*@
+
+@using (Ajax.BeginForm("mantap", "GeneralSetting", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="contentForm" style="padding-top: 1em">
+        @Html.Partial("Partial/GeneralSetting_Form_Partial")
+
+    </div>
+}
+
+@Html.DevExpress().LoadingPanel(
+    settings =>
+    {
+        settings.Name = "loadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = "contentForm";
+        settings.Styles.LoadingDiv.BackColor = System.Drawing.Color.White;
+    }).GetHtml()
+
+
+
+
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflItemList
+    -----------------------------------------------------------------------------
+*@
+
+
+@{
+    var cflJasaAngkutLautItem_ParamModel = new CflItem_ParamModel();
+    cflJasaAngkutLautItem_ParamModel.Name = "JasaAngkutLaut";
+    cflJasaAngkutLautItem_ParamModel.Type = "GeneralSetting";
+    cflJasaAngkutLautItem_ParamModel.SqlWhere = "";
+    cflJasaAngkutLautItem_ParamModel.Header = "";
+
+    cflJasaAngkutLautItem_ParamModel.IsMulti = "N";
+}
+
+
+
+<script type="text/javascript">
+
+
+
+    function OnClickChoose_CflItemJasaAngkutLaut(s, e, data) {
+        JasaAngkutCodeLaut.SetValue(data.ItemCode);
+        JasaAngkutNameLaut.SetValue(data.ItemName);
+        cflItemPopupListJasaAngkutLaut.Hide();
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflJasaAngkutLautItem_ParamModel)
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflItemList
+    -----------------------------------------------------------------------------
+*@
+
+
+@{
+    var cflJasaAngkutDaratItem_ParamModel = new CflItem_ParamModel();
+    cflJasaAngkutDaratItem_ParamModel.Name = "JasaAngkutDarat";
+    cflJasaAngkutDaratItem_ParamModel.Type = "GeneralSetting";
+    cflJasaAngkutDaratItem_ParamModel.SqlWhere = "";
+    cflJasaAngkutDaratItem_ParamModel.Header = "";
+
+    cflJasaAngkutDaratItem_ParamModel.IsMulti = "N";
+}
+
+
+
+<script type="text/javascript">
+
+
+
+    function OnClickChoose_CflItemJasaAngkutDarat(s, e, data) {
+        JasaAngkutCodeDarat.SetValue(data.ItemCode);
+        JasaAngkutNameDarat.SetValue(data.ItemName);
+        cflItemPopupListJasaAngkutDarat.Hide();
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflJasaAngkutDaratItem_ParamModel)
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflItemList
+    -----------------------------------------------------------------------------
+*@
+
+
+@{
+    var cflSolarItem_ParamModel = new CflItem_ParamModel();
+    cflSolarItem_ParamModel.Name = "Solar";
+    cflSolarItem_ParamModel.Type = "GeneralSetting";
+    cflSolarItem_ParamModel.SqlWhere = "";
+    cflSolarItem_ParamModel.Header = "";
+
+    cflSolarItem_ParamModel.IsMulti = "N";
+}
+
+
+
+<script type="text/javascript">
+
+
+
+    function OnClickChoose_CflItemSolar(s, e, data) {
+        SolarItemCode.SetValue(data.ItemCode);
+        SolarItemName.SetValue(data.ItemName);
+        cflItemPopupListSolar.Hide();
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflSolarItem_ParamModel)
+
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflCoaBankIncomingList
+    -----------------------------------------------------------------------------
+*@
+
+@{
+    var cflCoaStockOpname_ParamModel = new CflCoa_ParamModel();
+    cflCoaStockOpname_ParamModel.Name = "StockOpname";
+    cflCoaStockOpname_ParamModel.Type = "GeneralSetting";
+    cflCoaStockOpname_ParamModel.Header = "";
+    cflCoaStockOpname_ParamModel.SqlWhere = "";
+    cflCoaStockOpname_ParamModel.IsMulti = "N";
+}
+
+
+
+<script type="text/javascript">
+
+    function OnClickChoose_CflCoaStockOpname(s, e, data) {
+        var StockOpnameCoaCode = ASPxClientTextBox.Cast("StockOpnameCoaCode");
+        StockOpnameCoaCode.SetValue(data.ActId);
+        var StockOpnameCoaName = ASPxClientTextBox.Cast("StockOpnameCoaName");
+        StockOpnameCoaName.SetValue(data.AcctName);
+
+        cflCoaPopupListStockOpname.Hide();
+
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflCoa/Partial/_CflCoa_Panel_List_Partial.cshtml", cflCoaStockOpname_ParamModel)
+
+
+
+
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflCoaList
+    -----------------------------------------------------------------------------
+*@
+
+@{
+    var cflCoa_ParamModel = new CflCoa_ParamModel();
+    cflCoa_ParamModel.Name = "Coa";
+    cflCoa_ParamModel.Type = "GeneralSetting";
+    cflCoa_ParamModel.Header = "";
+    cflCoa_ParamModel.SqlWhere = "";
+    cflCoa_ParamModel.IsMulti = "N";
+}
+
+
+
+<script type="text/javascript">
+
+    function OnClickChoose_CflCoaCoa(s, e, data) {
+        var CoaCode = ASPxClientTextBox.Cast("gvGeneralSettingCoaDetail_CoaCode");
+        CoaCode.SetValue(data.ActId);
+        var CoaName = ASPxClientTextBox.Cast("gvGeneralSettingCoaDetail_CoaName");
+        CoaName.SetValue(data.AcctName);
+
+        cflCoaPopupListCoa.Hide();
+
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflCoa/Partial/_CflCoa_Panel_List_Partial.cshtml", cflCoa_ParamModel)
+

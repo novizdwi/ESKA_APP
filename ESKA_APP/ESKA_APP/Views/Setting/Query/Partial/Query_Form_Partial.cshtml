@@ -1,0 +1,226 @@
+﻿@using Models.Setting.Query; 
+
+@model Models.Setting.Query.QueryModel    
+  
+  
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
+
+    ).Bind(Model.Id).GetHtml()
+
+
+ @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.ColCount = 1;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 0;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.Color.Orange;
+
+    });
+
+
+    groupItem.Items.AddEmptyItem().Height = 0;
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+    var groupItem_3 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+        //itemSettings.Width = Unit.Percentage(33.33);
+    });
+
+
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+        //itemSettings.Width = Unit.Percentage(33.33);
+    });
+
+    var groupItem_Col3 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+
+        //itemSettings.Width = Unit.Percentage(33.33);
+    });
+
+    groupItem_Col1.Items.Add(m => Model.GroupId, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Group";
+
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "GroupId";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "GroupName";
+        cbo.Properties.ValueField = "Id";
+        cbo.Properties.ValueType = typeof(int);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetQueryGroups();
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Query Name";
+        itemSettings.FieldName = "QueryName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "QueryName";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.RadioButtonList;
+        itemSettings.Caption = "Active";
+        itemSettings.FieldName = "IsActive";
+        var rb = (RadioButtonListSettings)itemSettings.NestedExtensionSettings;
+        rb.Properties.RepeatDirection = RepeatDirection.Horizontal;
+        rb.Name = "IsActive";
+        rb.ShowModelErrors = true;
+        rb.Properties.TextField = "Name";
+        rb.Properties.ValueField = "Code";
+        rb.Properties.ValueType = typeof(string);
+        rb.ControlStyle.CssClass = "editor";
+        rb.Properties.DataSource = Models._Utils.GeneralGetList.GetList("Boolean");
+        rb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        rb.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+    });
+
+
+    groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+
+        //group.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+        //group.VerticalAlign = FormLayoutVerticalAlign.Top;
+        //group.TabAlign = TabAlign.Left;
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabSql";
+            item.Caption = "SQL";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Query_Form_TabSql_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabParam";
+            item.Caption = "Parameter    ";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                @Html.Partial("Partial/Query_Form_TabParam_List_Partial", Model.ListParams_)
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabUser";
+            item.Caption = "User";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Query_Form_TabUser_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabRole";
+            item.Caption = "Role";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Query_Form_TabRole_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+    });
+
+
+}).GetHtml()
+   
+ 
+ 
+ 

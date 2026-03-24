@@ -1,0 +1,47 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupItemTag";
+    settings.CallbackRouteValues = new { Controller = "StockOpnameScan", Action = "ViewItemTag_PopupListOnDemandPartial" };
+    settings.CloseAction = CloseAction.CloseButton;
+
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.Modal = true;
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = false;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+
+    settings.ShowPageScrollbarWhenModal = true;
+    
+    settings.EnableHotTrack = true;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.ClientSideEvents.EndCallback = "popupItemTag_EndCallback";
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "Item Tag List";
+
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("Partial/ItemTag/ItemTag_Form_Partial");
+
+    });
+
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender;
+        //popup.Width = 1000;
+        //popup.Height =690;
+
+        popup.Width = 350;
+        popup.Height = 250;
+    };
+
+
+}).GetHtml()

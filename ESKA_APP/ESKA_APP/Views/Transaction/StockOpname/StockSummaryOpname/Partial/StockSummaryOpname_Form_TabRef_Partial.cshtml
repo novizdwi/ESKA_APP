@@ -1,0 +1,132 @@
+﻿@using Models;
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvRef";
+    settings.KeyFieldName = "DetId";
+    settings.CallbackRouteValues = new { Controller = "StockSummaryOpname", Action = "TabRefListPartial" };
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    //settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+    
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    //settings.Settings.ShowFilterRow = true;
+    //settings.Settings.ShowFilterRowMenu = true;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    settings.Columns.Add("BaseId", "BaseId").Width = 0;
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "BaseNo";
+        column.FieldName = "BaseNo";
+        column.Caption = "Scan No";
+
+        column.ReadOnly = true;
+        column.CellStyle.ForeColor = System.Drawing.Color.FromName("#EDEDED");
+        column.Width = 300;
+
+        column.SetDataItemTemplateContent(c =>
+        {
+            if (c.ItemIndex >= 0)
+            {
+                string ProgressNo = (string)DataBinder.Eval(c.DataItem, "BaseNo");
+
+                Html.DevExpress().HyperLink(settingsHL =>
+                {
+                    settingsHL.Name = "ChooseDocument_" + DataBinder.Eval(c.DataItem, "BaseNo") + "_" + Guid.NewGuid().ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = ProgressNo;
+                    settings.ClientVisible = true;
+                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickbaseId(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "BaseId"));
+                    settingsHL.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+                }).Render();
+            }
+        });
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "BaseCreatedDate";
+        column.Name = "BaseCreatedDate";
+        column.Caption = "Scan Date";
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = 90;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+    });
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "ScanDeviceId";
+        column.FieldName = "ScanDeviceId";
+        column.Caption = "Scan Device Id";
+
+        column.ReadOnly = true;
+        column.Width = 300;
+
+    });
+
+    settings.Columns.Add("Status", "Status").Width = 100;
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "Comments";
+        column.FieldName = "Comments";
+        column.Caption = "Scan Commentary";
+
+        column.ReadOnly = true;
+        column.Width = 300;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "BaseCreatedUser_";
+        column.FieldName = "BaseCreatedUser_";
+        column.Caption = "Scaned By";
+
+        column.ReadOnly = true;
+        column.Width = 150;
+
+    });
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvRefOnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvRefOnEndCallback";
+
+    settings.ClientSideEvents.BatchEditStartEditing = "gvRefOnBatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvRefOnBatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvRefOnBatchEditRowValidating";
+
+}).Bind(Model).GetHtml()
+

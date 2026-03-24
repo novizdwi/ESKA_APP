@@ -1,0 +1,356 @@
+﻿@using Models;
+@using Models._Cfl;
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+    if (ViewBag.ReadOnly == null)
+    {
+        ViewBag.ReadOnly = false;
+        string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_TransferRequest\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+        if (status != "Draft")
+        {
+            ViewBag.ReadOnly = true;
+        }
+    }
+
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvTransferRequestDetail";
+    settings.KeyFieldName = "DetId";
+    /* ===== FIX FOOTER ALIGNMENT ===== */
+    settings.Settings.UseFixedTableLayout = true;
+    settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Control;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    /* ================================= */
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.CallbackRouteValues = new { Controller = "TransferRequest", Action = "TabDetailListPartial" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+
+    settings.CommandColumn.ShowDeleteButton = false;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.Enabled = true;
+
+    settings.CommandColumn.Width = 50;
+
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton() { ID = "deleteButton", Text = "Delete" };
+    settings.CommandColumn.CustomButtons.Add(customButton);
+
+    settings.ClientSideEvents.CustomButtonClick = "gvTransferRequestDetailOnCustomButtonClick";
+
+
+    settings.Enabled = true;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 150;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvTransferRequestDetail_ItemCode";
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 400;
+
+        column.ReadOnly = true;
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvTransferRequestDetail_ItemName";
+
+    });
+    /*
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "FromWhsCode";
+        column.Name = "FromWhsCode";
+        column.Caption = "From Whse Code";
+        
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 0;
+        
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "FromWhsName";
+        column.Name = "FromWhsName";
+        column.Caption = "From Whse Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 0;
+        
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
+    */
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ToWhsCode";
+        column.Name = "ToWhsCode";
+        column.Caption = "To Whse Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 0;
+
+        column.ReadOnly = true;
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvTransferRequestDetail_ToWhsCode";
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ToWhsName";
+        column.Name = "ToWhsName";
+        column.Caption = "To Whse Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 0;
+
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvTransferRequestDetail_ToWhsName";
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 70;
+        column.Settings.AllowSort = DefaultBoolean.True;
+        column.Settings.SortMode = DevExpress.XtraGrid.ColumnSortMode.Value;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //column.ReadOnly = true;
+
+        if (ViewBag.ReadOnly)
+        {
+
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.ForeColor = System.Drawing.Color.Black;
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+        }
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###.##";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+        txt.SpinButtons.ShowIncrementButtons = false;
+
+        txt.ClientInstanceName = "gvTransferRequestDetail_Quantity";
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+
+        txt.AllowMouseWheel = false;
+        ASPxSummaryItem summaryItem = new ASPxSummaryItem(column.FieldName, DevExpress.Data.SummaryItemType.Sum);
+        summaryItem.Tag = column.FieldName + "_Sum";
+        summaryItem.DisplayFormat = "{0}";
+        settings.TotalSummary.Add(summaryItem);
+
+        column.SetFooterTemplateContent(c =>
+        {
+            Html.DevExpress().Label(lbSettings =>
+            {
+                string fieldName = (c.Column as GridViewDataColumn).FieldName;
+                lbSettings.Name = "gvTransferRequestDetailLabel" + fieldName + "Sum";
+                lbSettings.Properties.EnableClientSideAPI = true;
+                ASPxSummaryItem summaryItem1 = c.Grid.TotalSummary.First(i => i.Tag == (fieldName + "_Sum"));
+                lbSettings.Text = decimal.Parse(c.Grid.GetTotalSummaryValue(summaryItem1).ToString()).ToString("#");
+
+                lbSettings.CustomJSProperties = (sender, e) =>
+                {
+                    e.Properties["cpValue"] = c.Grid.GetTotalSummaryValue(summaryItem1).ToString();
+                };
+
+            }).Render();
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityOnHand_";
+        column.Name = "QuantityOnHand_";
+        column.Caption = "Qty In Warehouse";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = ViewBag.ReadOnly == true ? 0: 120;
+
+        column.ReadOnly = true;
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvTransferRequestDetail_QuantityOnHand_";
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = column.FieldName;
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityOpen";
+        column.Name = "QuantityOpen";
+        column.Caption = "Qty Open";
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Width = ViewBag.ReadOnly == true ? 120 : 0;
+
+        column.ReadOnly = true;
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###.##";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+        txt.SpinButtons.ShowIncrementButtons = false;
+
+        txt.ClientInstanceName = "gvTransferRequestDetail_QuantityOpen";
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = column.FieldName;
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+
+    });
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "QuantityScan";
+    //    column.Name = "QuantityScan";
+    //    column.Caption = "Qty Scan";
+
+    //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+    //    column.Width = 80;
+    //    
+    //    column.ReadOnly = true;
+
+    //    var txt = column.PropertiesEdit as TextBoxProperties;
+    //    txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    //});
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Uom";
+    //    column.Name = "Uom";
+    //    column.Caption = "UoM";
+
+    //    column.ColumnType = MVCxGridViewColumnType.TextBox;
+    //    column.Width = 100;
+    //    
+    //    column.ReadOnly = true;
+
+    //    var txt = column.PropertiesEdit as TextBoxProperties;
+    //    txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Comments";
+        column.Name = "Comments";
+        column.Caption = "Free Text";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 250;
+
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        if (ViewBag.ReadOnly)
+        {
+
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            column.CellStyle.ForeColor = System.Drawing.Color.Black;
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+        }
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvTransferRequestDetail_Comments";
+
+    });
+
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvTransferRequestDetailOnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvTransferRequestDetailOnEndCallback";
+
+    settings.ClientSideEvents.BatchEditStartEditing = "gvTransferRequestDetailOnBatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvTransferRequestDetailOnBatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvTransferRequestDetailOnBatchEditRowValidating";
+
+}).Bind(Model).GetHtml()
+

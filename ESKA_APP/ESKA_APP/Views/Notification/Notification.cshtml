@@ -1,0 +1,52 @@
+﻿@using Models.Notification
+
+@if (false)
+{
+    <script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-2.2.0.intellisense.js"></script>
+    <script src="~/Scripts/Test/DXR.js"></script>
+}
+
+@{
+    var notification_ParamModel = new Notification_ParamModel();
+    notification_ParamModel.Name = "Notification";
+    notification_ParamModel.Type = "Notification";
+    notification_ParamModel.Header = "Notification";
+    notification_ParamModel.SqlWhere = " ";
+    notification_ParamModel.IsMulti = "N";
+}
+
+@Html.Partial("~/Views/Notification/Partial/_Notification_Panel_List_Partial.cshtml", notification_ParamModel)
+
+<script>  
+
+    function updateNotificationBadge() {
+        $.ajax({
+            url: '@Url.Action("GetUnreadCount", "_Notification")',
+            type: 'GET',
+            success: function (count) {
+
+                var badge = document.getElementById("notifBadge");
+                if (!badge) return;
+
+                if (count > 0) {
+                    badge.innerHTML = count;
+                    badge.style.display = "inline-block";
+                } else {
+                    badge.style.display = "none";
+                }
+            }
+        });
+    }
+
+    // 1️⃣ langsung jalan sekali
+    updateNotificationBadge();
+
+    // 2️⃣ ulangi tiap 10 detik
+    setInterval(function () {
+        updateNotificationBadge();
+    }, 600000);
+
+</script>
+
+

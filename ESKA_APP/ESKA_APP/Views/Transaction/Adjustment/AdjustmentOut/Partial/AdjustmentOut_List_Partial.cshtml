@@ -1,0 +1,201 @@
+﻿@using Models;
+@using Models._Utils;
+
+@{
+    GridViewModel viewModel = Model;
+
+    var cpGvFind_FilterExpression = GetSqlFromGridViewModelState.getHanaCriteria(viewModel);
+    var cpGvFind_SortExpression = GetSqlFromGridViewModelState.getHanaSort(viewModel);
+    var cpGvFind_PageIndex = viewModel.Pager.PageIndex;
+    var cpGvFind_PageSize = viewModel.Pager.PageSize;
+
+}
+
+
+@Html.DevExpress().GridView(settings=>
+{
+    settings.Name = "gvAdjustmentOutList";
+    settings.KeyFieldName = "Id";
+    settings.CallbackRouteValues =  new { Controller = "AdjustmentOut", Action = "ListPartial" };
+
+    settings.Columns.Add(column =>
+    {
+        column.Caption = "#";
+
+        column.SetDataItemTemplateContent(c =>
+        {
+
+            ViewContext.Writer.Write(
+
+             Html.DevExpress().HyperLink(settingsHL => {
+                 settingsHL.Name = "gvAdjustmentOutListChoose_" + Guid.NewGuid();
+                 settingsHL.NavigateUrl = "javascript:void(0)";
+                 settingsHL.Properties.Text = "Choose";
+                 settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "Id"));
+             }).GetHtml()
+
+
+         );
+        });
+        column.SetHeaderTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+               "#Action#"
+            );
+        });
+
+        column.Settings.AllowDragDrop = DefaultBoolean.False;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 70;
+    });
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+
+    settings.Columns.Add("Id", "Id").Visible=false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransNo";
+        column.Caption = "Trans No";
+        column.Name = "TransNo";
+        column.Width = Unit.Percentage(40);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransDate";
+        column.Name = "TransDate";
+        column.Caption = "Trans Date";
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = Unit.Percentage(30);
+
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.EditFormat = EditFormat.Date;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DocNum";
+        column.Caption = "SAP Doc Num";
+        column.Name = "DocNum";
+        column.Width = Unit.Percentage(40);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "AdjustmentTypeName_";
+        column.Caption = "Adjustment Type";
+        column.Name = "AdjustmentTypeName_";
+        column.Width = Unit.Percentage(50);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsCode";
+        column.Caption = "Whs Code";
+        column.Name = "WhsCode";
+        column.Width = Unit.Percentage(50);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ScanDeviceId";
+        column.Caption = "Scan Device Id";
+        column.Name = "ScanDeviceId";
+        column.Width = Unit.Percentage(80);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "IsOpeningBalance_";
+        column.Caption = "Is Obal";
+        column.Name = "IsOpeningBalance_";
+        column.Width = Unit.Percentage(30);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Caption = "Status";
+        column.Name = "Status";
+        column.Width = Unit.Percentage(30);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ApprovalStatus";
+        column.Caption = "Approval Status";
+        column.Name = "ApprovalStatus";
+        column.Width = Unit.Percentage(30);
+    });
+
+    settings.SettingsPager.Position = PagerPosition.Bottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.AlwaysShowPager = true;
+
+    if (cpGvFind_PageIndex == 0)
+    {
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    }
+
+
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 400;
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.SettingsBehavior.AllowFocusedRow = true;
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden;
+
+    settings.CustomBindingRouteValuesCollection.Add(
+        GridViewOperationType.Paging,
+        new { Controller = "AdjustmentOut", Action = "ListPaging" }
+    );
+
+    settings.CustomBindingRouteValuesCollection.Add(
+        GridViewOperationType.Filtering,
+        new { Controller = "AdjustmentOut", Action = "ListFiltering" }
+    );
+
+    settings.CustomBindingRouteValuesCollection.Add(
+        GridViewOperationType.Sorting,
+        new { Controller = "AdjustmentOut", Action = "ListSorting" }
+    );
+
+
+    settings.CustomJSProperties = (sender, e) =>
+    {
+        e.Properties["cpGvFind_FilterExpression"] = cpGvFind_FilterExpression;
+        e.Properties["cpGvFind_SortExpression"] =cpGvFind_SortExpression;
+        e.Properties["cpGvFind_PageIndex"] = cpGvFind_PageIndex;
+        e.Properties["cpGvFind_PageSize"] = cpGvFind_PageSize;
+    };
+
+
+    foreach (GridViewDataColumn column in settings.Columns)
+    {
+        column.Settings.AllowAutoFilterTextInputTimer = DevExpress.Utils.DefaultBoolean.False;
+    }
+
+    settings.BeforeGetCallbackResult = (sender, e) =>
+    {
+        MVCxGridView gridView = sender as MVCxGridView;
+        Models._Utils.General.GridViewFilterExpression(gridView, settings);
+    };
+
+    string additionParam = "e.customArgs['hidden_IsFindTransDate']=IsFindTransDate.GetValue();";
+    additionParam += "e.customArgs['hidden_TransDate_From']=(TransDate_From.GetDate()!=null)?TransDate_From.GetDate().toJSON():'';";
+    additionParam += "e.customArgs['hidden_TransDate_To']=(TransDate_To.GetDate()!=null)?TransDate_To.GetDate().toJSON():'';";
+
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ {0} }}", additionParam);
+
+}).BindToCustomData(Model).GetHtml()
+
+

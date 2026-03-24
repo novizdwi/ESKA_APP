@@ -1,0 +1,51 @@
+﻿@{
+    
+    var controllerName=ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+} 
+
+
+@Html.DevExpress().GridView(settings =>
+   {
+       settings.Name = "gvPrintList";
+       settings.KeyFieldName = "Id";
+       settings.CallbackRouteValues = new { Controller = controllerName, Action = "Print_ListPartial" };
+
+       settings.Columns.Add(column =>
+       {
+           column.Caption = "#";
+
+           column.SetDataItemTemplateContent(c =>
+           {
+
+               ViewContext.Writer.Write(
+
+                Html.DevExpress().HyperLink(settingsHL =>
+                {
+                    settingsHL.Name = "Print_Choose_" + c.KeyValue.ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = "Choose";
+                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ PrintLayout(s, e, '{0}','{1}','{2}'); }}", c.KeyValue.ToString(), DataBinder.Eval(c.DataItem, "OutputType"), Url.Action("Layout", controllerName));
+                }).GetHtml()
+
+
+            );
+           });
+           column.SetHeaderTemplateContent(c =>
+           {
+               ViewContext.Writer.Write(
+                  "#Action#"
+               );
+           });
+
+           column.Settings.AllowDragDrop = DefaultBoolean.False;
+           column.Settings.AllowSort = DefaultBoolean.False;
+           column.Width = 70;
+       });
+
+       settings.Settings.ShowFilterRow = true;
+       settings.Settings.ShowFilterRowMenu = true;
+
+       settings.Columns.Add("Id", "Id").Visible = false;
+       settings.Columns.Add("LayoutName", "Layout Name");
+
+   }).Bind(Models._Utils.Rpt.GetPrintLayouts(controllerName,(int)Session["userId"])).GetHtml()

@@ -1,0 +1,39 @@
+﻿@using Models;
+
+@model Models.Setting.Query.QueryModel
+ 
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayoutTabQuery";
+    settings.EncodeHtml = false;
+
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+
+    settings.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+        itemSettings.Caption = "SQL"; 
+        itemSettings.FieldName = "Sql";
+        itemSettings.ShowCaption = DefaultBoolean.False;
+
+        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Sql"; 
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = Unit.Percentage(100);
+        txt.Height = 200;
+        
+    });
+  
+ 
+
+}).GetHtml()
+
+
+

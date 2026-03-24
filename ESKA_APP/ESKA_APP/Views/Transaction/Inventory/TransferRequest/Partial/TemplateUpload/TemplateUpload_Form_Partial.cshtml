@@ -1,0 +1,31 @@
+﻿
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).Bind(ViewBag.Id).GetHtml()
+ 
+@Html.DevExpress().UploadControl(
+settings =>
+{
+    settings.Name = "UploadFile";
+    settings.CallbackRouteValues = new { Controller = "TransferRequest", Action = "TemplateUploadFile" };
+    settings.AddUploadButtonsHorizontalPosition = AddUploadButtonsHorizontalPosition.Left;
+    settings.FileInputCount = 1; 
+    settings.ShowAddRemoveButtons = false;
+    settings.AutoStartUpload = true;
+    //settings.ValidationSettings.Assign(Controllers.Transaction.Sales.DeliveryUploadControlHelper.ValidationSettings);
+    settings.ValidationSettings.AllowedFileExtensions = new[] { ".csv" };
+    settings.ClientSideEvents.FileUploadComplete = "function(s,e){  TemplateUpload_FileUploadComplete(s,e); }";
+}).GetHtml()
+
+<br /><br />
+<div class="editorArea text">
+    Allowed file types: xls, xlsx, doc, docx, pdf, txt, csv, jpg, jpeg, jpe, gif, png, msg<br />
+    Maximum file size: 2MB
+</div>

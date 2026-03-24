@@ -1,0 +1,31 @@
+﻿@using Models
+
+@model Models.Authentication.Role.RoleModel
+
+@if (false)
+{ <script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script> }
+
+ 
+@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "TvRoleAuth";
+        settings.Width = Unit.Percentage(100); 
+        settings.AllowSelectNode = true;
+        settings.AllowCheckNodes = true;
+        settings.CheckNodesRecursive = true;
+        //settings.EnableClientSideAPI = true;
+        
+        
+        settings.ClientSideEvents.CheckedChanged = "function(s, e) { }";//hanya untuk supaya html/object membuat "treeView.nodesInfo"
+
+        //settings.PreRender = (source, e) =>
+        //{
+        //    ASPxTreeView treeView = (ASPxTreeView)source;
+        //    treeView.ExpandAll();
+        //};
+
+        Controllers.Authentication.RoleController.CreateTreeViewNodesRecursive(Model.role_Auths, settings.Nodes, "");
+        
+         
+    }).GetHtml()

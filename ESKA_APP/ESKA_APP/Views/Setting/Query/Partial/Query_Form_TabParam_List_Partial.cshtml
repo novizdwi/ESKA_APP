@@ -1,0 +1,222 @@
+﻿@using Models;  
+
+@Html.DevExpress().GridView(settings =>
+   {
+       settings.Name = "gvQueryParamDetail";
+       settings.KeyFieldName = "DetId";
+       settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+       settings.Settings.VerticalScrollableHeight = 300;
+       settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+       settings.Width = Unit.Percentage(100);
+       //settings.Height = Unit.Percentage(100);
+       settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+       settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+       settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+       settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+       settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+       settings.CommandColumn.Visible = true;
+       settings.CommandColumn.ShowDeleteButton = true;
+       settings.CommandColumn.ShowNewButtonInHeader = true;
+       settings.CommandColumn.Width = 50;
+       settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden; 
+
+       settings.Columns.Add("Id", "Id").Visible = false;
+       settings.Columns.Add("DetId", "DetId").Visible = false;
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "SortCode";
+           column.Name = "SortCode";
+           column.Caption = "Sort";
+           column.ColumnType = MVCxGridViewColumnType.TextBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 50;
+
+           var txt = column.PropertiesEdit as TextBoxProperties;
+           txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "ParamName";
+           column.Name = "ParamName";
+           column.Caption = "Name";
+           column.ColumnType = MVCxGridViewColumnType.TextBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 100;
+
+           var txt = column.PropertiesEdit as TextBoxProperties; 
+           txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "IsMandatory";
+           column.Name = "IsMandatory";
+           column.Caption = "Mandatory";
+           column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 80;
+
+           var chk = column.PropertiesEdit as CheckBoxProperties;
+           chk.ValueType = typeof(string);
+           chk.ValueChecked = "Y";
+           chk.ValueUnchecked = "N";
+           
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "IsHide";
+           column.Name = "IsHide";
+           column.Caption = "Hide";
+           column.ColumnType = MVCxGridViewColumnType.CheckBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 50;
+
+           var chk = column.PropertiesEdit as CheckBoxProperties;
+           chk.ValueType = typeof(string);
+           chk.ValueChecked = "Y";
+           chk.ValueUnchecked = "N";
+           
+
+       });
+
+       
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "TypeData";
+           column.Name = "TypeData";
+           column.Caption = "Type";
+           column.ColumnType = MVCxGridViewColumnType.ComboBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 80;
+
+           var cbo = column.PropertiesEdit as ComboBoxProperties;
+           cbo.DataSource = Models._Utils.GeneralGetList.GetList("ReportTypeData");
+           cbo.TextField = "Name";
+           cbo.ValueField = "Code";
+           cbo.ValueType = typeof(string);
+           cbo.DropDownStyle = DropDownStyle.DropDownList;
+           cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+           cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "Caption";
+           column.Name = "Caption";
+           column.Caption = "Caption";
+           column.ColumnType = MVCxGridViewColumnType.TextBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 200;
+
+           var txt = column.PropertiesEdit as TextBoxProperties;
+           txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "DefaultValue";
+           column.Name = "DefaultValue";
+           column.Caption = "Default Value";
+           column.ColumnType = MVCxGridViewColumnType.TextBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 100;
+
+           var txt = column.PropertiesEdit as TextBoxProperties;
+           txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "Sql";
+           column.Name = "Sql";
+           column.Caption = "SQL";
+           column.ColumnType = MVCxGridViewColumnType.Memo;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 400;
+
+           var txt = column.PropertiesEdit as MemoProperties;
+           txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "TypeControl";
+           column.Name = "TypeControl";
+           column.Caption = "Control";
+           column.ColumnType = MVCxGridViewColumnType.ComboBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 120;
+
+           var cbo = column.PropertiesEdit as ComboBoxProperties;
+           cbo.DataSource = Models._Utils.GeneralGetList.GetList("ReportTypeControl");
+           cbo.TextField = "Name";
+           cbo.ValueField = "Code";
+           cbo.ValueType = typeof(string);
+           cbo.DropDownStyle = DropDownStyle.DropDownList;
+           cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+           cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+       settings.Columns.Add(column =>
+       {
+           column.FieldName = "TypeChoose";
+           column.Name = "TypeChoose";
+           column.Caption = "Choose";
+           column.ColumnType = MVCxGridViewColumnType.ComboBox;
+           column.Settings.AllowSort = DefaultBoolean.False;
+
+           column.Width = 100;
+
+           var cbo = column.PropertiesEdit as ComboBoxProperties;
+           cbo.DataSource = Models._Utils.GeneralGetList.GetList("ReportTypeChoose");
+           cbo.TextField = "Name";
+           cbo.ValueField = "Code";
+           cbo.ValueType = typeof(string);
+           cbo.DropDownStyle = DropDownStyle.DropDownList;
+           cbo.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+           cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+       });
+
+
+       settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+       settings.CellEditorInitialize = (s, e) =>
+       {
+           ASPxEdit editor = (ASPxEdit)e.Editor;
+           editor.ValidationSettings.Display = Display.Dynamic;
+       };
+
+       settings.CellEditorInitialize = (s, e) =>
+       {
+           ASPxEdit editor = (ASPxEdit)e.Editor;
+           editor.ValidationSettings.Display = Display.Dynamic;
+       };
+ 
+
+   }).Bind(Model).GetHtml()

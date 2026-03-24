@@ -1,0 +1,126 @@
+﻿@using Models;
+
+
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+}
+
+@Html.DevExpress().GridView(settings =>
+   {
+
+       settings.Name = "gvAdjustmentOutAttachmentDetail";
+       settings.KeyFieldName = "DetId";
+       settings.CallbackRouteValues = new { Controller = "AdjustmentOut", Action = "TabAttachmentListPartial" };
+       settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "AdjustmentOut", Action = "TabAttachmentEditModesAddNewPartial" };
+       settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "AdjustmentOut", Action = "TabAttachmentEditModesUpdatePartial" };
+       settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "AdjustmentOut", Action = "TabAttachmentEditModesDeletePartial" };
+       // settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+       //settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+
+
+       settings.Columns.Add(column =>
+       {
+           column.Caption = "#";
+
+           //button new tidak muncul ketika mode new
+           //----------------------------------------
+           //var Id = Convert.ToInt64(Request["cbId"]);
+           if (ViewBag.initNew == null)
+           {
+               ViewBag.initNew = false;
+           }
+           if (((Id != 0) && (IsAjax)) || (!ViewBag.initNew))
+           {
+               column.SetHeaderTemplateContent(c =>
+               {
+                   ViewContext.Writer.Write(
+                      Html.DevExpress().HyperLink(settingsHL =>
+                      {
+                          settingsHL.Name = "gvAdjustmentOutAttachmentDetail_btnNew";
+                          settingsHL.NavigateUrl = "javascript:void(0)";
+                          settingsHL.Properties.Text = "New Upload";
+                          settingsHL.Properties.ClientSideEvents.Click = "function(s, e){gvAdjustmentOutAttachmentDetail_OnClickBtnNew(); }";
+                          settingsHL.Height = 20;
+                      }).GetHtml()
+                );
+               });
+           }
+           else
+           {
+               settings.Enabled = false;
+           }
+
+           column.SetDataItemTemplateContent(c =>
+           {
+
+               ViewContext.Writer.Write(
+                   Html.DevExpress().HyperLink(settingsHL =>
+                   {
+                       settingsHL.Name = "gvAdjustmentOutAttachmentDetail_btnDownload_" + c.KeyValue.ToString();
+                       settingsHL.NavigateUrl = Url.Action("Attachment_Download", "AdjustmentOut", new { DetId = c.KeyValue });
+                       settingsHL.Properties.Text = "Download";
+
+                       settingsHL.Height = 20;
+                   }).GetHtml()
+             );
+
+               ViewContext.Writer.Write("&nbsp;|&nbsp;");
+
+               ViewContext.Writer.Write(
+                    Html.DevExpress().HyperLink(settingsHL =>
+                    {
+                        settingsHL.Name = "gvAdjustmentOutAttachmentDetail_btnDelete_" + c.KeyValue.ToString();
+                        settingsHL.NavigateUrl = "javascript:void(0)";
+                        settingsHL.Properties.Text = "Delete";
+                        settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ gvAdjustmentOutAttachmentDetail_OnClickBtnDelete({0}); }}", c.KeyValue.ToString());
+                        //settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) { PriceComponent_OnClickBtnEdit({0}); }", c.KeyValue.ToString());
+                        //settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ PriceComponent_OnClickBtnEdit({0}); }}", new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(c.DataItem));
+                        settingsHL.Height = 20;
+                    }).GetHtml()
+              );
+
+
+           });
+
+           column.Settings.AllowDragDrop = DefaultBoolean.False;
+           column.Settings.AllowSort = DefaultBoolean.False;
+           column.Width = 100;
+       });
+
+
+       settings.Columns.Add("Id", "Id").Visible = false;
+       settings.Columns.Add("DetId", "DetId").Visible = false;
+
+       settings.Columns.Add(column =>
+       {
+
+           column.Name = "FileName";
+           column.FieldName = "FileName";
+           column.Caption = "File Name";
+
+           column.ReadOnly = true;
+           column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+           column.Width = 300;
+
+       });
+
+
+
+       settings.Settings.ShowFooter = true;
+
+       settings.ClientSideEvents.BeginCallback = "gvAdjustmentOutAttachmentDetailBeginCallback";
+       //settings.ClientSideEvents.EndCallback = "gvAdjustmentOutAttachmentDetailEndCallback";
+       //settings.ClientSideEvents.Init = "gvAdjustmentOutAttachmentDetailInit";
+
+
+       settings.Settings.ShowFooter = true;
+       if (ViewBag.ErrorDesc != null)
+       {
+           settings.SetFooterRowTemplateContent(c =>
+           {
+               Html.ViewContext.Writer.Write("<span style='color: red'>" + ViewBag.ErrorDesc + "</span>");
+           });
+       }
+
+   }).Bind(Model).GetHtml()

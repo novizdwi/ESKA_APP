@@ -1,0 +1,28 @@
+@{ 
+    var user = (Session["userName"] == null ? " " : (string)Session["userName"]);
+    var roleName = (Session["roleName"] == null ? " " : (string)Session["roleName"]);
+
+    var controllerName = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+} 
+
+ 
+ 
+<span class="DivUserInfo">@user</span>
+<span class="DivUserInfo">|</span> 
+<span class="DivUserInfo">@roleName</span>
+<span class="DivUserInfo">|</span> 
+@Html.ActionLink("LOGOUT", "Logout", "Logout")
+<div style="height:5px"></div>
+<div style="width:230px">
+@*@if (controllerName != "Login")
+{ 
+@: @Html.Partial("AlertPartialView") 
+}*@
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,95 @@
+﻿@using Models;
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvUserWarehouseDetail";
+    settings.KeyFieldName = "WhsCode_";
+
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 250;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = false;
+    settings.CommandColumn.ShowDeleteButton = false;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.CommandColumn.Width = 50;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "IsTick";
+        column.Name = "IsTick";
+        column.Caption = "#";
+        column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        column.Settings.AllowSort = DefaultBoolean.False;
+
+        column.Width = 80;
+
+        var chk = column.PropertiesEdit as CheckBoxProperties;
+        chk.ValueType = typeof(string);
+        chk.ValueChecked = "Y";
+        chk.ValueUnchecked = "N";
+    });
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "DetId";
+    //    column.Name = "DetId";
+    //    column.Caption = "Det Id";
+    //    column.Settings.AllowSort = DefaultBoolean.False;
+    //    column.Width = 0;
+    //    column.ReadOnly = true;
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.Caption = "Warehouse Code";
+        column.Name = "WhsCode_";
+        column.FieldName = "WhsCode_";
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 150;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED"); 
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.Caption = "Warehouse Name";
+        column.Name = "WhsName_";
+        column.FieldName = "WhsName_";
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 350;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED"); 
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+    });
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+}).Bind(Model).GetHtml()

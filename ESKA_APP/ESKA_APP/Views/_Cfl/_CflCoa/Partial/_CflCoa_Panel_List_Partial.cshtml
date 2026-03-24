@@ -1,0 +1,118 @@
+﻿@using Models._Cfl
+
+@model Models._Cfl.CflCoa_ParamModel
+
+@{
+    GridViewModel viewModel = new GridViewModel();
+    if (ViewBag.viewModel != null)
+    {
+        viewModel = ViewBag.viewModel;
+    } 
+  
+    
+}
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = string.Format("cflCoaPopupList{0}", Model.Name);
+    settings.CallbackRouteValues = new { Controller = "_CflCoa", Action = "PopupListLoadOnDemandPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowMaximizeButton = true;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+
+
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true;
+    //settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "Choose Coa " + Model.Header;
+
+    settings.SetContent(() =>
+    {
+
+        //Html.DevExpress().HyperLink(settingsHL =>
+        //{
+        //    settingsHL.Name = "gvCflCoaList" + Model.Name + "_GvExportTo";
+        //    settingsHL.NavigateUrl = "javascript:void(0)";
+        //    settingsHL.Properties.Text = "Excel";
+        //    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ GvCflExportTo(gvCflCoaList{1}, '{0}'); }}", @Url.Action("ExportTo", "_CflCoa"), Model.Name);
+        //    settingsHL.Height = 20;
+        //}).GetHtml();
+
+        if (Model.IsMulti == "Y")
+        {
+            //ViewContext.Writer.Write("&nbsp;|&nbsp;");
+            Html.DevExpress().HyperLink(settingsChoose =>
+            {
+                settingsChoose.Name = "gvCflCoa" + Model.Name + "Choose";
+                settingsChoose.NavigateUrl = "javascript:void(0)";
+                settingsChoose.Properties.Text = "Choose";
+                settingsChoose.Height = 20;
+                settingsChoose.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose_CflCoa{0}(s, e); }}", Model.Name);
+            }).GetHtml();
+
+            ViewContext.Writer.Write("&nbsp;|&nbsp;");
+        }
+
+
+        Html.DevExpress().HyperLink(settingsChoose =>
+        {
+            settingsChoose.Name = "gvCflCoa" + Model.Name + "Cancel";
+            settingsChoose.NavigateUrl = "javascript:void(0)";
+            settingsChoose.Properties.Text = "Cancel";
+            settingsChoose.Height = 20;
+            settingsChoose.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ cflCoaPopupList{0}.Hide(); }}", Model.Name);
+        }).GetHtml();
+
+        Html.RenderPartial("Partial/_CflCoa_List_Partial", viewModel);
+
+    });
+
+    settings.CustomJSProperties = (sender, e) =>
+    {
+        e.Properties["cpPopupFind_CflType"] = Model.Type;
+        e.Properties["cpPopupFind_CflName"] = Model.Name;
+        e.Properties["cpPopupFind_CflHeader"] = Model.Header;
+        e.Properties["cpPopupFind_CflSqlWhere"] = Model.SqlWhere;
+        e.Properties["cpPopupFind_CflIsMulti"] = Model.IsMulti;
+    };
+
+    string additionParam = "";
+
+    //additionParam = " e.customArgs['hidden_CflDocId']=Id.GetValue(); ";
+
+    //if (Model.Type == "Vehicle")
+    //{
+    //    additionParam += " e.customArgs['hidden_CflDestination']=Destination.GetValue(); ";
+    //}
+
+
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender;
+        popup.Width = 1000;
+        popup.Height = 500;
+    };
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ {0}  e.customArgs['hidden_CflType']=s.cpPopupFind_CflType; e.customArgs['hidden_CflName']=s.cpPopupFind_CflName; e.customArgs['hidden_CflHeader']=s.cpPopupFind_CflHeader; e.customArgs['hidden_CflSqlWhere']=s.cpPopupFind_CflSqlWhere;e.customArgs['hidden_CflIsMulti']=s.cpPopupFind_CflIsMulti; }}", additionParam);
+    settings.ClientSideEvents.Resize = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(cflCoaPopupList{0},gvCflCoaList{0}); }}", Model.Name);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(cflCoaPopupList{0},gvCflCoaList{0}); }}", Model.Name);
+
+
+
+}).GetHtml()

@@ -1,0 +1,495 @@
+﻿@using Models;
+@using Models._Utils;
+
+@{
+    GridViewModel viewModel = Model;
+
+    var cpGvFind_FilterExpression = GetSqlFromGridViewModelState.getHanaCriteria(viewModel);
+    var cpGvFind_SortExpression = GetSqlFromGridViewModelState.getHanaSort(viewModel);
+    
+    var cpGvFind_PageIndex = viewModel.Pager.PageIndex;
+    var cpGvFind_PageSize = viewModel.Pager.PageSize;
+
+    int cpQuery_Id = 0;
+
+    if (ViewBag.Query_Id != null)
+    {
+        cpQuery_Id = ViewBag.Query_Id;
+    }
+    else
+    {
+        cpQuery_Id = int.Parse(Request["Query_Id"]);
+    }
+
+    string cpParams = "";
+
+    if (ViewBag.Params != null)
+    {
+        cpParams = ViewBag.Params;
+    }
+    else
+    {
+        cpParams = Request["Params"];
+    }
+    
+
+    var datatable=new System.Data.DataTable();
+    if (ViewBag.ViewDataTable != null)
+    {
+        datatable = ViewBag.ViewDataTable;
+    }
+    else
+    {
+         
+        if (ViewBag.dataTable != null)
+        {
+            datatable = ViewBag.dataTable;
+        }
+        
+    }
+
+
+    var sql = "SELECT TOP 1 T0.\"QueryName\" FROM \"Tm_Query\" T0 WHERE T0.\"Id\"=:p0 ";
+
+    int RowCount = ViewBag.RowCount;
+
+    var gridTitle = Models._Utils.GeneralGetList.GetValue<string>(sql, cpQuery_Id);
+    
+}
+
+@if (RowCount >0)
+{
+@Html.DevExpress().GridView(settings =>
+   {
+       settings.Name = "gvDetail|" + cpQuery_Id.ToString() + "|"; 
+       settings.KeyFieldName = "Key";
+       settings.CallbackRouteValues = new { Controller = "ReportQuery", Action = "ListDetailPartial" };
+       settings.SettingsText.Title = gridTitle;
+       settings.Settings.ShowTitlePanel = false;
+       
+       settings.Width = Unit.Percentage(100);
+       settings.Settings.ShowFilterRow = true;
+       settings.Settings.ShowFilterRowMenu = true;
+
+       bool isExistsColumnLinkControlerName = false; 
+
+       for (int i = 0; i < datatable.Columns.Count; i++)
+       {
+
+           if (!isExistsColumnLinkControlerName)
+           {
+               if (datatable.Columns[i].ColumnName == "LinkControlerName")
+               {
+                   isExistsColumnLinkControlerName = true;
+               }
+           }
+
+           if (i > 0)
+           {
+               if (datatable.Columns[i - 1].ColumnName == "LinkControlerName")
+               {
+                   settings.Columns.Add(column =>
+                   {
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+
+                       column.SetDataItemTemplateContent(c =>
+                       {
+                           var byName = (IDictionary<string, object>)c.DataItem;
+                           string valText = (string)byName[column.FieldName];
+
+                           string valLinkControlerName = (string)byName["LinkControlerName"];
+
+
+                           ViewContext.Writer.Write(
+
+                               Html.DevExpress().HyperLink(settingsHL =>
+                               {
+                                   settingsHL.Name = "BtnColumnLink_" + c.KeyValue + "_" + Guid.NewGuid().ToString();
+                                   settingsHL.NavigateUrl = "javascript:void(0)";
+                                   settingsHL.Properties.Text = valText;
+                                   settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickColumnLink(s, e, '{0}','{1}'); }}", Url.Action("Detail", valLinkControlerName), c.KeyValue);
+                               }).GetHtml()
+
+                           );
+
+                       });
+
+                   });
+
+                   continue;
+               }
+
+           }
+           
+           
+           switch (datatable.Columns[i].DataType.ToString())
+           {
+               case "System.Decimal":
+               case "System.Double":
+                   settings.Columns.Add(column =>
+                   {
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+
+                       column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                       var txt = column.PropertiesEdit as SpinEditProperties;
+                       txt.NumberType = SpinEditNumberType.Float;
+                       txt.DisplayFormatString = "#,###.00";
+                       txt.DisplayFormatInEditMode = true;
+                       txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                       txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                   });
+
+                   break;
+               case "System.Int16":
+               case "System.Int32":
+               case "System.Int64":
+                   settings.Columns.Add(column =>
+                   {
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+
+                       column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                       //column.Width = 100;
+                       var txt = column.PropertiesEdit as SpinEditProperties;
+                       txt.NumberType = SpinEditNumberType.Float;
+                       txt.DisplayFormatString = "#,###";
+                       txt.DisplayFormatInEditMode = true;
+                       txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                       txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                   });
+                   break;
+               case "System.DateTime":
+                   settings.Columns.Add(column =>
+                   {
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                       //column.Width = 100;
+                       var txt = column.PropertiesEdit as DateEditProperties;
+                       txt.UseMaskBehavior = true;
+                       txt.DisplayFormatString = "dd/MM/yyyy";
+                       txt.EditFormatString = "dd/MM/yyyy";
+
+                       var arr = datatable.Columns[i].ColumnName.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                       if (arr.Length > 1)
+                       {
+                           column.Caption = arr[0];
+                           if (arr[1].ToUpper() == "DATETIME")
+                           {
+                               txt.DisplayFormatString = "dd/MM/yyyy HH:mm:ss";
+                               txt.EditFormatString = "dd/MM/yyyy  HH:mm:ss";
+
+                               txt.TimeSectionProperties.Visible = true;
+                               txt.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
+                               txt.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm:ss";
+                           }
+
+                       }
+                       
+
+                   });
+                   break;
+               default: 
+                   
+                   settings.Columns.Add(datatable.Columns[i].ColumnName, datatable.Columns[i].ColumnName.Replace("*", "."));
+
+                   break;
+           }
+
+
+       }
+
+       settings.Columns["Key"].Visible = false;
+
+       if (isExistsColumnLinkControlerName)
+       {
+           settings.Columns["LinkControlerName"].Visible = false;
+       }
+       
+       settings.SettingsPager.Position = PagerPosition.Bottom;
+       settings.SettingsPager.FirstPageButton.Visible = true;
+       settings.SettingsPager.LastPageButton.Visible = true;
+       settings.SettingsPager.AlwaysShowPager = true;
+       //settings.Width = System.Web.UI.WebControls.Unit.Percentage(70); 
+
+
+       if (cpGvFind_PageIndex == 0)
+       {
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+       }
+
+
+       settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50","100","200","500","1000","2000","5000","10000" };
+
+       settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+       settings.Settings.VerticalScrollableHeight = 400;
+
+       settings.SettingsBehavior.AllowFocusedRow = true;
+     // settings.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden;
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Paging,
+           new { Controller = "ReportQuery", Action = "ListDetailPaging" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Filtering,
+           new { Controller = "ReportQuery", Action = "ListDetailFiltering" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Sorting,
+           new { Controller = "ReportQuery", Action = "ListDetailSorting" }
+       );
+
+
+       settings.CustomJSProperties = (sender, e) =>
+       {
+           e.Properties["cpGvFind_FilterExpression"] = cpGvFind_FilterExpression;
+           e.Properties["cpGvFind_SortExpression"] = cpGvFind_SortExpression;
+           e.Properties["cpGvFind_PageIndex"] = cpGvFind_PageIndex;
+           e.Properties["cpGvFind_PageSize"] = cpGvFind_PageSize;
+           e.Properties["cpQuery_Id"] = cpQuery_Id;
+           e.Properties["cpParams"] = cpParams;
+           
+       };
+
+       settings.ClientSideEvents.BeginCallback = "gvDetailBeginCallback";
+
+
+
+       foreach (GridViewDataColumn column in settings.Columns)
+       {
+           column.Settings.AllowAutoFilterTextInputTimer = DevExpress.Utils.DefaultBoolean.False;
+       }
+
+
+   }).BindToCustomData(Model).GetHtml() 
+    
+}
+else {
+    
+    
+@Html.DevExpress().GridView(settings =>
+   {
+       settings.Name = "gvDetail|" + cpQuery_Id.ToString() + "|"; 
+       settings.KeyFieldName = "Key";
+       settings.CallbackRouteValues = new { Controller = "ReportQuery", Action = "ListDetailPartial" };
+       settings.SettingsText.Title = gridTitle;
+       settings.Settings.ShowTitlePanel = false;
+       
+       settings.Width = Unit.Percentage(100);
+       settings.Settings.ShowFilterRow = true;
+       settings.Settings.ShowFilterRowMenu = true;
+
+       bool isExistsColumnLinkControlerName = false; 
+
+       for (int i = 0; i < datatable.Columns.Count; i++)
+       {
+
+           if (!isExistsColumnLinkControlerName)
+           {
+               if (datatable.Columns[i].ColumnName == "LinkControlerName")
+               {
+                   isExistsColumnLinkControlerName = true;
+               }
+           }
+
+           if (i > 0)
+           {
+               if (datatable.Columns[i - 1].ColumnName == "LinkControlerName")
+               {
+                   settings.Columns.Add(column =>
+                   {
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+
+                       column.SetDataItemTemplateContent(c =>
+                       {
+                           var byName = (IDictionary<string, object>)c.DataItem;
+                           string valText = (string)byName[column.FieldName];
+
+                           string valLinkControlerName = (string)byName["LinkControlerName"];
+
+
+                           ViewContext.Writer.Write(
+
+                               Html.DevExpress().HyperLink(settingsHL =>
+                               {
+                                   settingsHL.Name = "BtnColumnLink_" + c.KeyValue + "_" + Guid.NewGuid().ToString();
+                                   settingsHL.NavigateUrl = "javascript:void(0)";
+                                   settingsHL.Properties.Text = valText;
+                                   settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickColumnLink(s, e, '{0}','{1}'); }}", Url.Action("Detail", valLinkControlerName), c.KeyValue);
+                               }).GetHtml()
+
+                           );
+
+                       });
+
+                   });
+
+                   continue;
+               }
+
+           }
+           
+           
+           switch (datatable.Columns[i].DataType.ToString())
+           {
+               case "System.Decimal":
+               case "System.Double":
+                   settings.Columns.Add(column =>
+                   {
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+
+                       column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                       var txt = column.PropertiesEdit as SpinEditProperties;
+                       txt.NumberType = SpinEditNumberType.Float;
+                       txt.DisplayFormatString = "#,###.00";
+                       txt.DisplayFormatInEditMode = true;
+                       txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                       txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                   });
+
+                   break;
+               case "System.Int16":
+               case "System.Int32":
+               case "System.Int64":
+                   settings.Columns.Add(column =>
+                   {
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+
+                       column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+                       //column.Width = 100;
+                       var txt = column.PropertiesEdit as SpinEditProperties;
+                       txt.NumberType = SpinEditNumberType.Float;
+                       txt.DisplayFormatString = "#,###";
+                       txt.DisplayFormatInEditMode = true;
+                       txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                       txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                   });
+                   break;
+               case "System.DateTime":
+                   settings.Columns.Add(column =>
+                   {
+                       //column.Name = datatable.Columns[i].ColumnName;
+                       column.FieldName = datatable.Columns[i].ColumnName;
+                       column.Caption = datatable.Columns[i].ColumnName.Replace("*", ".");
+                       column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                       //column.Width = 100;
+                       var txt = column.PropertiesEdit as DateEditProperties;
+                       txt.UseMaskBehavior = true;
+                       txt.DisplayFormatString = "dd/MM/yyyy";
+                       txt.EditFormatString = "dd/MM/yyyy";
+
+                       var arr = datatable.Columns[i].ColumnName.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                       if (arr.Length > 1)
+                       {
+                           column.Caption = arr[0];
+                           if (arr[1].ToUpper() == "DATETIME")
+                           {
+                               txt.DisplayFormatString = "dd/MM/yyyy HH:mm:ss";
+                               txt.EditFormatString = "dd/MM/yyyy  HH:mm:ss";
+
+                               txt.TimeSectionProperties.Visible = true;
+                               txt.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
+                               txt.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm:ss";
+                           }
+
+                       }
+                       
+
+                   });
+                   break;
+               default: 
+                   
+                   settings.Columns.Add(datatable.Columns[i].ColumnName, datatable.Columns[i].ColumnName.Replace("*", "."));
+
+                   break;
+           }
+
+
+       }
+
+       settings.Columns["Key"].Visible = false;
+
+       if (isExistsColumnLinkControlerName)
+       {
+           settings.Columns["LinkControlerName"].Visible = false;
+       }
+       
+       settings.SettingsPager.Position = PagerPosition.Bottom;
+       settings.SettingsPager.FirstPageButton.Visible = true;
+       settings.SettingsPager.LastPageButton.Visible = true;
+       settings.SettingsPager.AlwaysShowPager = true;
+       //settings.Width = System.Web.UI.WebControls.Unit.Percentage(70); 
+
+
+       if (cpGvFind_PageIndex == 0)
+       {
+           settings.SettingsPager.PageSizeItemSettings.Visible = true;
+       }
+
+
+       settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50","100","200","500","1000","2000","5000","10000" };
+
+       settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+       settings.Settings.VerticalScrollableHeight = 400;
+
+       settings.SettingsBehavior.AllowFocusedRow = true;
+     // settings.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden;
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Paging,
+           new { Controller = "ReportQuery", Action = "ListDetailPaging" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Filtering,
+           new { Controller = "ReportQuery", Action = "ListDetailFiltering" }
+       );
+
+       settings.CustomBindingRouteValuesCollection.Add(
+           GridViewOperationType.Sorting,
+           new { Controller = "ReportQuery", Action = "ListDetailSorting" }
+       );
+
+
+       settings.CustomJSProperties = (sender, e) =>
+       {
+           e.Properties["cpGvFind_FilterExpression"] = cpGvFind_FilterExpression;
+           e.Properties["cpGvFind_SortExpression"] = cpGvFind_SortExpression;
+           e.Properties["cpGvFind_PageIndex"] = cpGvFind_PageIndex;
+           e.Properties["cpGvFind_PageSize"] = cpGvFind_PageSize;
+           e.Properties["cpQuery_Id"] = cpQuery_Id;
+           e.Properties["cpParams"] = cpParams;
+           
+       };
+
+       settings.ClientSideEvents.BeginCallback = "gvDetailBeginCallback";
+
+
+
+       foreach (GridViewDataColumn column in settings.Columns)
+       {
+           column.Settings.AllowAutoFilterTextInputTimer = DevExpress.Utils.DefaultBoolean.False;
+       }
+
+
+   }).Bind(datatable).GetHtml() 
+}

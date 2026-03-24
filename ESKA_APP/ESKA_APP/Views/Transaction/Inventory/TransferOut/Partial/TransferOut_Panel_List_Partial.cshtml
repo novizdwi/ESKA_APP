@@ -1,0 +1,143 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupList";
+    settings.CallbackRouteValues = new { Controller = "TransferOut", Action = "PopupListLoadOnDemandPartial" };
+    settings.CloseAction = CloseAction.OuterMouseClick;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;
+
+
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowMaximizeButton = true;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+
+    settings.ShowPageScrollbarWhenModal = true;
+
+    settings.EnableHotTrack = true;
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "List Document";
+
+    settings.SetContent(() =>
+    {
+        Html.DevExpress().FormLayout(settingtab =>
+        {
+            settingtab.Name = "formLayoutTabInventoryInFindTransDate";
+            settingtab.EncodeHtml = false;
+
+            //settingtab.Width = Unit.Percentage(100);
+            settingtab.AlignItemCaptionsInAllGroups = true;
+            settingtab.ShowItemCaptionColon = false;
+
+            var groupItemtab = settingtab.Items.AddGroupItem(itemSettings =>
+            {
+                itemSettings.Caption = "";
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+                itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                itemSettings.ColCount = 1;
+
+
+            });
+
+            var groupItem_Col1 = groupItemtab.Items.AddGroupItem(itemSettings =>
+            {
+
+                itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Top;
+                itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.ColCount = 3;
+            });
+
+            groupItem_Col1.Items.Add(itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
+                itemSettings.Caption = "";
+                itemSettings.CaptionSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+                var cb = (CheckBoxSettings)itemSettings.NestedExtensionSettings;
+                cb.Name = "IsFindTransDate";
+                cb.ShowModelErrors = false;
+                cb.ClientVisible = false;
+                cb.ControlStyle.CssClass = "editor";
+                cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                cb.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+                cb.Checked = false;
+                cb.Properties.ClientSideEvents.CheckedChanged = "function(s,e) {{  gvTransferOutList.PerformCallback(); }}";
+
+            });
+
+            groupItem_Col1.Items.Add(itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                itemSettings.Caption = "From Date";
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+                txt.Name = "TransDate_From";
+                txt.ShowModelErrors = true;
+                txt.Width = 100;
+                txt.Date = DateTime.Now.Date.AddDays((DateTime.Now.Day - 1) * -1);
+                txt.ClientVisible = false;
+                txt.ControlStyle.CssClass = "editornoimage";
+                txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+                txt.Properties.NullText = "dd/MM/yyyy";
+                txt.Properties.EditFormat = EditFormat.Custom;
+                txt.Properties.EditFormatString = "dd/MM/yyyy";
+
+
+                txt.Properties.ClientSideEvents.ValueChanged = "function(s,e) {{   if(IsFindTransDate.GetValue()) {  gvTransferOutList.PerformCallback(); } }}";
+                txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e); if(IsFindTransDate.GetValue()) {  gvTransferOutList.PerformCallback(); } } }";
+            });
+
+            groupItem_Col1.Items.Add(itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                itemSettings.Caption = "To Date";
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+                txt.Name = "TransDate_To";
+                txt.ShowModelErrors = true;
+                txt.Width = 100;
+                txt.Date = DateTime.Now.Date;
+                txt.ClientVisible = false;
+                txt.ControlStyle.CssClass = "editornoimage";
+                txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+                txt.Properties.NullText = "dd/MM/yyyy";
+                txt.Properties.EditFormat = EditFormat.Custom;
+                txt.Properties.EditFormatString = "dd/MM/yyyy";
+
+
+                txt.Properties.ClientSideEvents.ValueChanged = "function(s,e) {{ if(IsFindTransDate.GetValue()) {  gvTransferOutList.PerformCallback(); } }}";
+                txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e); if(IsFindTransDate.GetValue()) {  gvTransferOutList.PerformCallback(); } } }";
+
+            });
+        }).GetHtml();
+
+
+
+        Html.RenderPartial("Partial/TransferOut_List_Partial");
+
+    });
+
+    settings.ClientSideEvents.Resize = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(popupList,gvTransferOutList,50); }}", "");
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(popupList,gvTransferOutList,50); }}", "");
+
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender;
+        popup.Width = 1024;
+        popup.Height = 500;
+    };
+
+}).GetHtml()

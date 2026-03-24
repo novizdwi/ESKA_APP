@@ -1,0 +1,129 @@
+﻿@using Models;
+
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+}
+
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "ViewApproval_gvContentDetail";
+    settings.CallbackRouteValues = new { Controller = "TransferSummaryIn", Action = "ViewApprovalListPartial" };
+
+    settings.KeyFieldName = "DetId";
+    settings.Height = Unit.Percentage(100);
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 150;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Width = Unit.Percentage(100);
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    settings.Columns.Add("StageId", "StageId").Width = 0;
+    settings.Columns.Add("UserId", "UserId").Width = 0;
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "Step";
+        column.FieldName = "Step";
+        column.Caption = "Step";
+
+        column.ReadOnly = true;
+        column.Width = 45;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "Username";
+        column.FieldName = "Username";
+        column.Caption = "Approver";
+
+        column.ReadOnly = true;
+        column.Width = 150;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ActionDate";
+        column.Name = "ActionDate";
+        column.Caption = "Approve Date";
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = 100;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+    });
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "Status";
+        column.FieldName = "Status";
+        column.Caption = "Status";
+
+        column.ReadOnly = true;
+        column.Width = 80;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+
+        column.Name = "Comments";
+        column.FieldName = "Comments";
+        column.Caption = "Comments";
+
+        column.ReadOnly = true;
+        column.Width = 200;
+
+    });
+
+    settings.HtmlDataCellPrepared = (s, e) =>
+    {
+        if (e.VisibleIndex >= 0)
+        {
+            ASPxGridView gridView = (ASPxGridView)s;
+            var status = Convert.ToString(gridView.GetRowValues(e.VisibleIndex, "Status"));
+            if (status == "Waiting")
+            {
+                e.Cell.BackColor = System.Drawing.Color.FromName("#DEDEDE"); 
+            }
+            else if (status == "Rejected")
+            {
+                e.Cell.BackColor = System.Drawing.Color.IndianRed;
+                e.Cell.ForeColor = System.Drawing.Color.White;
+            }
+
+        }
+    };
+
+    settings.Settings.ShowFooter = true;
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    settings.ClientSideEvents.BeginCallback = "ViewApproval_gvContentDetailBeginCallback";
+
+}).Bind(Model).GetHtml()

@@ -1,0 +1,184 @@
+﻿@using Models;
+@using Models.Master.Item;
+
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "RfidMonitoring_gvContentItemTagList";
+    settings.KeyFieldName = "LogId";
+    settings.CommandColumn.Visible = false;
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Width = 1200;
+    settings.CommandColumn.Width = 70;
+
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+    settings.SettingsBehavior.AllowSort = false;
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransactionName_";
+        column.Name = "TransactionName_";
+        column.Caption = "Trans Type";
+        column.Width = 120;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "BaseTransNo";
+        column.Name = "BaseTransNo";
+        column.Caption = "Trans No";
+        column.Width = 120;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Old Item Code";
+        column.Width = 150;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Old Item Name";
+        column.Width = 280;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "NewItemCode";
+        column.Name = "NewItemCode";
+        column.Caption = "New Item Code";
+        column.Width = 150;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "NewItemName";
+        column.Name = "NewItemName";
+        column.Caption = "New Item Name";
+        column.Width = 280;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsCode";
+        column.Name = "WhsCode";
+        column.Caption = "Whs Code";
+        column.Width = 100;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsName";
+        column.Name = "WhsName";
+        column.Caption = "Whs Name";
+        column.Width = 150;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "OldTagId";
+        column.Name = "OldTagId";
+        column.Caption = "Old RFID";
+        column.Width = 200;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "NewTagId";
+        column.Name = "NewTagId";
+        column.Caption = "New RFID";
+        column.Width = 200;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Name = "Status";
+        column.Caption = "Status";
+        column.Width = 80;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "CreatedDate";
+        column.Name = "CreatedDate";
+        column.Caption = "Created Date";
+        column.Width = 100;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "CreatedUser";
+        column.Name = "CreatedUser";
+        column.Caption = "Created User";
+        column.Width = 100;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Visible = true;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+}).Bind(Model).GetHtml()

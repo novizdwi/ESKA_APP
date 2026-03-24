@@ -1,0 +1,109 @@
+﻿@using Models;
+@using Models.Setting.ApprovalTemplate;
+@{
+    var Id = Convert.ToInt32(Request["cbId"]);
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+    var readOnly = true;
+    if (Id != 0 && (IsAjax))
+    {
+        readOnly = false;
+    }
+}
+
+
+@*@model Models.Setting.ApprovalTemplate.ApprovalTemplateModel*@
+
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvApprovalTemplateDepartmentDetail";
+    settings.KeyFieldName = "DepartmentId";
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto; ;
+    
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(25);
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = false;
+    settings.CommandColumn.ShowDeleteButton = false;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.CommandColumn.Width = 50;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DepartmentId";
+        column.Name = "DepartmentId";
+        column.Caption = "Department Id";
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 00;
+        column.ReadOnly = true;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DepartmentName_";
+        column.Name = "DepartmentName_";
+        column.Caption = "Department Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 200;
+        column.ReadOnly = true;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvApprovalTemplateDepartmentDetail_DepartmentName_";
+
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "IsSelected";
+        column.Name = "IsSelected";
+        column.Caption = "Selected";
+        column.ColumnType = MVCxGridViewColumnType.CheckBox;
+        column.Settings.AllowSort = DefaultBoolean.False;
+
+        column.Width = 85;
+
+        var chk = column.PropertiesEdit as CheckBoxProperties;
+        chk.ValueType = typeof(string);
+        chk.ValueChecked = "Y";
+        chk.ValueUnchecked = "N";
+    });
+
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.Dynamic;
+    };
+
+
+}).Bind(Model).GetHtml()

@@ -1,0 +1,278 @@
+﻿@using Models.Master.Item;
+@using System.Web.Script.Serialization;
+
+@{
+    ViewBag.UserId = Model.UserId;
+
+}
+
+@model Models.Master.Item.RfidMonitoringModel
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "ItemCode";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
+
+).Bind(Model.ItemCode).GetHtml()
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "<b>RFID List</b>";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        itemSettings.ColCount = 1;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+
+    });
+
+
+    groupItem.Items.AddEmptyItem().Height = 8;
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = 500;
+    });
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = 500;
+    });
+
+
+    groupItem_Col1.Items.Add(
+    itemSettings =>
+    {
+        itemSettings.Caption = "Date Entry";
+    }
+    )
+    .SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write("<table><tr><td style=\"padding-right:5px;\">");
+
+        Html.DevExpress().DateEditFor(i => i.FromDate, s =>
+        {
+            s.Name = "FromDate";
+            s.Width = 100;
+            s.ShowModelErrors = true;
+            //s.ReadOnly = ViewBag.ReadOnly;
+            s.ControlStyle.CssClass = "editor";
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.NullText = "dd/MM/yyyy";
+            s.Properties.EditFormat = EditFormat.Custom;
+            s.Properties.EditFormatString = "dd/MM/yyyy";
+            s.Properties.DisplayFormatString = "dd/MM/yyyy";
+            s.Properties.ValidationSettings.Display = Display.Dynamic;
+            s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+
+        }).Render();
+
+        ViewContext.Writer.Write("</td><td> To &nbsp; <td>");
+
+        Html.DevExpress().DateEditFor(i => i.ToDate, s =>
+        {
+            s.Name = "ToDate";
+            s.Width = 100;
+            s.ShowModelErrors = true;
+            //s.ReadOnly = ViewBag.ReadOnly;
+            s.ControlStyle.CssClass = "editor";
+            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            s.Properties.NullText = "dd/MM/yyyy";
+            s.Properties.EditFormat = EditFormat.Custom;
+            s.Properties.EditFormatString = "dd/MM/yyyy";
+            s.Properties.DisplayFormatString = "dd/MM/yyyy";
+            s.Properties.ValidationSettings.Display = Display.Dynamic;
+            s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+
+        }).Render();
+
+        ViewContext.Writer.Write("</td></tr></table>");
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DropDownEdit;
+
+        itemSettings.Caption = "Item Code";
+
+        DropDownEditSettings dropDownEdit = (DropDownEditSettings)itemSettings.NestedExtensionSettings;
+
+        dropDownEdit.Name = "checkComboBox";
+        //dropDownEdit.Text = "Chrome;Safari";
+        dropDownEdit.Width = 300;
+        dropDownEdit.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+        dropDownEdit.SetDropDownWindowTemplateContent(c =>
+        {
+
+            Html.DevExpress().ListBox(
+                listBoxSettings =>
+                {
+                    listBoxSettings.Name = "checkListBox";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                    listBoxSettings.Width = Unit.Percentage(100);
+
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+
+                    var dataTable = Models._Utils.GeneralGetList.GetItemList();
+                    listBoxSettings.Properties.Items.Add("(Select all)");
+                    for (int i = 0; i < dataTable.Rows.Count; i++)
+                    {
+                        listBoxSettings.Properties.Items.Add(dataTable.Rows[i]["ItemCode"].ToString(), dataTable.Rows[i]["ItemCode"].ToString());
+                    }
+
+
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "OnListBoxSelectionChanged";
+                }
+            )
+            .Render();
+            ViewContext.Writer.Write("<div style=\"padding: 6px; height: 24px;\">");
+            Html.DevExpress().Button(
+                buttonSettings =>
+                {
+                    buttonSettings.Name = "buttonClose";
+                    buttonSettings.Text = "Close";
+                    buttonSettings.Style.Add("float", "right");
+                    buttonSettings.Style.Add("padding", "0px 2px");
+                    buttonSettings.ClientSideEvents.Click = "function(s, e){ checkComboBox.HideDropDown(); }";
+                    buttonSettings.Height = 26;
+                }
+            )
+            .Render();
+            ViewContext.Writer.Write("</div>");
+        });
+        dropDownEdit.Properties.AnimationType = AnimationType.None;
+        dropDownEdit.Properties.ClientSideEvents.TextChanged = "SynchronizeListBoxValues";
+        dropDownEdit.Properties.ClientSideEvents.DropDown = "SynchronizeListBoxValues";
+    });
+
+
+    groupItem_Col1.Items.Add(m => Model.WhsCode, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.FieldName = "WhsCode";
+        itemSettings.Caption = "Whs Code";
+
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDown;
+        cbo.Name = "WhsCode";
+        cbo.ShowModelErrors = false;
+        cbo.Properties.TextField = "Name";
+        cbo.Properties.ValueField = "Code";
+        cbo.Properties.ValueType = typeof(string);
+
+
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.Width = 300;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetUserWarehouse(ViewBag.UserId);
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        cbo.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "RFID";
+        itemSettings.FieldName = "TagId";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "TagId";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 300;
+    });
+
+    groupItem_Col2.Items.Add(m => Model.Status, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.FieldName = "Status";
+        itemSettings.Caption = "Status";
+
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDown;
+        cbo.Name = "Status";
+        cbo.ShowModelErrors = false;
+        cbo.Properties.TextField = "Name";
+        cbo.Properties.ValueField = "Code";
+        cbo.Properties.ValueType = typeof(string);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.Width = 300;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetList("RFIDStatus");
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        cbo.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+        group.PageControl.ContentStyle.Paddings.Padding = 3;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabReference";
+            item.Caption = "   Reference      ";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                     Html.Partial("Partial/RfidMonitoring_Form_TabReference_List_Partial", Model.ListReferences_)
+                 );
+            });
+
+        });
+
+
+
+    });
+
+
+
+}).GetHtml()
+
+
+

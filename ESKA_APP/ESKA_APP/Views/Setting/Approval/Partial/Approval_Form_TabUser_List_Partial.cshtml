@@ -1,0 +1,57 @@
+﻿@using Models;
+@using Models.Setting.Approval;
+
+@model Models.Setting.Approval.ApprovalModel 
+
+@{ 
+    var Id = Convert.ToInt64(Request["cbId"]);
+}
+
+@Html.DevExpress().GridView(settings =>
+   {
+
+       settings.Name = "gvApprovalUserDetail";
+       settings.KeyFieldName = "UserId";
+       settings.Height = 300;
+       settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+       settings.Settings.VerticalScrollableHeight = 300;
+       settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+       settings.Width = Unit.Percentage(100);
+
+       settings.CommandColumn.Visible = true;
+       settings.CommandColumn.ShowSelectCheckbox = true;
+
+       settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+
+       settings.Columns.Add("Id", "Id").Visible = false;
+       settings.Columns.Add("DetId", "DetId").Visible = false;
+       settings.Columns.Add("UserId", "UserId").Visible = false;
+       settings.Columns.Add("UserName_", "UserName").Width = 300;
+       settings.Columns.Add("IsTick", "IsTick").Visible = false;
+
+       settings.Settings.ShowFooter = true;
+
+       //settings.SettingsPager.PageSize = 2000000;
+
+       settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+       settings.PreRender = (sender, e) =>
+       {
+           ASPxGridView gridView = (ASPxGridView)sender;
+
+           for (int i = 0; i < gridView.VisibleRowCount; i++)
+           {
+               gridView.Selection.SetSelection(i, (string)gridView.GetRowValues(i, "IsTick") == "Y");
+           }
+       };
+
+       if (ViewBag.ErrorDesc != null)
+       {
+           settings.SetFooterRowTemplateContent(c =>
+           {
+               Html.ViewContext.Writer.Write("<span style='color:red'>" + ViewBag.ErrorDesc + "</span>");
+           });
+       }
+
+   }).Bind(Model.ListUsers_).GetHtml()

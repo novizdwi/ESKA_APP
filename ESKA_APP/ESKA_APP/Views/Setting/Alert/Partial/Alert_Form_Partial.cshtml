@@ -1,0 +1,207 @@
+﻿@using Models.Setting.Alert; 
+
+@model Models.Setting.Alert.AlertModel    
+  
+  
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
+
+    ).Bind(Model.Id).GetHtml()
+
+
+ @Html.DevExpress().FormLayout(settings => {
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true; 
+    settings.ShowItemCaptionColon = false;
+    
+    
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "Alert Report";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.ColorTranslator.FromHtml("#F20056");
+
+        itemSettings.Width = Unit.Percentage(100);
+        
+    });
+
+    groupItem.Items.AddEmptyItem().Height = 25;
+
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+
+
+
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1; 
+    });
+
+
+    groupItem_Col1.Items.Add(m => Model.GroupId, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Group";
+
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "GroupId";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "GroupName";
+        cbo.Properties.ValueField = "Id";
+        cbo.Properties.ValueType = typeof(int);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        cbo.Width = 300;
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetAlertGroups();
+
+         cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+ 
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Alert Name";
+        itemSettings.FieldName = "AlertName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "AlertName";
+        txt.ShowModelErrors = true;
+        txt.Width = 300;
+
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    });
+
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Frequency (Minute)";
+        itemSettings.FieldName = "Frequency";
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Frequency";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Properties.MinValue = 0;
+        txt.Properties.MaxValue = 10000;
+        txt.Properties.NullText = "0";
+        txt.Width = 100;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+
+
+    });
+    
+ 
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.RadioButtonList;
+        itemSettings.Caption = "Active";
+        itemSettings.FieldName = "IsActive";
+        var rb = (RadioButtonListSettings)itemSettings.NestedExtensionSettings;
+        rb.Properties.RepeatDirection = RepeatDirection.Horizontal;
+        rb.Name = "IsActive";
+        rb.ShowModelErrors = true;
+        rb.Properties.TextField = "Name";
+        rb.Properties.ValueField = "Code";
+        rb.Properties.ValueType = typeof(string);
+        rb.ControlStyle.CssClass = "editor";
+        rb.Properties.DataSource =  Models._Utils.GeneralGetList.GetList("Boolean");
+        rb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        rb.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED"); 
+        
+    });
+    
+
+
+    groupItem_Col1.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+
+        //group.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+        //group.VerticalAlign = FormLayoutVerticalAlign.Top;
+        //group.TabAlign = TabAlign.Left;
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabSql";
+            item.Caption = "SQL";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Alert_Form_TabSql_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+        
+        group.Items.Add(item =>
+        {
+            item.Name = "TabUser";
+            item.Caption = "User";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Alert_Form_TabUser_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+
+        group.Items.Add(item =>
+        {
+            item.Name = "TabRole";
+            item.Caption = "Role";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+             @Html.Partial("Partial/Alert_Form_TabRole_List_Partial")
+          );
+            });
+            item.CaptionStyle.BackColor = System.Drawing.Color.Blue;
+            item.CaptionCellStyle.BackColor = System.Drawing.Color.Blue;
+
+        });
+        
+    });
+    
+    
+}).GetHtml()
+   
+ 
+ 
+ 

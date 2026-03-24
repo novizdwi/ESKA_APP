@@ -1,0 +1,45 @@
+﻿@{ Layout = "~/Views/Shared/_rootRpt.cshtml"; }
+
+@{
+    //ViewBag.Title = "Preview"; 
+    ViewBag.Guid = Guid.NewGuid();
+}
+
+
+<div id="content">
+
+<iframe id="ReportFrame" src="" width="100%" height="100%" style="border: none" frameborder="0" scrolling="yes"></iframe>
+</div>
+<script type="text/javascript">
+
+
+
+
+    $(document).ready(function () {
+
+        if ('@ViewBag.OutputType' == 'Pdf') {
+            $('#ReportFrame').attr('src', '@Url.Content("~/_CrystalReport/DisplayPdf")' + '?ReportFile=' + '@ViewBag.CrtFile' + '&ReportParam=@ViewBag.CrtParam' + '&DatabaseType=@ViewBag.DatabaseType' + '&Guid=@ViewBag.Guid');
+        }
+        else if ('@ViewBag.OutputType' == 'Excel') {
+            $('#ReportFrame').attr('src', '@Url.Content("~/_CrystalReport/DisplayExcel")' + '?ReportFile=' + '@ViewBag.CrtFile' + '&ReportParam=@ViewBag.CrtParam' + '&DatabaseType=@ViewBag.DatabaseType' + '&Guid=@ViewBag.Guid');
+
+        }
+        else if ('@ViewBag.OutputType' == 'Csv') {
+            $('#ReportFrame').attr('src', '@Url.Content("~/_CrystalReport/DisplayCsv")' + '?ReportFile=' + '@ViewBag.CrtFile' + '&ReportParam=@ViewBag.CrtParam' + '&DatabaseType=@ViewBag.DatabaseType' + '&Guid=@ViewBag.Guid');
+
+        }
+        else if ('@ViewBag.OutputType' == 'Text') {
+            $('#ReportFrame').attr('src', '@Url.Content("~/_CrystalReport/DisplayText")' + '?ReportFile=' + '@ViewBag.CrtFile' + '&ReportParam=@ViewBag.CrtParam' + '&DatabaseType=@ViewBag.DatabaseType' + '&Guid=@ViewBag.Guid');
+
+        } else {
+            $('#ReportFrame').attr('src', '@Url.Content("~/Rpts/Rpt.aspx")' + '?ReportFile=' + '@ViewBag.CrtFile' + '&ReportParam=@ViewBag.CrtParam' + '&DatabaseType=@ViewBag.DatabaseType' + '&Guid=@ViewBag.Guid');
+
+        }
+
+        
+
+
+    });
+
+</script>
+

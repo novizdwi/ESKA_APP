@@ -1,0 +1,488 @@
+﻿@if (false)
+{ <script src="~/Scripts/ASPxScriptIntelliSense.js" type="text/javascript"></script> }
+
+@model Models.Setting.Alert.AlertModel
+
+
+@{
+    ViewBag.Title = "Alert Report";
+}
+
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+
+        SetBtnStatus('new');
+    }
+    );
+
+</script>
+
+<script type="text/javascript">
+
+
+    $.ajaxSetup({
+        cache: false
+    });
+
+    function OnBegin() {
+        loadingPanel.Show();
+    }
+
+    function SetBtnStatus(formMode) {
+
+        var grpBtnAdd = formLayouBtn.GetItemByName('grpBtnAdd');
+        var btnAdd = ASPxClientButton.Cast('btnAdd');
+        var grpBtnUpdate = formLayouBtn.GetItemByName('grpBtnUpdate');
+        var btnUpdate = ASPxClientButton.Cast('btnUpdate');
+
+        var btnDelete = ASPxClientButton.Cast('btnDelete');
+        var btnRefresh = ASPxClientButton.Cast('btnRefresh');
+
+        switch (formMode) {
+            case 'new':
+
+                grpBtnAdd.SetVisible(true);
+                grpBtnUpdate.SetVisible(false);
+
+                btnAdd.SetEnabled(true);
+                btnUpdate.SetEnabled(false);
+                btnDelete.SetEnabled(false);
+                btnRefresh.SetEnabled(false);
+
+
+                break;
+            case 'edit':
+
+                grpBtnAdd.SetVisible(false);
+                grpBtnUpdate.SetVisible(true);
+
+                btnAdd.SetEnabled(false);
+                btnUpdate.SetEnabled(true);
+                btnDelete.SetEnabled(true);
+                btnRefresh.SetEnabled(true);
+
+
+                break;
+            default:
+
+                break;
+        }
+
+    }
+
+    var msgCount = 0;
+    function OnSuccess() {
+
+        $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + 'Action success</p>' + $("#MessageText").html());
+
+    }
+
+
+    function OnSuccessMsgBox() {
+
+        $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + 'Action success</p>' + $("#MessageText").html());
+        loadingPanel.Hide();
+
+        popupSuccess.Show();
+        setTimeout(function () { popupSuccess.Hide(); }, 1000);
+
+    }
+
+    function OnFailure(jqXhr, textStatus, errorThrown) {
+
+        if (jqXhr.responseText.substring(0, 12) == "[VALIDATION]") {
+            $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + jqXhr.responseText + '</p>' + $("#MessageText").html());
+
+            loadingPanel.Hide()
+            alert(jqXhr.responseText);
+        }
+        else {
+            // untuk error yg tidak ter capture di validation
+            var doc = jqXhr.responseText.match(/.*<title>([\s\S]*)<\/title>.*/);
+            $("#MessageText").html('<p>' + '(' + (++msgCount) + ') ' + doc[1] + '</p>' + $("#MessageText").html());
+
+            loadingPanel.Hide();
+            alert(doc[1]);
+        }
+
+    }
+
+    function OnComplete() {
+        loadingPanel.Hide();
+
+    }
+
+
+    function BeforeSave() {
+        var tab = ASPxClientTabControl.Cast("TabDetail");
+
+        var tabPageCount = tab.GetTabCount();
+        for (var i = 0; i < tabPageCount; i++) {
+            tab.SetActiveTabIndex(i);
+            if (!($("#formDetail").valid())) {
+                var validator = $("#formDetail").validate();
+                var errors = validator.numberOfInvalids();
+                if (errors) {
+                    // alert( validator.errorList[0].message);
+                    validator.errorList[0].element.focus();
+
+                }
+                return false;
+            }
+
+
+        }
+
+        return true;
+
+    }
+
+    function RefreshAfterSuccess(response) {
+        var tab = ASPxClientTabControl.Cast("TabDetail");
+
+        if (tab.GetActiveTabIndex != 0) {
+            tab.SetActiveTabIndex(0);
+        }
+
+        $("#contentForm").html(response);
+
+        $.validator.unobtrusive.parse("#formDetail");
+
+        MVCxClientUtils.FinalizeCallback();
+
+    }
+
+
+    function OnClickBtnNew(s, e) {
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DetailPartial", "Alert")",
+            beforeSend: function () {
+                OnBegin();
+            },
+
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('new');
+                OnSuccess();
+            },
+
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+
+            complete: function () {
+                OnComplete()
+            }
+        });
+
+    }
+
+    function getFormData() {
+        var formData = $('#formDetail').serializeObject();
+
+        var gvUser = ASPxClientGridView.Cast("gvAlertUserDetail");
+        var gvRole = ASPxClientGridView.Cast("gvAlertRoleDetail");
+
+
+        $.extend(formData, {
+            UserTicks_: gvUser.GetSelectedKeysOnPage(),
+            RoleTicks_: gvRole.GetSelectedKeysOnPage()
+        });
+        return formData;
+    }
+
+
+    function OnClickBtnAdd(s, e) {
+
+        if (BeforeSave() == false) {
+            return;
+        }
+
+        var formData = getFormData();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Add", "Alert")',
+                data: formData,
+                beforeSend: function () {
+                    OnBegin();
+                },
+                success: function (response) {
+                    RefreshAfterSuccess(response);
+                    SetBtnStatus('new');
+                    OnSuccessMsgBox();
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    OnFailure(jqXhr, textStatus, errorThrown)
+                },
+                complete: function () {
+                    OnComplete();
+                }
+            });
+
+
+        }
+
+        function OnClickBtnUpdate(s, e) {
+            if (BeforeSave() == false) {
+                return;
+            }
+
+            var formData = getFormData();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Update", "Alert")',
+                data: formData,
+                beforeSend: function () {
+                    OnBegin();
+                },
+                success: function (response) {
+                    RefreshAfterSuccess(response);
+                    SetBtnStatus('edit');
+                    OnSuccessMsgBox();
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    OnFailure(jqXhr, textStatus, errorThrown)
+                },
+                complete: function () {
+                    OnComplete() 
+                     
+                }
+            });
+
+
+
+        }
+
+        function OnClickBtnDelete(s, e) {
+            if (confirm('Delete data?')) {
+                key = Id.GetValue();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Alert")',
+                data: { Id: key },
+                beforeSend: function () {
+                    OnBegin();
+                },
+                success: function (response) {
+                    RefreshAfterSuccess(response);
+                    SetBtnStatus('new');
+                    OnSuccessMsgBox();
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    OnFailure(jqXhr, textStatus, errorThrown)
+                },
+                complete: function () {
+                    OnComplete()
+                }
+            });
+        }
+    }
+
+
+    function OnClickBtnNavFirst(s, e) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NavFirst", "Alert")",
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+    function OnClickBtnNavPrevious(s, e) {
+        key = Id.GetValue();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("NavPrevious", "Alert")',
+            data: { Id: key },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+    function OnClickBtnNavNext(s, e) {
+        key = Id.GetValue();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("NavNext", "Alert")',
+            data: { Id: key },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+
+
+    function OnClickBtnNavLast(s, e) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NavLast", "Alert")",
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+
+    function OnClickBtnRefresh(s, e) {
+        key = Id.GetValue();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DetailPartial", "Alert")',
+            data: { Id: key },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+    function OnClickChoose(s, e, key) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DetailPartial", "Alert")',
+            data: { Id: key },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                SetBtnStatus('edit');
+                OnSuccess();
+                popupList.Hide();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+    }
+
+
+</script>
+
+
+
+@Html.Partial("Partial/Alert_Form_Btn_Partial")
+
+@* 
+--------------------------------------------------------------------------------------------
+*@
+
+
+@using (Ajax.BeginForm("mantap", "Alert", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{ 
+<div id="contentForm">
+@Html.Partial("Partial/Alert_Form_Partial")
+</div> 
+}
+
+
+
+@Html.DevExpress().LoadingPanel(
+    settings =>
+    {
+        settings.Name = "loadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = "contentForm";
+        settings.Styles.LoadingDiv.BackColor = System.Drawing.Color.White;
+    }).GetHtml()
+
+
+
+@* 
+--------------------------------------------------------------------------------------------
+*@
+
+@Html.Partial("Partial/Alert_Panel_List_Partial")
+
+
+
