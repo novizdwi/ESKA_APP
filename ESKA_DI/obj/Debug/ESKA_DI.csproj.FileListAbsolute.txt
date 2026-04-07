@@ -51,10 +51,6 @@ C:\LegionShared\Project\ESKA_APP\BBS_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInpu
 C:\LegionShared\Project\ESKA_APP\BBS_DI\obj\Debug\ESKA_DI.csproj.CopyComplete
 C:\LegionShared\Project\ESKA_APP\BBS_DI\obj\Debug\BBS_DI.dll
 C:\LegionShared\Project\ESKA_APP\BBS_DI\obj\Debug\BBS_DI.pdb
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csprojAssemblyReference.cache
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\Interop.SAPbobsCOM.dll
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.ResolveComReference.cache
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\BBS_DI.dll.config
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\BBS_DI.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\BBS_DI.pdb
@@ -64,9 +60,10 @@ C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.SqlServer.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.Utils.v20.1.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.xml
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.SqlServer.xml
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.pdb
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.xml
-C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.dll.config
+C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csprojAssemblyReference.cache
+C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\Interop.SAPbobsCOM.dll
+C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.ResolveComReference.cache
+C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CopyComplete
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\BBS_DI.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\BBS_DI.pdb

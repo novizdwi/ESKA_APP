@@ -144,54 +144,32 @@
                     dataTable = Models._Utils.GeneralGetList.GetMenuUrls((int)Session["userId"]);
                 }
 
+
                 settings.Nodes.Add(node1 =>
                 {
                     node1.Text = "Master";
+                    AddNode(dataTable, node1, "Process", "Process");
+                    AddNode(dataTable, node1, "Route", "Route");
+                });
 
-                    node1.Nodes.Add(node2 =>
-                    {
-                        node2.Text = "Item";
-                        AddNode(dataTable, node2, "Item Master", "ItemMaster");
-                        AddNode(dataTable, node2, "RFID List", "RfidMonitoring");
-                        AddNode(dataTable, node2, "Deactive Tag", "DeactiveTag");
-                        AddNode(dataTable, node2, "Change Item RFID", "ChangeItem");
-                    });
+                settings.Nodes.Add(node1 =>
+                {
+                    node1.Text = "Production";
+                    AddNode(dataTable, node1, "Process Card", "ProcessCard");
+                    AddNode(dataTable, node1, "Production Schedule", "ProductionSchedule");
+                    AddNode(dataTable, node1, "Task List", "TaskList");
+                    AddNode(dataTable, node1, "Activity", "Activity");
+
                 });
 
                 settings.Nodes.Add(node1 =>
                 {
                     node1.Text = "Transaction";
+                    AddNode(dataTable, node1, "Issue-Receipt", "IssueReceipt");
+                    AddNode(dataTable, node1, "Inventory Transfer", "InventoryTransfer");
+                    AddNode(dataTable, node1, "Stock Opname", "StockOpname");
+                    AddNode(dataTable, node1, "Goods Receipt PO", "GoodsReceiptPO");
 
-                    node1.Nodes.Add(node3 =>
-                    {
-                        node3.Text = "Adjustment";
-                        AddNode(dataTable, node3, "Adjustment In", "AdjustmentIn");
-                        AddNode(dataTable, node3, "Adjustment Out", "AdjustmentOut");
-                    });
-                    node1.Nodes.Add(node3 =>
-                    {
-                        node3.Text = "Inventory";
-                        AddNode(dataTable, node3, "Transfer Request", "TransferRequest");
-                        AddNode(dataTable, node3, "Transfer Out Scan", "TransferOut");
-                        AddNode(dataTable, node3, "Transfer Out Summary ", "TransferSummaryOut");
-                        AddNode(dataTable, node3, "Transfer In Scan", "TransferIn");
-                        AddNode(dataTable, node3, "Transfer In Summary ", "TransferSummaryIn");
-                    });
-
-                    node1.Nodes.Add(node3 =>
-                    {
-                        node3.Text = "Stock Opname";
-                        AddNode(dataTable, node3, "Stock Opname Request ", "RequestStockOpname");
-                        AddNode(dataTable, node3, "Stock Opname Scan List", "StockOpnameScan");
-                        AddNode(dataTable, node3, "Stock Opname Summary", "StockSummaryOpname");
-                    });
-
-                    node1.Nodes.Add(node3 =>
-                    {
-                        node3.Text = "Purchasing";
-                        AddNode(dataTable, node3, "PO Scan List", "PurchaseOrderScan");
-                        AddNode(dataTable, node3, "GRPO Summary", "GoodsReceiptPO");
-                    });
                 });
 
                 settings.Nodes.Add(node1 =>
