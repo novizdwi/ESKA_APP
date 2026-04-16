@@ -379,37 +379,19 @@
     <Compile Include="Models\_EF\Tm_Alert_User.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_Approval.cs">
+    <Compile Include="Models\_EF\Tm_DocContent.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalStage.cs">
+    <Compile Include="Models\_EF\Tm_DocContent_Ref.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalStage_Role.cs">
+    <Compile Include="Models\_EF\Tm_DocGeneral.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalStage_User.cs">
+    <Compile Include="Models\_EF\Tm_DocGeneral_Attachment.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalTemplate.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalTemplate_Position.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalTemplate_Role.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalTemplate_Stage.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_ApprovalTemplate_User.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Approval_Role.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Approval_User.cs">
+    <Compile Include="Models\_EF\Tm_DocGeneral_Reference.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tm_GeneralSetting.cs">
@@ -419,21 +401,6 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tm_GeneralSetting_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Item_Warehouse.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Item_Warehouse_Tag.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Item_Warehouse_Tag_Log.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_Item_Warehouse_Tag_Replace.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tm_Layout.cs">
@@ -446,6 +413,24 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tm_MasterSetting.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_MasterSettingEngine_Bagian.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_MasterSettingEngine_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_MasterSettingEngine_SubItem.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_MasterSetting_Bagian.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_MasterSetting_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_MasterSetting_SubItem.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tm_Query.cs">
@@ -496,19 +481,31 @@
     <Compile Include="Models\_EF\Tm_Role_Auth.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\_EF\Tm_Ship.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_Acco.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_Anchor.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_Attachment.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_Engine.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_NavEq.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_Operation.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tm_Ship_SafeEq.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\_EF\Tm_User.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tm_User_Warehouse.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tp_Approval.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tp_Approval_User.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tp_UserAlert.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Ts_FormatNumbering.cs">
@@ -523,22 +520,10 @@
     <Compile Include="Models\_EF\Ts_Menu.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Ts_ObjectApproval.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\_EF\Tx_AdjustmentIn.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn_Approval.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\_EF\Tx_AdjustmentIn_Attachment.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn_Item_Tag.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_AdjustmentIn_Location.cs">
@@ -547,151 +532,190 @@
     <Compile Include="Models\_EF\Tx_AdjustmentOut.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut_Approval.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\_EF\Tx_AdjustmentOut_Attachment.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut_Item_Tag.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_AdjustmentOut_Location.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_ChangeItem.cs">
+    <Compile Include="Models\_EF\Tx_ApprovalMR.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_ChangeItem_Tag.cs">
+    <Compile Include="Models\_EF\Tx_ApprovalMR_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_DeactiveTag.cs">
+    <Compile Include="Models\_EF\Tx_CleaningTank.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_DeactiveTag_Approval.cs">
+    <Compile Include="Models\_EF\Tx_CleaningTank_Attachment.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_DeactiveTag_Item.cs">
+    <Compile Include="Models\_EF\Tx_CleaningTank_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_DeactiveTag_Log.cs">
+    <Compile Include="Models\_EF\Tx_Delivery.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_Delivery_Activity.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_Docking.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_Docking_Detail.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_FreshWaterControl.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_FreshWaterControl_Detail.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_FuelControl.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_FuelControl_Detail.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_GeneralDocRenewal.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_GeneralDocRenewal_Reference.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_GoodIssue.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_GoodsReceiptPO.cs">
+    <Compile Include="Models\_EF\Tx_GoodIssue_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Approval.cs">
+    <Compile Include="Models\_EF\Tx_GoodIssue_Detail_Batch.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Item.cs">
+    <Compile Include="Models\_EF\Tx_InventoryIn.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_InventoryIn_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Ref.cs">
+    <Compile Include="Models\_EF\Tx_InventoryIn_Detail_Batch.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_PurchaseOrder.cs">
+    <Compile Include="Models\_EF\Tx_InventoryReceived.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_PurchaseOrder_Item.cs">
+    <Compile Include="Models\_EF\Tx_InventoryReceived_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_PurchaseOrder_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_InventoryReceived_Detail_Batch.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_Request_StockOpname.cs">
+    <Compile Include="Models\_EF\Tx_InventorySend.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname.cs">
+    <Compile Include="Models\_EF\Tx_InventorySend_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Approval.cs">
+    <Compile Include="Models\_EF\Tx_InventorySend_Detail_Batch.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Item.cs">
+    <Compile Include="Models\_EF\Tx_Kecelakaan.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_Kecelakaan_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockSummaryOpname.cs">
+    <Compile Include="Models\_EF\Tx_KerusakanKapal.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockSummaryOpname_Approval.cs">
+    <Compile Include="Models\_EF\Tx_KerusakanKapal_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockSummaryOpname_Item.cs">
+    <Compile Include="Models\_EF\Tx_LoadingOrder.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockSummaryOpname_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_LoadingOrder_SalesOrder.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_StockSummaryOpname_Ref.cs">
+    <Compile Include="Models\_EF\Tx_LoadingOrder_Segel.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferIn.cs">
+    <Compile Include="Models\_EF\Tx_MaterialRequest.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferIn_Item.cs">
+    <Compile Include="Models\_EF\Tx_MaterialRequest_Attachment.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferIn_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_MaterialRequest_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferOut.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferOut_Item.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul_AEKanan.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferOut_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul_AEKiri.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferRequest.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul_GBKanan.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferRequest_Approval.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul_GBKiri.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferRequest_Item.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul_MEKanan.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryIn.cs">
+    <Compile Include="Models\_EF\Tx_Overhaul_MEKiri.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryIn_Approval.cs">
+    <Compile Include="Models\_EF\Tx_Perawatan.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryIn_Item.cs">
+    <Compile Include="Models\_EF\Tx_PerawatanEngine.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryIn_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_PerawatanEngine_Attachment.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryIn_Ref.cs">
+    <Compile Include="Models\_EF\Tx_PerawatanEngine_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryOut.cs">
+    <Compile Include="Models\_EF\Tx_Perawatan_Attachment.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryOut_Approval.cs">
+    <Compile Include="Models\_EF\Tx_Perawatan_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryOut_Item.cs">
+    <Compile Include="Models\_EF\Tx_Receipt.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryOut_Item_Tag.cs">
+    <Compile Include="Models\_EF\Tx_RunningHours.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_TransferSummaryOut_Ref.cs">
+    <Compile Include="Models\_EF\Tx_RunningHours_Daily.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_RunningHours_RunPump.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_RunningHours_Total.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_ShipInventory.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_ShipInventory_Detail.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_TukarFakturReceipt.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_TukarFakturSend.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_TukarFakturSend_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_Sap\SAPCachedCompany.cs" />
