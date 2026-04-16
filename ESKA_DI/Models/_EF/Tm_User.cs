@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ESKA_DI.Models._EF
+namespace BBS_DI.Models._EF
 {
     using System;
     using System.Collections.Generic;
@@ -29,11 +29,5 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public string IsActive { get; set; }
-        public string LastLoginDeviceName { get; set; }
-        public string LastLoginIpAddress { get; set; }
-        public Nullable<System.DateTime> LastLoginDate { get; set; }
-        public string DefaultWhsCode { get; set; }
-        public string Position { get; set; }
     }
 }
