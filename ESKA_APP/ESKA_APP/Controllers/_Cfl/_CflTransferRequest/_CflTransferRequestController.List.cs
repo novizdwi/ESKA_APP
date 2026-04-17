@@ -49,15 +49,6 @@ namespace Controllers._Cfl
                     )
                 )
                 ";
-
-                if(userId != 1)
-                {
-                    ssql += @"AND EXISTS(
-                        SELECT 1
-                        FROM ""Tm_User_Warehouse"" Tx
-                        WHERE Tx.""WhsCode"" = T0.""FromWhsCode"" 
-                    )";
-                } 
                 cflParam.SqlWhere = string.Format(ssql, hidden_CflDocId);
             }
             if (cflParam.Type == "TransferSummaryIn")

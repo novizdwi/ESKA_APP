@@ -1149,45 +1149,7 @@ namespace Models.Transaction.Adjustment
             return model;
         }
 
-
-        public long Detail_Add(List<AdjustmentIn_AttachmentModel> ListModel)
-        {
-            long Id = 0;
-
-            if (ListModel != null)
-            {
-                using (var CONTEXT = new HANA_APP())
-                {
-                    using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
-                    {
-                        for (int i = 0; i < ListModel.Count; i++)
-                        {
-                            Tx_AdjustmentIn_Attachment tx_AdjustmentIn_Attachment = new Tx_AdjustmentIn_Attachment();
-                            var model = ListModel[i];
-
-                            CopyProperty.CopyProperties(model, tx_AdjustmentIn_Attachment, false);
-                            DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-
-                            tx_AdjustmentIn_Attachment.CreatedDate = dtModified;
-                            tx_AdjustmentIn_Attachment.CreatedUser = model._UserId;
-                            tx_AdjustmentIn_Attachment.ModifiedDate = dtModified;
-                            tx_AdjustmentIn_Attachment.ModifiedUser = model._UserId;
-
-                            CONTEXT.Tx_AdjustmentIn_Attachment.Add(tx_AdjustmentIn_Attachment);
-                            CONTEXT.SaveChanges();
-                            string keyValue = tx_AdjustmentIn_Attachment.Id.ToString();
-                            SpNotif.SpSysControllerTransNotif(model._UserId, "AdjustmentIn", CONTEXT, "after", "Tx_AdjustmentIn", "add", "Id", keyValue);
-                        }
-
-                        CONTEXT_TRANS.Commit();
-                    }
-                }
-
-            }
-
-            return Id;
-
-        }
+         
 
         public void Attachment_Delete(AdjustmentIn_AttachmentModel model)
         {

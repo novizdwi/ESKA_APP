@@ -56,76 +56,150 @@
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tm_DocContent">
+  <EntityType Name="Tm_Approval">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="DocumentName" Type="nvarchar" MaxLength="50" />
-    <Property Name="Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="FormCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalName" Type="nvarchar" MaxLength="50" />
     <Property Name="IsActive" Type="varchar" MaxLength="1" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ExpiredType" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarningNotif" Type="int" />
   </EntityType>
-  <EntityType Name="Tm_DocContent_Ref">
+  <EntityType Name="Tm_Approval_Role">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
     <Property Name="Id" Type="int" />
     <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Reference" Type="nvarchar" MaxLength="200" />
-    <Property Name="IsMandatory" Type="varchar" MaxLength="1" />
+    <Property Name="RoleId" Type="int" />
+    <Property Name="IsTick" Type="varchar" MaxLength="1" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="IsFixed" Type="varchar" MaxLength="1" />
   </EntityType>
-  <EntityType Name="Tm_DocGeneral">
+  <EntityType Name="Tm_Approval_User">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="IsTick" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalStage">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="DocumentName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Type" Type="int" />
-    <Property Name="ExpiredDate" Type="timestamp" />
-    <Property Name="WarningDate" Type="timestamp" />
-    <Property Name="IsActive" Type="varchar" MaxLength="1" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="StageName" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" MaxLength="100" />
+    <Property Name="MinApprove" Type="int" />
+    <Property Name="MinReject" Type="int" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tm_DocGeneral_Attachment">
+  <EntityType Name="Tm_ApprovalStage_Role">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
-    <Property Name="Id" Type="bigint" Nullable="false" />
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleId" Type="int" />
+    <Property Name="IsTick" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalStage_User">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="IsTick" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalTemplate">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TemplateName" Type="varchar" MaxLength="50" />
+    <Property Name="ObjectCode" Type="varchar" MaxLength="50" />
+    <Property Name="IsActive" Type="varchar" MaxLength="1" />
+    <Property Name="Sql" Type="varchar(max)" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalTemplate_Position">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Position" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsTick" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalTemplate_Role">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleId" Type="int" />
+    <Property Name="IsTick" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalTemplate_Stage">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="SortCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_ApprovalTemplate_User">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="FileName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Guid" Type="nvarchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tm_DocGeneral_Reference">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="int" />
-    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ContentId" Type="int" />
-    <Property Name="ContentDetId" Type="int" />
-    <Property Name="ContentValue" Type="nvarchar" MaxLength="250" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="IsTick" Type="nvarchar" MaxLength="1" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
@@ -143,6 +217,8 @@
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
+    <Property Name="StockOpnameCoaCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="StockOpnameCoaName" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="Tm_GeneralSetting_Coa">
     <Key>
@@ -167,6 +243,96 @@
     <Property Name="DetId" Type="int" Nullable="false" />
     <Property Name="ItemGroupCode" Type="varchar" MaxLength="200" />
     <Property Name="ItemGroupName" Type="varchar" MaxLength="200" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_Item">
+    <Key>
+      <PropertyRef Name="ItemCode" />
+    </Key>
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="OnHand" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="IsCommitted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="OnOrder" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="StockOpnameCoaCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="StockOpnameCoaName" Type="nvarchar" MaxLength="200" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_Item_Warehouse">
+    <Key>
+      <PropertyRef Name="ItemCode" />
+      <PropertyRef Name="WhsCode" />
+    </Key>
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="200" />
+    <Property Name="OnHand" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="IsCommitted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="OnOrder" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_Item_Warehouse_Tag">
+    <Key>
+      <PropertyRef Name="TagId" />
+      <PropertyRef Name="ItemCode" />
+    </Key>
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+    <Property Name="OnHand" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="IsCommitted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="OnOrder" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="DeactiveRemarks" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Tm_Item_Warehouse_Tag_Log">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="200" />
+    <Property Name="OldTagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Status" Type="nvarchar" MaxLength="200" />
+    <Property Name="Event" Type="nvarchar" MaxLength="100" />
+    <Property Name="ActionNote" Type="nvarchar" MaxLength="500" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_Item_Warehouse_Tag_Replace">
+    <Key>
+      <PropertyRef Name="TagId" />
+      <PropertyRef Name="ItemCode" />
+    </Key>
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="200" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
@@ -223,88 +389,17 @@
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Desc" Type="varchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="Tm_MasterSetting_Bagian">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Description" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tm_MasterSetting_Item">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="Description" Type="varchar" MaxLength="200" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tm_MasterSetting_SubItem">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="Description" Type="varchar" MaxLength="200" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tm_MasterSettingEngine_Bagian">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Description" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tm_MasterSettingEngine_Item">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="Description" Type="varchar" MaxLength="200" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tm_MasterSettingEngine_SubItem">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="Description" Type="varchar" MaxLength="200" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'HDB.ESKA_APP_TEST.Tm_Process' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Tm_Process">
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="IsActive" Type="varchar" MaxLength="1" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>-->
   <EntityType Name="Tm_Query">
     <Key>
       <PropertyRef Name="Id" />
@@ -534,137 +629,6 @@
     <Property Name="MenuCode" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAccess" Type="varchar" MaxLength="1" />
   </EntityType>
-  <EntityType Name="Tm_Ship">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="Alias" Type="varchar" MaxLength="50" />
-    <Property Name="ShipType" Type="varchar" MaxLength="50" />
-    <Property Name="Builder" Type="varchar" MaxLength="50" />
-    <Property Name="YearOfBuild" Type="varchar" MaxLength="11" />
-    <Property Name="Flag" Type="varchar" MaxLength="50" />
-    <Property Name="Class" Type="varchar" MaxLength="50" />
-    <Property Name="CallSign" Type="varchar" MaxLength="50" />
-    <Property Name="RegMark" Type="varchar" MaxLength="50" />
-    <Property Name="RegPlace" Type="varchar" MaxLength="50" />
-    <Property Name="LOA" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="LBP" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="BreadthMoulded" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="DepthDraught" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="GrossTonnage" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="NetTonnage" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="DraftDesign" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Owner" Type="varchar" MaxLength="50" />
-    <Property Name="OwnerAddress" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="MarkTonnage" Type="varchar" MaxLength="50" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="MarkOfTonageCer" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_Acco">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DetName" Type="varchar" MaxLength="250" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_Anchor">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DetName" Type="varchar" MaxLength="250" />
-    <Property Name="Brand" Type="varchar" MaxLength="250" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_Attachment">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="FileName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Guid" Type="nvarchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_Engine">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DetName" Type="varchar" MaxLength="250" />
-    <Property Name="Brand" Type="varchar" MaxLength="250" />
-    <Property Name="Power" Type="varchar" MaxLength="250" />
-    <Property Name="StdLO" Type="varchar" MaxLength="11" />
-    <Property Name="StdFilterLO" Type="varchar" MaxLength="50" />
-    <Property Name="StdFORacor" Type="varchar" MaxLength="50" />
-    <Property Name="StdFOFilter" Type="varchar" MaxLength="50" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Modifieduser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_NavEq">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DetName" Type="varchar" MaxLength="250" />
-    <Property Name="Brand" Type="varchar" MaxLength="250" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_Operation">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DetName" Type="varchar" MaxLength="250" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tm_Ship_SafeEq">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DetName" Type="varchar" MaxLength="250" />
-    <Property Name="Brand" Type="varchar" MaxLength="250" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
   <EntityType Name="Tm_User">
     <Key>
       <PropertyRef Name="Id" />
@@ -684,6 +648,40 @@
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tp_Approval">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TemplateId" Type="int" />
+    <Property Name="CurrentStep" Type="int" />
+    <Property Name="ObjectId" Type="nvarchar" MaxLength="255" />
+    <Property Name="ObjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="FlagNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Tp_UserAlert">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseTransNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="Action" Type="nvarchar" MaxLength="100" />
+    <Property Name="NotificationMessage" Type="nvarchar" MaxLength="500" />
+    <Property Name="SenderId" Type="int" />
+    <Property Name="IsRead" Type="varchar" MaxLength="1" />
+    <Property Name="LastShowTime" Type="timestamp" />
   </EntityType>
   <EntityType Name="Ts_FormatNumbering">
     <Key>
@@ -724,6 +722,14 @@
     <Property Name="ParentCode" Type="nvarchar" MaxLength="50" />
     <Property Name="Sort" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Ts_ObjectApproval">
+    <Key>
+      <PropertyRef Name="ObjectCode" />
+    </Key>
+    <Property Name="ObjectCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ObjectName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Sort" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Tx_AdjustmentIn">
     <Key>
       <PropertyRef Name="Id" />
@@ -732,22 +738,51 @@
     <Property Name="TransType" Type="nvarchar" MaxLength="50" />
     <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="AdjustmentTypeCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="AdjustmentTypeName" Type="nvarchar" MaxLength="100" />
+    <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
-    <Property Name="QtyStock" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
-    <Property Name="SapGoodReceiptId" Type="int" />
-    <Property Name="SapGoodReceiptNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsOpeningBalance" Type="varchar" MaxLength="1" />
+    <Property Name="DocEntry" Type="int" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="200" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="500" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-    <Property Name="SapGoodIssueId" Type="int" />
-    <Property Name="SapGoodIssueNo" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Tx_AdjustmentIn_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
   </EntityType>
   <EntityType Name="Tx_AdjustmentIn_Attachment">
     <Key>
@@ -762,15 +797,51 @@
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tx_AdjustmentIn_Location">
+  <EntityType Name="Tx_AdjustmentIn_Item">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
-    <Property Name="Id" Type="bigint" />
+    <Property Name="Id" Type="bigint" Nullable="false" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BinAbsEntry" Type="int" />
-    <Property Name="BinCode" Type="nvarchar" MaxLength="200" />
-    <Property Name="TotalReceipt" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FreeText" Type="nvarchar" MaxLength="1000" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityPosted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="UnitPriceTc" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_AdjustmentIn_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="PostResultNote" Type="nvarchar" MaxLength="500" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
@@ -784,22 +855,51 @@
     <Property Name="TransType" Type="nvarchar" MaxLength="50" />
     <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="AdjustmentTypeCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="AdjustmentTypeName" Type="nvarchar" MaxLength="100" />
+    <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
-    <Property Name="QtyStock" Type="decimal" Precision="21" Scale="6" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
-    <Property Name="SapGoodIssueId" Type="int" />
-    <Property Name="SapGoodIssueNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapGoodReceiptId" Type="int" />
-    <Property Name="SapGoodReceiptNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsOpeningBalance" Type="varchar" MaxLength="1" />
+    <Property Name="DocEntry" Type="int" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="200" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="500" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="Tx_AdjustmentOut_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
   </EntityType>
   <EntityType Name="Tx_AdjustmentOut_Attachment">
     <Key>
@@ -814,407 +914,37 @@
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tx_AdjustmentOut_Location">
+  <EntityType Name="Tx_AdjustmentOut_Item">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
-    <Property Name="Id" Type="bigint" />
+    <Property Name="Id" Type="bigint" Nullable="false" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BinAbsEntry" Type="int" />
-    <Property Name="BinCode" Type="nvarchar" MaxLength="200" />
-    <Property Name="TotalIssue" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tx_ApprovalMR">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="BaseTransId" Type="bigint" />
-    <Property Name="BaseTransNo" Type="varchar" MaxLength="50" />
-    <Property Name="RequesterId" Type="int" />
-    <Property Name="RequesterUserName" Type="varchar" MaxLength="50" />
-    <Property Name="ApprovedDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipSection" Type="varchar" MaxLength="50" />
-    <Property Name="WarehouseCode" Type="varchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="varchar" MaxLength="50" />
-    <Property Name="ReqType" Type="varchar" MaxLength="50" />
-    <Property Name="ReqDate" Type="timestamp" />
-    <Property Name="Attachment" Type="int" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="SapDocEntry" Type="bigint" />
-    <Property Name="SapDocNum" Type="bigint" />
-    <Property Name="IsAfterPosted" Type="varchar" MaxLength="10" />
-    <Property Name="IsApproved" Type="varchar" MaxLength="10" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="PriceMode" Type="varchar" MaxLength="50" />
-    <Property Name="RefNum" Type="varchar" MaxLength="200" />
-    <Property Name="RefType" Type="varchar" MaxLength="200" />
-    <Property Name="Kategori" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_ApprovalMR_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BaseDetID" Type="bigint" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="ItemCode" Type="varchar" MaxLength="50" />
-    <Property Name="ItemDescription" Type="varchar" MaxLength="200" />
-    <Property Name="Qty" Type="decimal" Precision="34" Scale="0" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FreeText" Type="nvarchar" MaxLength="1000" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityPosted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
     <Property Name="UomEntry" Type="int" />
-    <Property Name="UoMCode" Type="varchar" MaxLength="50" />
-    <Property Name="ROB" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="QtyVA" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="QtyApproved" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="IsApproved" Type="varchar" MaxLength="10" />
-    <Property Name="DeliveryDate" Type="timestamp" />
-    <Property Name="WhsQty" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="DocEntryPR" Type="bigint" />
-    <Property Name="DocNumPR" Type="varchar" MaxLength="200" />
-    <Property Name="QtyPR" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="DocEntryPO" Type="bigint" />
-    <Property Name="DocNumPO" Type="varchar" MaxLength="200" />
-    <Property Name="QtyPO" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="IsAfterPosted" Type="varchar" MaxLength="10" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Remark2" Type="varchar" MaxLength="250" />
-    <Property Name="QtySJ" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="ItemRemark" Type="varchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Tx_CleaningTank">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransNo" Type="varchar" MaxLength="100" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Periode" Type="timestamp" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tx_CleaningTank_Attachment">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="FileName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Guid" Type="nvarchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_CleaningTank_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Date" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tx_Delivery">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShippingType" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SuratJalanId" Type="bigint" />
-    <Property Name="SuratJalanNo" Type="nvarchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Delivery_Activity">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ActivityId" Type="int" />
-    <Property Name="ActivityName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ActivityDate" Type="timestamp" />
-    <Property Name="ActivityTime" Type="timestamp" />
-    <Property Name="Description" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tx_Docking">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="NoPR" Type="varchar" MaxLength="50" />
-    <Property Name="Dock" Type="varchar" MaxLength="50" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="EstBudget" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Status2" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_Docking_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Bagian" Type="varchar" MaxLength="100" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="Kerusakan" Type="varchar" MaxLength="200" />
-    <Property Name="Perbaikan" Type="varchar" MaxLength="200" />
-    <Property Name="Material" Type="varchar" MaxLength="200" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_FreshWaterControl">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_FreshWaterControl_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Date" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Voyage" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="ROB" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="QtyTerima" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Supplier" Type="varchar" MaxLength="200" />
-    <Property Name="QtyTotal" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="FuelPaket" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Customer" Type="varchar" MaxLength="200" />
-    <Property Name="Route" Type="varchar" MaxLength="200" />
-    <Property Name="Balance" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_FuelControl">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_FuelControl_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Date" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Voyage" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="ROB" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="QtyTerima" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="QtyTotal" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="FuelPaket" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Balance" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Customer" Type="varchar" MaxLength="100" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_GeneralDocRenewal">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="DocumentId" Type="int" />
-    <Property Name="DocumentName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Category" Type="nvarchar" MaxLength="50" />
-    <Property Name="Type" Type="int" />
-    <Property Name="OldExpiredDate" Type="timestamp" />
-    <Property Name="ExpiredDate" Type="timestamp" />
-    <Property Name="OldWarningDate" Type="timestamp" />
-    <Property Name="WarningDate" Type="timestamp" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tx_GeneralDocRenewal_Reference">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ContentId" Type="int" />
-    <Property Name="ContentDetId" Type="int" />
-    <Property Name="ContentOldValue" Type="nvarchar" MaxLength="250" />
-    <Property Name="ContentValue" Type="nvarchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-  </EntityType>
-  <EntityType Name="Tx_GoodIssue">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="BaseTransId" Type="bigint" />
-    <Property Name="BaseTransNo" Type="varchar" MaxLength="50" />
-    <Property Name="Series" Type="int" />
-    <Property Name="SeriesName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="Jenis" Type="varchar" MaxLength="50" />
-    <Property Name="Bagian" Type="varchar" MaxLength="50" />
-    <Property Name="Ref" Type="varchar" MaxLength="50" />
-    <Property Name="WarehouseCode" Type="varchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="SapDocEntry" Type="bigint" />
-    <Property Name="SapDocNum" Type="bigint" />
-    <Property Name="IsAfterPosted" Type="varchar" MaxLength="10" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Kategori" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_GoodIssue_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BaseDetID" Type="bigint" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="ItemCode" Type="varchar" MaxLength="50" />
-    <Property Name="ItemDescription" Type="varchar" MaxLength="200" />
-    <Property Name="Qty" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="UomEntry" Type="int" />
-    <Property Name="UoMCode" Type="varchar" MaxLength="50" />
-    <Property Name="ROB" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ManBtchNum" Type="nvarchar" MaxLength="10" />
-    <Property Name="Batch" Type="varchar" MaxLength="100" />
-    <Property Name="ItemRemark" Type="varchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Tx_GoodIssue_Detail_Batch">
+  <EntityType Name="Tx_AdjustmentOut_Item_Tag">
     <Key>
       <PropertyRef Name="DetDetId" />
     </Key>
@@ -1222,10 +952,52 @@
     <Property Name="DetId" Type="bigint" />
     <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="BatchNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="Quantity" Type="decimal" Precision="34" Scale="0" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="PostResultNote" Type="nvarchar" MaxLength="500" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tx_InventoryIn">
+  <EntityType Name="Tx_AjustmentIn_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_AjustmentOut_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_ChangeItem">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
@@ -1233,843 +1005,107 @@
     <Property Name="TransType" Type="nvarchar" MaxLength="50" />
     <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="varchar" MaxLength="100" />
+    <Property Name="OriginItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="OriginItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="ToItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToItemName" Type="nvarchar" MaxLength="200" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="VendorName" Type="nvarchar" MaxLength="200" />
-    <Property Name="VendorRef" Type="nvarchar" MaxLength="100" />
-    <Property Name="WarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="Series" Type="int" />
-    <Property Name="SeriesName" Type="varchar" MaxLength="50" />
-    <Property Name="SapGrpoId" Type="int" />
-    <Property Name="SapGrpoNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapPoId" Type="int" />
-    <Property Name="SapPoNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="IsApproved" Type="varchar" MaxLength="10" />
-    <Property Name="IsAfterPosted" Type="varchar" MaxLength="10" />
-    <Property Name="ManBtchNum" Type="nvarchar" MaxLength="10" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Bagian" Type="varchar" MaxLength="50" />
-    <Property Name="ReqType" Type="varchar" MaxLength="50" />
-    <Property Name="Discount" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="PotongaDp" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="BiayaPengiriman" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Kategori" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_InventoryIn_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ItemDescription" Type="nvarchar" MaxLength="200" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="UomEntry" Type="int" />
-    <Property Name="UoMCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="QtyReceipt" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="SapPoId" Type="int" />
-    <Property Name="SapPoNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapPoLineNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="nvarchar" MaxLength="50" />
-    <Property Name="MRId" Type="int" />
-    <Property Name="MRNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="Batch" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ManBtchNum" Type="nvarchar" MaxLength="10" />
-    <Property Name="QtyOpen" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="BatchName" Type="varchar" MaxLength="250" />
-    <Property Name="ItemRemark" Type="varchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Tx_InventoryIn_Detail_Batch">
-    <Key>
-      <PropertyRef Name="DetDetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" />
-    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="BaseLine" Type="int" />
-    <Property Name="BatchNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="Quantity" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="ExpDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_InventoryReceived">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="BaseTransId" Type="bigint" />
-    <Property Name="BaseTransNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="FromWarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="FromWarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ToWarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ToWarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="200" />
-    <Property Name="Remark2" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SapDocEntry" Type="int" />
-    <Property Name="SapDocNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="BaseSapDocEntry" Type="int" />
-    <Property Name="BaseSapDocNum" Type="nvarchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_InventoryReceived_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ItemDescription" Type="nvarchar" MaxLength="200" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="UomEntry" Type="int" />
-    <Property Name="UoMCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="Qty" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="QtyReceived" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SapDocEntry" Type="int" />
-    <Property Name="SapLineNum" Type="int" />
-    <Property Name="ManBtchNum" Type="nvarchar" MaxLength="10" />
-    <Property Name="BaseDetId" Type="bigint" />
-    <Property Name="Batch" Type="varchar" MaxLength="100" />
-    <Property Name="BatchName" Type="varchar" MaxLength="250" />
-    <Property Name="ItemRemark" Type="varchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Tx_InventoryReceived_Detail_Batch">
-    <Key>
-      <PropertyRef Name="DetDetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" />
-    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="BatchNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="Quantity" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="ExpDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_InventorySend">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="FromWarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="FromWarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ToWarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ToWarehouseName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="200" />
-    <Property Name="Remark2" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SapDocEntry" Type="int" />
-    <Property Name="SapDocNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="Received" Type="nvarchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="Tx_InventorySend_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ItemDescription" Type="nvarchar" MaxLength="200" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="UomEntry" Type="int" />
-    <Property Name="UoMCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="Qty" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SapDocEntry" Type="int" />
-    <Property Name="SapLineNum" Type="int" />
-    <Property Name="ManBtchNum" Type="nvarchar" MaxLength="10" />
-    <Property Name="QtyOpen" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Batch" Type="varchar" MaxLength="100" />
-    <Property Name="BatchName" Type="varchar" MaxLength="250" />
-    <Property Name="ItemRemark" Type="varchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Tx_InventorySend_Detail_Batch">
-    <Key>
-      <PropertyRef Name="DetDetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" />
-    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="BatchNum" Type="nvarchar" MaxLength="50" />
-    <Property Name="Quantity" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="ExpDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_Kecelakaan">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_Kecelakaan_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Date" Type="timestamp" />
-    <Property Name="Lokasi" Type="varchar" MaxLength="200" />
-    <Property Name="Jenis" Type="varchar" MaxLength="200" />
-    <Property Name="DoneDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_KerusakanKapal">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Stop" Type="varchar" MaxLength="50" />
-    <Property Name="ReqPerbaikan" Type="varchar" MaxLength="50" />
-    <Property Name="Lokasi" Type="varchar" MaxLength="200" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Status2" Type="varchar" MaxLength="50" />
-    <Property Name="Os" Type="varchar" MaxLength="200" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="EstPerbaikan" Type="decimal" Precision="34" Scale="0" />
-  </EntityType>
-  <EntityType Name="Tx_KerusakanKapal_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Bagian" Type="varchar" MaxLength="100" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="Penyebab" Type="varchar" MaxLength="250" />
-    <Property Name="Tindakan" Type="varchar" MaxLength="250" />
-    <Property Name="Part" Type="varchar" MaxLength="250" />
-    <Property Name="Qty" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="UoM" Type="varchar" MaxLength="200" />
-    <Property Name="EstPerbaikan" Type="varchar" MaxLength="200" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_LoadingOrder">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="WarehouseCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ShippingType" Type="nvarchar" MaxLength="50" />
-    <Property Name="Owner" Type="nvarchar" MaxLength="50" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="PreferedCapacity" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="UnitId" Type="int" />
-    <Property Name="UnitName" Type="nvarchar" MaxLength="200" />
-    <Property Name="UnitPoliceNo" Type="nvarchar" MaxLength="200" />
-    <Property Name="UnitCapacity" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="DriverId" Type="int" />
-    <Property Name="DriverName" Type="nvarchar" MaxLength="200" />
-    <Property Name="SegelQuantity" Type="int" />
-    <Property Name="IsUseTangkiJalan" Type="varchar" MaxLength="1" />
-    <Property Name="TangkiJalanCapacity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
-    <Property Name="IsAfterDelivered" Type="varchar" MaxLength="1" />
-    <Property Name="RealisasiTangkiJalan" Type="decimal" Precision="21" Scale="2" />
-    <Property Name="RealisasiTemp" Type="decimal" Precision="21" Scale="2" />
-    <Property Name="RealisasiSg" Type="decimal" Precision="21" Scale="2" />
-    <Property Name="RealisasiT2DpnBlkg" Type="decimal" Precision="21" Scale="2" />
-    <Property Name="RealisasiFSBinCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="RealisasiFSBinAbsEntry" Type="int" />
-    <Property Name="RealisasiTJBinCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="RealisasiTJBinAbsEntry" Type="int" />
-    <Property Name="IsReturnTJ" Type="varchar" MaxLength="1" />
-    <Property Name="DeliverDate" Type="timestamp" />
-    <Property Name="ReceiptDate" Type="timestamp" />
-    <Property Name="CancelReason" Type="nvarchar" MaxLength="1000" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="500" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SppOwner" Type="nvarchar" MaxLength="50" />
-    <Property Name="SppId" Type="bigint" />
-    <Property Name="SppNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SppType" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapDeliveryTJId" Type="bigint" />
-    <Property Name="SapDeliveryTJNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="IsSyncDlvryBiayaAngkut" Type="varchar" MaxLength="1" />
-    <Property Name="SyncDlvryBiayaAngkutOwner" Type="nvarchar" MaxLength="50" />
-    <Property Name="SyncDlvryBiayaAngkutId" Type="bigint" />
-    <Property Name="SyncDlvryBiayaAngkutNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SyncDlvryBiayaAngkutError" Type="nvarchar" MaxLength="250" />
-    <Property Name="IsNewRoute" Type="varchar" MaxLength="1" />
-    <Property Name="IsNewUnit" Type="varchar" MaxLength="1" />
-    <Property Name="OldSppRouteId" Type="bigint" />
-    <Property Name="OldSppRouteNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="OldSppUnitId" Type="bigint" />
-    <Property Name="OldSppUnitNo" Type="varchar" MaxLength="50" />
-    <Property Name="TugUnitId" Type="int" />
-    <Property Name="TugUnitNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="TugUnitName" Type="nvarchar" MaxLength="200" />
-    <Property Name="TinggiTerra" Type="nvarchar" MaxLength="200" />
-    <Property Name="RealisasiFSLocation" Type="nvarchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="Tx_LoadingOrder_SalesOrder">
+  <EntityType Name="Tx_ChangeItem_Tag">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
     <Property Name="Id" Type="bigint" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BaseOwner" Type="nvarchar" MaxLength="50" />
-    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
-    <Property Name="BaseId" Type="bigint" />
-    <Property Name="BaseSoNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="BaseSoDate" Type="timestamp" />
-    <Property Name="CustomerCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_DeactiveTag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="200" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="500" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_DeactiveTag_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_DeactiveTag_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" Nullable="false" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
     <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ItemName" Type="nvarchar" MaxLength="100" />
-    <Property Name="Quantity" Type="decimal" Precision="19" Scale="2" />
-    <Property Name="OpenQuantity" Type="decimal" Precision="19" Scale="2" />
-    <Property Name="Destination" Type="nvarchar" MaxLength="200" />
-    <Property Name="Capacity" Type="decimal" Precision="19" Scale="2" />
-    <Property Name="RemarksInternal" Type="nvarchar" MaxLength="250" />
-    <Property Name="Description" Type="nvarchar" MaxLength="250" />
-    <Property Name="SapDeliveryId" Type="bigint" />
-    <Property Name="SapDeliveryNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapGoodIssueId" Type="bigint" />
-    <Property Name="SapGoodIssueNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapGoodReceiptId" Type="bigint" />
-    <Property Name="SapGoodReceiptNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="QtyDeliver" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FreeText" Type="nvarchar" MaxLength="1000" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="200" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="SapInventoryTransferId" Type="bigint" />
-    <Property Name="SapInventoryTransferNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="SapInventoryTransferCancelId" Type="bigint" />
-    <Property Name="SapInventoryTransferCancelNo" Type="nvarchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="Tx_LoadingOrder_Segel">
+  <EntityType Name="Tx_DeactiveTag_Log">
     <Key>
-      <PropertyRef Name="DetId" />
+      <PropertyRef Name="LogId" />
     </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Description" Type="nvarchar" MaxLength="250" />
-    <Property Name="SegelId" Type="bigint" />
-    <Property Name="SegelDetId" Type="bigint" />
-    <Property Name="SegelNo" Type="varchar" MaxLength="50" />
+    <Property Name="LogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Message" Type="nvarchar" MaxLength="5000" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="IsChangeRoute" Type="varchar" MaxLength="1" />
   </EntityType>
-  <EntityType Name="Tx_MaterialRequest">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipSection" Type="varchar" MaxLength="50" />
-    <Property Name="WarehouseCode" Type="varchar" MaxLength="50" />
-    <Property Name="WarehouseName" Type="varchar" MaxLength="50" />
-    <Property Name="Attachment" Type="int" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="SapDocEntry" Type="bigint" />
-    <Property Name="SapDocNum" Type="bigint" />
-    <Property Name="ReqType" Type="varchar" MaxLength="50" />
-    <Property Name="IsAfterPosted" Type="varchar" MaxLength="10" />
-    <Property Name="Remark" Type="nvarchar" MaxLength="250" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="RefNum" Type="varchar" MaxLength="200" />
-    <Property Name="RefType" Type="varchar" MaxLength="200" />
-    <Property Name="Kategori" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_MaterialRequest_Attachment">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="FileName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Guid" Type="nvarchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_MaterialRequest_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="ItemCode" Type="varchar" MaxLength="50" />
-    <Property Name="ItemDescription" Type="varchar" MaxLength="200" />
-    <Property Name="Qty" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="UoMCode" Type="varchar" MaxLength="50" />
-    <Property Name="ROB" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="SapDocEntry" Type="bigint" />
-    <Property Name="SapDocNum" Type="bigint" />
-    <Property Name="UomEntry" Type="int" />
-    <Property Name="ItemRemark" Type="varchar" MaxLength="250" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="MEKiri" Type="varchar" MaxLength="200" />
-    <Property Name="MEKanan" Type="varchar" MaxLength="200" />
-    <Property Name="AEKiri" Type="varchar" MaxLength="200" />
-    <Property Name="AEKanan" Type="varchar" MaxLength="200" />
-    <Property Name="PICOVH" Type="varchar" MaxLength="200" />
-    <Property Name="EstTime" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="EstBudget" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul_AEKanan">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="PartNumber" Type="varchar" MaxLength="200" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Unit" Type="varchar" MaxLength="200" />
-    <Property Name="Cyl1" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl2" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl3" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl4" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl5" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl6" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl7" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl8" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl9" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl10" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl11" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl12" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl13" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl14" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl15" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl16" Type="varchar" MaxLength="50" />
-    <Property Name="TotalRepair" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="TotalReplace" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CleanNRepair" Type="varchar" MaxLength="200" />
-    <Property Name="QtySisa" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul_AEKiri">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="PartNumber" Type="varchar" MaxLength="200" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Unit" Type="varchar" MaxLength="200" />
-    <Property Name="Cyl1" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl2" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl3" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl4" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl5" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl6" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl7" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl8" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl9" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl10" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl11" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl12" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl13" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl14" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl15" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl16" Type="varchar" MaxLength="50" />
-    <Property Name="TotalRepair" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="TotalReplace" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CleanNRepair" Type="varchar" MaxLength="200" />
-    <Property Name="QtySisa" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul_GBKanan">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="PartNumber" Type="varchar" MaxLength="200" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Unit" Type="varchar" MaxLength="200" />
-    <Property Name="Cyl1" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl2" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl3" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl4" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl5" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl6" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl7" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl8" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl9" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl10" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl11" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl12" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl13" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl14" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl15" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl16" Type="varchar" MaxLength="50" />
-    <Property Name="TotalRepair" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="TotalReplace" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CleanNRepair" Type="varchar" MaxLength="200" />
-    <Property Name="QtySisa" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul_GBKiri">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="PartNumber" Type="varchar" MaxLength="200" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Unit" Type="varchar" MaxLength="200" />
-    <Property Name="Cyl1" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl2" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl3" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl4" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl5" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl6" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl7" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl8" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl9" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl10" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl11" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl12" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl13" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl14" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl15" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl16" Type="varchar" MaxLength="50" />
-    <Property Name="TotalRepair" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="TotalReplace" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CleanNRepair" Type="varchar" MaxLength="200" />
-    <Property Name="QtySisa" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul_MEKanan">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="PartNumber" Type="varchar" MaxLength="200" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Unit" Type="varchar" MaxLength="200" />
-    <Property Name="Cyl1" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl2" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl3" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl4" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl5" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl6" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl7" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl8" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl9" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl10" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl11" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl12" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl13" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl14" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl15" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl16" Type="varchar" MaxLength="50" />
-    <Property Name="TotalRepair" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="TotalReplace" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CleanNRepair" Type="varchar" MaxLength="200" />
-    <Property Name="QtySisa" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Overhaul_MEKiri">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="PartNumber" Type="varchar" MaxLength="200" />
-    <Property Name="QtyOrder" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Unit" Type="varchar" MaxLength="200" />
-    <Property Name="Cyl1" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl2" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl3" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl4" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl5" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl6" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl7" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl8" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl9" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl10" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl11" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl12" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl13" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl14" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl15" Type="varchar" MaxLength="50" />
-    <Property Name="Cyl16" Type="varchar" MaxLength="50" />
-    <Property Name="TotalRepair" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="TotalReplace" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CleanNRepair" Type="varchar" MaxLength="200" />
-    <Property Name="QtySisa" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="Tx_Perawatan">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_Perawatan_Attachment">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="FileName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Guid" Type="nvarchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_Perawatan_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="Uraian" Type="varchar" MaxLength="200" />
-    <Property Name="Material" Type="varchar" MaxLength="200" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_PerawatanEngine">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
-    <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_PerawatanEngine_Attachment">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="FileName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Guid" Type="nvarchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_PerawatanEngine_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Bagian" Type="varchar" MaxLength="200" />
-    <Property Name="Item" Type="varchar" MaxLength="200" />
-    <Property Name="SubItem" Type="varchar" MaxLength="200" />
-    <Property Name="Uraian" Type="varchar" MaxLength="200" />
-    <Property Name="Material" Type="varchar" MaxLength="200" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="StartDate" Type="timestamp" />
-    <Property Name="EndDate" Type="timestamp" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-  </EntityType>
-  <EntityType Name="Tx_Receipt">
+  <EntityType Name="Tx_GoodsReceiptPO">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
@@ -2077,222 +1113,903 @@
     <Property Name="TransType" Type="nvarchar" MaxLength="50" />
     <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
-    <Property Name="UnitId" Type="int" />
-    <Property Name="UnitName" Type="nvarchar" MaxLength="200" />
-    <Property Name="UnitCapacity" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="DriverId" Type="int" />
-    <Property Name="DriverName" Type="nvarchar" MaxLength="200" />
-    <Property Name="QtyDelivery" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="ReceiptDate" Type="timestamp" />
-    <Property Name="LoadingDate" Type="timestamp" />
-    <Property Name="FinishDate" Type="timestamp" />
-    <Property Name="T2DepanBelakang" Type="nvarchar" MaxLength="200" />
-    <Property Name="Temperature" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="QtyReceipt" Type="decimal" Precision="21" Scale="6" />
-    <Property Name="ReceiptTime" Type="timestamp" />
-    <Property Name="LoadingTime" Type="timestamp" />
-    <Property Name="FinishTime" Type="timestamp" />
-    <Property Name="SuratJalanId" Type="bigint" />
-    <Property Name="SuratJalanNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseDocNum" Type="nvarchar" MaxLength="100" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ShippingType" Type="nvarchar" MaxLength="50" />
-    <Property Name="FlowMeterStart" Type="decimal" Precision="21" Scale="2" />
-    <Property Name="FlowMeterEnd" Type="decimal" Precision="21" Scale="2" />
-    <Property Name="UnitPoliceNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="250" />
   </EntityType>
-  <EntityType Name="Tx_RunningHours">
+  <EntityType Name="Tx_GoodsReceiptPO_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="QuantityOnHandSAP" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityValid" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="UnitPriceTc" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseLine" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="IdPDO" Type="int" />
+    <Property Name="GoodsReceiptDocEntry" Type="int" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="bigint" />
+    <Property Name="BaseDetDetId" Type="bigint" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Ref">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseId" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseCreatedDate" Type="timestamp" />
+    <Property Name="BaseCreatedUser" Type="int" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_PurchaseOrder">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
-    <Property Name="TransNo" Type="varchar" MaxLength="50" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
-    <Property Name="PIC" Type="varchar" MaxLength="200" />
-    <Property Name="Status" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tx_RunningHours_Daily">
+  <EntityType Name="Tx_PurchaseOrder_Item">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
     <Property Name="Id" Type="bigint" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Date" Type="timestamp" />
-    <Property Name="MEPS" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="MESB" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="AE1" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="AE2" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="GBME" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="GBAE" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseLine" Type="int" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UnitPriceTc" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="IdPDO" Type="int" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_RunningHours_RunPump">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Name" Type="varchar" MaxLength="200" />
-    <Property Name="Hours" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="200" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
   </EntityType>
-  <EntityType Name="Tx_RunningHours_Total">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="bigint" />
-    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RowNum" Type="int" />
-    <Property Name="Engine" Type="varchar" MaxLength="200" />
-    <Property Name="RunningHours" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="LubOil" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="LoFilter" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="LoRacor" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="FoFilter" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="CreatedDate" Type="timestamp" />
-    <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
-  </EntityType>
-  <EntityType Name="Tx_ShipInventory">
+  <EntityType Name="Tx_Request_StockOpname">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TransNo" Type="varchar" MaxLength="100" />
-    <Property Name="TransType" Type="varchar" MaxLength="50" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="nvarchar" MaxLength="100" />
+    <Property Name="StartDate" Type="timestamp" />
+    <Property Name="EndDate" Type="timestamp" />
+    <Property Name="Description" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_StockOpname">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
-    <Property Name="ShipId" Type="int" />
-    <Property Name="ShipName" Type="varchar" MaxLength="50" />
-    <Property Name="ShipSection" Type="varchar" MaxLength="50" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
+    <Property Name="RequestId" Type="bigint" />
+    <Property Name="RequestNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="500" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="ShipCode" Type="varchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="Tx_ShipInventory_Detail">
+  <EntityType Name="Tx_StockOpname_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_StockOpname_Item">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
     <Property Name="Id" Type="bigint" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ItemCode" Type="varchar" MaxLength="250" />
-    <Property Name="ItemDescription" Type="varchar" MaxLength="250" />
-    <Property Name="Type" Type="varchar" MaxLength="250" />
-    <Property Name="UoMCode" Type="varchar" MaxLength="250" />
-    <Property Name="QtyUsed" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Stock" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Condition" Type="varchar" MaxLength="50" />
-    <Property Name="LastReceivedDate" Type="timestamp" />
-    <Property Name="QtyReceived" Type="decimal" Precision="34" Scale="0" />
-    <Property Name="Remark" Type="varchar" MaxLength="250" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <EntityType Name="Tx_TukarFakturReceipt">
+  <EntityType Name="Tx_StockOpname_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="PostResultNote" Type="nvarchar" MaxLength="500" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_StockSummaryOpname">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="NoTglTerima" Type="nvarchar" MaxLength="50" />
-    <Property Name="TglTerima" Type="timestamp" />
-    <Property Name="NoTtd" Type="nvarchar" MaxLength="250" />
-    <Property Name="NamaPenerima" Type="nvarchar" MaxLength="250" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocEntry" Type="int" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="RequestId" Type="bigint" />
+    <Property Name="RequestNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsName" Type="varchar" MaxLength="100" />
+    <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="Resi" Type="nvarchar" MaxLength="100" />
-    <Property Name="Keterangan" Type="nvarchar" MaxLength="100" />
-    <Property Name="MetodeKirim" Type="nvarchar" MaxLength="100" />
-    <Property Name="Pengiriman" Type="nvarchar" MaxLength="100" />
   </EntityType>
-  <EntityType Name="Tx_TukarFakturSend">
+  <EntityType Name="Tx_StockSummaryOpname_Approval">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="DetId" />
     </Key>
-    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="NoDokumen" Type="nvarchar" MaxLength="50" />
-    <Property Name="TglDokumen" Type="timestamp" />
-    <Property Name="MetodeKirim" Type="nvarchar" MaxLength="200" />
-    <Property Name="Pengiriman" Type="nvarchar" MaxLength="200" />
-    <Property Name="NamaCustomer" Type="nvarchar" MaxLength="200" />
-    <Property Name="AlamatKirim" Type="nvarchar" MaxLength="200" />
-    <Property Name="NoInvoice" Type="nvarchar" MaxLength="200" />
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
-    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
     <Property Name="CreatedUser" Type="int" />
-    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="seconddate" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="CodeCustomer" Type="nvarchar" MaxLength="100" />
   </EntityType>
-  <EntityType Name="Tx_TukarFakturSend_Detail">
+  <EntityType Name="Tx_StockSummaryOpname_Item">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
     <Property Name="Id" Type="bigint" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="NoArInvoice" Type="nvarchar" MaxLength="50" />
-    <Property Name="TanggalInvoice" Type="timestamp" />
-    <Property Name="TotalInvoice" Type="decimal" Precision="34" Scale="0" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="QuantityOnHandSAP" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityValid" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QtyVariance" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UnitPriceTc" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="AcctCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="AcctName" Type="nvarchar" MaxLength="100" />
+    <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
+    <Property Name="FreeText" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="NoInvoiceRevisi" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Tx_StockSummaryOpname_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="bigint" />
+    <Property Name="BaseDetDetId" Type="bigint" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_StockSummaryOpname_Ref">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseId" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseCreatedDate" Type="timestamp" />
+    <Property Name="BaseCreatedUser" Type="int" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferIn">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseDocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="JournalRemarks" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="ModifiedUser" Type="int" />
+    <Property Name="PriceList" Type="nvarchar" MaxLength="100" />
+    <Property Name="PriceListName" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+  </EntityType>
+  <EntityType Name="Tx_TransferIn_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseLine" Type="int" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferIn_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="bigint" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseDocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="PriceList" Type="int" />
+    <Property Name="PriceListName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="JournalRemarks" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferOut_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseLine" Type="int" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferOut_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="bigint" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="PriceList" Type="int" />
+    <Property Name="PriceListName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="JournalRemarks" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessage" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="Tx_TransferRequest_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferRequest_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="FreeText" Type="nvarchar" MaxLength="200" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryIn">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseTransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="TransitWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransitWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="PriceList" Type="int" />
+    <Property Name="PriceListName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="JournalRemarks" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessage" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryIn_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryIn_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="int" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityValid" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityPosted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="TransitWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransitWhsName" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryIn_Item_tag">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="bigint" />
+    <Property Name="BaseDetDetId" Type="bigint" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryIn_Ref">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseId" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseCreatedDate" Type="timestamp" />
+    <Property Name="BaseCreatedUser" Type="int" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryOut">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="RequestId" Type="bigint" />
+    <Property Name="RequestNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="varchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="254" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="TransitWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransitWhsName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="PriceList" Type="int" />
+    <Property Name="PriceListName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="JournalRemarks" Type="nvarchar" MaxLength="254" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryOut_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryOut_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RequestId" Type="bigint" />
+    <Property Name="RequestDetId" Type="bigint" />
+    <Property Name="BaseType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="FromWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="TransitWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransitWhsName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ToWhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToWhsName" Type="varchar" MaxLength="100" />
+    <Property Name="QuantityRequest" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityValid" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityPosted" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="QuantityToReceipt" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryOut_Item_Tag">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="TagId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
+    <Property Name="EventType" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseId" Type="bigint" />
+    <Property Name="BaseDetId" Type="bigint" />
+    <Property Name="BaseDetDetId" Type="bigint" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_TransferSummaryOut_Ref">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BaseId" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseCreatedDate" Type="timestamp" />
+    <Property Name="BaseCreatedUser" Type="int" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
   </EntityType>
   <EntityContainer Name="Model1StoreContainer">
     <EntitySet Name="Tm_Alert" EntityType="Self.Tm_Alert" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Alert_Role" EntityType="Self.Tm_Alert_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Alert_User" EntityType="Self.Tm_Alert_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_AlertGroup" EntityType="Self.Tm_AlertGroup" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_DocContent" EntityType="Self.Tm_DocContent" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_DocContent_Ref" EntityType="Self.Tm_DocContent_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_DocGeneral" EntityType="Self.Tm_DocGeneral" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_DocGeneral_Attachment" EntityType="Self.Tm_DocGeneral_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_DocGeneral_Reference" EntityType="Self.Tm_DocGeneral_Reference" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Approval" EntityType="Self.Tm_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Approval_Role" EntityType="Self.Tm_Approval_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Approval_User" EntityType="Self.Tm_Approval_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalStage" EntityType="Self.Tm_ApprovalStage" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalStage_Role" EntityType="Self.Tm_ApprovalStage_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalStage_User" EntityType="Self.Tm_ApprovalStage_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalTemplate" EntityType="Self.Tm_ApprovalTemplate" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalTemplate_Position" EntityType="Self.Tm_ApprovalTemplate_Position" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalTemplate_Role" EntityType="Self.Tm_ApprovalTemplate_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalTemplate_Stage" EntityType="Self.Tm_ApprovalTemplate_Stage" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_ApprovalTemplate_User" EntityType="Self.Tm_ApprovalTemplate_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_GeneralSetting" EntityType="Self.Tm_GeneralSetting" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_GeneralSetting_Coa" EntityType="Self.Tm_GeneralSetting_Coa" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_GeneralSetting_Item" EntityType="Self.Tm_GeneralSetting_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Item" EntityType="Self.Tm_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Item_Warehouse" EntityType="Self.Tm_Item_Warehouse" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Item_Warehouse_Tag" EntityType="Self.Tm_Item_Warehouse_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Item_Warehouse_Tag_Log" EntityType="Self.Tm_Item_Warehouse_Tag_Log" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Item_Warehouse_Tag_Replace" EntityType="Self.Tm_Item_Warehouse_Tag_Replace" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Layout" EntityType="Self.Tm_Layout" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Layout_Role" EntityType="Self.Tm_Layout_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Layout_User" EntityType="Self.Tm_Layout_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_MasterSetting" EntityType="Self.Tm_MasterSetting" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_MasterSetting_Bagian" EntityType="Self.Tm_MasterSetting_Bagian" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_MasterSetting_Item" EntityType="Self.Tm_MasterSetting_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_MasterSetting_SubItem" EntityType="Self.Tm_MasterSetting_SubItem" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_MasterSettingEngine_Bagian" EntityType="Self.Tm_MasterSettingEngine_Bagian" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_MasterSettingEngine_Item" EntityType="Self.Tm_MasterSettingEngine_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_MasterSettingEngine_SubItem" EntityType="Self.Tm_MasterSettingEngine_SubItem" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Query" EntityType="Self.Tm_Query" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Query_Param" EntityType="Self.Tm_Query_Param" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Query_Role" EntityType="Self.Tm_Query_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -2309,84 +2026,80 @@
     <EntitySet Name="Tm_ReportGroup_User" EntityType="Self.Tm_ReportGroup_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Role" EntityType="Self.Tm_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Role_Auth" EntityType="Self.Tm_Role_Auth" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship" EntityType="Self.Tm_Ship" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_Acco" EntityType="Self.Tm_Ship_Acco" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_Anchor" EntityType="Self.Tm_Ship_Anchor" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_Attachment" EntityType="Self.Tm_Ship_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_Engine" EntityType="Self.Tm_Ship_Engine" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_NavEq" EntityType="Self.Tm_Ship_NavEq" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_Operation" EntityType="Self.Tm_Ship_Operation" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tm_Ship_SafeEq" EntityType="Self.Tm_Ship_SafeEq" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_User" EntityType="Self.Tm_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tp_Approval" EntityType="Self.Tp_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Ts_FormatNumbering" EntityType="Self.Ts_FormatNumbering" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Ts_LayoutForm" EntityType="Self.Ts_LayoutForm" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Ts_List" EntityType="Self.Ts_List" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Ts_Menu" EntityType="Self.Ts_Menu" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Ts_ObjectApproval" EntityType="Self.Ts_ObjectApproval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_AdjustmentIn" EntityType="Self.Tx_AdjustmentIn" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AdjustmentIn_Approval" EntityType="Self.Tx_AdjustmentIn_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_AdjustmentIn_Attachment" EntityType="Self.Tx_AdjustmentIn_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_AdjustmentIn_Location" EntityType="Self.Tx_AdjustmentIn_Location" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AdjustmentIn_Item" EntityType="Self.Tx_AdjustmentIn_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AdjustmentIn_Item_Tag" EntityType="Self.Tx_AdjustmentIn_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_AdjustmentOut" EntityType="Self.Tx_AdjustmentOut" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AdjustmentOut_Approval" EntityType="Self.Tx_AdjustmentOut_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_AdjustmentOut_Attachment" EntityType="Self.Tx_AdjustmentOut_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_AdjustmentOut_Location" EntityType="Self.Tx_AdjustmentOut_Location" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_ApprovalMR" EntityType="Self.Tx_ApprovalMR" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_ApprovalMR_Detail" EntityType="Self.Tx_ApprovalMR_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_CleaningTank" EntityType="Self.Tx_CleaningTank" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_CleaningTank_Attachment" EntityType="Self.Tx_CleaningTank_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_CleaningTank_Detail" EntityType="Self.Tx_CleaningTank_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Delivery" EntityType="Self.Tx_Delivery" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Delivery_Activity" EntityType="Self.Tx_Delivery_Activity" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Docking" EntityType="Self.Tx_Docking" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Docking_Detail" EntityType="Self.Tx_Docking_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_FreshWaterControl" EntityType="Self.Tx_FreshWaterControl" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_FreshWaterControl_Detail" EntityType="Self.Tx_FreshWaterControl_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_FuelControl" EntityType="Self.Tx_FuelControl" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_FuelControl_Detail" EntityType="Self.Tx_FuelControl_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_GeneralDocRenewal" EntityType="Self.Tx_GeneralDocRenewal" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_GeneralDocRenewal_Reference" EntityType="Self.Tx_GeneralDocRenewal_Reference" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_GoodIssue" EntityType="Self.Tx_GoodIssue" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_GoodIssue_Detail" EntityType="Self.Tx_GoodIssue_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_GoodIssue_Detail_Batch" EntityType="Self.Tx_GoodIssue_Detail_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventoryIn" EntityType="Self.Tx_InventoryIn" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventoryIn_Detail" EntityType="Self.Tx_InventoryIn_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventoryIn_Detail_Batch" EntityType="Self.Tx_InventoryIn_Detail_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventoryReceived" EntityType="Self.Tx_InventoryReceived" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventoryReceived_Detail" EntityType="Self.Tx_InventoryReceived_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventoryReceived_Detail_Batch" EntityType="Self.Tx_InventoryReceived_Detail_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventorySend" EntityType="Self.Tx_InventorySend" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventorySend_Detail" EntityType="Self.Tx_InventorySend_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_InventorySend_Detail_Batch" EntityType="Self.Tx_InventorySend_Detail_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Kecelakaan" EntityType="Self.Tx_Kecelakaan" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Kecelakaan_Detail" EntityType="Self.Tx_Kecelakaan_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_KerusakanKapal" EntityType="Self.Tx_KerusakanKapal" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_KerusakanKapal_Detail" EntityType="Self.Tx_KerusakanKapal_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_LoadingOrder" EntityType="Self.Tx_LoadingOrder" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_LoadingOrder_SalesOrder" EntityType="Self.Tx_LoadingOrder_SalesOrder" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_LoadingOrder_Segel" EntityType="Self.Tx_LoadingOrder_Segel" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_MaterialRequest" EntityType="Self.Tx_MaterialRequest" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_MaterialRequest_Attachment" EntityType="Self.Tx_MaterialRequest_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_MaterialRequest_Detail" EntityType="Self.Tx_MaterialRequest_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul" EntityType="Self.Tx_Overhaul" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul_AEKanan" EntityType="Self.Tx_Overhaul_AEKanan" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul_AEKiri" EntityType="Self.Tx_Overhaul_AEKiri" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul_GBKanan" EntityType="Self.Tx_Overhaul_GBKanan" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul_GBKiri" EntityType="Self.Tx_Overhaul_GBKiri" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul_MEKanan" EntityType="Self.Tx_Overhaul_MEKanan" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Overhaul_MEKiri" EntityType="Self.Tx_Overhaul_MEKiri" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Perawatan" EntityType="Self.Tx_Perawatan" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Perawatan_Attachment" EntityType="Self.Tx_Perawatan_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Perawatan_Detail" EntityType="Self.Tx_Perawatan_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_PerawatanEngine" EntityType="Self.Tx_PerawatanEngine" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_PerawatanEngine_Attachment" EntityType="Self.Tx_PerawatanEngine_Attachment" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_PerawatanEngine_Detail" EntityType="Self.Tx_PerawatanEngine_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_Receipt" EntityType="Self.Tx_Receipt" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_RunningHours" EntityType="Self.Tx_RunningHours" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_RunningHours_Daily" EntityType="Self.Tx_RunningHours_Daily" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_RunningHours_RunPump" EntityType="Self.Tx_RunningHours_RunPump" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_RunningHours_Total" EntityType="Self.Tx_RunningHours_Total" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_ShipInventory" EntityType="Self.Tx_ShipInventory" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_ShipInventory_Detail" EntityType="Self.Tx_ShipInventory_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_TukarFakturReceipt" EntityType="Self.Tx_TukarFakturReceipt" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_TukarFakturSend" EntityType="Self.Tx_TukarFakturSend" Schema="ESKA_APP_TEST" store:Type="Tables" />
-    <EntitySet Name="Tx_TukarFakturSend_Detail" EntityType="Self.Tx_TukarFakturSend_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AdjustmentOut_Item" EntityType="Self.Tx_AdjustmentOut_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AdjustmentOut_Item_Tag" EntityType="Self.Tx_AdjustmentOut_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AjustmentIn_Approval" EntityType="Self.Tx_AjustmentIn_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_AjustmentOut_Approval" EntityType="Self.Tx_AjustmentOut_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_ChangeItem" EntityType="Self.Tx_ChangeItem" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_ChangeItem_Tag" EntityType="Self.Tx_ChangeItem_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_DeactiveTag" EntityType="Self.Tx_DeactiveTag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_DeactiveTag_Approval" EntityType="Self.Tx_DeactiveTag_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_DeactiveTag_Item" EntityType="Self.Tx_DeactiveTag_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_DeactiveTag_Log" EntityType="Self.Tx_DeactiveTag_Log" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO" EntityType="Self.Tx_GoodsReceiptPO" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Approval" EntityType="Self.Tx_GoodsReceiptPO_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Self.Tx_GoodsReceiptPO_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item_Tag" EntityType="Self.Tx_GoodsReceiptPO_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Ref" EntityType="Self.Tx_GoodsReceiptPO_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_PurchaseOrder" EntityType="Self.Tx_PurchaseOrder" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_PurchaseOrder_Item" EntityType="Self.Tx_PurchaseOrder_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_Request_StockOpname" EntityType="Self.Tx_Request_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockOpname_Item_Tag" EntityType="Self.Tx_StockOpname_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockSummaryOpname" EntityType="Self.Tx_StockSummaryOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockSummaryOpname_Approval" EntityType="Self.Tx_StockSummaryOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockSummaryOpname_Item" EntityType="Self.Tx_StockSummaryOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockSummaryOpname_Item_Tag" EntityType="Self.Tx_StockSummaryOpname_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_StockSummaryOpname_Ref" EntityType="Self.Tx_StockSummaryOpname_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferIn" EntityType="Self.Tx_TransferIn" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferIn_Item" EntityType="Self.Tx_TransferIn_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferIn_Item_Tag" EntityType="Self.Tx_TransferIn_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferOut" EntityType="Self.Tx_TransferOut" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferOut_Item" EntityType="Self.Tx_TransferOut_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferOut_Item_Tag" EntityType="Self.Tx_TransferOut_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferRequest" EntityType="Self.Tx_TransferRequest" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferRequest_Approval" EntityType="Self.Tx_TransferRequest_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferRequest_Item" EntityType="Self.Tx_TransferRequest_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryIn" EntityType="Self.Tx_TransferSummaryIn" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryIn_Approval" EntityType="Self.Tx_TransferSummaryIn_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryIn_Item" EntityType="Self.Tx_TransferSummaryIn_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryIn_Item_tag" EntityType="Self.Tx_TransferSummaryIn_Item_tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryIn_Ref" EntityType="Self.Tx_TransferSummaryIn_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryOut" EntityType="Self.Tx_TransferSummaryOut" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryOut_Approval" EntityType="Self.Tx_TransferSummaryOut_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryOut_Item" EntityType="Self.Tx_TransferSummaryOut_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryOut_Item_Tag" EntityType="Self.Tx_TransferSummaryOut_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_TransferSummaryOut_Ref" EntityType="Self.Tx_TransferSummaryOut_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tp_UserAlert" EntityType="Self.Tp_UserAlert" store:Type="Tables" store:Schema="ESKA_APP_TEST">
+      <DefiningQuery>SELECT 
+"Tp_UserAlert"."Id" AS "Id", 
+"Tp_UserAlert"."UserId" AS "UserId", 
+"Tp_UserAlert"."BaseType" AS "BaseType", 
+"Tp_UserAlert"."BaseId" AS "BaseId", 
+"Tp_UserAlert"."BaseTransNo" AS "BaseTransNo", 
+"Tp_UserAlert"."Action" AS "Action", 
+"Tp_UserAlert"."NotificationMessage" AS "NotificationMessage", 
+"Tp_UserAlert"."SenderId" AS "SenderId", 
+"Tp_UserAlert"."IsRead" AS "IsRead", 
+"Tp_UserAlert"."LastShowTime" AS "LastShowTime"
+FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
+    </EntitySet>
   </EntityContainer>
 </Schema>

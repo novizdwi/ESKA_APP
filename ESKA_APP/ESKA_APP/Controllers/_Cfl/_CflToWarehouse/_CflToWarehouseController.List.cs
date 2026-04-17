@@ -27,18 +27,7 @@ namespace Controllers._Cfl
             cflParam.Name = Request["hidden_CflName"];
             cflParam.Header = Request["hidden_CflHeader"];
             cflParam.SqlWhere = Request["hidden_CflSqlWhere"];
-
-            if (cflParam.Type == "ChangeItem")
-            {
-                var hidden_CflDocId = (string)Request["hidden_CflDocId"];
-                hidden_CflDocId = hidden_CflDocId.Replace("'", "''");
-                if(userId != 1)
-                {
-                    cflParam.SqlWhere = string.Format(" AND " +
-                        " T0.\"WhsCode\" IN (SELECT T0_.\"WhsCode\" FROM \"Tm_User_Warehouse\" T0_ WHERE COALESCE(T0_.\"IsTick\",'N') = 'Y' AND T0_.\"Id\"={0} ) " +
-                        " ", userId);
-                }
-            }
+            
 
             cflParam.IsMulti = Request["hidden_CflIsMulti"];
 
