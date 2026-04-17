@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BBS_DI.Models._EF
+namespace ESKA_DI.Models._EF
 {
     using System;
     using System.Data.Entity;
@@ -29,24 +29,29 @@ namespace BBS_DI.Models._EF
         public virtual DbSet<Tm_Alert_Role> Tm_Alert_Role { get; set; }
         public virtual DbSet<Tm_Alert_User> Tm_Alert_User { get; set; }
         public virtual DbSet<Tm_AlertGroup> Tm_AlertGroup { get; set; }
-        public virtual DbSet<Tm_DocContent> Tm_DocContent { get; set; }
-        public virtual DbSet<Tm_DocContent_Ref> Tm_DocContent_Ref { get; set; }
-        public virtual DbSet<Tm_DocGeneral> Tm_DocGeneral { get; set; }
-        public virtual DbSet<Tm_DocGeneral_Attachment> Tm_DocGeneral_Attachment { get; set; }
-        public virtual DbSet<Tm_DocGeneral_Reference> Tm_DocGeneral_Reference { get; set; }
+        public virtual DbSet<Tm_Approval> Tm_Approval { get; set; }
+        public virtual DbSet<Tm_Approval_Role> Tm_Approval_Role { get; set; }
+        public virtual DbSet<Tm_Approval_User> Tm_Approval_User { get; set; }
+        public virtual DbSet<Tm_ApprovalStage> Tm_ApprovalStage { get; set; }
+        public virtual DbSet<Tm_ApprovalStage_Role> Tm_ApprovalStage_Role { get; set; }
+        public virtual DbSet<Tm_ApprovalStage_User> Tm_ApprovalStage_User { get; set; }
+        public virtual DbSet<Tm_ApprovalTemplate> Tm_ApprovalTemplate { get; set; }
+        public virtual DbSet<Tm_ApprovalTemplate_Position> Tm_ApprovalTemplate_Position { get; set; }
+        public virtual DbSet<Tm_ApprovalTemplate_Role> Tm_ApprovalTemplate_Role { get; set; }
+        public virtual DbSet<Tm_ApprovalTemplate_Stage> Tm_ApprovalTemplate_Stage { get; set; }
+        public virtual DbSet<Tm_ApprovalTemplate_User> Tm_ApprovalTemplate_User { get; set; }
         public virtual DbSet<Tm_GeneralSetting> Tm_GeneralSetting { get; set; }
         public virtual DbSet<Tm_GeneralSetting_Coa> Tm_GeneralSetting_Coa { get; set; }
         public virtual DbSet<Tm_GeneralSetting_Item> Tm_GeneralSetting_Item { get; set; }
+        public virtual DbSet<Tm_Item> Tm_Item { get; set; }
+        public virtual DbSet<Tm_Item_Warehouse> Tm_Item_Warehouse { get; set; }
+        public virtual DbSet<Tm_Item_Warehouse_Tag> Tm_Item_Warehouse_Tag { get; set; }
+        public virtual DbSet<Tm_Item_Warehouse_Tag_Log> Tm_Item_Warehouse_Tag_Log { get; set; }
+        public virtual DbSet<Tm_Item_Warehouse_Tag_Replace> Tm_Item_Warehouse_Tag_Replace { get; set; }
         public virtual DbSet<Tm_Layout> Tm_Layout { get; set; }
         public virtual DbSet<Tm_Layout_Role> Tm_Layout_Role { get; set; }
         public virtual DbSet<Tm_Layout_User> Tm_Layout_User { get; set; }
         public virtual DbSet<Tm_MasterSetting> Tm_MasterSetting { get; set; }
-        public virtual DbSet<Tm_MasterSetting_Bagian> Tm_MasterSetting_Bagian { get; set; }
-        public virtual DbSet<Tm_MasterSetting_Item> Tm_MasterSetting_Item { get; set; }
-        public virtual DbSet<Tm_MasterSetting_SubItem> Tm_MasterSetting_SubItem { get; set; }
-        public virtual DbSet<Tm_MasterSettingEngine_Bagian> Tm_MasterSettingEngine_Bagian { get; set; }
-        public virtual DbSet<Tm_MasterSettingEngine_Item> Tm_MasterSettingEngine_Item { get; set; }
-        public virtual DbSet<Tm_MasterSettingEngine_SubItem> Tm_MasterSettingEngine_SubItem { get; set; }
         public virtual DbSet<Tm_Query> Tm_Query { get; set; }
         public virtual DbSet<Tm_Query_Param> Tm_Query_Param { get; set; }
         public virtual DbSet<Tm_Query_Role> Tm_Query_Role { get; set; }
@@ -63,84 +68,66 @@ namespace BBS_DI.Models._EF
         public virtual DbSet<Tm_ReportGroup_User> Tm_ReportGroup_User { get; set; }
         public virtual DbSet<Tm_Role> Tm_Role { get; set; }
         public virtual DbSet<Tm_Role_Auth> Tm_Role_Auth { get; set; }
-        public virtual DbSet<Tm_Ship> Tm_Ship { get; set; }
-        public virtual DbSet<Tm_Ship_Acco> Tm_Ship_Acco { get; set; }
-        public virtual DbSet<Tm_Ship_Anchor> Tm_Ship_Anchor { get; set; }
-        public virtual DbSet<Tm_Ship_Attachment> Tm_Ship_Attachment { get; set; }
-        public virtual DbSet<Tm_Ship_Engine> Tm_Ship_Engine { get; set; }
-        public virtual DbSet<Tm_Ship_NavEq> Tm_Ship_NavEq { get; set; }
-        public virtual DbSet<Tm_Ship_Operation> Tm_Ship_Operation { get; set; }
-        public virtual DbSet<Tm_Ship_SafeEq> Tm_Ship_SafeEq { get; set; }
         public virtual DbSet<Tm_User> Tm_User { get; set; }
+        public virtual DbSet<Tp_Approval> Tp_Approval { get; set; }
         public virtual DbSet<Ts_FormatNumbering> Ts_FormatNumbering { get; set; }
         public virtual DbSet<Ts_LayoutForm> Ts_LayoutForm { get; set; }
         public virtual DbSet<Ts_List> Ts_List { get; set; }
         public virtual DbSet<Ts_Menu> Ts_Menu { get; set; }
         public virtual DbSet<Tx_AdjustmentIn> Tx_AdjustmentIn { get; set; }
         public virtual DbSet<Tx_AdjustmentIn_Attachment> Tx_AdjustmentIn_Attachment { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn_Location> Tx_AdjustmentIn_Location { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Item> Tx_AdjustmentIn_Item { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Item_Tag> Tx_AdjustmentIn_Item_Tag { get; set; }
         public virtual DbSet<Tx_AdjustmentOut> Tx_AdjustmentOut { get; set; }
         public virtual DbSet<Tx_AdjustmentOut_Attachment> Tx_AdjustmentOut_Attachment { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut_Location> Tx_AdjustmentOut_Location { get; set; }
-        public virtual DbSet<Tx_ApprovalMR> Tx_ApprovalMR { get; set; }
-        public virtual DbSet<Tx_ApprovalMR_Detail> Tx_ApprovalMR_Detail { get; set; }
-        public virtual DbSet<Tx_CleaningTank> Tx_CleaningTank { get; set; }
-        public virtual DbSet<Tx_CleaningTank_Attachment> Tx_CleaningTank_Attachment { get; set; }
-        public virtual DbSet<Tx_CleaningTank_Detail> Tx_CleaningTank_Detail { get; set; }
-        public virtual DbSet<Tx_Delivery> Tx_Delivery { get; set; }
-        public virtual DbSet<Tx_Delivery_Activity> Tx_Delivery_Activity { get; set; }
-        public virtual DbSet<Tx_Docking> Tx_Docking { get; set; }
-        public virtual DbSet<Tx_Docking_Detail> Tx_Docking_Detail { get; set; }
-        public virtual DbSet<Tx_FreshWaterControl> Tx_FreshWaterControl { get; set; }
-        public virtual DbSet<Tx_FreshWaterControl_Detail> Tx_FreshWaterControl_Detail { get; set; }
-        public virtual DbSet<Tx_FuelControl> Tx_FuelControl { get; set; }
-        public virtual DbSet<Tx_FuelControl_Detail> Tx_FuelControl_Detail { get; set; }
-        public virtual DbSet<Tx_GeneralDocRenewal> Tx_GeneralDocRenewal { get; set; }
-        public virtual DbSet<Tx_GeneralDocRenewal_Reference> Tx_GeneralDocRenewal_Reference { get; set; }
-        public virtual DbSet<Tx_GoodIssue> Tx_GoodIssue { get; set; }
-        public virtual DbSet<Tx_GoodIssue_Detail> Tx_GoodIssue_Detail { get; set; }
-        public virtual DbSet<Tx_GoodIssue_Detail_Batch> Tx_GoodIssue_Detail_Batch { get; set; }
-        public virtual DbSet<Tx_InventoryIn> Tx_InventoryIn { get; set; }
-        public virtual DbSet<Tx_InventoryIn_Detail> Tx_InventoryIn_Detail { get; set; }
-        public virtual DbSet<Tx_InventoryIn_Detail_Batch> Tx_InventoryIn_Detail_Batch { get; set; }
-        public virtual DbSet<Tx_InventoryReceived> Tx_InventoryReceived { get; set; }
-        public virtual DbSet<Tx_InventoryReceived_Detail> Tx_InventoryReceived_Detail { get; set; }
-        public virtual DbSet<Tx_InventoryReceived_Detail_Batch> Tx_InventoryReceived_Detail_Batch { get; set; }
-        public virtual DbSet<Tx_InventorySend> Tx_InventorySend { get; set; }
-        public virtual DbSet<Tx_InventorySend_Detail> Tx_InventorySend_Detail { get; set; }
-        public virtual DbSet<Tx_InventorySend_Detail_Batch> Tx_InventorySend_Detail_Batch { get; set; }
-        public virtual DbSet<Tx_Kecelakaan> Tx_Kecelakaan { get; set; }
-        public virtual DbSet<Tx_Kecelakaan_Detail> Tx_Kecelakaan_Detail { get; set; }
-        public virtual DbSet<Tx_KerusakanKapal> Tx_KerusakanKapal { get; set; }
-        public virtual DbSet<Tx_KerusakanKapal_Detail> Tx_KerusakanKapal_Detail { get; set; }
-        public virtual DbSet<Tx_LoadingOrder> Tx_LoadingOrder { get; set; }
-        public virtual DbSet<Tx_LoadingOrder_SalesOrder> Tx_LoadingOrder_SalesOrder { get; set; }
-        public virtual DbSet<Tx_LoadingOrder_Segel> Tx_LoadingOrder_Segel { get; set; }
-        public virtual DbSet<Tx_MaterialRequest> Tx_MaterialRequest { get; set; }
-        public virtual DbSet<Tx_MaterialRequest_Attachment> Tx_MaterialRequest_Attachment { get; set; }
-        public virtual DbSet<Tx_MaterialRequest_Detail> Tx_MaterialRequest_Detail { get; set; }
-        public virtual DbSet<Tx_Overhaul> Tx_Overhaul { get; set; }
-        public virtual DbSet<Tx_Overhaul_AEKanan> Tx_Overhaul_AEKanan { get; set; }
-        public virtual DbSet<Tx_Overhaul_AEKiri> Tx_Overhaul_AEKiri { get; set; }
-        public virtual DbSet<Tx_Overhaul_GBKanan> Tx_Overhaul_GBKanan { get; set; }
-        public virtual DbSet<Tx_Overhaul_GBKiri> Tx_Overhaul_GBKiri { get; set; }
-        public virtual DbSet<Tx_Overhaul_MEKanan> Tx_Overhaul_MEKanan { get; set; }
-        public virtual DbSet<Tx_Overhaul_MEKiri> Tx_Overhaul_MEKiri { get; set; }
-        public virtual DbSet<Tx_Perawatan> Tx_Perawatan { get; set; }
-        public virtual DbSet<Tx_Perawatan_Attachment> Tx_Perawatan_Attachment { get; set; }
-        public virtual DbSet<Tx_Perawatan_Detail> Tx_Perawatan_Detail { get; set; }
-        public virtual DbSet<Tx_PerawatanEngine> Tx_PerawatanEngine { get; set; }
-        public virtual DbSet<Tx_PerawatanEngine_Attachment> Tx_PerawatanEngine_Attachment { get; set; }
-        public virtual DbSet<Tx_PerawatanEngine_Detail> Tx_PerawatanEngine_Detail { get; set; }
-        public virtual DbSet<Tx_Receipt> Tx_Receipt { get; set; }
-        public virtual DbSet<Tx_RunningHours> Tx_RunningHours { get; set; }
-        public virtual DbSet<Tx_RunningHours_Daily> Tx_RunningHours_Daily { get; set; }
-        public virtual DbSet<Tx_RunningHours_RunPump> Tx_RunningHours_RunPump { get; set; }
-        public virtual DbSet<Tx_RunningHours_Total> Tx_RunningHours_Total { get; set; }
-        public virtual DbSet<Tx_ShipInventory> Tx_ShipInventory { get; set; }
-        public virtual DbSet<Tx_ShipInventory_Detail> Tx_ShipInventory_Detail { get; set; }
-        public virtual DbSet<Tx_TukarFakturReceipt> Tx_TukarFakturReceipt { get; set; }
-        public virtual DbSet<Tx_TukarFakturSend> Tx_TukarFakturSend { get; set; }
-        public virtual DbSet<Tx_TukarFakturSend_Detail> Tx_TukarFakturSend_Detail { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Item> Tx_AdjustmentOut_Item { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Item_Tag> Tx_AdjustmentOut_Item_Tag { get; set; }
+        public virtual DbSet<Tx_ChangeItem> Tx_ChangeItem { get; set; }
+        public virtual DbSet<Tx_ChangeItem_Tag> Tx_ChangeItem_Tag { get; set; }
+        public virtual DbSet<Tx_DeactiveTag> Tx_DeactiveTag { get; set; }
+        public virtual DbSet<Tx_DeactiveTag_Approval> Tx_DeactiveTag_Approval { get; set; }
+        public virtual DbSet<Tx_DeactiveTag_Item> Tx_DeactiveTag_Item { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO> Tx_GoodsReceiptPO { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item> Tx_GoodsReceiptPO_Item { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item_Tag> Tx_GoodsReceiptPO_Item_Tag { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Ref> Tx_GoodsReceiptPO_Ref { get; set; }
+        public virtual DbSet<Tx_PurchaseOrder> Tx_PurchaseOrder { get; set; }
+        public virtual DbSet<Tx_PurchaseOrder_Item> Tx_PurchaseOrder_Item { get; set; }
+        public virtual DbSet<Tx_Request_StockOpname> Tx_Request_StockOpname { get; set; }
+        public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
+        public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
+        public virtual DbSet<Tx_StockOpname_Item_Tag> Tx_StockOpname_Item_Tag { get; set; }
+        public virtual DbSet<Tx_StockSummaryOpname> Tx_StockSummaryOpname { get; set; }
+        public virtual DbSet<Tx_StockSummaryOpname_Item> Tx_StockSummaryOpname_Item { get; set; }
+        public virtual DbSet<Tx_StockSummaryOpname_Item_Tag> Tx_StockSummaryOpname_Item_Tag { get; set; }
+        public virtual DbSet<Tx_StockSummaryOpname_Ref> Tx_StockSummaryOpname_Ref { get; set; }
+        public virtual DbSet<Tx_TransferIn> Tx_TransferIn { get; set; }
+        public virtual DbSet<Tx_TransferIn_Item> Tx_TransferIn_Item { get; set; }
+        public virtual DbSet<Tx_TransferIn_Item_Tag> Tx_TransferIn_Item_Tag { get; set; }
+        public virtual DbSet<Tx_TransferOut> Tx_TransferOut { get; set; }
+        public virtual DbSet<Tx_TransferOut_Item> Tx_TransferOut_Item { get; set; }
+        public virtual DbSet<Tx_TransferOut_Item_Tag> Tx_TransferOut_Item_Tag { get; set; }
+        public virtual DbSet<Tx_TransferRequest> Tx_TransferRequest { get; set; }
+        public virtual DbSet<Tx_TransferRequest_Approval> Tx_TransferRequest_Approval { get; set; }
+        public virtual DbSet<Tx_TransferRequest_Item> Tx_TransferRequest_Item { get; set; }
+        public virtual DbSet<Tx_TransferSummaryIn_Approval> Tx_TransferSummaryIn_Approval { get; set; }
+        public virtual DbSet<Tx_TransferSummaryIn_Item> Tx_TransferSummaryIn_Item { get; set; }
+        public virtual DbSet<Tx_TransferSummaryIn_Item_tag> Tx_TransferSummaryIn_Item_tag { get; set; }
+        public virtual DbSet<Tx_TransferSummaryIn_Ref> Tx_TransferSummaryIn_Ref { get; set; }
+        public virtual DbSet<Tx_TransferSummaryOut> Tx_TransferSummaryOut { get; set; }
+        public virtual DbSet<Tx_TransferSummaryOut_Approval> Tx_TransferSummaryOut_Approval { get; set; }
+        public virtual DbSet<Tx_TransferSummaryOut_Item> Tx_TransferSummaryOut_Item { get; set; }
+        public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
+        public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
+        public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tx_TransferSummaryIn> Tx_TransferSummaryIn { get; set; }
+        public virtual DbSet<Ts_ObjectApproval> Ts_ObjectApproval { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Approval> Tx_AdjustmentIn_Approval { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Approval> Tx_GoodsReceiptPO_Approval { get; set; }
+        public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
+        public virtual DbSet<Tx_StockSummaryOpname_Approval> Tx_StockSummaryOpname_Approval { get; set; }
+        public virtual DbSet<Tx_AjustmentIn_Approval> Tx_AjustmentIn_Approval { get; set; }
+        public virtual DbSet<Tx_AjustmentOut_Approval> Tx_AjustmentOut_Approval { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Approval> Tx_AdjustmentOut_Approval { get; set; }
     }
 }

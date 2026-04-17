@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BBS_DI.Models._EF
+namespace ESKA_DI.Models._EF
 {
     using System;
     using System.Collections.Generic;
@@ -22,5 +22,7 @@ namespace BBS_DI.Models._EF
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
+        public string StockOpnameCoaCode { get; set; }
+        public string StockOpnameCoaName { get; set; }
     }
 }

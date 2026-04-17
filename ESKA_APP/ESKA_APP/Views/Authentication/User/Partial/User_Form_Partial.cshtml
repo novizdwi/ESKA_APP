@@ -206,55 +206,6 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
     });
 
-
-    //groupItem_Col2.Items.AddGroupItem(itemSettings =>
-    //{
-
-
-    //});
-
-    groupItem_Col2.Items.Add(m => Model.Position, itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
-        itemSettings.Caption = "Position";
-        itemSettings.Width = Unit.Percentage(100);
-        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
-        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
-        cbo.Name = "Position";
-        cbo.ShowModelErrors = true;
-        cbo.Properties.TextField = "Code";
-        cbo.Properties.ValueField = "Name";
-        cbo.Properties.ValueType = typeof(string);
-        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
-
-        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetPositions();
-
-        cbo.ControlStyle.CssClass = "editornoimage";
-        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-
-    });
-
-    groupItem_Col2.Items.Add(m => Model.DefaultWhsCode, itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
-        itemSettings.Caption = "Default Warehouse";
-        itemSettings.Width = Unit.Percentage(100);
-        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
-        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
-        cbo.Name = "DefaultWhsCode";
-        cbo.ShowModelErrors = true;
-        cbo.Properties.TextField = "Code";
-        cbo.Properties.ValueField = "Name";
-        cbo.Properties.ValueType = typeof(string);
-        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
-
-        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetDefaultWhsCodes(id);
-
-        cbo.ControlStyle.CssClass = "editornoimage";
-        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-
-    });
-
     groupItem_Col2.Items.Add(m => Model.IsActive, itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;

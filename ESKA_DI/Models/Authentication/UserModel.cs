@@ -280,39 +280,7 @@ namespace Models.Authentication.User
             if (model != null)
             {
                 {
-                    detId = CONTEXT.Database.SqlQuery<int?>(@"SELECT TOP 1 T0.""DetId"" FROM ""Tm_User_Warehouse"" T0 WHERE T0.""Id"" = :p0 AND T0.""WhsCode"" = :p1 ", id, model.WhsCode_).FirstOrDefault() ?? 0;
-                    if (detId == 0)
-                    {
-                        Tm_User_Warehouse tm_User_Warehouse = new Tm_User_Warehouse();
-                        CopyProperty.CopyProperties(model, tm_User_Warehouse, false);
-
-                        tm_User_Warehouse.WhsCode = model.WhsCode_;
-                        tm_User_Warehouse.CreatedDate = dtModified;
-                        tm_User_Warehouse.CreatedUser = userId;
-                        tm_User_Warehouse.ModifiedDate = dtModified;
-                        tm_User_Warehouse.ModifiedUser = userId;
-
-                        CONTEXT.Tm_User_Warehouse.Add(tm_User_Warehouse);
-                        var u = CONTEXT.SaveChanges();
-
-                    }
-                    else
-                    {
-                        var tm_User_Warehouse = CONTEXT.Tm_User_Warehouse.Find(detId);
-                        if (tm_User_Warehouse != null)
-                        {
-                            var exceptColumns = new string[] { "DetId", "Id" };
-                            CopyProperty.CopyProperties(model, tm_User_Warehouse, false, exceptColumns);
-
-                            tm_User_Warehouse.WhsCode = model.WhsCode_;
-                            tm_User_Warehouse.ModifiedDate = dtModified;
-                            tm_User_Warehouse.ModifiedUser = userId;
-
-                            CONTEXT.SaveChanges();
-
-                        }
-                    }
-
+                    
                 }
             }
 
@@ -373,8 +341,7 @@ namespace Models.Authentication.User
         {
             UserModel model = new UserModel();
             model.isSetPassword = true;
-            model.IsActive = "Y";
-            model.ListWarehouses_ = GetWarehouseById(0);
+            model.IsActive = "Y"; 
             return model;
         }
 
@@ -386,8 +353,7 @@ namespace Models.Authentication.User
                 using (var CONTEXT = new HANA_APP())
                 {
                     model = CONTEXT.Database.SqlQuery<UserModel>("SELECT T0.* FROM \"Tm_User\" T0 WHERE T0.\"Id\"=:p0 ", id).Single();
-                    model.isSetPassword = false;
-                    model.ListWarehouses_ = this.GetWarehouseById(model.Id);
+                    model.isSetPassword = false; 
                 }
             }
 
@@ -484,28 +450,6 @@ namespace Models.Authentication.User
 
         }
 
-        public List<User_WarehouseModel> GetWarehouseById(long id)
-        {
-            string ssql = "";
-            using (var CONTEXT = new HANA_APP())
-            {
-                ssql = @"SELECT
-                    ROW_NUMBER() OVER (ORDER BY T0.""WhsCode"") AS ""RowNo"",
-                    T1.""Id"" AS ""Id"",
-	                T1.""WhsCode"" AS ""WhsCode"",
-	                T1.""IsTick"" AS ""IsTick"",
-	                T0.""WhsCode"" AS ""WhsCode_"",
-	                T0.""WhsName"" AS ""WhsName_""
-                FROM ""{0}"".""OWHS"" T0
-                LEFT JOIN  ""Tm_User_Warehouse"" T1 ON T0.""WhsCode"" = T1.""WhsCode"" AND T1.""Id"" = :p0 
-                ORDER BY T0.""WhsCode"" ASC
-                ";
-
-                ssql = string.Format(ssql, DbProvider.dbSap_Name);
-                return CONTEXT.Database.SqlQuery<User_WarehouseModel>(ssql, id).ToList();
-            }
-
-        }
     }
 
     #endregion

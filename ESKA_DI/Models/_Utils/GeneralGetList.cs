@@ -299,43 +299,6 @@ namespace Models._Utils
             }
         }
 
-        public static DataTable GetPositions()
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                var ssql = @"
-                SELECT NULL AS ""Code"", NULL AS ""Name"" FROM DUMMY
-
-                UNION ALL
-                
-                SELECT T0.""Code"", T0.""Name"" FROM ""{0}"".""@POSITION"" T0 ";
-                ssql = string.Format(ssql, DbProvider.dbSap_Name);
-                return GetDataTable(CONTEXT, ssql);
-            }
-        }
-
-        public static DataTable GetDefaultWhsCodes(int id)
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                var ssql = @"
-                    SELECT * FROM (
-                        SELECT NULL AS ""Code"", NULL AS ""Name"" FROM DUMMY
-
-                        UNION ALL
-
-                        SELECT T0.""WhsCode"" AS ""Code"", 
-                        T0.""WhsName""  AS ""Name""
-                        FROM ""{0}"".""OWHS"" T0  
-                        LEFT JOIN ""Tm_User_Warehouse"" T1 ON T0.""WhsCode"" = T1.""WhsCode"" AND  T1.""Id"" = {1} 
-                    ) TX ORDER BY TX.""Code"" ASC
-                ";
-                ssql = string.Format(ssql, DbProvider.dbSap_Name, id);
-                return GetDataTable(CONTEXT, ssql);
-            }
-        }
-
-
         public static DataTable GetListPointEx(string strType)
         {
             using (var CONTEXT = new HANA_APP())
@@ -373,39 +336,7 @@ namespace Models._Utils
             return GetDataTable(CONTEXT, ssql, strType, strCategory);
 
         }
-
-        public static DataTable GetUserWarehouse(int userId = -1)
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                return GetUserWarehouse(CONTEXT, userId);
-            }
-        }
-
-        public static DataTable GetUserWarehouse(HANA_APP CONTEXT, int userId = -1)
-        {
-            var ssql = "";
-            if (userId == 1)
-            {
-                ssql = @"SELECT DISTINCT T1.""WhsCode"" AS ""Code"", T1.""WhsName"" AS ""Name"" 
-                    FROM ""{0}"".""OWHS"" T1
-                    ";
-                ssql = string.Format(ssql, DbProvider.dbSap_Name);
-            }
-            else
-            {
-                ssql = @"SELECT T0.""WhsCode"" AS ""Code"", T1.""WhsName"" AS ""Name"" 
-                FROM ""Tm_User_Warehouse"" T0   
-                INNER JOIN ""{0}"".""OWHS"" T1 ON T0.""WhsCode"" = T1.""WhsCode""
-                WHERE T0.""Id""= '{1}'  AND T0.""IsTick"" = 'Y'  ";
-                ssql = string.Format(ssql, DbProvider.dbSap_Name, userId);
-            }
-
-            var ret = GetDataTable(CONTEXT, ssql);
-            return ret;
-
-        }
-
+        
         public static string GetWarehouseCodeByUserId(int userId)
         {
             using (var CONTEXT = new HANA_APP())
