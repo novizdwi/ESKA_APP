@@ -414,6 +414,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tm_Position">
+      <EntityTypeMapping TypeName="Model1.Tm_Position">
+        <MappingFragment StoreEntitySet="Tm_Position">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tm_Query">
       <EntityTypeMapping TypeName="Model1.Tm_Query">
         <MappingFragment StoreEntitySet="Tm_Query">
@@ -662,6 +675,7 @@
     <EntitySetMapping Name="Tm_User">
       <EntityTypeMapping TypeName="Model1.Tm_User">
         <MappingFragment StoreEntitySet="Tm_User">
+          <ScalarProperty Name="PositionId" ColumnName="PositionId" />
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
@@ -676,6 +690,20 @@
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="TransType" ColumnName="TransType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tm_User_Routing">
+      <EntityTypeMapping TypeName="Model1.Tm_User_Routing">
+        <MappingFragment StoreEntitySet="Tm_User_Routing">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsTick" ColumnName="IsTick" />
+          <ScalarProperty Name="RouteProcess" ColumnName="RouteProcess" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -740,6 +768,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Ts_ObjectApproval">
+      <EntityTypeMapping TypeName="Model1.Ts_ObjectApproval">
+        <MappingFragment StoreEntitySet="Ts_ObjectApproval">
+          <ScalarProperty Name="Sort" ColumnName="Sort" />
+          <ScalarProperty Name="ObjectName" ColumnName="ObjectName" />
+          <ScalarProperty Name="ObjectCode" ColumnName="ObjectCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tx_AdjustmentIn">
       <EntityTypeMapping TypeName="Model1.Tx_AdjustmentIn">
         <MappingFragment StoreEntitySet="Tx_AdjustmentIn">
@@ -774,6 +811,24 @@
           <ScalarProperty Name="TransDate" ColumnName="TransDate" />
           <ScalarProperty Name="TransNo" ColumnName="TransNo" />
           <ScalarProperty Name="TransType" ColumnName="TransType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_AdjustmentIn_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_AdjustmentIn_Approval">
+        <MappingFragment StoreEntitySet="Tx_AdjustmentIn_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -882,6 +937,24 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tx_AdjustmentOut_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_AdjustmentOut_Approval">
+        <MappingFragment StoreEntitySet="Tx_AdjustmentOut_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tx_AdjustmentOut_Attachment">
       <EntityTypeMapping TypeName="Model1.Tx_AdjustmentOut_Attachment">
         <MappingFragment StoreEntitySet="Tx_AdjustmentOut_Attachment">
@@ -942,6 +1015,42 @@
           <ScalarProperty Name="ItemName" ColumnName="ItemName" />
           <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
           <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_AjustmentIn_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_AjustmentIn_Approval">
+        <MappingFragment StoreEntitySet="Tx_AjustmentIn_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_AjustmentOut_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_AjustmentOut_Approval">
+        <MappingFragment StoreEntitySet="Tx_AjustmentOut_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
           <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
@@ -1073,6 +1182,24 @@
           <ScalarProperty Name="TransDate" ColumnName="TransDate" />
           <ScalarProperty Name="TransNo" ColumnName="TransNo" />
           <ScalarProperty Name="TransType" ColumnName="TransType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_GoodsReceiptPO_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Approval">
+        <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1245,6 +1372,24 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tx_StockOpname_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Approval">
+        <MappingFragment StoreEntitySet="Tx_StockOpname_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tx_StockOpname_Item">
       <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item">
         <MappingFragment StoreEntitySet="Tx_StockOpname_Item">
@@ -1318,6 +1463,24 @@
           <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
           <ScalarProperty Name="TransNo" ColumnName="TransNo" />
           <ScalarProperty Name="TransType" ColumnName="TransType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_StockSummaryOpname_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname_Approval">
+        <MappingFragment StoreEntitySet="Tx_StockSummaryOpname_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1642,6 +1805,47 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tx_TransferSummaryIn">
+      <EntityTypeMapping TypeName="Model1.Tx_TransferSummaryIn">
+        <MappingFragment StoreEntitySet="Tx_TransferSummaryIn">
+          <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ApprovalMessage" ColumnName="ApprovalMessage" />
+          <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
+          <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+          <ScalarProperty Name="JournalRemarks" ColumnName="JournalRemarks" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+          <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="PriceListName" ColumnName="PriceListName" />
+          <ScalarProperty Name="PriceList" ColumnName="PriceList" />
+          <ScalarProperty Name="ToWhsName" ColumnName="ToWhsName" />
+          <ScalarProperty Name="ToWhsCode" ColumnName="ToWhsCode" />
+          <ScalarProperty Name="TransitWhsName" ColumnName="TransitWhsName" />
+          <ScalarProperty Name="TransitWhsCode" ColumnName="TransitWhsCode" />
+          <ScalarProperty Name="FromWhsName" ColumnName="FromWhsName" />
+          <ScalarProperty Name="FromWhsCode" ColumnName="FromWhsCode" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+          <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+          <ScalarProperty Name="BaseType" ColumnName="BaseType" />
+          <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
+          <ScalarProperty Name="BaseId" ColumnName="BaseId" />
+          <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+          <ScalarProperty Name="DocNum" ColumnName="DocNum" />
+          <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+          <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
+          <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+          <ScalarProperty Name="TransNo" ColumnName="TransNo" />
+          <ScalarProperty Name="TransType" ColumnName="TransType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tx_TransferSummaryIn_Approval">
       <EntityTypeMapping TypeName="Model1.Tx_TransferSummaryIn_Approval">
         <MappingFragment StoreEntitySet="Tx_TransferSummaryIn_Approval">
@@ -1876,182 +2080,6 @@
           <ScalarProperty Name="BaseId" ColumnName="BaseId" />
           <ScalarProperty Name="BaseType" ColumnName="BaseType" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_TransferSummaryIn">
-      <EntityTypeMapping TypeName="Model1.Tx_TransferSummaryIn">
-        <MappingFragment StoreEntitySet="Tx_TransferSummaryIn">
-          <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ApprovalMessage" ColumnName="ApprovalMessage" />
-          <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
-          <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
-          <ScalarProperty Name="JournalRemarks" ColumnName="JournalRemarks" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
-          <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="PriceListName" ColumnName="PriceListName" />
-          <ScalarProperty Name="PriceList" ColumnName="PriceList" />
-          <ScalarProperty Name="ToWhsName" ColumnName="ToWhsName" />
-          <ScalarProperty Name="ToWhsCode" ColumnName="ToWhsCode" />
-          <ScalarProperty Name="TransitWhsName" ColumnName="TransitWhsName" />
-          <ScalarProperty Name="TransitWhsCode" ColumnName="TransitWhsCode" />
-          <ScalarProperty Name="FromWhsName" ColumnName="FromWhsName" />
-          <ScalarProperty Name="FromWhsCode" ColumnName="FromWhsCode" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="VendorName" ColumnName="VendorName" />
-          <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
-          <ScalarProperty Name="BaseType" ColumnName="BaseType" />
-          <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
-          <ScalarProperty Name="BaseId" ColumnName="BaseId" />
-          <ScalarProperty Name="DocDate" ColumnName="DocDate" />
-          <ScalarProperty Name="DocNum" ColumnName="DocNum" />
-          <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
-          <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
-          <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-          <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-          <ScalarProperty Name="TransType" ColumnName="TransType" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Ts_ObjectApproval">
-      <EntityTypeMapping TypeName="Model1.Ts_ObjectApproval">
-        <MappingFragment StoreEntitySet="Ts_ObjectApproval">
-          <ScalarProperty Name="Sort" ColumnName="Sort" />
-          <ScalarProperty Name="ObjectName" ColumnName="ObjectName" />
-          <ScalarProperty Name="ObjectCode" ColumnName="ObjectCode" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_AdjustmentIn_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_AdjustmentIn_Approval">
-        <MappingFragment StoreEntitySet="Tx_AdjustmentIn_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_GoodsReceiptPO_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Approval">
-        <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_StockOpname_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Approval">
-        <MappingFragment StoreEntitySet="Tx_StockOpname_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_StockSummaryOpname_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname_Approval">
-        <MappingFragment StoreEntitySet="Tx_StockSummaryOpname_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_AjustmentIn_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_AjustmentIn_Approval">
-        <MappingFragment StoreEntitySet="Tx_AjustmentIn_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_AjustmentOut_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_AjustmentOut_Approval">
-        <MappingFragment StoreEntitySet="Tx_AjustmentOut_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_AdjustmentOut_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_AdjustmentOut_Approval">
-        <MappingFragment StoreEntitySet="Tx_AdjustmentOut_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -52,6 +52,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_Layout_Role> Tm_Layout_Role { get; set; }
         public virtual DbSet<Tm_Layout_User> Tm_Layout_User { get; set; }
         public virtual DbSet<Tm_MasterSetting> Tm_MasterSetting { get; set; }
+        public virtual DbSet<Tm_Position> Tm_Position { get; set; }
         public virtual DbSet<Tm_Query> Tm_Query { get; set; }
         public virtual DbSet<Tm_Query_Param> Tm_Query_Param { get; set; }
         public virtual DbSet<Tm_Query_Role> Tm_Query_Role { get; set; }
@@ -69,25 +70,32 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_Role> Tm_Role { get; set; }
         public virtual DbSet<Tm_Role_Auth> Tm_Role_Auth { get; set; }
         public virtual DbSet<Tm_User> Tm_User { get; set; }
+        public virtual DbSet<Tm_User_Routing> Tm_User_Routing { get; set; }
         public virtual DbSet<Tp_Approval> Tp_Approval { get; set; }
         public virtual DbSet<Ts_FormatNumbering> Ts_FormatNumbering { get; set; }
         public virtual DbSet<Ts_LayoutForm> Ts_LayoutForm { get; set; }
         public virtual DbSet<Ts_List> Ts_List { get; set; }
         public virtual DbSet<Ts_Menu> Ts_Menu { get; set; }
+        public virtual DbSet<Ts_ObjectApproval> Ts_ObjectApproval { get; set; }
         public virtual DbSet<Tx_AdjustmentIn> Tx_AdjustmentIn { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Approval> Tx_AdjustmentIn_Approval { get; set; }
         public virtual DbSet<Tx_AdjustmentIn_Attachment> Tx_AdjustmentIn_Attachment { get; set; }
         public virtual DbSet<Tx_AdjustmentIn_Item> Tx_AdjustmentIn_Item { get; set; }
         public virtual DbSet<Tx_AdjustmentIn_Item_Tag> Tx_AdjustmentIn_Item_Tag { get; set; }
         public virtual DbSet<Tx_AdjustmentOut> Tx_AdjustmentOut { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Approval> Tx_AdjustmentOut_Approval { get; set; }
         public virtual DbSet<Tx_AdjustmentOut_Attachment> Tx_AdjustmentOut_Attachment { get; set; }
         public virtual DbSet<Tx_AdjustmentOut_Item> Tx_AdjustmentOut_Item { get; set; }
         public virtual DbSet<Tx_AdjustmentOut_Item_Tag> Tx_AdjustmentOut_Item_Tag { get; set; }
+        public virtual DbSet<Tx_AjustmentIn_Approval> Tx_AjustmentIn_Approval { get; set; }
+        public virtual DbSet<Tx_AjustmentOut_Approval> Tx_AjustmentOut_Approval { get; set; }
         public virtual DbSet<Tx_ChangeItem> Tx_ChangeItem { get; set; }
         public virtual DbSet<Tx_ChangeItem_Tag> Tx_ChangeItem_Tag { get; set; }
         public virtual DbSet<Tx_DeactiveTag> Tx_DeactiveTag { get; set; }
         public virtual DbSet<Tx_DeactiveTag_Approval> Tx_DeactiveTag_Approval { get; set; }
         public virtual DbSet<Tx_DeactiveTag_Item> Tx_DeactiveTag_Item { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO> Tx_GoodsReceiptPO { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Approval> Tx_GoodsReceiptPO_Approval { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item> Tx_GoodsReceiptPO_Item { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Tag> Tx_GoodsReceiptPO_Item_Tag { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Ref> Tx_GoodsReceiptPO_Ref { get; set; }
@@ -95,9 +103,11 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_PurchaseOrder_Item> Tx_PurchaseOrder_Item { get; set; }
         public virtual DbSet<Tx_Request_StockOpname> Tx_Request_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
+        public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
         public virtual DbSet<Tx_StockOpname_Item_Tag> Tx_StockOpname_Item_Tag { get; set; }
         public virtual DbSet<Tx_StockSummaryOpname> Tx_StockSummaryOpname { get; set; }
+        public virtual DbSet<Tx_StockSummaryOpname_Approval> Tx_StockSummaryOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockSummaryOpname_Item> Tx_StockSummaryOpname_Item { get; set; }
         public virtual DbSet<Tx_StockSummaryOpname_Item_Tag> Tx_StockSummaryOpname_Item_Tag { get; set; }
         public virtual DbSet<Tx_StockSummaryOpname_Ref> Tx_StockSummaryOpname_Ref { get; set; }
@@ -110,6 +120,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_TransferRequest> Tx_TransferRequest { get; set; }
         public virtual DbSet<Tx_TransferRequest_Approval> Tx_TransferRequest_Approval { get; set; }
         public virtual DbSet<Tx_TransferRequest_Item> Tx_TransferRequest_Item { get; set; }
+        public virtual DbSet<Tx_TransferSummaryIn> Tx_TransferSummaryIn { get; set; }
         public virtual DbSet<Tx_TransferSummaryIn_Approval> Tx_TransferSummaryIn_Approval { get; set; }
         public virtual DbSet<Tx_TransferSummaryIn_Item> Tx_TransferSummaryIn_Item { get; set; }
         public virtual DbSet<Tx_TransferSummaryIn_Item_tag> Tx_TransferSummaryIn_Item_tag { get; set; }
@@ -120,14 +131,5 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
-        public virtual DbSet<Tx_TransferSummaryIn> Tx_TransferSummaryIn { get; set; }
-        public virtual DbSet<Ts_ObjectApproval> Ts_ObjectApproval { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn_Approval> Tx_AdjustmentIn_Approval { get; set; }
-        public virtual DbSet<Tx_GoodsReceiptPO_Approval> Tx_GoodsReceiptPO_Approval { get; set; }
-        public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
-        public virtual DbSet<Tx_StockSummaryOpname_Approval> Tx_StockSummaryOpname_Approval { get; set; }
-        public virtual DbSet<Tx_AjustmentIn_Approval> Tx_AjustmentIn_Approval { get; set; }
-        public virtual DbSet<Tx_AjustmentOut_Approval> Tx_AjustmentOut_Approval { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut_Approval> Tx_AdjustmentOut_Approval { get; set; }
     }
 }

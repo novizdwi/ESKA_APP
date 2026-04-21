@@ -12,23 +12,15 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tm_User
+    public partial class Tm_User_Routing
     {
-        public int Id { get; set; }
-        public string TransType { get; set; }
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string MidleName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Pwd { get; set; }
-        public Nullable<int> RoleId { get; set; }
-        public Nullable<int> EmpId { get; set; }
-        public string LastController { get; set; }
+        public Nullable<int> Id { get; set; }
+        public int DetId { get; set; }
+        public string RouteProcess { get; set; }
+        public string IsTick { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public Nullable<int> PositionId { get; set; }
     }
 }
