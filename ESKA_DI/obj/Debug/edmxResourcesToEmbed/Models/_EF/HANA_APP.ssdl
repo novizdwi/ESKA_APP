@@ -389,17 +389,6 @@
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Desc" Type="varchar" MaxLength="50" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'HDB.ESKA_APP_TEST.Tm_Process' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Tm_Process">
-          <Property Name="ProcessName" Type="nvarchar" MaxLength="150" />
-          <Property Name="Description" Type="nvarchar" MaxLength="250" />
-          <Property Name="IsActive" Type="varchar" MaxLength="1" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>-->
   <EntityType Name="Tm_Query">
     <Key>
       <PropertyRef Name="Id" />
@@ -628,6 +617,35 @@ warning 6013: The table/view 'HDB.ESKA_APP_TEST.Tm_Process' does not have a prim
     <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="MenuCode" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAccess" Type="varchar" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="Tm_Stage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="varchar" MaxLength="50" />
+    <Property Name="StageName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
+    <Property Name="IsActive" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tm_Stage_Process">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RouteCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="Sequence" Type="int" />
+    <Property Name="Process" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
   </EntityType>
   <EntityType Name="Tm_User">
     <Key>
@@ -2026,6 +2044,8 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <EntitySet Name="Tm_ReportGroup_User" EntityType="Self.Tm_ReportGroup_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Role" EntityType="Self.Tm_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Role_Auth" EntityType="Self.Tm_Role_Auth" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Stage" EntityType="Self.Tm_Stage" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tm_Stage_Process" EntityType="Self.Tm_Stage_Process" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_User" EntityType="Self.Tm_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tp_Approval" EntityType="Self.Tp_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Ts_FormatNumbering" EntityType="Self.Ts_FormatNumbering" Schema="ESKA_APP_TEST" store:Type="Tables" />

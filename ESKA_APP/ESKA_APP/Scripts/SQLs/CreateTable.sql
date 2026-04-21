@@ -237,4 +237,3 @@ CREATE COLUMN TABLE "Ts_ObjectApproval" (
   PRIMARY KEY ("ObjectCode")
 ) UNLOAD PRIORITY 5 AUTO MERGE
 ;
-
