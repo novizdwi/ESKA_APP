@@ -50,6 +50,7 @@
         <EntityTypeShape EntityType="Model1.Tm_Role" Width="1.5" PointX="14.75" PointY="17.75" />
         <EntityTypeShape EntityType="Model1.Tm_Role_Auth" Width="1.5" PointX="16.75" PointY="17.75" />
         <EntityTypeShape EntityType="Model1.Tm_User" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tm_User_Routing" Width="1.5" PointX="18.75" PointY="6.75" />
         <EntityTypeShape EntityType="Model1.Tp_Approval" Width="1.5" PointX="18.75" PointY="10.75" />
         <EntityTypeShape EntityType="Model1.Ts_FormatNumbering" Width="1.5" PointX="18.75" PointY="15.75" />
         <EntityTypeShape EntityType="Model1.Ts_LayoutForm" Width="1.5" PointX="18.75" PointY="18.75" />
@@ -110,7 +111,6 @@
         <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" Width="1.5" PointX="30.75" PointY="31.75" />
         <EntityTypeShape EntityType="Model1.Tx_TransferSummaryOut_Ref" Width="1.5" PointX="32.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="32.75" PointY="5.75" />
-        <EntityTypeShape EntityType="Model1.Tm_User_Routing" Width="1.5" PointX="15.375" PointY="32.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
