@@ -675,6 +675,7 @@
     <EntitySetMapping Name="Tm_User">
       <EntityTypeMapping TypeName="Model1.Tm_User">
         <MappingFragment StoreEntitySet="Tm_User">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
           <ScalarProperty Name="PositionId" ColumnName="PositionId" />
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -702,7 +703,8 @@
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="IsTick" ColumnName="IsTick" />
-          <ScalarProperty Name="RouteProcess" ColumnName="RouteProcess" />
+          <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+          <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
           <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>

@@ -655,6 +655,7 @@
           <Property Name="ModifiedDate" Type="timestamp" />
           <Property Name="ModifiedUser" Type="int" />
           <Property Name="PositionId" Type="int" />
+          <Property Name="IsActive" Type="varchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="Tm_User_Routing">
           <Key>
@@ -662,7 +663,8 @@
           </Key>
           <Property Name="Id" Type="int" />
           <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RouteProcess" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
           <Property Name="IsTick" Type="varchar" MaxLength="1" />
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
@@ -2886,6 +2888,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
           <Property Name="PositionId" Type="Int32" />
+          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Tm_User_Routing">
           <Key>
@@ -2893,7 +2896,8 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           </Key>
           <Property Name="Id" Type="Int32" />
           <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RouteProcess" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IsTick" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
@@ -4897,6 +4901,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySetMapping Name="Tm_User">
             <EntityTypeMapping TypeName="Model1.Tm_User">
               <MappingFragment StoreEntitySet="Tm_User">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="PositionId" ColumnName="PositionId" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -4924,7 +4929,8 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="IsTick" ColumnName="IsTick" />
-                <ScalarProperty Name="RouteProcess" ColumnName="RouteProcess" />
+                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

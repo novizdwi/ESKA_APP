@@ -47,13 +47,70 @@
             var groupBtn = panelBtnsettings.Items.AddGroupItem(groupBtnSettings =>
             {
 
+
                 groupBtnSettings.Caption = "";
                 groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
                 groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
                 groupBtnSettings.ColCount = 12;
                 groupBtnSettings.SettingsItems.ShowCaption = DefaultBoolean.False;
                 groupBtnSettings.CellStyle.Paddings.Padding = 0;
-                  
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnNew";
+                    btnSettings.Text = "New";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnNew";
+                    btnSettings.ToolTip = "New";
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/new.png";
+                    btnSettings.Styles.Style.CssClass = "btn-shadow";
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+
+                });
+
+
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    itemSettings.Name = "grpBtnAdd";
+
+
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnAdd";
+                    btnSettings.Text = "Save";
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnAdd";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                    btnSettings.Styles.Style.CssClass = "btn-shadow";
+
+
+                });
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    itemSettings.Name = "grpBtnUpdate";
+
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnUpdate";
+                    btnSettings.Text = "Save";
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnUpdate";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                    btnSettings.Styles.Style.CssClass = "btn-shadow";
+
+                });
+
                 groupBtnSettings.Items.Add(itemSettings =>
                 {
                     itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
@@ -108,7 +165,8 @@
                     btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/last.png";
                     btnSettings.Styles.Style.Paddings.Padding = 0;
                     btnSettings.Styles.Style.CssClass = "btn-shadow";
-                }); 
+                });
+
 
                 groupBtnSettings.Items.Add(itemSettings =>
                 {
@@ -136,7 +194,27 @@
                     btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Find.png";
                     btnSettings.Styles.Style.Paddings.Padding = 0;
                     btnSettings.Styles.Style.CssClass = "btn-shadow";
-                }); 
+                });
+
+
+
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnPrint";
+                    btnSettings.Text = "Print";
+
+                    var controllerName = ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
+                    string strCheckPrintLayout = Url.Action("CheckLayout", controllerName);
+                    btnSettings.ClientSideEvents.Click = string.Format("function (s,e) {{ OnClickBtnPrintNotif(s,e,'{0}') }}", strCheckPrintLayout);
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ImagePosition = ImagePosition.Left;
+                    btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Print.png";
+                    btnSettings.Styles.Style.Paddings.Padding = 0;
+                    btnSettings.Styles.Style.CssClass = "btn-shadow";
+
+                });
 
             });
 

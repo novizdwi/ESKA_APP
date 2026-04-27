@@ -650,6 +650,7 @@
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
     <Property Name="PositionId" Type="int" />
+    <Property Name="IsActive" Type="varchar" MaxLength="1" />
   </EntityType>
   <EntityType Name="Tm_User_Routing">
     <Key>
@@ -657,7 +658,8 @@
     </Key>
     <Property Name="Id" Type="int" />
     <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RouteProcess" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
     <Property Name="IsTick" Type="varchar" MaxLength="1" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
