@@ -1,0 +1,140 @@
+﻿@using Models;
+@using Models._Cfl;
+@{
+    var ItemCode = Convert.ToString(Request["ItemCode"]);
+
+    if (!string.IsNullOrWhiteSpace(ViewBag.ItemCode))
+    {
+        ItemCode = ViewBag.ItemCode;
+    }
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvItemMasterDetail";
+    settings.KeyFieldName = "ItemCode; WhsCode";
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    //settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.CallbackRouteValues = new { Controller = "ItemMaster", Action = "TabDetailListPartial" };
+
+    //settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    //settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    //settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    //settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.ShowDeleteButton = false;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.Enabled = true;
+
+    settings.CommandColumn.Width = 0;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Enabled = true;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    settings.Columns.Add("ItemCode", "ItemCode").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsCode";
+        column.Name = "WhsCode";
+        column.Caption = "Whs Code";
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 250;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsName";
+        column.Name = "WhsName";
+        column.Caption = "Whs Name";
+        column.CellStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 250;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "OnHand";
+        column.Name = "OnHand";
+        column.Caption = "On Hand Web";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###.0000";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "OnHandSAP_";
+        column.Name = "OnHandSAP_";
+        column.Caption = "On Hand SAP";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###.0000";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+
+    });
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvItemMasterDetailOnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvItemMasterDetailOnEndCallback";
+
+    settings.ClientSideEvents.BatchEditStartEditing = "gvItemMasterDetailOnBatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvItemMasterDetailOnBatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvItemMasterDetailOnBatchEditRowValidating";
+
+}).Bind(Model).GetHtml()
+

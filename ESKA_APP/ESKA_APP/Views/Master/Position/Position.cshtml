@@ -8,20 +8,7 @@
     <script src="~/Scripts/Test/DXR.js"></script>
 }
 
-@model Models.Master.Item.ChangeItemModel
-
-
-@{
-    ViewBag.UserId = (int)Session["userId"];
-    ViewBag.Title = "Change Item";
-    string MenuCodePost = "ChangeItem/Post";
-    string IsCanPost_ = "Y";
-    if (ViewBag.UserId != 1)
-    {
-        IsCanPost_ = Models._Utils.GeneralGetList.GetIsCanAccessOpeningBalance(ViewBag.UserId, MenuCodePost);
-    }
-}
-
+@model Models.Master.Position.PositionModel
 
 
 <script type="text/javascript">
@@ -39,7 +26,6 @@
 
 
 <script type="text/javascript">
-    var IsCanPost_ = '@IsCanPost_';
 
     var beforeSaveActiveTabName = '';
     var beforeSaveActiveTabIndex = 0;
@@ -76,8 +62,8 @@
             formMode = 'edit';
         }
 
-        btnPost.SetEnabled(false);
-        btnCancel.SetEnabled(false);
+        //btnPost.SetEnabled(false);
+        //btnCancel.SetEnabled(false);
         switch (formMode) {
             case 'new':
 
@@ -97,39 +83,39 @@
                 btnAdd.SetEnabled(false);
                 btnRefresh.SetEnabled(true);
                 btnUpdate.SetEnabled(true);
-                var Status = ASPxClientComboBox.Cast('Status');
-                switch (Status.GetValue()) {
-                    case 'Draft':
-                        btnUpdate.SetEnabled(true);
+                //var Status = ASPxClientComboBox.Cast('Status');
+                //switch (Status.GetValue()) {
+                //    case 'Draft':
+                //        btnUpdate.SetEnabled(true);
 
-                        btnPost.SetEnabled(true);
-                        btnCancel.SetEnabled(true);
-                        break;
-                    case 'Posted':
-                        btnUpdate.SetEnabled(true);
-                        btnCancel.SetEnabled(true);
+                //        btnPost.SetEnabled(true);
+                //        btnCancel.SetEnabled(true);
+                //        break;
+                //    case 'Posted':
+                //        btnUpdate.SetEnabled(true);
+                //        btnCancel.SetEnabled(true);
 
-                        break;
-                    case 'Cancel':
-                        btnUpdate.SetEnabled(false);
+                //        break;
+                //    case 'Cancel':
+                //        btnUpdate.SetEnabled(false);
 
-                        break;
-                    case 'Closed':
-                        btnUpdate.SetEnabled(false);
-                        break;
-                    default:
-                        break;
+                //        break;
+                //    case 'Closed':
+                //        btnUpdate.SetEnabled(false);
+                //        break;
+                //    default:
+                //        break;
 
-                }
+                //}
 
                 break;
             default:
 
                 break;
         }
-        if (IsCanPost_ == "N") {
-            btnPost.SetEnabled(false);
-        }
+        //if (IsCanPost_ == "N") {
+        //    btnPost.SetEnabled(false);
+        //}
     }
 
     var msgCount = 0;
@@ -183,21 +169,21 @@
 
     function BeforeSave() {
 
-        var tab = ASPxClientTabControl.Cast("TabDetail");
-        var tabPageCount = tab.GetTabCount();
-        for (var i = 0; i < tabPageCount; i++) {
-            tab.SetActiveTabIndex(i);
-            if (!($("#formDetail").valid())) {
-                var validator = $("#formDetail").validate();
-                var errors = validator.numberOfInvalids();
-                if (errors) {
-                    // alert( validator.errorList[0].message);
-                    validator.errorList[0].element.focus();
+        //var tab = ASPxClientTabControl.Cast("TabDetail");
+        //var tabPageCount = tab.GetTabCount();
+        //for (var i = 0; i < tabPageCount; i++) {
+        //    tab.SetActiveTabIndex(i);
+        //    if (!($("#formDetail").valid())) {
+        //        var validator = $("#formDetail").validate();
+        //        var errors = validator.numberOfInvalids();
+        //        if (errors) {
+        //            // alert( validator.errorList[0].message);
+        //            validator.errorList[0].element.focus();
 
-                }
-                return false;
-            }
-        }
+        //        }
+        //        return false;
+        //    }
+        //}
 
         return true;
 
@@ -205,18 +191,18 @@
 
 
     function RefreshAfterSuccess(response) {
-        var tab = ASPxClientTabControl.Cast("TabDetail");
+       // var tab = ASPxClientTabControl.Cast("TabDetail");
 
-        if (tab.GetActiveTabIndex != 0) {
-            tab.SetActiveTabIndex(0);
-        }
+        //if (tab.GetActiveTabIndex != 0) {
+        //    tab.SetActiveTabIndex(0);
+        //}
 
         $("#contentForm").html(response);
 
         $.validator.unobtrusive.parse("#formDetail");
 
         MVCxClientUtils.FinalizeCallback();
-        SetBtnStatus();
+       SetBtnStatus();
         //ExpiredTypeOnValueChange();
     }
 
@@ -226,7 +212,7 @@
 
         $.ajax({
             type: "POST",
-            url: "@Url.Action("DetailPartial", "ChangeItem")",
+            url: "@Url.Action("DetailPartial", "Position")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -258,7 +244,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Post", "ChangeItem")',
+                url: '@Url.Action("Post", "Position")',
                 data: formData,
                 beforeSend: function () {
                     OnBegin();
@@ -279,7 +265,7 @@
 
     }
 
-    function OnClickBtnCancel(s, e) {
+   function OnClickBtnCancel(s, e) {
         key = Id.GetValue();
         btnShowCancelReasonOnClick(s, e, key);
     }
@@ -288,9 +274,8 @@
     function GetFormData() {
         var formData = $('#formDetail').serializeObject();
 
-        var Details_ = Get
-    ('gvChangeItemDetail');
-        $.extend(formData, { Details_: Details_ });
+        //var Details_ = GetGvDetails('gvPositionDetail');
+        //$.extend(formData, { Details_: Details_ });
         return formData;
     }
 
@@ -304,7 +289,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Add", "ChangeItem")',
+            url: '@Url.Action("Add", "Position")',
             data: formData,
             beforeSend: function () {
                 OnBegin();
@@ -324,7 +309,7 @@
 
     }
 
-    function OnClickBtnUpdate(s, e) {
+   function OnClickBtnUpdate(s, e) {
         if (BeforeSave() == false) {
             return;
         }
@@ -333,7 +318,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Update", "ChangeItem")',
+            url: '@Url.Action("Update", "Position")',
             data: formData,
             beforeSend: function () {
                 OnBegin();
@@ -362,7 +347,7 @@
     function OnClickBtnNavFirst(s, e) {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("NavFirst", "ChangeItem")",
+            url: "@Url.Action("NavFirst", "Position")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -384,7 +369,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("NavPrevious", "ChangeItem")',
+            url: '@Url.Action("NavPrevious", "Position")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -406,7 +391,7 @@
         key = Id.GetValue();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("NavNext", "ChangeItem")',
+            url: '@Url.Action("NavNext", "Position")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -427,9 +412,10 @@
 
 
     function OnClickBtnNavLast(s, e) {
+        console.log('aku disini');
         $.ajax({
             type: "POST",
-            url: "@Url.Action("NavLast", "ChangeItem")",
+            url: "@Url.Action("NavLast", "Position")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -453,7 +439,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("DetailPartial", "ChangeItem")',
+            url: '@Url.Action("DetailPartial", "Position")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -477,7 +463,7 @@
     function OnClickBtnListFind(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupList");
 
-        var gv = ASPxClientGridView.Cast('gvChangeItemList');
+        var gv = ASPxClientGridView.Cast('gvPositionList');
         if (gv == null) {
             popup.Show();
         } else {
@@ -506,7 +492,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("Post", "ChangeItem")',
+                        url: '@Url.Action("Post", "Position")',
                         data: formData,
                         beforeSend: function () {
                             OnBegin();
@@ -533,6 +519,7 @@
         }
     }
 
+
     function popupCancelReason_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#CancelReason_formDetail");
 
@@ -546,20 +533,19 @@
     function btnShowCancelReasonOnClick(s, e, Id) {
         var popup = ASPxClientPopupControl.Cast("popupCancelReason");
 
-        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "ChangeItem")' + '?Id=' + Id;
+        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "Position")' + '?Id=' + Id;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
             loadingPanel.Show();
         }
     }
-
     function OnClickChooseItem(s, e, detId) {
         @*key = Id.GetValue();
 
         var popup = ASPxClientPopupControl.Cast("popupItemTag");
 
-        popup.callbackUrl = '@Url.Action("ViewItemTag_PopupListOnDemandPartial", "ChangeItem")' + '?Id=' + key + '&DetId=' + detId;
+        popup.callbackUrl = '@Url.Action("ViewItemTag_PopupListOnDemandPartial", "Position")' + '?Id=' + key + '&DetId=' + detId;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -576,7 +562,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Cancel", "ChangeItem")',
+            url: '@Url.Action("Cancel", "Position")',
             data: { Id: key, CancelReason: reason },
             beforeSend: function () {
                 OnBegin();
@@ -600,7 +586,7 @@
     function OnClickChoose(s, e, key) {
         $.ajax({
             type: "POST",
-            url: '@Url.Action("DetailPartial", "ChangeItem")',
+            url: '@Url.Action("DetailPartial", "Position")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -623,360 +609,11 @@
 </script>
 
 
-<script type="text/javascript">
 
 
-    function OnBatchEditStartEditing(s, e) {
-    }
+@Html.Partial("Partial/Position_Form_Btn_Partial")
 
-    function OnBatchEditEndEditing(s, e) {
-    }
-
-    function OnGridFocusedRowChanged(s, e) {
-    }
-
-    function setColValue(s, e, value) {
-    }
-
-    function OnLookupBeginCallback(s, e) {
-    }
-</script>
-<script type="text/javascript">
-
-    function gvChangeItemDetailOnBeginCallback(s, e) {
-        e.customArgs['cbId'] = Id.GetValue();
-    }
-
-    function gvChangeItemDetailOnEndCallback(s, e) {
-
-    }
-
-    function gvChangeItemDetailOnCustomButtonClick(s, e) {
-
-        if (e.buttonID == "deleteButton") {
-            //if (confirm('Delete line transaction?')) {
-            //s.batchEditApi.StartEdit(e.visibleIndex);
-            //var rowValues = s.batchEditHelper.GetRowValues(e.visibleIndex);
-            //gvChangeItemDetailCalculateSummary(s, rowValues, e.visibleIndex, true);
-            //s.DeleteRow(e.visibleIndex);
-            //s.GetBatchEditHelper().CanUpdate();
-
-            var vi = e.visibleIndex;
-
-            // Pastikan nilai editor di-commit ke batch cache
-            s.batchEditApi.EndEdit();
-
-            // Ambil nilai langsung dari cache batch edit
-            var fields = ["Qty", "Price", "Discount", "Amount"]; // ganti sesuai kolom
-            var rowValues = {};
-            fields.forEach(function (f) {
-                rowValues[f] = s.batchEditApi.GetCellValue(vi, f);
-            });
-
-            // Hitung ulang summary (sebelum hapus, jika logika Anda perlu)
-            gvChangeItemDetailCalculateSummary(s, rowValues, vi, true);
-
-            // Hapus baris di batch
-            s.DeleteRow(vi);
-
-            //}
-        }
-
-    }
-
-
-    function gvChangeItemDetailOnBatchEditStartEditing(s, e) {
-    }
-
-    function gvChangeItemDetailOnBatchEditEndEditing(s, e) {
-    }
-
-    function gvChangeItemDetailOnBatchEditRowValidating(s, e) {
-    }
-
-    function gvChangeItemDetailCalculateSummary(grid, rowValues, visibleIndex, isDeleting) {
-    }
-
-</script>
-
-@*
-    ----------------------------------------------------------------------------
-        CflWarehouse
-
-    ----------------------------------------------------------------------------
-*@
-
-@{
-    var cflWarehouse_ParamModel = new CflWarehouse_ParamModel();
-    cflWarehouse_ParamModel.Name = "ChangeItem";
-    cflWarehouse_ParamModel.Type = "ChangeItem";
-    cflWarehouse_ParamModel.SqlWhere = "   ";
-    cflWarehouse_ParamModel.Header = "";
-
-    cflWarehouse_ParamModel.IsMulti = "N";
-}
-<script type="text/javascript">
-
-    function BtnCflWarehousePopupListChangeItemOnClick(s, e) {
-
-        //cflCrmWorkOrderHdrPopupListDeliveryOrder.Show();
-
-        var popup = ASPxClientPopupControl.Cast("cflWarehousePopupListChangeItem");
-
-        var gv = ASPxClientGridView.Cast('gvCflWarehouseListChangeItem');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
-    }
-
-    function OnClickChoose_CflWarehouseChangeItem(s, e, data) {
-        WhsCode.SetValue(data.WhsCode);
-        WhsName.SetValue(data.WhsName);
-
-        cflWarehousePopupListChangeItem.Hide();
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_Panel_List_Partial.cshtml", cflWarehouse_ParamModel)
-
-
-@*
-    ----------------------------------------------------------------------------
-        CflOriginItemCode
-    ----------------------------------------------------------------------------
-*@
-
-@{
-    var cflOriginItemCode_ParamModel = new CflItem_ParamModel();
-    cflOriginItemCode_ParamModel.Name = "OriginItem";
-    cflOriginItemCode_ParamModel.Type = "OriginItem";
-    cflOriginItemCode_ParamModel.SqlWhere = "   ";
-    cflOriginItemCode_ParamModel.Header = "";
-
-    cflOriginItemCode_ParamModel.IsMulti = "N";
-}
-<script type="text/javascript">
-
-    function BtnCflOriginItemCodePopupListChangeItemOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("cflItemPopupListOriginItem");
-
-        var gv = ASPxClientGridView.Cast('gvCflItemListOriginItem');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
-    }
-
-    function OnClickChoose_CflItemOriginItem(s, e, data) {
-        OriginItemCode.SetValue(data.ItemCode);
-        OriginItemName.SetValue(data.ItemName);
-
-        cflItemPopupListOriginItem.Hide();
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflOriginItemCode_ParamModel)
-
-
-@*
-    ----------------------------------------------------------------------------
-        CflToItemCode
-    ----------------------------------------------------------------------------
-*@
-
-@{
-    var cflToItemCode_ParamModel = new CflItem_ParamModel();
-    cflToItemCode_ParamModel.Name = "ToItem";
-    cflToItemCode_ParamModel.Type = "ToItem";
-    cflToItemCode_ParamModel.SqlWhere = "   ";
-    cflToItemCode_ParamModel.Header = "";
-
-    cflToItemCode_ParamModel.IsMulti = "N";
-}
-<script type="text/javascript">
-
-    function BtnCflToItemCodeCodePopupListChangeItemOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("cflItemPopupListToItem");
-
-        var gv = ASPxClientGridView.Cast('gvCflItemListToItem');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
-    }
-
-    function OnClickChoose_CflItemToItem(s, e, data) {
-        ToItemCode.SetValue(data.ItemCode);
-        ToItemName.SetValue(data.ItemName);
-
-        cflItemPopupListToItem.Hide();
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflToItemCode_ParamModel)
-
-@*
-    ----------------------------------------------------------------------------
-        CflTag
-
-    ----------------------------------------------------------------------------
-*@
-
-@{
-    var cflTag_ParamModel = new CflTag_ParamModel();
-    cflTag_ParamModel.Name = "ChangeItem";
-    cflTag_ParamModel.Type = "ChangeItem";
-    cflTag_ParamModel.SqlWhere = "   ";
-    cflTag_ParamModel.Header = "";
-
-    cflTag_ParamModel.IsMulti = "Y";
-}
-<script type="text/javascript">
-
-    function BtnCflTagPopupListChangeItemOnClick(s, e) {
-
-        var popup = ASPxClientPopupControl.Cast("cflTagPopupListChangeItem");
-
-        var gv = ASPxClientGridView.Cast('gvCflTagListChangeItem');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
-    }
-
-    function OnClickChoose_CflTagChangeItem(s, e) {
-        gvCflTagListChangeItem.GetSelectedFieldValues('TagId', GetSelectedFieldValuesCallback_CflTag);
-    }
-
-    function GetSelectedFieldValuesCallback_CflTag(values) { 
-        cflTagPopupListChangeItem.Hide();
-
-        key = Id.GetValue(); 
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("ChooseItem", "ChangeItem")',
-            data: { Id: key, Data: values },
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                gvChangeItemDetail.PerformCallback();
-                OnSuccessMsgBox();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete();
-            }
-        });
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflTag/Partial/_CflTag_Panel_List_Partial.cshtml", cflTag_ParamModel)
-
-
-@*
-    -----------------------------------------------------------------------------
-    gvCflItemByWarehouseList
-    -----------------------------------------------------------------------------
-*@
-
-
-@{
-    var cflItemByWarehouse_ParamModel = new CflItemByWarehouse_ParamModel();
-    cflItemByWarehouse_ParamModel.Name = "ChangeItem";
-    cflItemByWarehouse_ParamModel.Type = "ChangeItem";
-    cflItemByWarehouse_ParamModel.SqlWhere = "    ";
-    cflItemByWarehouse_ParamModel.Header = "";
-
-    cflItemByWarehouse_ParamModel.IsMulti = "Y";
-}
-
-
-
-<script type="text/javascript">
-
-    function BtnCflItemByWarehousePopupListChangeItemOnClick(s, e) {
-
-        var popup = ASPxClientPopupControl.Cast("cflItemByWarehousePopupListChangeItem");
-
-        var gv = ASPxClientGridView.Cast('gvCflItemByWarehouseListChangeItem');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-    }
-
-
-    function OnClickChoose_CflItemByWarehouseChangeItem(s, e) {
-        gvCflItemByWarehouseListChangeItem.GetSelectedFieldValues('ItemCode', GetSelectedFieldValuesCallback_CflItemByWarehouse);
-    }
-
-
-    function GetSelectedFieldValuesCallback_CflItemByWarehouse(values) {
-        cflItemByWarehousePopupListChangeItem.Hide();
-
-        key = Id.GetValue();
-        fromWhsCodeKey = FromWhsCode.GetValue();
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("ChooseItem", "ChangeItem")',
-            data: { Id: key, Data: values },
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                gvChangeItemDetail.PerformCallback();
-                OnSuccessMsgBox();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete();
-            }
-        });
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_Panel_List_Partial.cshtml", cflItemByWarehouse_ParamModel)
-
-
-@Html.Partial("Partial/ChangeItem_Form_Btn_Partial")
-
-@using (Ajax.BeginForm("mantap", "ChangeItem", null,
+@using (Ajax.BeginForm("mantap", "Position", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -997,7 +634,7 @@ new
 }))
 {
     <div id="contentForm" style="padding-top:79px">
-        @Html.Partial("Partial/ChangeItem_Form_Partial")
+        @Html.Partial("Partial/Position_Form_Partial")
 
     </div>
 }
@@ -1019,23 +656,10 @@ new
         settings.Styles.LoadingDiv.Opacity = 0;
     }).GetHtml()
 
-
-
-@*-------------------------------------------------
-    CancelReason
-    -------------------------------------------------*@
-
-@Html.Partial("Partial/CancelReason/CancelReason_Partial")
-
 @*
     -----------------------------------------------------------------------------
     gvShipList
     -----------------------------------------------------------------------------
 *@
 
-@Html.Partial("Partial/ChangeItem_Form_BtnBottom_Partial")
-
-@Html.Partial("Partial/ChangeItem_Panel_List_Partial")
-
-@Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")
-
+@Html.Partial("Partial/Position_Panel_List_Partial")
