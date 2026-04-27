@@ -48,7 +48,7 @@ namespace Models.Master.Position
         public PositionModel GetNewModel(int userItemCode)
         {
             PositionModel model = new PositionModel();
-
+            model.IsActive = "Y";
             return model;
         }
         public PositionModel GetById(int userId, long id = 0)
