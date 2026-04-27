@@ -178,7 +178,7 @@ namespace Models.Setting.Approval
                             String keyValue;
                             keyValue = tm_Approval.Id.ToString();
 
-                            Detail_User(CONTEXT, model, Id);
+                            //Detail_User(CONTEXT, model, Id);
                             Detail_Role(CONTEXT, model, Id);
 
                             SpNotif.SpSysControllerTransNotif(model._UserId, "Approval", CONTEXT, "after", "Approval", "add", "Id", keyValue);
@@ -232,7 +232,7 @@ namespace Models.Setting.Approval
                             tm_Approval.ModifiedUser = model._UserId;
                             CONTEXT.SaveChanges();
 
-                            Detail_User(CONTEXT, model, model.Id);
+                            //Detail_User(CONTEXT, model, model.Id);
                             Detail_Role(CONTEXT, model, model.Id);
 
                             SpNotif.SpSysControllerTransNotif(model._UserId, "after", CONTEXT, "after", "Approval", "update", "Id", keyValue);
@@ -283,54 +283,54 @@ namespace Models.Setting.Approval
             }
         }
 
-        public void Detail_User(HANA_APP CONTEXT, ApprovalModel pModel, int pId)
-        {
-            //------------------------------
-            //Detail
-            //------------------------------ 
-            var Ticks_ = pModel.UserTicks_ ?? new string[] { };
+        //public void Detail_User(HANA_APP CONTEXT, ApprovalModel pModel, int pId)
+        //{
+        //    //------------------------------
+        //    //Detail
+        //    //------------------------------ 
+        //    var Ticks_ = pModel.UserTicks_ ?? new string[] { };
 
-            List<Tm_User> items = CONTEXT.Database.SqlQuery<Tm_User>(@"SELECT * FROM ""Tm_User"" T0 ").ToList();
-            DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>(@"SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+        //    List<Tm_User> items = CONTEXT.Database.SqlQuery<Tm_User>(@"SELECT * FROM ""Tm_User"" T0 ").ToList();
+        //    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>(@"SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-            for (int i = 0; i < items.Count; i++)
-            {
-                var ssql2 = @"SELECT TOP 1 T0.""DetId"" FROM  ""Tm_Approval_User"" T0 WHERE T0.""Id"" = :p0 AND T0.""UserId"" = :p1 ";
-                int? DetId = CONTEXT.Database.SqlQuery<int?>(ssql2, pId, items[i].Id).FirstOrDefault();
+        //    for (int i = 0; i < items.Count; i++)
+        //    {
+        //        var ssql2 = @"SELECT TOP 1 T0.""DetId"" FROM  ""Tm_Approval_User"" T0 WHERE T0.""Id"" = :p0 AND T0.""UserId"" = :p1 ";
+        //        int? DetId = CONTEXT.Database.SqlQuery<int?>(ssql2, pId, items[i].Id).FirstOrDefault();
 
-                if (DetId == null)
-                {
-                    var item = new Tm_Approval_User();
-                    item.Id = pId;
-                    item.UserId = items[i].Id ;
-                    item.IsTick = Ticks_.Contains(items[i].Id.ToString()) ? "Y" : "N";
+        //        if (DetId == null)
+        //        {
+        //            var item = new Tm_Approval_User();
+        //            item.Id = pId;
+        //            item.UserId = items[i].Id ;
+        //            item.IsTick = Ticks_.Contains(items[i].Id.ToString()) ? "Y" : "N";
 
-                    item.CreatedUser = pModel._UserId;
-                    item.CreatedDate = dtModified;
-                    item.ModifiedUser = pModel._UserId;
-                    item.ModifiedDate = dtModified;
+        //            item.CreatedUser = pModel._UserId;
+        //            item.CreatedDate = dtModified;
+        //            item.ModifiedUser = pModel._UserId;
+        //            item.ModifiedDate = dtModified;
 
-                    CONTEXT.Tm_Approval_User.Add(item);
-                    CONTEXT.SaveChanges();
+        //            CONTEXT.Tm_Approval_User.Add(item);
+        //            CONTEXT.SaveChanges();
 
-                    DetId = item.DetId;
-                }
-                else
-                {
-                    Tm_Approval_User item = CONTEXT.Tm_Approval_User.Find(DetId);
-                    if (item != null)
-                    {
-                        item.IsTick = Ticks_.Contains(items[i].Id.ToString()) ? "Y" : "N";
+        //            DetId = item.DetId;
+        //        }
+        //        else
+        //        {
+        //            Tm_Approval_User item = CONTEXT.Tm_Approval_User.Find(DetId);
+        //            if (item != null)
+        //            {
+        //                item.IsTick = Ticks_.Contains(items[i].Id.ToString()) ? "Y" : "N";
 
-                        item.ModifiedUser = pModel._UserId;
-                        item.ModifiedDate = dtModified;
+        //                item.ModifiedUser = pModel._UserId;
+        //                item.ModifiedDate = dtModified;
                         
-                        CONTEXT.SaveChanges();
-                    }
-                }
+        //                CONTEXT.SaveChanges();
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         public void Detail_Role(HANA_APP CONTEXT, ApprovalModel pModel, int pId)
         {
