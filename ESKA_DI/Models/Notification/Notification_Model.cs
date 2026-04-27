@@ -33,14 +33,36 @@ namespace Models.Notification
         public string ObjectName { get; set; }
         public string TransNo { get; set; }
         public string Message { get; set; }
-        public DateTime RequestDate { get; set; }
-        public int CreatedUser { get; set; }
+        public DateTime? RequestDate { get; set; }
+        public int? CreatedUser { get; set; }
         public string FirstName { get; set; }
 
     }
 
     public class Notification_Model
     {
+        public static string ssql = @"
+            SELECT
+                Tx.*,
+                Ty.""FirstName"",
+                Tz.""ObjectName""
+            FROM(
+            SELECT                     
+                    NULL AS ""Id"",
+                    NULL AS ""TransType"",
+                    NULL AS ""TransNo"" ,
+                    NULL AS ""Message"",
+                    NULL AS ""RequestDate"", 
+                    NULL AS ""CreatedUser""
+            FROM DUMMY
+        )Tx
+            LEFT JOIN ""Tm_User"" Ty ON Tx.""CreatedUser"" = Ty.""Id""
+            LEFT JOIN ""Ts_ObjectApproval"" Tz ON Tx.""TransType"" = Tz.""ObjectCode"" 
+            
+            ORDER BY Tx.""RequestDate"" DESC
+        ";
+
+        /*
         public static string ssql = @"
             SELECT
                 Tx.*,
@@ -150,7 +172,7 @@ namespace Models.Notification
             
             ORDER BY Tx.""RequestDate"" DESC
         ";
-
+        */
         public static void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e, int userId, Notification_ParamModel notificationParam)
         {
             var Cfl_Sql = Notification_Model.ssql;
