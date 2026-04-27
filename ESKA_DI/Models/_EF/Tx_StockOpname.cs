@@ -17,14 +17,19 @@ namespace ESKA_DI.Models._EF
         public long Id { get; set; }
         public string TransType { get; set; }
         public string TransNo { get; set; }
+        public Nullable<int> DocEntry { get; set; }
+        public string DocNum { get; set; }
         public Nullable<System.DateTime> TransDate { get; set; }
-        public Nullable<long> RequestId { get; set; }
-        public string RequestNo { get; set; }
+        public Nullable<System.DateTime> PostingDate { get; set; }
         public string WhsCode { get; set; }
-        public string ScanDeviceId { get; set; }
+        public string WhsName { get; set; }
         public string Status { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string IsAfterPosted { get; set; }
         public string Comments { get; set; }
         public string CancelReason { get; set; }
+        public string IsApproval { get; set; }
+        public string ApprovalMessages { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

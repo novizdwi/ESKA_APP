@@ -101,16 +101,9 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_GoodsReceiptPO_Ref> Tx_GoodsReceiptPO_Ref { get; set; }
         public virtual DbSet<Tx_PurchaseOrder> Tx_PurchaseOrder { get; set; }
         public virtual DbSet<Tx_PurchaseOrder_Item> Tx_PurchaseOrder_Item { get; set; }
-        public virtual DbSet<Tx_Request_StockOpname> Tx_Request_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
-        public virtual DbSet<Tx_StockOpname_Item_Tag> Tx_StockOpname_Item_Tag { get; set; }
-        public virtual DbSet<Tx_StockSummaryOpname> Tx_StockSummaryOpname { get; set; }
-        public virtual DbSet<Tx_StockSummaryOpname_Approval> Tx_StockSummaryOpname_Approval { get; set; }
-        public virtual DbSet<Tx_StockSummaryOpname_Item> Tx_StockSummaryOpname_Item { get; set; }
-        public virtual DbSet<Tx_StockSummaryOpname_Item_Tag> Tx_StockSummaryOpname_Item_Tag { get; set; }
-        public virtual DbSet<Tx_StockSummaryOpname_Ref> Tx_StockSummaryOpname_Ref { get; set; }
         public virtual DbSet<Tx_TransferIn> Tx_TransferIn { get; set; }
         public virtual DbSet<Tx_TransferIn_Item> Tx_TransferIn_Item { get; set; }
         public virtual DbSet<Tx_TransferIn_Item_Tag> Tx_TransferIn_Item_Tag { get; set; }

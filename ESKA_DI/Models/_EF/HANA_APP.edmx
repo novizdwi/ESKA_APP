@@ -1294,27 +1294,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ModifiedDate" Type="timestamp" />
           <Property Name="ModifiedUser" Type="int" />
         </EntityType>
-        <EntityType Name="Tx_Request_StockOpname">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-          <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="WhsName" Type="nvarchar" MaxLength="100" />
-          <Property Name="StartDate" Type="timestamp" />
-          <Property Name="EndDate" Type="timestamp" />
-          <Property Name="Description" Type="nvarchar" MaxLength="100" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="CancelReason" Type="nvarchar" MaxLength="50" />
-          <Property Name="IsApproval" Type="varchar" MaxLength="1" />
-          <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
         <EntityType Name="Tx_StockOpname">
           <Key>
             <PropertyRef Name="Id" />
@@ -1322,14 +1301,19 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TransType" Type="nvarchar" MaxLength="50" />
           <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocEntry" Type="int" />
+          <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
           <Property Name="TransDate" Type="timestamp" />
-          <Property Name="RequestId" Type="bigint" />
-          <Property Name="RequestNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostingDate" Type="timestamp" />
           <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
+          <Property Name="WhsName" Type="varchar" MaxLength="100" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
           <Property Name="Comments" Type="nvarchar" MaxLength="254" />
-          <Property Name="CancelReason" Type="nvarchar" MaxLength="500" />
+          <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+          <Property Name="IsApproval" Type="varchar" MaxLength="1" />
+          <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
           <Property Name="ModifiedDate" Type="timestamp" />
@@ -1361,97 +1345,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
           <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
-          <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
-          <Property Name="UomEntry" Type="int" />
-          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tx_StockOpname_Item_Tag">
-          <Key>
-            <PropertyRef Name="DetDetId" />
-          </Key>
-          <Property Name="Id" Type="bigint" />
-          <Property Name="DetId" Type="bigint" />
-          <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
-          <Property Name="TagId" Type="nvarchar" MaxLength="200" />
-          <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
-          <Property Name="EventType" Type="nvarchar" MaxLength="100" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="PostResultNote" Type="nvarchar" MaxLength="500" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-          <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="DocEntry" Type="int" />
-          <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
-          <Property Name="TransDate" Type="timestamp" />
-          <Property Name="PostingDate" Type="timestamp" />
-          <Property Name="RequestId" Type="bigint" />
-          <Property Name="RequestNo" Type="nvarchar" MaxLength="100" />
-          <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="WhsName" Type="varchar" MaxLength="100" />
-          <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
-          <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
-          <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
-          <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
-          <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
-          <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
-          <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
-          <Property Name="Comments" Type="nvarchar" MaxLength="254" />
-          <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
-          <Property Name="IsApproval" Type="varchar" MaxLength="1" />
-          <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Approval">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="int" />
-          <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StageId" Type="int" />
-          <Property Name="UserId" Type="int" />
-          <Property Name="Step" Type="int" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
-          <Property Name="ActionDate" Type="seconddate" />
-          <Property Name="CreatedDate" Type="seconddate" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="seconddate" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Item">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="bigint" />
-          <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
-          <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
           <Property Name="QuantityOnHandSAP" Type="decimal" Precision="21" Scale="2" />
           <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
           <Property Name="QuantityValid" Type="decimal" Precision="21" Scale="2" />
@@ -1461,56 +1354,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="Uom" Type="nvarchar" MaxLength="50" />
           <Property Name="AcctCode" Type="nvarchar" MaxLength="100" />
           <Property Name="AcctName" Type="nvarchar" MaxLength="100" />
-          <Property Name="PillarsCode" Type="nvarchar" MaxLength="10" />
-          <Property Name="PillarsName" Type="nvarchar" MaxLength="50" />
-          <Property Name="ClassCode" Type="nvarchar" MaxLength="10" />
-          <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
-          <Property Name="SubClass1Code" Type="nvarchar" MaxLength="10" />
-          <Property Name="SubClass1Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="SubClass2Code" Type="nvarchar" MaxLength="10" />
-          <Property Name="SubClass2Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProjectCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
           <Property Name="FreeText" Type="nvarchar" MaxLength="254" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Item_Tag">
-          <Key>
-            <PropertyRef Name="DetDetId" />
-          </Key>
-          <Property Name="Id" Type="bigint" />
-          <Property Name="DetId" Type="bigint" />
-          <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
-          <Property Name="TagId" Type="nvarchar" MaxLength="200" />
-          <Property Name="Quantity" Type="decimal" Precision="21" Scale="6" />
-          <Property Name="EventType" Type="nvarchar" MaxLength="100" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="BaseId" Type="bigint" />
-          <Property Name="BaseDetId" Type="bigint" />
-          <Property Name="BaseDetDetId" Type="bigint" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Ref">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="bigint" />
-          <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="BaseId" Type="nvarchar" MaxLength="50" />
-          <Property Name="BaseNo" Type="nvarchar" MaxLength="200" />
-          <Property Name="ScanDeviceId" Type="nvarchar" MaxLength="1000" />
-          <Property Name="Comments" Type="nvarchar" MaxLength="254" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="BaseCreatedDate" Type="timestamp" />
-          <Property Name="BaseCreatedUser" Type="int" />
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
           <Property Name="ModifiedDate" Type="timestamp" />
@@ -2082,16 +1926,9 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tx_GoodsReceiptPO_Ref" EntityType="Self.Tx_GoodsReceiptPO_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_PurchaseOrder" EntityType="Self.Tx_PurchaseOrder" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_PurchaseOrder_Item" EntityType="Self.Tx_PurchaseOrder_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_Request_StockOpname" EntityType="Self.Tx_Request_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_StockOpname_Item_Tag" EntityType="Self.Tx_StockOpname_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_StockSummaryOpname" EntityType="Self.Tx_StockSummaryOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_StockSummaryOpname_Approval" EntityType="Self.Tx_StockSummaryOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_StockSummaryOpname_Item" EntityType="Self.Tx_StockSummaryOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_StockSummaryOpname_Item_Tag" EntityType="Self.Tx_StockSummaryOpname_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tx_StockSummaryOpname_Ref" EntityType="Self.Tx_StockSummaryOpname_Ref" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_TransferIn" EntityType="Self.Tx_TransferIn" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_TransferIn_Item" EntityType="Self.Tx_TransferIn_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_TransferIn_Item_Tag" EntityType="Self.Tx_TransferIn_Item_Tag" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -2207,16 +2044,9 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_GoodsReceiptPO_Ref" EntityType="Model1.Tx_GoodsReceiptPO_Ref" />
           <EntitySet Name="Tx_PurchaseOrder" EntityType="Model1.Tx_PurchaseOrder" />
           <EntitySet Name="Tx_PurchaseOrder_Item" EntityType="Model1.Tx_PurchaseOrder_Item" />
-          <EntitySet Name="Tx_Request_StockOpname" EntityType="Model1.Tx_Request_StockOpname" />
           <EntitySet Name="Tx_StockOpname" EntityType="Model1.Tx_StockOpname" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
-          <EntitySet Name="Tx_StockOpname_Item_Tag" EntityType="Model1.Tx_StockOpname_Item_Tag" />
-          <EntitySet Name="Tx_StockSummaryOpname" EntityType="Model1.Tx_StockSummaryOpname" />
-          <EntitySet Name="Tx_StockSummaryOpname_Approval" EntityType="Model1.Tx_StockSummaryOpname_Approval" />
-          <EntitySet Name="Tx_StockSummaryOpname_Item" EntityType="Model1.Tx_StockSummaryOpname_Item" />
-          <EntitySet Name="Tx_StockSummaryOpname_Item_Tag" EntityType="Model1.Tx_StockSummaryOpname_Item_Tag" />
-          <EntitySet Name="Tx_StockSummaryOpname_Ref" EntityType="Model1.Tx_StockSummaryOpname_Ref" />
           <EntitySet Name="Tx_TransferIn" EntityType="Model1.Tx_TransferIn" />
           <EntitySet Name="Tx_TransferIn_Item" EntityType="Model1.Tx_TransferIn_Item" />
           <EntitySet Name="Tx_TransferIn_Item_Tag" EntityType="Model1.Tx_TransferIn_Item_Tag" />
@@ -3496,27 +3326,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
-        <EntityType Name="Tx_Request_StockOpname">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="WhsName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" />
-          <Property Name="EndDate" Type="DateTime" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CancelReason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
         <EntityType Name="Tx_StockOpname">
           <Key>
             <PropertyRef Name="Id" />
@@ -3524,14 +3333,19 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocEntry" Type="Int32" />
+          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TransDate" Type="DateTime" />
-          <Property Name="RequestId" Type="Int64" />
-          <Property Name="RequestNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostingDate" Type="DateTime" />
           <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ScanDeviceId" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="WhsName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CancelReason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CancelReason" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -3563,97 +3377,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="QuantityScan" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="UomEntry" Type="Int32" />
-          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_StockOpname_Item_Tag">
-          <Key>
-            <PropertyRef Name="DetDetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" />
-          <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="TagId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="6" />
-          <Property Name="EventType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PostResultNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DocEntry" Type="Int32" />
-          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransDate" Type="DateTime" />
-          <Property Name="PostingDate" Type="DateTime" />
-          <Property Name="RequestId" Type="Int64" />
-          <Property Name="RequestNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="WhsName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="PillarsCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="PillarsName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ClassCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ClassName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass1Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass2Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CancelReason" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Approval">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int32" />
-          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StageId" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="Step" Type="Int32" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ActionDate" Type="DateTime" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Item">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="QuantityOnHandSAP" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="QuantityScan" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="QuantityValid" Type="Decimal" Precision="21" Scale="2" />
@@ -3663,56 +3386,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PillarsCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="PillarsName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ClassCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ClassName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass1Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass2Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SubClass2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Item_Tag">
-          <Key>
-            <PropertyRef Name="DetDetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" />
-          <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="TagId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="6" />
-          <Property Name="EventType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BaseId" Type="Int64" />
-          <Property Name="BaseDetId" Type="Int64" />
-          <Property Name="BaseDetDetId" Type="Int64" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_StockSummaryOpname_Ref">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BaseId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BaseNo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ScanDeviceId" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BaseCreatedDate" Type="DateTime" />
-          <Property Name="BaseCreatedUser" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -5557,28 +5231,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tx_Request_StockOpname">
-            <EntityTypeMapping TypeName="Model1.Tx_Request_StockOpname">
-              <MappingFragment StoreEntitySet="Tx_Request_StockOpname">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
-                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
-                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="WhsName" ColumnName="WhsName" />
-                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
-                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-                <ScalarProperty Name="TransType" ColumnName="TransType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tx_StockOpname">
             <EntityTypeMapping TypeName="Model1.Tx_StockOpname">
               <MappingFragment StoreEntitySet="Tx_StockOpname">
@@ -5586,14 +5238,19 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
+                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
                 <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ScanDeviceId" ColumnName="ScanDeviceId" />
+                <ScalarProperty Name="WhsName" ColumnName="WhsName" />
                 <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
-                <ScalarProperty Name="RequestNo" ColumnName="RequestNo" />
-                <ScalarProperty Name="RequestId" ColumnName="RequestId" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
                 <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
                 <ScalarProperty Name="TransNo" ColumnName="TransNo" />
                 <ScalarProperty Name="TransType" ColumnName="TransType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -5625,112 +5282,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Uom" ColumnName="Uom" />
-                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
-                <ScalarProperty Name="QuantityScan" ColumnName="QuantityScan" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockOpname_Item_Tag">
-            <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item_Tag">
-              <MappingFragment StoreEntitySet="Tx_StockOpname_Item_Tag">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="PostResultNote" ColumnName="PostResultNote" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="EventType" ColumnName="EventType" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="TagId" ColumnName="TagId" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockSummaryOpname">
-            <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname">
-              <MappingFragment StoreEntitySet="Tx_StockSummaryOpname">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
-                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
-                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
-                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
-                <ScalarProperty Name="ProjectCode" ColumnName="ProjectCode" />
-                <ScalarProperty Name="SubClass2Name" ColumnName="SubClass2Name" />
-                <ScalarProperty Name="SubClass2Code" ColumnName="SubClass2Code" />
-                <ScalarProperty Name="SubClass1Name" ColumnName="SubClass1Name" />
-                <ScalarProperty Name="SubClass1Code" ColumnName="SubClass1Code" />
-                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
-                <ScalarProperty Name="ClassCode" ColumnName="ClassCode" />
-                <ScalarProperty Name="PillarsName" ColumnName="PillarsName" />
-                <ScalarProperty Name="PillarsCode" ColumnName="PillarsCode" />
-                <ScalarProperty Name="WhsName" ColumnName="WhsName" />
-                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
-                <ScalarProperty Name="RequestNo" ColumnName="RequestNo" />
-                <ScalarProperty Name="RequestId" ColumnName="RequestId" />
-                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
-                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
-                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
-                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-                <ScalarProperty Name="TransType" ColumnName="TransType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockSummaryOpname_Approval">
-            <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname_Approval">
-              <MappingFragment StoreEntitySet="Tx_StockSummaryOpname_Approval">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Step" ColumnName="Step" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="StageId" ColumnName="StageId" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockSummaryOpname_Item">
-            <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname_Item">
-              <MappingFragment StoreEntitySet="Tx_StockSummaryOpname_Item">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
-                <ScalarProperty Name="ProjectCode" ColumnName="ProjectCode" />
-                <ScalarProperty Name="SubClass2Name" ColumnName="SubClass2Name" />
-                <ScalarProperty Name="SubClass2Code" ColumnName="SubClass2Code" />
-                <ScalarProperty Name="SubClass1Name" ColumnName="SubClass1Name" />
-                <ScalarProperty Name="SubClass1Code" ColumnName="SubClass1Code" />
-                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
-                <ScalarProperty Name="ClassCode" ColumnName="ClassCode" />
-                <ScalarProperty Name="PillarsName" ColumnName="PillarsName" />
-                <ScalarProperty Name="PillarsCode" ColumnName="PillarsCode" />
                 <ScalarProperty Name="AcctName" ColumnName="AcctName" />
                 <ScalarProperty Name="AcctCode" ColumnName="AcctCode" />
                 <ScalarProperty Name="Uom" ColumnName="Uom" />
@@ -5743,47 +5295,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockSummaryOpname_Item_Tag">
-            <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname_Item_Tag">
-              <MappingFragment StoreEntitySet="Tx_StockSummaryOpname_Item_Tag">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="BaseDetDetId" ColumnName="BaseDetDetId" />
-                <ScalarProperty Name="BaseDetId" ColumnName="BaseDetId" />
-                <ScalarProperty Name="BaseId" ColumnName="BaseId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="EventType" ColumnName="EventType" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="TagId" ColumnName="TagId" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockSummaryOpname_Ref">
-            <EntityTypeMapping TypeName="Model1.Tx_StockSummaryOpname_Ref">
-              <MappingFragment StoreEntitySet="Tx_StockSummaryOpname_Ref">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="BaseCreatedUser" ColumnName="BaseCreatedUser" />
-                <ScalarProperty Name="BaseCreatedDate" ColumnName="BaseCreatedDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="ScanDeviceId" ColumnName="ScanDeviceId" />
-                <ScalarProperty Name="BaseNo" ColumnName="BaseNo" />
-                <ScalarProperty Name="BaseId" ColumnName="BaseId" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
