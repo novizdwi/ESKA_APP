@@ -52,6 +52,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_Layout_Role> Tm_Layout_Role { get; set; }
         public virtual DbSet<Tm_Layout_User> Tm_Layout_User { get; set; }
         public virtual DbSet<Tm_MasterSetting> Tm_MasterSetting { get; set; }
+        public virtual DbSet<Tm_Position> Tm_Position { get; set; }
         public virtual DbSet<Tm_Query> Tm_Query { get; set; }
         public virtual DbSet<Tm_Query_Param> Tm_Query_Param { get; set; }
         public virtual DbSet<Tm_Query_Role> Tm_Query_Role { get; set; }
@@ -68,8 +69,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_ReportGroup_User> Tm_ReportGroup_User { get; set; }
         public virtual DbSet<Tm_Role> Tm_Role { get; set; }
         public virtual DbSet<Tm_Role_Auth> Tm_Role_Auth { get; set; }
-        public virtual DbSet<Tm_Stage> Tm_Stage { get; set; }
-        public virtual DbSet<Tm_Stage_Process> Tm_Stage_Process { get; set; }
         public virtual DbSet<Tm_User> Tm_User { get; set; }
         public virtual DbSet<Tp_Approval> Tp_Approval { get; set; }
         public virtual DbSet<Ts_FormatNumbering> Ts_FormatNumbering { get; set; }
@@ -131,5 +130,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tm_User_Routing> Tm_User_Routing { get; set; }
     }
 }

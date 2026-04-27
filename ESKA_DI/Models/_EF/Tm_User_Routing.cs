@@ -12,13 +12,13 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tm_Stage_Process
+    public partial class Tm_User_Routing
     {
         public Nullable<int> Id { get; set; }
         public int DetId { get; set; }
-        public string RouteCode { get; set; }
-        public Nullable<int> Sequence { get; set; }
-        public string Process { get; set; }
+        public string RoutingCode { get; set; }
+        public string RoutingName { get; set; }
+        public string IsTick { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

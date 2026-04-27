@@ -57,7 +57,8 @@ namespace Models.Authentication.Login
         {
             string ssql = "SELECT COUNT(*) AS IDU "
                               + " FROM \"Tm_User\" T0 "
-                              + " WHERE T0.\"UserName\"=:p0 AND T0.\"Pwd\"=:p1 ";
+                              + " WHERE T0.\"UserName\"=:p0 AND T0.\"Pwd\"=:p1 "                               
+                              + " AND T0.\"IsActive\" = 'Y' ";
             long flag;
 
             using (var CONTEXT = new HANA_APP())

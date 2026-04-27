@@ -394,6 +394,18 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Desc" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Tm_Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="varchar" MaxLength="1" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
         <EntityType Name="Tm_Query">
           <Key>
             <PropertyRef Name="Id" />
@@ -623,35 +635,6 @@
           <Property Name="MenuCode" Type="nvarchar" MaxLength="50" />
           <Property Name="IsAccess" Type="varchar" MaxLength="1" />
         </EntityType>
-        <EntityType Name="Tm_Stage">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TransType" Type="nvarchar" MaxLength="50" />
-          <Property Name="TransNo" Type="varchar" MaxLength="50" />
-          <Property Name="StageName" Type="nvarchar" MaxLength="100" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
-          <Property Name="IsActive" Type="varchar" MaxLength="1" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
-        <EntityType Name="Tm_Stage_Process">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="int" />
-          <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RouteCode" Type="nvarchar" MaxLength="100" />
-          <Property Name="Sequence" Type="int" />
-          <Property Name="Process" Type="nvarchar" MaxLength="100" />
-          <Property Name="CreatedDate" Type="timestamp" />
-          <Property Name="CreatedUser" Type="int" />
-          <Property Name="ModifiedDate" Type="timestamp" />
-          <Property Name="ModifiedUser" Type="int" />
-        </EntityType>
         <EntityType Name="Tm_User">
           <Key>
             <PropertyRef Name="Id" />
@@ -667,6 +650,22 @@
           <Property Name="RoleId" Type="int" />
           <Property Name="EmpId" Type="int" />
           <Property Name="LastController" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="ModifiedUser" Type="int" />
+          <Property Name="PositionId" Type="int" />
+          <Property Name="IsActive" Type="varchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="Tm_User_Routing">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="int" />
+          <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsTick" Type="varchar" MaxLength="1" />
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
           <Property Name="ModifiedDate" Type="timestamp" />
@@ -2033,6 +2032,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tm_Layout_Role" EntityType="Self.Tm_Layout_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Layout_User" EntityType="Self.Tm_Layout_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_MasterSetting" EntityType="Self.Tm_MasterSetting" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tm_Position" EntityType="Self.Tm_Position" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Query" EntityType="Self.Tm_Query" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Query_Param" EntityType="Self.Tm_Query_Param" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Query_Role" EntityType="Self.Tm_Query_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -2049,9 +2049,8 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tm_ReportGroup_User" EntityType="Self.Tm_ReportGroup_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Role" EntityType="Self.Tm_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Role_Auth" EntityType="Self.Tm_Role_Auth" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tm_Stage" EntityType="Self.Tm_Stage" Schema="ESKA_APP_TEST" store:Type="Tables" />
-          <EntitySet Name="Tm_Stage_Process" EntityType="Self.Tm_Stage_Process" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_User" EntityType="Self.Tm_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tm_User_Routing" EntityType="Self.Tm_User_Routing" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tp_Approval" EntityType="Self.Tp_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Ts_FormatNumbering" EntityType="Self.Ts_FormatNumbering" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Ts_LayoutForm" EntityType="Self.Ts_LayoutForm" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -2159,6 +2158,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tm_Layout_Role" EntityType="Model1.Tm_Layout_Role" />
           <EntitySet Name="Tm_Layout_User" EntityType="Model1.Tm_Layout_User" />
           <EntitySet Name="Tm_MasterSetting" EntityType="Model1.Tm_MasterSetting" />
+          <EntitySet Name="Tm_Position" EntityType="Model1.Tm_Position" />
           <EntitySet Name="Tm_Query" EntityType="Model1.Tm_Query" />
           <EntitySet Name="Tm_Query_Param" EntityType="Model1.Tm_Query_Param" />
           <EntitySet Name="Tm_Query_Role" EntityType="Model1.Tm_Query_Role" />
@@ -2175,8 +2175,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tm_ReportGroup_User" EntityType="Model1.Tm_ReportGroup_User" />
           <EntitySet Name="Tm_Role" EntityType="Model1.Tm_Role" />
           <EntitySet Name="Tm_Role_Auth" EntityType="Model1.Tm_Role_Auth" />
-          <EntitySet Name="Tm_Stage" EntityType="Model1.Tm_Stage" />
-          <EntitySet Name="Tm_Stage_Process" EntityType="Model1.Tm_Stage_Process" />
           <EntitySet Name="Tm_User" EntityType="Model1.Tm_User" />
           <EntitySet Name="Tp_Approval" EntityType="Model1.Tp_Approval" />
           <EntitySet Name="Ts_FormatNumbering" EntityType="Model1.Ts_FormatNumbering" />
@@ -2238,6 +2236,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_TransferSummaryOut_Item_Tag" EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" />
           <EntitySet Name="Tx_TransferSummaryOut_Ref" EntityType="Model1.Tx_TransferSummaryOut_Ref" />
           <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
+          <EntitySet Name="Tm_User_Routing" EntityType="Model1.Tm_User_Routing" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -2628,6 +2627,18 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Tm_Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PositionName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
         <EntityType Name="Tm_Query">
           <Key>
             <PropertyRef Name="Id" />
@@ -2857,35 +2868,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="MenuCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsAccess" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Tm_Stage">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="StageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tm_Stage_Process">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int32" />
-          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RouteCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Sequence" Type="Int32" />
-          <Property Name="Process" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
         <EntityType Name="Tm_User">
           <Key>
             <PropertyRef Name="Id" />
@@ -2905,6 +2887,8 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
+          <Property Name="PositionId" Type="Int32" />
+          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Tp_Approval">
           <Key>
@@ -4223,6 +4207,20 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="LastShowTime" Type="DateTime" />
         </EntityType>
+        <EntityType Name="Tm_User_Routing">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int32" />
+          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsTick" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4642,6 +4640,19 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Tm_Position">
+            <EntityTypeMapping TypeName="Model1.Tm_Position">
+              <MappingFragment StoreEntitySet="Tm_Position">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tm_Query">
             <EntityTypeMapping TypeName="Model1.Tm_Query">
               <MappingFragment StoreEntitySet="Tm_Query">
@@ -4887,40 +4898,11 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tm_Stage">
-            <EntityTypeMapping TypeName="Model1.Tm_Stage">
-              <MappingFragment StoreEntitySet="Tm_Stage">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="StageName" ColumnName="StageName" />
-                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-                <ScalarProperty Name="TransType" ColumnName="TransType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tm_Stage_Process">
-            <EntityTypeMapping TypeName="Model1.Tm_Stage_Process">
-              <MappingFragment StoreEntitySet="Tm_Stage_Process">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Process" ColumnName="Process" />
-                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
-                <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tm_User">
             <EntityTypeMapping TypeName="Model1.Tm_User">
               <MappingFragment StoreEntitySet="Tm_User">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PositionId" ColumnName="PositionId" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
@@ -6311,6 +6293,21 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="BaseId" ColumnName="BaseId" />
                 <ScalarProperty Name="BaseType" ColumnName="BaseType" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tm_User_Routing">
+            <EntityTypeMapping TypeName="Model1.Tm_User_Routing">
+              <MappingFragment StoreEntitySet="Tm_User_Routing">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsTick" ColumnName="IsTick" />
+                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

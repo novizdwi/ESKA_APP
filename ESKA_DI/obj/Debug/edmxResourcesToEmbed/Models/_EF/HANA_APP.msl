@@ -414,6 +414,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tm_Position">
+      <EntityTypeMapping TypeName="Model1.Tm_Position">
+        <MappingFragment StoreEntitySet="Tm_Position">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tm_Query">
       <EntityTypeMapping TypeName="Model1.Tm_Query">
         <MappingFragment StoreEntitySet="Tm_Query">
@@ -659,40 +672,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Tm_Stage">
-      <EntityTypeMapping TypeName="Model1.Tm_Stage">
-        <MappingFragment StoreEntitySet="Tm_Stage">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="StageName" ColumnName="StageName" />
-          <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-          <ScalarProperty Name="TransType" ColumnName="TransType" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tm_Stage_Process">
-      <EntityTypeMapping TypeName="Model1.Tm_Stage_Process">
-        <MappingFragment StoreEntitySet="Tm_Stage_Process">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="Process" ColumnName="Process" />
-          <ScalarProperty Name="Sequence" ColumnName="Sequence" />
-          <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Tm_User">
       <EntityTypeMapping TypeName="Model1.Tm_User">
         <MappingFragment StoreEntitySet="Tm_User">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="PositionId" ColumnName="PositionId" />
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
@@ -2083,6 +2067,21 @@
           <ScalarProperty Name="BaseId" ColumnName="BaseId" />
           <ScalarProperty Name="BaseType" ColumnName="BaseType" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tm_User_Routing">
+      <EntityTypeMapping TypeName="Model1.Tm_User_Routing">
+        <MappingFragment StoreEntitySet="Tm_User_Routing">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsTick" ColumnName="IsTick" />
+          <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+          <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

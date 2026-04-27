@@ -3,8 +3,9 @@
 @Html.DevExpress().GridView(settings =>
 {
 
-    settings.Name = "gvUserWarehouseDetail";
-    settings.KeyFieldName = "WhsCode_";
+    settings.Name = "gvUserRoutingDetail";
+    settings.KeyFieldName = "RoutingCode_";
+    settings.CommandColumn.Visible = false;
 
     settings.Width = Unit.Percentage(100);
 
@@ -34,7 +35,7 @@
         column.ColumnType = MVCxGridViewColumnType.CheckBox;
         column.Settings.AllowSort = DefaultBoolean.False;
 
-        column.Width = 80;
+        column.Width = 60;
 
         var chk = column.PropertiesEdit as CheckBoxProperties;
         chk.ValueType = typeof(string);
@@ -42,41 +43,46 @@
         chk.ValueUnchecked = "N";
     });
 
-    //settings.Columns.Add(column =>
-    //{
-    //    column.FieldName = "DetId";
-    //    column.Name = "DetId";
-    //    column.Caption = "Det Id";
-    //    column.Settings.AllowSort = DefaultBoolean.False;
-    //    column.Width = 0;
-    //    column.ReadOnly = true;
-    //});
-
     settings.Columns.Add(column =>
     {
-        column.Caption = "Warehouse Code";
-        column.Name = "WhsCode_";
-        column.FieldName = "WhsCode_";
+        column.Caption = "Routing Code";
+        column.Name = "RoutingCode_";
+        column.FieldName = "RoutingCode_";
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = 150;
+        column.Width = 100;
         column.ReadOnly = true;
 
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED"); 
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
         column.CellStyle.ForeColor = System.Drawing.Color.Black;
     });
 
     settings.Columns.Add(column =>
     {
-        column.Caption = "Warehouse Name";
-        column.Name = "WhsName_";
-        column.FieldName = "WhsName_";
+        column.Caption = "Routing Name";
+        column.Name = "RoutingName_";
+        column.FieldName = "RoutingName_";
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = 350;
+        column.Width = 240;
         column.ReadOnly = true;
 
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED"); 
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
         column.CellStyle.ForeColor = System.Drawing.Color.Black;
     });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.Caption = "Level";
+        column.Name = "Level_";
+        column.FieldName = "Level_";
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 100;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+    });
+
 
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 

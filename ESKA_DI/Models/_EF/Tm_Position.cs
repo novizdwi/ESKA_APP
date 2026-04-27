@@ -12,13 +12,10 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tm_Stage
+    public partial class Tm_Position
     {
         public int Id { get; set; }
-        public string TransType { get; set; }
-        public string TransNo { get; set; }
-        public string StageName { get; set; }
-        public string Remarks { get; set; }
+        public string PositionName { get; set; }
         public string IsActive { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }

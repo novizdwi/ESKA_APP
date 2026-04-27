@@ -626,7 +626,7 @@
     <Content Include="Views\Authentication\Role\Partial\Role_TreeView_Partial.cshtml" />
     <Content Include="Views\Authentication\Role\Role.cshtml" />
     <Content Include="Views\Shared\_rootRpt.cshtml" />
-    <Content Include="Views\Authentication\User\Partial\User_TabWarehouse_List_Partial.cshtml" />
+    <Content Include="Views\Authentication\User\Partial\User_TabRouting_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_Panel_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_List_Partial.cshtml" />

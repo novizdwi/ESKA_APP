@@ -28,6 +28,7 @@
     <EntitySet Name="Tm_Layout_Role" EntityType="Model1.Tm_Layout_Role" />
     <EntitySet Name="Tm_Layout_User" EntityType="Model1.Tm_Layout_User" />
     <EntitySet Name="Tm_MasterSetting" EntityType="Model1.Tm_MasterSetting" />
+    <EntitySet Name="Tm_Position" EntityType="Model1.Tm_Position" />
     <EntitySet Name="Tm_Query" EntityType="Model1.Tm_Query" />
     <EntitySet Name="Tm_Query_Param" EntityType="Model1.Tm_Query_Param" />
     <EntitySet Name="Tm_Query_Role" EntityType="Model1.Tm_Query_Role" />
@@ -44,8 +45,6 @@
     <EntitySet Name="Tm_ReportGroup_User" EntityType="Model1.Tm_ReportGroup_User" />
     <EntitySet Name="Tm_Role" EntityType="Model1.Tm_Role" />
     <EntitySet Name="Tm_Role_Auth" EntityType="Model1.Tm_Role_Auth" />
-    <EntitySet Name="Tm_Stage" EntityType="Model1.Tm_Stage" />
-    <EntitySet Name="Tm_Stage_Process" EntityType="Model1.Tm_Stage_Process" />
     <EntitySet Name="Tm_User" EntityType="Model1.Tm_User" />
     <EntitySet Name="Tp_Approval" EntityType="Model1.Tp_Approval" />
     <EntitySet Name="Ts_FormatNumbering" EntityType="Model1.Ts_FormatNumbering" />
@@ -107,6 +106,7 @@
     <EntitySet Name="Tx_TransferSummaryOut_Item_Tag" EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" />
     <EntitySet Name="Tx_TransferSummaryOut_Ref" EntityType="Model1.Tx_TransferSummaryOut_Ref" />
     <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
+    <EntitySet Name="Tm_User_Routing" EntityType="Model1.Tm_User_Routing" />
   </EntityContainer>
   <EntityType Name="Tm_Alert">
     <Key>
@@ -497,6 +497,18 @@
     <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
+  <EntityType Name="Tm_Position">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PositionName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
   <EntityType Name="Tm_Query">
     <Key>
       <PropertyRef Name="Id" />
@@ -726,35 +738,6 @@
     <Property Name="MenuCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsAccess" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="Tm_Stage">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="StageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-    <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="CreatedDate" Type="DateTime" />
-    <Property Name="CreatedUser" Type="Int32" />
-    <Property Name="ModifiedDate" Type="DateTime" />
-    <Property Name="ModifiedUser" Type="Int32" />
-  </EntityType>
-  <EntityType Name="Tm_Stage_Process">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="Int32" />
-    <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RouteCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Sequence" Type="Int32" />
-    <Property Name="Process" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="CreatedDate" Type="DateTime" />
-    <Property Name="CreatedUser" Type="Int32" />
-    <Property Name="ModifiedDate" Type="DateTime" />
-    <Property Name="ModifiedUser" Type="Int32" />
-  </EntityType>
   <EntityType Name="Tm_User">
     <Key>
       <PropertyRef Name="Id" />
@@ -774,6 +757,8 @@
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
+    <Property Name="PositionId" Type="Int32" />
+    <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Tp_Approval">
     <Key>
@@ -2091,5 +2076,19 @@
     <Property Name="SenderId" Type="Int32" />
     <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
     <Property Name="LastShowTime" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="Tm_User_Routing">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="Int32" />
+    <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsTick" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
 </Schema>
