@@ -69,18 +69,16 @@ namespace Models.Authentication.User
         //[Required(ErrorMessage = "required")]
         public int? EmpId { get; set; }
 
-        public string Position { get; set; }
-
-        public string DefaultWhsCode { get; set; }
+        public int? PositionId { get; set; } 
 
         public string IsActive { get; set; }
 
-        public List<User_WarehouseModel> ListWarehouses_ = new List<User_WarehouseModel>();
+        public List<User_RoutingModel> ListRouting_ = new List<User_RoutingModel>();
 
-        public User_WarehouseModel_Contents DetailContents_ { get; set; }
+        public User_Routing_Contents DetailContents_ { get; set; }
     }
 
-    public class User_WarehouseModel
+    public class User_RoutingModel
     {
 
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
@@ -96,22 +94,27 @@ namespace Models.Authentication.User
 
         public int? Id { get; set; }
 
-        public string WhsCode { get; set; }
+        public string RoutingCode { get; set; }
+
+        public string RoutingName { get; set; }
 
         public string IsTick { get; set; }
 
-        public string WhsCode_ { get; set; }
+        public string RoutingCode_ { get; set; }
 
-        public string WhsName_ { get; set; }
+        public string RoutingName_ { get; set; }
+
+        public int Level_ { get; set; }
+
     }
 
-    public class User_WarehouseModel_Contents
+    public class User_Routing_Contents
     {
         public List<int> deletedRowKeys { get; set; }
 
-        public List<User_WarehouseModel> insertedRowValues { get; set; }
+        public List<User_RoutingModel> insertedRowValues { get; set; }
 
-        public List<User_WarehouseModel> modifiedRowValues { get; set; }
+        public List<User_RoutingModel> modifiedRowValues { get; set; }
     }
     #endregion
 
@@ -273,14 +276,44 @@ namespace Models.Authentication.User
             }
         }
 
-        public void Content_Update(HANA_APP CONTEXT, User_WarehouseModel model, int id, int userId, DateTime dtModified)
+        public void Content_Update(HANA_APP CONTEXT, User_RoutingModel model, int id, int userId, DateTime dtModified)
         {
             int? detId = 0;
 
             if (model != null)
             {
+                detId = CONTEXT.Database.SqlQuery<int?>(@"SELECT TOP 1 T0.""DetId"" FROM ""Tm_User_Routing"" T0 WHERE T0.""Id"" = :p0 AND T0.""RoutingCode"" = :p1 ", id, model.RoutingCode_).FirstOrDefault() ?? 0;
+                if (detId == 0)
                 {
-                    
+                    Tm_User_Routing Tm_User_Routing = new Tm_User_Routing();
+                    CopyProperty.CopyProperties(model, Tm_User_Routing, false);
+
+                    Tm_User_Routing.RoutingCode = model.RoutingCode_;
+                    Tm_User_Routing.RoutingName = model.RoutingName_;
+                    Tm_User_Routing.CreatedDate = dtModified;
+                    Tm_User_Routing.CreatedUser = userId;
+                    Tm_User_Routing.ModifiedDate = dtModified;
+                    Tm_User_Routing.ModifiedUser = userId;
+
+                    CONTEXT.Tm_User_Routing.Add(Tm_User_Routing);
+                    var u = CONTEXT.SaveChanges();
+
+                }
+                else
+                {
+                    var Tm_User_Routing = CONTEXT.Tm_User_Routing.Find(detId);
+                    if (Tm_User_Routing != null)
+                    {
+                        var exceptColumns = new string[] { "DetId", "Id" };
+                        CopyProperty.CopyProperties(model, Tm_User_Routing, false, exceptColumns);
+
+                        Tm_User_Routing.RoutingName = model.RoutingName_;
+                        Tm_User_Routing.ModifiedDate = dtModified;
+                        Tm_User_Routing.ModifiedUser = userId;
+
+                        CONTEXT.SaveChanges();
+
+                    }
                 }
             }
 
@@ -341,7 +374,8 @@ namespace Models.Authentication.User
         {
             UserModel model = new UserModel();
             model.isSetPassword = true;
-            model.IsActive = "Y"; 
+            model.IsActive = "Y";
+            model.ListRouting_ = GetRoutingById(0);
             return model;
         }
 
@@ -353,7 +387,9 @@ namespace Models.Authentication.User
                 using (var CONTEXT = new HANA_APP())
                 {
                     model = CONTEXT.Database.SqlQuery<UserModel>("SELECT T0.* FROM \"Tm_User\" T0 WHERE T0.\"Id\"=:p0 ", id).Single();
-                    model.isSetPassword = false; 
+                    model.isSetPassword = false;
+
+                    model.ListRouting_ = this.GetRoutingById(model.Id);
                 }
             }
 
@@ -447,6 +483,30 @@ namespace Models.Authentication.User
             }
             model = this.GetById(Id.HasValue ? Id.Value : 0);
             return model;
+
+        }
+
+        private List<User_RoutingModel> GetRoutingById(int id)
+        {
+            string ssql = "";
+            using (var CONTEXT = new HANA_APP())
+            {
+                ssql = @"SELECT
+                    ROW_NUMBER() OVER (ORDER BY T0.""Code"") AS ""RowNo"",
+                    T1.""Id"" AS ""Id"",
+	                T1.""RoutingCode"" AS ""RoutingCode"",
+	                T1.""IsTick"" AS ""IsTick"",
+	                T0.""Code"" AS ""RoutingCode_"",
+	                T0.""U_RoutingName"" AS ""RoutingName_"",
+                    T0.""U_Level"" AS ""Level_""
+                FROM ""{0}"".""@IDU_MASTER_ROUTING"" T0
+                LEFT JOIN  ""Tm_User_Routing"" T1 ON T0.""Code"" = T1.""RoutingCode"" AND T1.""Id"" = :p0 
+                ORDER BY T0.""Code"", T0.""U_Level"" ASC
+                ";
+
+                ssql = string.Format(ssql, DbProvider.dbSap_Name);
+                return CONTEXT.Database.SqlQuery<User_RoutingModel>(ssql, id).ToList();
+            }
 
         }
 

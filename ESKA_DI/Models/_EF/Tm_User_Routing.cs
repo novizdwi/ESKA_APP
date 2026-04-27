@@ -16,7 +16,8 @@ namespace ESKA_DI.Models._EF
     {
         public Nullable<int> Id { get; set; }
         public int DetId { get; set; }
-        public string RouteProcess { get; set; }
+        public string RoutingCode { get; set; }
+        public string RoutingName { get; set; }
         public string IsTick { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }

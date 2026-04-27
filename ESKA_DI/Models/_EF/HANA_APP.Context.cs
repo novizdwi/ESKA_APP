@@ -70,7 +70,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_Role> Tm_Role { get; set; }
         public virtual DbSet<Tm_Role_Auth> Tm_Role_Auth { get; set; }
         public virtual DbSet<Tm_User> Tm_User { get; set; }
-        public virtual DbSet<Tm_User_Routing> Tm_User_Routing { get; set; }
         public virtual DbSet<Tp_Approval> Tp_Approval { get; set; }
         public virtual DbSet<Ts_FormatNumbering> Ts_FormatNumbering { get; set; }
         public virtual DbSet<Ts_LayoutForm> Ts_LayoutForm { get; set; }
@@ -131,5 +130,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tm_User_Routing> Tm_User_Routing { get; set; }
     }
 }

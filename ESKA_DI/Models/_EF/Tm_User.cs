@@ -30,5 +30,6 @@ namespace ESKA_DI.Models._EF
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
         public Nullable<int> PositionId { get; set; }
+        public string IsActive { get; set; }
     }
 }

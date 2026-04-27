@@ -25,7 +25,7 @@ namespace Models.Authentication.User
         public string LastName { get; set; }
         public string Email { get; set; }
         public string RoleName { get; set; }
-
+        
     }
 
     public class User__List_Model

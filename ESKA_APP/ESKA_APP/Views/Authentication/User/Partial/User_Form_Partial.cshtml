@@ -206,6 +206,29 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
     });
 
+    groupItem_Col2.Items.Add(m => Model.PositionId, itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Position";
+        itemSettings.Width = Unit.Percentage(100);
+        ComboBoxSettings cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Name = "PositionId";
+        cbo.ShowModelErrors = true;
+        cbo.Properties.TextField = "Name";
+        cbo.Properties.ValueField = "Id";
+        cbo.Properties.ValueType = typeof(int);
+        cbo.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetPositions();
+
+        cbo.ControlStyle.CssClass = "editornoimage";
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+
+    });
+
+
+
     groupItem_Col2.Items.Add(m => Model.IsActive, itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.CheckBox;
@@ -214,7 +237,7 @@
         itemSettings.Caption = "Active";
         //itemSettings.FieldName = "IsComparisonLowerComparisonFare";
 
-        var chk = (CheckBoxSettings)itemSettings.NestedExtensionSettings; 
+        var chk = (CheckBoxSettings)itemSettings.NestedExtensionSettings;
         chk.Name = "IsActive";
         chk.Properties.ValueType = typeof(string);
         chk.Properties.ValueChecked = "Y";
@@ -280,12 +303,12 @@
 
         group.Items.Add(item =>
         {
-            item.Name = "TabWarehouse";
-            item.Caption = "Warehouse";
+            item.Name = "TabRouting";
+            item.Caption = "Routing";
             item.SetNestedContent(() =>
             {
                 ViewContext.Writer.Write(
-                      Html.Partial("Partial/User_TabWarehouse_List_Partial", Model.ListWarehouses_)
+                      Html.Partial("Partial/User_TabRouting_List_Partial", Model.ListRouting_)
                   );
 
             });

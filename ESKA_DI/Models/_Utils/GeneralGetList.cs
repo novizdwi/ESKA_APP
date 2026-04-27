@@ -335,23 +335,23 @@ namespace Models._Utils
 
             return GetDataTable(CONTEXT, ssql, strType, strCategory);
 
-        }
-        
-        public static string GetWarehouseCodeByUserId(int userId)
+        } 
+
+        public static DataTable GetPositions()
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return GetWarehouseCodeByUserId(CONTEXT, userId);
+                var ssql = @"
+                SELECT NULL AS ""Id"", NULL AS ""Name"" FROM DUMMY
+
+                UNION ALL
+                
+                SELECT T0.""Id"", T0.""PositionName"" FROM ""Tm_Position"" T0 WHERE COALESCE(T0.""IsActive"",'N') = 'Y' ";
+                ssql = string.Format(ssql, DbProvider.dbSap_Name);
+                return GetDataTable(CONTEXT, ssql);
             }
         }
-
-        public static string GetWarehouseCodeByUserId(HANA_APP CONTEXT, int userId)
-        {
-            var ssql = @"SELECT T0.""WhsCode""  FROM ""Tm_User"" T0   WHERE T0.""Id""=:p0    ";
-
-            return GetValue<string>(CONTEXT, ssql, userId);
-
-        }
+        
 
         public static string GetWarehouseName(string whsCode)
         {
