@@ -304,16 +304,16 @@ CREATE COLUMN TABLE "Tx_StockOpname_Item" (
     "ItemName" NVARCHAR(200),
     "WhsCode" NVARCHAR(50),
 
-    "QuantityOnHandSAP" DECIMAL(21,2),
-    "QuantityScan" DECIMAL(21,2),
-    "QuantityValid" DECIMAL(21,2),	
+    "Quantity" DECIMAL(21,2),
     "QtyVariance" DECIMAL(21,2),	
-    "UnitPriceTc" DECIMAL(21,2),
     "UomEntry" INTEGER,
     "Uom" NVARCHAR(50),
     "AcctCode" NVARCHAR(100),
     "AcctName" NVARCHAR(100),
-
+	
+    "UnitPriceTc" DECIMAL(21,2),
+    "LineTotal" DECIMAL(21,2),
+    
     "FreeText" NVARCHAR(254),
     "CreatedDate" TIMESTAMP,
     "CreatedUser" INTEGER,

@@ -118,8 +118,8 @@ namespace Models.Notification
                     T0.""ApprovalMessages"" AS ""Message"",
                     T0.""CreatedDate"" AS ""RequestDate"", 
                     T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_StockSummaryOpname"" T0
-                INNER JOIN ""Tx_StockSummaryOpname_Approval"" T1 ON T1.""Id"" = T0.""Id""
+                FROM ""Tx_StockOpname"" T0
+                INNER JOIN ""Tx_StockOpname_Approval"" T1 ON T1.""Id"" = T0.""Id""
                 WHERE T0.""ApprovalStatus"" = 'Waiting' 
                 AND T1.""UserId"" = {UserId}
                 AND T0.""Status"" NOT IN ('Cancel', 'Posted')            

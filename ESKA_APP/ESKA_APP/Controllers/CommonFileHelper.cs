@@ -1,6 +1,6 @@
 ﻿using DevExpress.Web;
 using Models._Utils;
-using Models.Transaction.Inventory;
+using Models.Transaction;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -87,90 +87,90 @@ namespace ESKA_APP
             e.CallbackData = fileName;
         }
 
-        public static void TransferRequestFileComplete(object sender, FileUploadCompleteEventArgs e)
-        {
-            if (!e.UploadedFile.IsValid)
-            {
-                e.CallbackData = JsonConvert.SerializeObject(new { success = false, message = "Invalid file" });
-                return;
-            }
+        //public static void TransferRequestFileComplete(object sender, FileUploadCompleteEventArgs e)
+        //{
+        //    if (!e.UploadedFile.IsValid)
+        //    {
+        //        e.CallbackData = JsonConvert.SerializeObject(new { success = false, message = "Invalid file" });
+        //        return;
+        //    }
 
-            try
-            {
-                using (var reader = new StreamReader(e.UploadedFile.FileContent))
-                {
-                    int lineNumber = 0;
-                    TransferRequestTemplateHeader model = new TransferRequestTemplateHeader();
-                    List<TransferRequestTemplateDetail> details = new List<TransferRequestTemplateDetail>();
+        //    try
+        //    {
+        //        using (var reader = new StreamReader(e.UploadedFile.FileContent))
+        //        {
+        //            int lineNumber = 0;
+        //            TransferRequestTemplateHeader model = new TransferRequestTemplateHeader();
+        //            List<TransferRequestTemplateDetail> details = new List<TransferRequestTemplateDetail>();
 
-                    var timeout = TimeSpan.FromSeconds(300);
-                    var sw = System.Diagnostics.Stopwatch.StartNew();
+        //            var timeout = TimeSpan.FromSeconds(300);
+        //            var sw = System.Diagnostics.Stopwatch.StartNew();
 
-                    while (!reader.EndOfStream)
-                    {
-                        if (sw.Elapsed > timeout)
-                            throw new TimeoutException("Process reading file timeout.");
+        //            while (!reader.EndOfStream)
+        //            {
+        //                if (sw.Elapsed > timeout)
+        //                    throw new TimeoutException("Process reading file timeout.");
 
-                        string line = reader.ReadLine();
-                        lineNumber++;
+        //                string line = reader.ReadLine();
+        //                lineNumber++;
 
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
+        //                if (string.IsNullOrWhiteSpace(line))
+        //                    continue;
 
-                        var columns = line.Split(';');
+        //                var columns = line.Split(';');
 
-                        if (lineNumber == 2)
-                        {
-                            if (columns.Take(3).Any(c => string.IsNullOrWhiteSpace(c)))
-                                throw new Exception("Invalid header empty value of: TransDate, FromWarehouse, or ToWarehouse");
-                            if (!DateTime.TryParseExact(columns[0], "dd-MM-yyyy", CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime transDate))
-                                throw new Exception($"invalid date format: {columns[0]}");
+        //                if (lineNumber == 2)
+        //                {
+        //                    if (columns.Take(3).Any(c => string.IsNullOrWhiteSpace(c)))
+        //                        throw new Exception("Invalid header empty value of: TransDate, FromWarehouse, or ToWarehouse");
+        //                    if (!DateTime.TryParseExact(columns[0], "dd-MM-yyyy", CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime transDate))
+        //                        throw new Exception($"invalid date format: {columns[0]}");
 
-                            model = new TransferRequestTemplateHeader
-                            {
-                                TransDate = transDate,
-                                FromWhsCode = columns[1],
-                                ToWhsCode = columns[2],
-                                Comments = columns[3]
-                            };
+        //                    model = new TransferRequestTemplateHeader
+        //                    {
+        //                        TransDate = transDate,
+        //                        FromWhsCode = columns[1],
+        //                        ToWhsCode = columns[2],
+        //                        Comments = columns[3]
+        //                    };
 
-                            if (model.FromWhsCode == model.ToWhsCode)
-                                throw new Exception("From warehouse must be different than To warehouse");
+        //                    if (model.FromWhsCode == model.ToWhsCode)
+        //                        throw new Exception("From warehouse must be different than To warehouse");
 
-                            model.FromWhsName = GeneralGetList.GetWarehouseName(model.FromWhsCode);
-                            model.ToWhsName = GeneralGetList.GetWarehouseName(model.ToWhsCode);
+        //                    model.FromWhsName = GeneralGetList.GetWarehouseName(model.FromWhsCode);
+        //                    model.ToWhsName = GeneralGetList.GetWarehouseName(model.ToWhsCode);
 
-                        }
-                        else if (lineNumber >= 4)
-                        {
-                            if (columns.Take(2).Any(c => string.IsNullOrWhiteSpace(c)))
-                                throw new Exception("Invalid header empty value of ItemCode, or Quantity");
-                            if (!decimal.TryParse(columns[1], out decimal qty))
-                                throw new Exception($"Invalid quantity: {columns[1]} at line {lineNumber}");
+        //                }
+        //                else if (lineNumber >= 4)
+        //                {
+        //                    if (columns.Take(2).Any(c => string.IsNullOrWhiteSpace(c)))
+        //                        throw new Exception("Invalid header empty value of ItemCode, or Quantity");
+        //                    if (!decimal.TryParse(columns[1], out decimal qty))
+        //                        throw new Exception($"Invalid quantity: {columns[1]} at line {lineNumber}");
 
-                            var detail = new TransferRequestTemplateDetail
-                            {
-                                ItemCode = columns[0],
-                                ItemName = GeneralGetList.GetItemName(columns[0]),
-                                Quantity = qty,
-                                QuantityOpen = GeneralGetList.GetItemWarehouseStock(columns[0], model.FromWhsCode),
-                                Comments = columns.Length > 2 ? columns[2] : null
-                            };
-                            details.Add(detail);
-                        }
+        //                    var detail = new TransferRequestTemplateDetail
+        //                    {
+        //                        ItemCode = columns[0],
+        //                        ItemName = GeneralGetList.GetItemName(columns[0]),
+        //                        Quantity = qty,
+        //                        QuantityOpen = GeneralGetList.GetItemWarehouseStock(columns[0], model.FromWhsCode),
+        //                        Comments = columns.Length > 2 ? columns[2] : null
+        //                    };
+        //                    details.Add(detail);
+        //                }
 
-                        model.Detail_ = details;
-                    }
+        //                model.Detail_ = details;
+        //            }
 
-                    // sukses
-                    e.CallbackData = JsonConvert.SerializeObject(new { success = true, message = "Success" , FileName = e.UploadedFile.FileName, Model = model});
-                }
-            }
-            catch (Exception ex)
-            {
-                e.CallbackData = JsonConvert.SerializeObject(new { success = false, message = ex.Message });
-            }
-        }
+        //            // sukses
+        //            e.CallbackData = JsonConvert.SerializeObject(new { success = true, message = "Success" , FileName = e.UploadedFile.FileName, Model = model});
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        e.CallbackData = JsonConvert.SerializeObject(new { success = false, message = ex.Message });
+        //    }
+        //}
 
         public static void DeleteFile(string ModuleName, string fileName)
         {

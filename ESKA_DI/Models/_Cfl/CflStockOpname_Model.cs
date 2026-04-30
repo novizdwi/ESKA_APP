@@ -50,8 +50,8 @@ namespace Models._Cfl
             WHERE T0.""Status"" = 'Posted'
             AND NOT EXISTS(
 			    SELECT 1
-			    FROM ""Tx_StockSummaryOpname"" Tx
-			    INNER JOIN ""Tx_StockSummaryOpname_Ref"" Ty ON Tx.""Id"" = Ty.""Id""			
+			    FROM ""Tx_StockOpname"" Tx
+			    INNER JOIN ""Tx_StockOpname_Ref"" Ty ON Tx.""Id"" = Ty.""Id""			
 			    WHERE Ty.""BaseId"" = T0.""Id""
                 AND Tx.""Status"" != 'Cancel'
             )

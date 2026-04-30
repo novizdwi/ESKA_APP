@@ -305,20 +305,8 @@
     <Compile Include="Models\Setting\ReportGroupModel.cs" />
     <Compile Include="Models\Setting\ReportModel.cs" />
     <Compile Include="Models\Setting\Report__List_Model.cs" />
-    <Compile Include="Models\Transaction\Adjustment\AdjustmentIn.cs" />
-    <Compile Include="Models\Transaction\Adjustment\AdjustmentIn__List_Model.cs" />
-    <Compile Include="Models\Transaction\Adjustment\AdjustmentOut.cs" />
-    <Compile Include="Models\Transaction\Adjustment\AdjustmentOut__List_Model.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferInService.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferIn__List_Model.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferOutService.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferOut__List_Model.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferRequestService.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferRequest__List_Model.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferSummaryInService.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferSummaryIn__List_Model.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferSummaryOutService.cs" />
-    <Compile Include="Models\Transaction\Inventory\TransferSummaryOut__List_Model.cs" />
+    <Compile Include="Models\Transaction\StockOpnameService.cs" />
+    <Compile Include="Models\Transaction\StockOpname__List_Model.cs" />
     <Compile Include="Models\_BaseModel\FormModeEnum.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -336,7 +324,6 @@
     <Compile Include="Models\_Cfl\CflItem_Model.cs" />
     <Compile Include="Models\_Cfl\CflCoa_Model.cs" />
     <Compile Include="Models\_Cfl\CflStockOpname_Model.cs" />
-    <Compile Include="Models\_Cfl\CflTransferRequest_Model.cs" />
     <Compile Include="Models\_Cfl\CflTransferSummaryOut_Model.cs" />
     <Compile Include="Models\_Cfl\CflPurchaseOrder_Model.cs" />
     <Compile Include="Models\_Cfl\CflToWarehouse_Model.cs" />

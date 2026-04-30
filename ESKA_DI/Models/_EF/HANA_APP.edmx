@@ -1178,15 +1178,14 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
           <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="QuantityOnHandSAP" Type="decimal" Precision="21" Scale="2" />
-          <Property Name="QuantityScan" Type="decimal" Precision="21" Scale="2" />
-          <Property Name="QuantityValid" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
           <Property Name="QtyVariance" Type="decimal" Precision="21" Scale="2" />
-          <Property Name="UnitPriceTc" Type="decimal" Precision="21" Scale="2" />
           <Property Name="UomEntry" Type="int" />
           <Property Name="Uom" Type="nvarchar" MaxLength="50" />
           <Property Name="AcctCode" Type="nvarchar" MaxLength="100" />
           <Property Name="AcctName" Type="nvarchar" MaxLength="100" />
+          <Property Name="UnitPriceTc" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineTotal" Type="decimal" Precision="21" Scale="2" />
           <Property Name="FreeText" Type="nvarchar" MaxLength="254" />
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
@@ -1866,7 +1865,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_DeactiveTag_Item" EntityType="Model1.Tx_DeactiveTag_Item" />
           <EntitySet Name="Tx_StockOpname" EntityType="Model1.Tx_StockOpname" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
-          <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
           <EntitySet Name="Tx_TransferIn" EntityType="Model1.Tx_TransferIn" />
           <EntitySet Name="Tx_TransferIn_Item" EntityType="Model1.Tx_TransferIn_Item" />
           <EntitySet Name="Tx_TransferIn_Item_Tag" EntityType="Model1.Tx_TransferIn_Item_Tag" />
@@ -1886,6 +1884,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_TransferSummaryOut_Item" EntityType="Model1.Tx_TransferSummaryOut_Item" />
           <EntitySet Name="Tx_TransferSummaryOut_Item_Tag" EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" />
           <EntitySet Name="Tx_TransferSummaryOut_Ref" EntityType="Model1.Tx_TransferSummaryOut_Ref" />
+          <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -3035,30 +3034,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
-        <EntityType Name="Tx_StockOpname_Item">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="QuantityOnHandSAP" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="QuantityScan" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="QuantityValid" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="QtyVariance" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="UnitPriceTc" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="UomEntry" Type="Int32" />
-          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
         <EntityType Name="Tx_TransferIn">
           <Key>
             <PropertyRef Name="Id" />
@@ -3542,6 +3517,29 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BaseCreatedDate" Type="DateTime" />
           <Property Name="BaseCreatedUser" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_StockOpname_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int64" />
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="QtyVariance" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="UomEntry" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPriceTc" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineTotal" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -4769,31 +4767,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockOpname_Item">
-            <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item">
-              <MappingFragment StoreEntitySet="Tx_StockOpname_Item">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
-                <ScalarProperty Name="AcctCode" ColumnName="AcctCode" />
-                <ScalarProperty Name="Uom" ColumnName="Uom" />
-                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
-                <ScalarProperty Name="UnitPriceTc" ColumnName="UnitPriceTc" />
-                <ScalarProperty Name="QtyVariance" ColumnName="QtyVariance" />
-                <ScalarProperty Name="QuantityValid" ColumnName="QuantityValid" />
-                <ScalarProperty Name="QuantityScan" ColumnName="QuantityScan" />
-                <ScalarProperty Name="QuantityOnHandSAP" ColumnName="QuantityOnHandSAP" />
-                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tx_TransferIn">
             <EntityTypeMapping TypeName="Model1.Tx_TransferIn">
               <MappingFragment StoreEntitySet="Tx_TransferIn">
@@ -5296,6 +5269,30 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="ScanDeviceId" ColumnName="ScanDeviceId" />
                 <ScalarProperty Name="BaseNo" ColumnName="BaseNo" />
                 <ScalarProperty Name="BaseId" ColumnName="BaseId" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_StockOpname_Item">
+            <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item">
+              <MappingFragment StoreEntitySet="Tx_StockOpname_Item">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
+                <ScalarProperty Name="UnitPriceTc" ColumnName="UnitPriceTc" />
+                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
+                <ScalarProperty Name="AcctCode" ColumnName="AcctCode" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
+                <ScalarProperty Name="QtyVariance" ColumnName="QtyVariance" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

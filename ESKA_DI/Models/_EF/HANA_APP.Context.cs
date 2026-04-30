@@ -97,7 +97,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_DeactiveTag_Item> Tx_DeactiveTag_Item { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
-        public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
         public virtual DbSet<Tx_TransferIn> Tx_TransferIn { get; set; }
         public virtual DbSet<Tx_TransferIn_Item> Tx_TransferIn_Item { get; set; }
         public virtual DbSet<Tx_TransferIn_Item_Tag> Tx_TransferIn_Item_Tag { get; set; }
@@ -117,5 +116,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_TransferSummaryOut_Item> Tx_TransferSummaryOut_Item { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
+        public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
     }
 }

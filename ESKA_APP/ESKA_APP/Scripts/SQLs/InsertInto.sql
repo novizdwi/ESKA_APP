@@ -1,0 +1,1 @@
+INSERT INTO "Ts_FormatNumbering" VALUES('StockOpname','StockOpname', 'STO-','YYMM',3);
