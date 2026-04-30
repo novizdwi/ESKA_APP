@@ -410,9 +410,7 @@
     }
 
 
-
     function OnClickBtnNavLast(s, e) {
-        console.log('aku disini');
         $.ajax({
             type: "POST",
             url: "@Url.Action("NavLast", "Position")",
@@ -457,8 +455,6 @@
             }
         });
     }
-
-
 
     function OnClickBtnListFind(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupList");
