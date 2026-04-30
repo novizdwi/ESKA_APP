@@ -733,6 +733,8 @@
     <Content Include="Views\Transaction\StockOpname\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\StockOpname.cshtml" />
+    <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_Panel_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -854,6 +856,8 @@
     <Compile Include="Controllers\_Cfl\_CflCoa\_CflCoaController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflItem\_CflItemController.List.cs" />
