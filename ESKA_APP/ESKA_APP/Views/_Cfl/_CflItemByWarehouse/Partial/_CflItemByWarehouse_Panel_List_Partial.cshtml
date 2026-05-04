@@ -45,18 +45,8 @@
     settings.SetContent(() =>
     {
 
-        //Html.DevExpress().HyperLink(settingsHL =>
-        //{
-        //    settingsHL.Name = "gvCflItemByWarehouseList" + Model.Name + "_GvExportTo";
-        //    settingsHL.NavigateUrl = "javascript:void(0)";
-        //    settingsHL.Properties.Text = "Excel";
-        //    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ GvCflExportTo(gvCflItemByWarehouseList{1}, '{0}'); }}", @Url.Action("ExportTo", "_CflItemByWarehouse"), Model.Name);
-        //    settingsHL.Height = 20;
-        //}).GetHtml();
-
         if (Model.IsMulti == "Y")
         {
-            //ViewContext.Writer.Write("&nbsp;|&nbsp;");
             Html.DevExpress().HyperLink(settingsChoose =>
             {
                 settingsChoose.Name = "gvCflItemByWarehouse" + Model.Name + "Choose";
@@ -69,8 +59,49 @@
             ViewContext.Writer.Write("&nbsp;|&nbsp;");
         }
 
+        Html.DevExpress().FormLayout(settingtab =>
+        {
+            settingtab.Name = "formLayoutTabCflItem" + Model.Name;
+            settingtab.EncodeHtml = false;
 
+            //settingtab.Width = Unit.Percentage(100);
+            settingtab.AlignItemCaptionsInAllGroups = true;
+            settingtab.ShowItemCaptionColon = false;
 
+            var groupItemtab = settingtab.Items.AddGroupItem(itemSettings =>
+            {
+                itemSettings.Caption = "";
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+                itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                itemSettings.ColCount = 1;
+            });
+
+            var groupItem_Col1 = groupItemtab.Items.AddGroupItem(itemSettings =>
+            {
+
+                itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Top;
+                itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+                itemSettings.ShowCaption = DefaultBoolean.False;
+                itemSettings.ColCount = 3;
+            });
+
+            groupItem_Col1.Items.Add(itemSettings =>
+            {
+                itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+                itemSettings.Caption = "Sorting Item";
+
+                var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+                txt.Name = "SortingItem" + Model.Name;
+                txt.ShowModelErrors = true;
+                txt.ReadOnly = true;
+                txt.ControlStyle.CssClass = "editornoimage";
+                txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+                txt.Width = 450;
+            });
+
+        }).GetHtml();
 
         Html.RenderPartial("Partial/_CflItemByWarehouse_List_Partial", viewModel);
 
@@ -86,12 +117,11 @@
     };
 
     string additionParam = "";
-     
+    additionParam += " e.customArgs['hidden_Id']=Id.GetValue(); ";
+
     if (Model.Type == "StockOpname")
     {
         additionParam += " e.customArgs['hidden_WhsCode']=WhsCode.GetValue(); ";
-
-        //settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
     }
 
 

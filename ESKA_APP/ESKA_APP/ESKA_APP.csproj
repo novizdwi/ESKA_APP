@@ -631,7 +631,6 @@
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_Panel_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Setting\GeneralSetting\Partial\GeneralSetting_TabAdjustmentCoa_List_Partial.cshtml" />
     <Content Include="Views\Setting\ApprovalStage\ApprovalStage.cshtml" />
     <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Setting\ApprovalStage\Partial\ApprovalStage_Form_Partial.cshtml" />
@@ -901,7 +900,6 @@
     <Folder Include="Rpts\Layout\" />
     <Folder Include="Rpts\Models\" />
     <Folder Include="Views\Authentication\Login\Partial\" />
-    <Folder Include="Views\GeneralSetting\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\_Notification\" />
   </ItemGroup>

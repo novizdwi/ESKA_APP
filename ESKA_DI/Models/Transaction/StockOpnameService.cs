@@ -288,16 +288,7 @@ namespace Models.Transaction
                     int? approvalId = CONTEXT.Database.SqlQuery<int?>(@"CALL ""SpApproval_CheckNeedApproval""(:p0, 'StockOpname', :p1) ", userId, model.Id).FirstOrDefault();
                     model.ApprovalTemplateId_ = approvalId;
                 }
-                if (method == "Post")
-                {
-                    ssql = @"SELECT TOP 1 'Y'
-                        FROM ""Tx_StockOpname_Item_Tag"" T0
-                        INNER JOIN ""Tm_Item_Warehouse_Tag"" T1 ON T0.""TagId"" = T1.""TagId""
-                        WHERE T1.""Status"" = 'I'
-                        AND T0.""Id"" = :p0
-                    ";
-                    string checkDeactive = CONTEXT.Database.SqlQuery<string>(ssql, id).FirstOrDefault();
-                } 
+
                 if (model.ApprovalStatus == "Waiting")
                 {
                     string getDocNum = @"SELECT 'Y'
@@ -347,10 +338,17 @@ namespace Models.Transaction
 
         public List<StockOpname_DetailModel> StockOpname_Details(HANA_APP CONTEXT, long id = 0)
         {
-            string ssql = @"SELECT T0.*
+            string ssql = @"SELECT ROW_NUMBER() OVER (ORDER BY Tx.""DetId"") AS ""RowNo"",
+            Tx.*
+            FROM(
+                SELECT DISTINCT T0.*,
+                T2.""OnHand"" AS ""QuantityOnHandSAP_""
                 FROM ""Tx_StockOpname_Item"" T0
+                INNER JOIN ""Tx_StockOpname_Item"" T1 ON T0.""Id"" = T1.""Id""
+                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OITW"" T2 ON T0.""ItemCode"" = T2.""ItemCode"" AND T1.""WhsCode"" = T2.""WhsCode""
                 WHERE T0.""Id"" =:p0
-                ORDER BY T0.""DetId"" ASC
+            ) Tx
+            ORDER BY Tx.""DetId"" ASC
             ";
             var StockOpname = CONTEXT.Database.SqlQuery<StockOpname_DetailModel>(ssql, id).ToList();
             return StockOpname;
@@ -631,6 +629,75 @@ namespace Models.Transaction
             }
 
 
+        }
+
+        public bool ChooseItem(int UserId, long Id, string[] data, string sorting)
+        {
+            if (data != null)
+            {
+                using (var CONTEXT = new HANA_APP())
+                {
+
+                    using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            String keyValue;
+                            keyValue = Id.ToString();
+                            SpNotif.SpSysTransNotif(UserId, CONTEXT, "before", "StockOpname", "ChooseItem", "Id", keyValue);
+
+                            string sqlWhere;
+                            if (data == null)
+                            {
+                                sqlWhere = "";
+                            }
+                            else if (data.Length == 0)
+                            {
+                                sqlWhere = "";
+                            }
+                            else
+                            {
+                                for (var i = 0; i < data.Length; i++)
+                                {
+                                    data[i] = "'" + data[i].Replace("'", "''") + "'";
+                                }
+
+                                sqlWhere = string.Join(",", data);
+                            }
+
+
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_ChooseItem\"(:p0,:p1,:p2,:p3)", UserId, Id, sqlWhere, sorting);
+
+
+                            keyValue = Id.ToString();
+                            SpNotif.SpSysTransNotif(UserId, CONTEXT, "after", "StockOpname", "ChooseItem", "Id", keyValue);
+
+
+                            CONTEXT_TRANS.Commit();
+                        }
+
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMessage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMessage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMessage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMessage);
+                        }
+                    }
+                }
+
+
+            }
+            return true;
         }
 
         public long Detail_Add(HANA_APP CONTEXT, StockOpname_DetailModel model, long Id, int UserId)

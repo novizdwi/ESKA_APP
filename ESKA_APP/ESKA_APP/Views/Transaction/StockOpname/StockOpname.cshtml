@@ -13,13 +13,13 @@
 
 @{
     ViewBag.UserId = (int)Session["userId"];
-    ViewBag.Title = "Stock Opname Summary";
+    ViewBag.Title = "Stock Opname";
 
     string MenuCodePost = "StockOpname/Post";
     string IsCanPost_ = "Y";
     if (ViewBag.UserId != 1)
     {
-        IsCanPost_ = Models._Utils.GeneralGetList.GetIsCanAccessOpeningBalance(ViewBag.UserId, MenuCodePost);
+        IsCanPost_ = Models._Utils.GeneralGetList.GetIsCanMenu(ViewBag.UserId, MenuCodePost);
     }
 
 }
@@ -132,7 +132,7 @@
 
                 break;
         }
-        if (IsCanPost_ == "N" || WhsCode.GetValue().startsWith("TR")) {
+        if (IsCanPost_ == "N") {
             btnPost.SetEnabled(false);
         }
 
@@ -242,13 +242,6 @@
             }
         });
 
-    }
-
-    function btnAddItemOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("cflItemPopupListSalesOrder");
-        popup.SetContentHtml("");
-        popup.PerformCallback();
-        popup.Show();
     }
 
     function OnClickBtnPost(s, e) {
@@ -990,27 +983,45 @@ new
         }
     }
 
+    function ItemByWarehouseSelectionChangedStockOpname(s, e) {
+        var key = s.GetRowKey(e.visibleIndex);
+        if (s.IsRowSelectedOnPage(e.visibleIndex)) {
+            if (SortingItemStockOpname.GetValue() == null) {
+                SortingItemStockOpname.SetValue(key);
+            } else {
+                SortingItemStockOpname.SetValue(SortingItemStockOpname.GetValue() + ',' + key);
+            }
+        } else {
+            var sort = SortingItemStockOpname.GetValue();
+            sort = sort.replace(key, "");
+            sort = sort.replace(",,", ", ");
+            SortingItemStockOpname.SetValue(sort);
+        }
+    }
 
     function OnClickChoose_CflItemByWarehouseStockOpname(s, e) {
         gvCflItemByWarehouseListStockOpname.GetSelectedFieldValues('ItemCode', GetSelectedFieldValuesCallback_CflItemByWarehouse);
     }
 
-
     function GetSelectedFieldValuesCallback_CflItemByWarehouse(values) {
         cflItemByWarehousePopupListStockOpname.Hide();
 
         key = Id.GetValue();
-        fromWhsCodeKey = FromWhsCode.GetValue();
+        console.log(SortingItemStockOpname.GetValue()); 
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("ChooseItem", "StockOpnanme")',
-            data: { Id: key, Data: values },
+            url: '@Url.Action("ChooseItem", "StockOpname")',
+            data: {
+                Id: key,
+                Data: values,
+                Sorting: SortingItemStockOpname.GetValue(),
+            },
             beforeSend: function () {
                 OnBegin();
             },
             success: function (response) {
-                gvStockOpnameDetail.PerformCallback();
+                gvDetail.PerformCallback();
                 OnSuccessMsgBox();
             },
             error: function (jqXhr, textStatus, errorThrown) {

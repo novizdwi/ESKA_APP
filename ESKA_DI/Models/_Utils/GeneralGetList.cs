@@ -47,7 +47,7 @@ namespace Models._Utils
             }
         }
 
-        public static string GetIsCanAccessOpeningBalance(int UserId, string MenuCode)
+        public static string GetIsCanMenu(int UserId, string MenuCode)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -908,21 +908,7 @@ namespace Models._Utils
                 return GetDataTable(CONTEXT, ssql);
             }
         }
-
-        public static string GetSAPCoaAdjustment(string code)
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                string ssql = @"
-                    SELECT T0.""U_IDU_Account"" AS ""Code""
-                    FROM ""{0}"".""@ADJUSTMENTTYPE"" AS T0
-                    WHERE T0.""Code"" = '{1}'
-                ";
-
-                ssql = string.Format(ssql, DbProvider.dbSap_Name, code);
-                return CONTEXT.Database.SqlQuery<string>(ssql).FirstOrDefault();
-            }
-        }
+        
 
         public static DataTable GetSAPCodeOfAccountWithNull()
         {
@@ -940,40 +926,7 @@ namespace Models._Utils
                 return GetDataTable(CONTEXT, ssql);
             }
         }
-
-        public static DataTable GetSAPAdjustmentTypeWithNull(string adjustmentType = "IN" )
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                string ssql = @"
-                    SELECT NULL AS ""Code"", NULL AS ""Name"" FROM DUMMY
-                        UNION ALL
-                    SELECT T0.""Code"" AS ""Code"", T0.""Name"" AS ""Name""
-                    FROM ""{0}"".""@ADJUSTMENTTYPE"" AS T0
-                    WHERE ""U_IDU_Type"" = {1}
-                ";
-
-                ssql = string.Format(ssql, DbProvider.dbSap_Name, adjustmentType);
-                return GetDataTable(CONTEXT, ssql);
-            }
-        }
-
-        public static DataTable GetSAPAdjustmentType(string adjustmentType = "IN" )
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                string ssql = @"
-                    SELECT T0.""Code"" AS ""Code"", T0.""Name"" AS ""Name""
-                    FROM ""{0}"".""@ADJUSTMENTTYPE"" AS T0
-                    WHERE ""U_IDU_Type"" = {1}
-                ";
-
-                ssql = string.Format(ssql, DbProvider.dbSap_Name, adjustmentType);
-                return GetDataTable(CONTEXT, ssql);
-            }
-        }
-
-
+        
         public static DataTable GetSAPUserFields(string TableId)
         {
             using (var CONTEXT = new HANA_APP())

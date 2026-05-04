@@ -145,20 +145,7 @@
                 }).GetHtml();
             });
         });
-
-
-        group.Items.Add(item =>
-        {
-            item.Name = "TabAdjustmentCoa";
-            item.Caption = " Adjustment COA ";
-            item.SetNestedContent(() =>
-            {
-                ViewContext.Writer.Write(
-                     Html.Partial("Partial/GeneralSetting_TabAdjustmentCoa_List_Partial", Model.ListCoas_)
-                 );
-            });
-
-        });
+        
 
     });
 

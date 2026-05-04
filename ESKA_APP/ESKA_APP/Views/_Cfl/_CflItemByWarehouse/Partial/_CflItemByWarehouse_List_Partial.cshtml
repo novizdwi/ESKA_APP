@@ -175,12 +175,12 @@
     };
 
     string additionParam = "";
+    additionParam += " e.customArgs['hidden_Id']=Id.GetValue(); ";
 
     if (cpGvFind_CflType == "StockOpname")
     {
         additionParam += " e.customArgs['hidden_WhsCode']=WhsCode.GetValue(); ";
-
-        //settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
+        settings.ClientSideEvents.SelectionChanged = "ItemByWarehouseSelectionChanged"+ cpGvFind_CflType;
     }
 
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ {0}  e.customArgs['hidden_CflType']=s.cpGvFind_CflType; e.customArgs['hidden_CflName']=s.cpGvFind_CflName; e.customArgs['hidden_CflHeader']=s.cpGvFind_CflHeader; e.customArgs['hidden_CflSqlWhere']=s.cpGvFind_CflSqlWhere;e.customArgs['hidden_CflIsMulti']=s.cpGvFind_CflIsMulti; }}", additionParam);

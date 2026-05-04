@@ -180,8 +180,7 @@ namespace Models.Setting.GeneralSetting
             {
                 model = new GeneralSettingModel();
                 CopyProperty.CopyProperties(tm_GeneralSetting, model, false);
-
-                model.ListCoas_ = this.GeneralSetting_Coas(CONTEXT);
+                 
             }
             else
             {
@@ -194,17 +193,7 @@ namespace Models.Setting.GeneralSetting
         //-------------------------------------
         //Detail  GeneralSetting_CoaModel
         //-------------------------------------
-        public List<GeneralSetting_AdjustmentCoaModel> GeneralSetting_Coas(HANA_APP CONTEXT)
-        {
-            string ssql = @"
-                SELECT T0.*, T1.""AcctName"" AS ""AcctName""
-                FROM ""{0}"".""@ADJUSTMENTTYPE"" AS T0
-                INNER JOIN ""{0}"".""OACT"" AS T1 ON T0.""U_IDU_Account"" = T1.""AcctCode""
-            ";
 
-            ssql = string.Format(ssql, DbProvider.dbSap_Name);
-            return CONTEXT.Database.SqlQuery<GeneralSetting_AdjustmentCoaModel>(ssql).ToList();
-        }
 
         //---------------------------------------
         //GeneralSetting_CoaModel

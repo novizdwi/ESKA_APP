@@ -32,6 +32,12 @@
     settings.Width = Unit.Percentage(100);
     settings.Height = Unit.Percentage(100);
 
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.Width = 70;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.Enabled = true;
+
     settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
@@ -42,7 +48,7 @@
     settings.Settings.ShowFilterRow = false;
     settings.Settings.ShowFilterRowMenu = false;
 
-    settings.CommandColumn.Width = 70;
+
     settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
     settings.Columns.Add("Id", "Id").Visible = false;
     settings.Columns.Add("DetId", "DetId").Visible = false;
@@ -54,9 +60,9 @@
         column.Caption = "No.";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 60;
+        column.Width = 50;
         column.ReadOnly = true;
-        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Settings.AllowSort = DefaultBoolean.True;
         column.Settings.AllowAutoFilter = DefaultBoolean.False;
 
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
@@ -72,30 +78,10 @@
         column.Name = "ItemCode";
         column.Caption = "Item Code";
 
-
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 150;
         column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-        column.ReadOnly = true;
-
-        column.SetDataItemTemplateContent(c =>
-        {
-            if (c.ItemIndex >= 0)
-            {
-                string itemCode = (string)DataBinder.Eval(c.DataItem, "ItemCode");
-
-                Html.DevExpress().HyperLink(settingsHL =>
-                {
-                    settingsHL.Name = "ChooseDocument_" + DataBinder.Eval(c.DataItem, "Id") + "_" + Guid.NewGuid().ToString();
-                    settingsHL.NavigateUrl = "javascript:void(0)";
-                    settingsHL.Properties.Text = itemCode;
-                    settings.ClientVisible = true;
-                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChooseItem(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "DetId"));
-                    settingsHL.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
-
-                }).Render();
-            }
-        });
+        column.ReadOnly = true;         
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
     });
 
@@ -106,7 +92,7 @@
         column.Caption = "Item Name";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 220;
+        column.Width = 250;
         column.ReadOnly = true;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
@@ -171,14 +157,34 @@
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 120;
-        column.ReadOnly = ViewBag.ReadOnly;
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
-
-        // FORMAT 2 DIGIT DESIMAL
+        column.ReadOnly = false;
         column.PropertiesEdit.DisplayFormatString = "N2";
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = column.FieldName;
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+        settings.TotalSummary.Add(summary);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityOnHandSAP_";
+        column.Name = "QuantityOnHandSAP_";
+        column.Caption = "On Hand";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.PropertiesEdit.DisplayFormatString = "N2";
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         ASPxSummaryItem summary = new ASPxSummaryItem();
         summary.FieldName = column.FieldName;
@@ -235,9 +241,9 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "UomEntry ";
-        column.Name = "UomEntry ";
-        column.Caption = "Uom Entry ";
+        column.FieldName = "UomEntry";
+        column.Name = "UomEntry";
+        column.Caption = "Uom Entry";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 0;
@@ -262,7 +268,7 @@
         column.Caption = "Uom";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 200;
+        column.Width = 150;
 
         column.ReadOnly = !ViewBag.ReadOnly;
 
@@ -291,7 +297,7 @@
 
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
-        //txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
     });
 
 
@@ -314,7 +320,7 @@
 
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
-        //txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
     });
 
     settings.Columns.Add(column =>
@@ -326,7 +332,7 @@
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 300;
 
-        column.ReadOnly = !ViewBag.ReadOnly;
+        column.ReadOnly = ViewBag.ReadOnly;
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;

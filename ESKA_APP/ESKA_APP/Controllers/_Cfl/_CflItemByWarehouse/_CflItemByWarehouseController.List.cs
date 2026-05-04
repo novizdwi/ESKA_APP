@@ -27,12 +27,14 @@ namespace Controllers._Cfl
             cflParam.Header = Request["hidden_CflHeader"];
             cflParam.SqlWhere = Request["hidden_CflSqlWhere"];
 
+            var hidden_Id = (string)Request["hidden_Id"];
+
             if (cflParam.Type == "StockOpname")
             {
                 var hidden_WhsCode = (string)Request["hidden_WhsCode"];
                 hidden_WhsCode = hidden_WhsCode.Replace("'", "''");
-
-                cflParam.SqlWhere = string.Format(" AND T0.\"WhsCode\"= '{0}'  ", hidden_WhsCode);
+                cflParam.SqlWhere = string.Format(" AND T0.\"WhsCode\"= '{1}'  " +
+                    "AND NOT EXISTS (SELECT 1 FROM \"Tx_StockOpname_Item\" Tx WHERE Tx.\"Id\" = {0} AND Tx.\"ItemCode\" = T0.\"ItemCode\" )", hidden_Id, hidden_WhsCode);
 
             }
 

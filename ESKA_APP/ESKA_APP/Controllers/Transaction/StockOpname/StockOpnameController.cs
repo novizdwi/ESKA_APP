@@ -127,6 +127,17 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, StockOpnameModel);
         }
 
+        public ContentResult ChooseItem(long Id, String[] Data, string Sorting)
+        {
+            int userId = (int)Session["userId"];
+
+            stockOpnameService = new StockOpnameService();
+            var result = stockOpnameService.ChooseItem(userId, Id, Data, Sorting);
+
+            return Content(result.ToString());
+        }
+
+
         [HttpPost, ValidateInput(false)]
         public ActionResult Post([ModelBinder(typeof(DevExpressEditorsBinder))]  StockOpnameModel StockOpnameModel)
         {
