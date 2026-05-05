@@ -12,20 +12,18 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_TransferSummaryOut_Ref
+    public partial class Tx_GoodsReceiptPO_Item_Batch_Scale
     {
-        public Nullable<long> Id { get; set; }
-        public long DetId { get; set; }
-        public string BaseId { get; set; }
-        public string BaseNo { get; set; }
-        public string ScanDeviceId { get; set; }
-        public string Comments { get; set; }
-        public string Status { get; set; }
-        public Nullable<System.DateTime> BaseCreatedDate { get; set; }
-        public Nullable<int> BaseCreatedUser { get; set; }
+        public long DetDetDetId { get; set; }
+        public Nullable<long> DetDetId { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public string Uom { get; set; }
+        public Nullable<decimal> Netto { get; set; }
+        public Nullable<int> LineNum { get; set; }
+        public string LineStatus { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> CreatedUser { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
     }
 }

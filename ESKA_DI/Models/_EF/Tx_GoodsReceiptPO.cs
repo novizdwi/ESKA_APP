@@ -12,15 +12,23 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_AdjustmentIn_Attachment
+    public partial class Tx_GoodsReceiptPO
     {
         public long Id { get; set; }
-        public long DetId { get; set; }
-        public string FileName { get; set; }
-        public string Guid { get; set; }
+        public string TransType { get; set; }
+        public string TransNo { get; set; }
+        public Nullable<System.DateTime> TransDate { get; set; }
+        public string VendorCode { get; set; }
+        public string VendorName { get; set; }
+        public string Address { get; set; }
+        public Nullable<long> DocEntry { get; set; }
+        public string DocNum { get; set; }
+        public Nullable<System.DateTime> DocDate { get; set; }
+        public string RefNo { get; set; }
+        public string Status { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> CreatedUser { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
     }
 }
