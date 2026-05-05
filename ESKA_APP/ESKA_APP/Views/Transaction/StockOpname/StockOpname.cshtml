@@ -870,6 +870,15 @@
     function gvRefOnBatchEditRowValidating(s, e) {
     } 
 
+    function QuantityOnValueChanged() {
+        var qtyVariance = gvDetail_Quantity.GetValue() - gvDetail_QuantityOnHandSAP_.GetValue();
+        gvDetail_QtyVariance_.SetValue(qtyVariance);
+
+        var lineTotal = gvDetail_UnitPriceTc.GetValue() * gvDetail_Quantity.GetValue();
+        gvDetail_LineTotal.SetValue(lineTotal );
+    }
+
+
 </script>
 
 @Html.Partial("Partial/StockOpname_Form_Btn_Partial")

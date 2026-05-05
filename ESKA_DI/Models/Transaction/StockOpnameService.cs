@@ -338,17 +338,16 @@ namespace Models.Transaction
 
         public List<StockOpname_DetailModel> StockOpname_Details(HANA_APP CONTEXT, long id = 0)
         {
-            string ssql = @"SELECT ROW_NUMBER() OVER (ORDER BY Tx.""DetId"") AS ""RowNo"",
-            Tx.*
-            FROM(
-                SELECT DISTINCT T0.*,
-                T2.""OnHand"" AS ""QuantityOnHandSAP_""
-                FROM ""Tx_StockOpname_Item"" T0
-                INNER JOIN ""Tx_StockOpname_Item"" T1 ON T0.""Id"" = T1.""Id""
-                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OITW"" T2 ON T0.""ItemCode"" = T2.""ItemCode"" AND T1.""WhsCode"" = T2.""WhsCode""
-                WHERE T0.""Id"" =:p0
-            ) Tx
-            ORDER BY Tx.""DetId"" ASC
+            string ssql = @"
+            SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"",
+                T0.*,
+                T2.""OnHand"" AS ""QuantityOnHandSAP_"",
+                CASE WHEN T1.""Status"" IN ('Draft') THEN COALESCE(T2.""OnHand"", 0) - COALESCE(T0.""Quantity"", 0) ELSE NULL END AS ""QtyVariance_""
+            FROM ""Tx_StockOpname_Item"" T0
+            INNER JOIN ""Tx_StockOpname"" T1 ON T0.""Id"" = T1.""Id""
+            LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OITW"" T2 ON T0.""ItemCode"" = T2.""ItemCode"" AND T1.""WhsCode"" = T2.""WhsCode""
+            WHERE T0.""Id"" =:p0
+            ORDER BY T0.""DetId"" ASC
             ";
             var StockOpname = CONTEXT.Database.SqlQuery<StockOpname_DetailModel>(ssql, id).ToList();
             return StockOpname;
@@ -563,7 +562,12 @@ namespace Models.Transaction
                                     //Tx_StockOpname.ApprovalStatus = isApprovalActive == "Y" && Tx_StockOpname.ApprovalStatus == "" ? "Waiting" : "Approved";
                                     tx_StockOpname.ModifiedDate = dtModified;
                                     tx_StockOpname.ModifiedUser = model._UserId;
-                                    
+
+                                    if (method == "Post")
+                                    {
+                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItem\"(:p0,:p1)", model._UserId, model.Id);
+                                    }
+
                                     if (model.Details_ != null)
                                     {
                                         if (model.Details_.insertedRowValues != null)
@@ -592,11 +596,7 @@ namespace Models.Transaction
                                             }
                                         }
                                     }
-
-                                    if(method == "Post")
-                                    {
-                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItem\"(:p0,:p1, 'before')", model._UserId, model.Id);
-                                    }
+                                    
                                     CONTEXT.SaveChanges();
 
                                     SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "update", "Id", keyValue);
