@@ -53,7 +53,6 @@
     <EntitySet Name="Ts_List" EntityType="Model1.Ts_List" />
     <EntitySet Name="Ts_Menu" EntityType="Model1.Ts_Menu" />
     <EntitySet Name="Ts_ObjectApproval" EntityType="Model1.Ts_ObjectApproval" />
-    <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
     <EntitySet Name="Tx_AdjustmentIn" EntityType="Model1.Tx_AdjustmentIn" />
     <EntitySet Name="Tx_AdjustmentIn_Approval" EntityType="Model1.Tx_AdjustmentIn_Approval" />
     <EntitySet Name="Tx_AdjustmentIn_Attachment" EntityType="Model1.Tx_AdjustmentIn_Attachment" />
@@ -71,8 +70,13 @@
     <EntitySet Name="Tx_DeactiveTag" EntityType="Model1.Tx_DeactiveTag" />
     <EntitySet Name="Tx_DeactiveTag_Approval" EntityType="Model1.Tx_DeactiveTag_Approval" />
     <EntitySet Name="Tx_DeactiveTag_Item" EntityType="Model1.Tx_DeactiveTag_Item" />
+    <EntitySet Name="Tx_GoodsReceiptPO" EntityType="Model1.Tx_GoodsReceiptPO" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Model1.Tx_GoodsReceiptPO_Item" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch_Scale" />
     <EntitySet Name="Tx_StockOpname" EntityType="Model1.Tx_StockOpname" />
     <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
+    <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
     <EntitySet Name="Tx_TransferIn" EntityType="Model1.Tx_TransferIn" />
     <EntitySet Name="Tx_TransferIn_Item" EntityType="Model1.Tx_TransferIn_Item" />
     <EntitySet Name="Tx_TransferIn_Item_Tag" EntityType="Model1.Tx_TransferIn_Item_Tag" />
@@ -92,7 +96,7 @@
     <EntitySet Name="Tx_TransferSummaryOut_Item" EntityType="Model1.Tx_TransferSummaryOut_Item" />
     <EntitySet Name="Tx_TransferSummaryOut_Item_Tag" EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" />
     <EntitySet Name="Tx_TransferSummaryOut_Ref" EntityType="Model1.Tx_TransferSummaryOut_Ref" />
-    <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
+    <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
   </EntityContainer>
   <EntityType Name="Tm_Alert">
     <Key>
@@ -824,21 +828,6 @@
     <Property Name="ObjectName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="Sort" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
-  <EntityType Name="Tp_UserAlert">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="UserId" Type="Int32" />
-    <Property Name="BaseType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BaseId" Type="Int64" />
-    <Property Name="BaseTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Action" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="NotificationMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-    <Property Name="SenderId" Type="Int32" />
-    <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="LastShowTime" Type="DateTime" />
-  </EntityType>
   <EntityType Name="Tx_AdjustmentIn">
     <Key>
       <PropertyRef Name="Id" />
@@ -1200,6 +1189,80 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TransDate" Type="DateTime" />
+    <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VendorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="DocEntry" Type="Int64" />
+    <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DocDate" Type="DateTime" />
+    <Property Name="RefNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Id" Type="Int64" />
+    <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Whse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LineNum" Type="Int32" />
+    <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DetId" Type="Int64" />
+    <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="AdmissionDate" Type="DateTime" />
+    <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="Int32" />
+    <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item_Batch_Scale">
+    <Key>
+      <PropertyRef Name="DetDetDetId" />
+    </Key>
+    <Property Name="DetDetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DetDetId" Type="Int64" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="Int32" />
+    <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
   <EntityType Name="Tx_StockOpname">
     <Key>
       <PropertyRef Name="Id" />
@@ -1237,6 +1300,29 @@
     <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="ActionDate" Type="DateTime" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Tx_StockOpname_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="Int64" />
+    <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="QtyVariance" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="UomEntry" Type="Int32" />
+    <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="UnitPriceTc" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="LineTotal" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
     <Property Name="CreatedDate" Type="DateTime" />
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" />
@@ -1730,27 +1816,19 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
-  <EntityType Name="Tx_StockOpname_Item">
+  <EntityType Name="Tp_UserAlert">
     <Key>
-      <PropertyRef Name="DetId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="Int64" />
-    <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
-    <Property Name="QtyVariance" Type="Decimal" Precision="21" Scale="2" />
-    <Property Name="UomEntry" Type="Int32" />
-    <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="UnitPriceTc" Type="Decimal" Precision="21" Scale="2" />
-    <Property Name="LineTotal" Type="Decimal" Precision="21" Scale="2" />
-    <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-    <Property Name="CreatedDate" Type="DateTime" />
-    <Property Name="CreatedUser" Type="Int32" />
-    <Property Name="ModifiedDate" Type="DateTime" />
-    <Property Name="ModifiedUser" Type="Int32" />
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="BaseType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BaseId" Type="Int64" />
+    <Property Name="BaseTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Action" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="NotificationMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="SenderId" Type="Int32" />
+    <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="LastShowTime" Type="DateTime" />
   </EntityType>
 </Schema>

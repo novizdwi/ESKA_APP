@@ -735,6 +735,15 @@
     <Content Include="Views\Transaction\StockOpname\StockOpname.cshtml" />
     <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPoStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\GoodsReceiptPo.cshtml" />
+    <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_Panel_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -841,6 +850,10 @@
     <Compile Include="Controllers\Setting\Report\ReportController.List.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.List.Export.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.List.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
@@ -858,6 +871,8 @@
     <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflGoodsReceiptPo\_CflGoodsReceiptPoController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflGoodsReceiptPo\_CflGoodsReceiptPoController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflItem\_CflItemController.List.cs" />

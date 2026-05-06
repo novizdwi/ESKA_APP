@@ -305,6 +305,8 @@
     <Compile Include="Models\Setting\ReportGroupModel.cs" />
     <Compile Include="Models\Setting\ReportModel.cs" />
     <Compile Include="Models\Setting\Report__List_Model.cs" />
+    <Compile Include="Models\Transaction\GoodsReceiptPoService.cs" />
+    <Compile Include="Models\Transaction\GoodsReceiptPo__List_Model.cs" />
     <Compile Include="Models\Transaction\StockOpnameService.cs" />
     <Compile Include="Models\Transaction\StockOpname__List_Model.cs" />
     <Compile Include="Models\_BaseModel\FormModeEnum.cs">
@@ -327,6 +329,7 @@
     <Compile Include="Models\_Cfl\CflTransferSummaryOut_Model.cs" />
     <Compile Include="Models\_Cfl\CflPurchaseOrder_Model.cs" />
     <Compile Include="Models\_Cfl\CflToWarehouse_Model.cs" />
+    <Compile Include="Models\_Cfl\CflGoodsReceiptPo_Model.cs" />
     <Compile Include="Models\_Cfl\CflWarehouse_Model.cs" />
     <Compile Include="Models\_CrystalReport\CrystalReportParam.cs" />
     <Compile Include="Models\_EF\EfIduHanaRsExtensionsApp.cs" />
@@ -554,6 +557,18 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_DeactiveTag_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_GoodsReceiptPO.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Item_Batch.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Item_Batch_Scale.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_StockOpname.cs">

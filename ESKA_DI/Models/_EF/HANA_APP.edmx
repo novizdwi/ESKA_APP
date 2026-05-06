@@ -1127,6 +1127,80 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
         </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransDate" Type="timestamp" />
+          <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="VendorName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="DocEntry" Type="bigint" />
+          <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocDate" Type="timestamp" />
+          <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+          <Property Name="Whse" Type="nvarchar" MaxLength="50" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetId" Type="bigint" />
+          <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="AdmissionDate" Type="timestamp" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO_Item_Batch_Scale">
+          <Key>
+            <PropertyRef Name="DetDetDetId" />
+          </Key>
+          <Property Name="DetDetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetDetId" Type="bigint" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
         <EntityType Name="Tx_StockOpname">
           <Key>
             <PropertyRef Name="Id" />
@@ -1751,6 +1825,10 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tx_DeactiveTag_Approval" EntityType="Self.Tx_DeactiveTag_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_DeactiveTag_Item" EntityType="Self.Tx_DeactiveTag_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_DeactiveTag_Log" EntityType="Self.Tx_DeactiveTag_Log" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_GoodsReceiptPO" EntityType="Self.Tx_GoodsReceiptPO" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Self.Tx_GoodsReceiptPO_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -1845,7 +1923,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Ts_List" EntityType="Model1.Ts_List" />
           <EntitySet Name="Ts_Menu" EntityType="Model1.Ts_Menu" />
           <EntitySet Name="Ts_ObjectApproval" EntityType="Model1.Ts_ObjectApproval" />
-          <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
           <EntitySet Name="Tx_AdjustmentIn" EntityType="Model1.Tx_AdjustmentIn" />
           <EntitySet Name="Tx_AdjustmentIn_Approval" EntityType="Model1.Tx_AdjustmentIn_Approval" />
           <EntitySet Name="Tx_AdjustmentIn_Attachment" EntityType="Model1.Tx_AdjustmentIn_Attachment" />
@@ -1863,8 +1940,13 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_DeactiveTag" EntityType="Model1.Tx_DeactiveTag" />
           <EntitySet Name="Tx_DeactiveTag_Approval" EntityType="Model1.Tx_DeactiveTag_Approval" />
           <EntitySet Name="Tx_DeactiveTag_Item" EntityType="Model1.Tx_DeactiveTag_Item" />
+          <EntitySet Name="Tx_GoodsReceiptPO" EntityType="Model1.Tx_GoodsReceiptPO" />
+          <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Model1.Tx_GoodsReceiptPO_Item" />
+          <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch" />
+          <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch_Scale" />
           <EntitySet Name="Tx_StockOpname" EntityType="Model1.Tx_StockOpname" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
+          <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
           <EntitySet Name="Tx_TransferIn" EntityType="Model1.Tx_TransferIn" />
           <EntitySet Name="Tx_TransferIn_Item" EntityType="Model1.Tx_TransferIn_Item" />
           <EntitySet Name="Tx_TransferIn_Item_Tag" EntityType="Model1.Tx_TransferIn_Item_Tag" />
@@ -1884,7 +1966,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_TransferSummaryOut_Item" EntityType="Model1.Tx_TransferSummaryOut_Item" />
           <EntitySet Name="Tx_TransferSummaryOut_Item_Tag" EntityType="Model1.Tx_TransferSummaryOut_Item_Tag" />
           <EntitySet Name="Tx_TransferSummaryOut_Ref" EntityType="Model1.Tx_TransferSummaryOut_Ref" />
-          <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
+          <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -2616,21 +2698,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ObjectName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Sort" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Tp_UserAlert">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="BaseType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BaseId" Type="Int64" />
-          <Property Name="BaseTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Action" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="NotificationMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SenderId" Type="Int32" />
-          <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="LastShowTime" Type="DateTime" />
-        </EntityType>
         <EntityType Name="Tx_AdjustmentIn">
           <Key>
             <PropertyRef Name="Id" />
@@ -2992,6 +3059,80 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransDate" Type="DateTime" />
+          <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VendorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DocEntry" Type="Int64" />
+          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocDate" Type="DateTime" />
+          <Property Name="RefNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Whse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetId" Type="Int64" />
+          <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="AdmissionDate" Type="DateTime" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_GoodsReceiptPO_Item_Batch_Scale">
+          <Key>
+            <PropertyRef Name="DetDetDetId" />
+          </Key>
+          <Property Name="DetDetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetDetId" Type="Int64" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
         <EntityType Name="Tx_StockOpname">
           <Key>
             <PropertyRef Name="Id" />
@@ -3029,6 +3170,29 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="ActionDate" Type="DateTime" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_StockOpname_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int64" />
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="QtyVariance" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="UomEntry" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPriceTc" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineTotal" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -3522,28 +3686,20 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
-        <EntityType Name="Tx_StockOpname_Item">
+        <EntityType Name="Tp_UserAlert">
           <Key>
-            <PropertyRef Name="DetId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="QtyVariance" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="UomEntry" Type="Int32" />
-          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AcctCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AcctName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UnitPriceTc" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="LineTotal" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="BaseType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaseId" Type="Int64" />
+          <Property Name="BaseTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NotificationMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SenderId" Type="Int32" />
+          <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastShowTime" Type="DateTime" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -4329,22 +4485,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tp_UserAlert">
-            <EntityTypeMapping TypeName="Model1.Tp_UserAlert">
-              <MappingFragment StoreEntitySet="Tp_UserAlert">
-                <ScalarProperty Name="LastShowTime" ColumnName="LastShowTime" />
-                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
-                <ScalarProperty Name="NotificationMessage" ColumnName="NotificationMessage" />
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
-                <ScalarProperty Name="BaseId" ColumnName="BaseId" />
-                <ScalarProperty Name="BaseType" ColumnName="BaseType" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tx_AdjustmentIn">
             <EntityTypeMapping TypeName="Model1.Tx_AdjustmentIn">
               <MappingFragment StoreEntitySet="Tx_AdjustmentIn">
@@ -4723,6 +4863,84 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Tx_GoodsReceiptPO">
+            <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO">
+              <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="RefNo" ColumnName="RefNo" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_GoodsReceiptPO_Item">
+            <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item">
+              <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="Whse" ColumnName="Whse" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_GoodsReceiptPO_Item_Batch">
+            <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item_Batch">
+              <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item_Batch">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="AdmissionDate" ColumnName="AdmissionDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Batch" ColumnName="Batch" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_GoodsReceiptPO_Item_Batch_Scale">
+            <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item_Batch_Scale">
+              <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item_Batch_Scale">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+                <ScalarProperty Name="DetDetDetId" ColumnName="DetDetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tx_StockOpname">
             <EntityTypeMapping TypeName="Model1.Tx_StockOpname">
               <MappingFragment StoreEntitySet="Tx_StockOpname">
@@ -4762,6 +4980,30 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="Step" ColumnName="Step" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="StageId" ColumnName="StageId" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_StockOpname_Item">
+            <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item">
+              <MappingFragment StoreEntitySet="Tx_StockOpname_Item">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
+                <ScalarProperty Name="UnitPriceTc" ColumnName="UnitPriceTc" />
+                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
+                <ScalarProperty Name="AcctCode" ColumnName="AcctCode" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
+                <ScalarProperty Name="QtyVariance" ColumnName="QtyVariance" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -5274,26 +5516,18 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tx_StockOpname_Item">
-            <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item">
-              <MappingFragment StoreEntitySet="Tx_StockOpname_Item">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
-                <ScalarProperty Name="UnitPriceTc" ColumnName="UnitPriceTc" />
-                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
-                <ScalarProperty Name="AcctCode" ColumnName="AcctCode" />
-                <ScalarProperty Name="Uom" ColumnName="Uom" />
-                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
-                <ScalarProperty Name="QtyVariance" ColumnName="QtyVariance" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <EntitySetMapping Name="Tp_UserAlert">
+            <EntityTypeMapping TypeName="Model1.Tp_UserAlert">
+              <MappingFragment StoreEntitySet="Tp_UserAlert">
+                <ScalarProperty Name="LastShowTime" ColumnName="LastShowTime" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="NotificationMessage" ColumnName="NotificationMessage" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
+                <ScalarProperty Name="BaseId" ColumnName="BaseId" />
+                <ScalarProperty Name="BaseType" ColumnName="BaseType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

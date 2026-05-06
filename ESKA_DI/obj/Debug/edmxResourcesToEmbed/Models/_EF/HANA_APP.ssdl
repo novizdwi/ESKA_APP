@@ -1122,6 +1122,80 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
   </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="VendorName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="250" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocDate" Type="timestamp" />
+    <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="bigint" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Whse" Type="nvarchar" MaxLength="50" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="Department" Type="nvarchar" MaxLength="50" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="AdmissionDate" Type="timestamp" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_GoodsReceiptPO_Item_Batch_Scale">
+    <Key>
+      <PropertyRef Name="DetDetDetId" />
+    </Key>
+    <Property Name="DetDetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetDetId" Type="bigint" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
   <EntityType Name="Tx_StockOpname">
     <Key>
       <PropertyRef Name="Id" />
@@ -1746,6 +1820,10 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <EntitySet Name="Tx_DeactiveTag_Approval" EntityType="Self.Tx_DeactiveTag_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_DeactiveTag_Item" EntityType="Self.Tx_DeactiveTag_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_DeactiveTag_Log" EntityType="Self.Tx_DeactiveTag_Log" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO" EntityType="Self.Tx_GoodsReceiptPO" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Self.Tx_GoodsReceiptPO_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />

@@ -77,7 +77,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Ts_List> Ts_List { get; set; }
         public virtual DbSet<Ts_Menu> Ts_Menu { get; set; }
         public virtual DbSet<Ts_ObjectApproval> Ts_ObjectApproval { get; set; }
-        public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
         public virtual DbSet<Tx_AdjustmentIn> Tx_AdjustmentIn { get; set; }
         public virtual DbSet<Tx_AdjustmentIn_Approval> Tx_AdjustmentIn_Approval { get; set; }
         public virtual DbSet<Tx_AdjustmentIn_Attachment> Tx_AdjustmentIn_Attachment { get; set; }
@@ -95,8 +94,13 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_DeactiveTag> Tx_DeactiveTag { get; set; }
         public virtual DbSet<Tx_DeactiveTag_Approval> Tx_DeactiveTag_Approval { get; set; }
         public virtual DbSet<Tx_DeactiveTag_Item> Tx_DeactiveTag_Item { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO> Tx_GoodsReceiptPO { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item> Tx_GoodsReceiptPO_Item { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch> Tx_GoodsReceiptPO_Item_Batch { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch_Scale> Tx_GoodsReceiptPO_Item_Batch_Scale { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
+        public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
         public virtual DbSet<Tx_TransferIn> Tx_TransferIn { get; set; }
         public virtual DbSet<Tx_TransferIn_Item> Tx_TransferIn_Item { get; set; }
         public virtual DbSet<Tx_TransferIn_Item_Tag> Tx_TransferIn_Item_Tag { get; set; }
@@ -116,6 +120,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_TransferSummaryOut_Item> Tx_TransferSummaryOut_Item { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
         public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
-        public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
+        public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
     }
 }
