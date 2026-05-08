@@ -18,81 +18,6 @@ namespace Models.Transaction
 {
     #region Models
 
-    //public class GoodsReceiptPoModel
-    //{
-    //    private FormModeEnum _FormModeEnum = FormModeEnum.New;
-
-    //    public FormModeEnum _FormMode
-    //    {
-    //        get { return this._FormModeEnum; }
-    //        set { this._FormModeEnum = value; }
-    //    }
-
-    //    public int _UserId { get; set; }
-
-    //    public int? CreatedUser { get; set; }
-
-    //    public int? ModifiedUser { get; set; }
-
-    //    public DateTime? ModifiedDate { get; set; }
-
-    //    public string UserName { get; set; }
-
-    //    public string TransType { get; set; }
-
-    //    public long Id { get; set; }
-
-    //    public string TransNo { get; set; }
-
-    //    public DateTime? TransDate { get; set; }
-
-    //    public DateTime? PostingDate { get; set; }
-
-    //    [Required(ErrorMessage = "required")]
-    //    public string WhsCode { get; set; }
-
-    //    [Required(ErrorMessage = "required")]
-    //    public string WhsName { get; set; }
-
-    //    public string Address { get; set; }
-
-    //    public long? DocEntry { get; set; }
-
-    //    public string DocNum { get; set; }
-
-    //    public string DocNum_ { get; set; }
-
-    //    public string Status { get; set; }
-
-    //    public string CheckNeedApproval_ { get; set; }
-
-    //    public string ApprovalStatus { get; set; }
-
-    //    public string ApprovalMessages { get; set; }
-
-    //    public string IsApproval { get; set; }
-
-    //    public string IsAfterPosted { get; set; }
-
-    //    public string Comments { get; set; }
-
-    //    public string CancelReason { get; set; }
-
-    //    public string CreatedDate_ { get; set; }
-
-    //    public string ModifiedDate_ { get; set; }
-
-    //    public int? ApprovalTemplateId_ { get; set; }
-
-    //    public string IsEligibleApprove_ { get; set; }
-
-    //    public List<GoodsReceiptPo_DetailModel> ListDetail_ = new List<GoodsReceiptPo_DetailModel>();
-
-    //    public List<GoodsReceiptPo_DetailModel> ListDetails_ = new List<GoodsReceiptPo_DetailModel>();
-
-    //    public GoodsReceiptPo_Detail Details_ { get; set; }
-    //}
-
     public class GoodsReceiptPoModel
     {
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
@@ -104,10 +29,6 @@ namespace Models.Transaction
         }
 
         public int _UserId { get; set; }
-
-        // =========================
-        // TABLE: Tx_GoodsReceiptPO
-        // =========================
 
         public long Id { get; set; }
 
@@ -141,8 +62,17 @@ namespace Models.Transaction
 
         public int? ModifiedUser { get; set; }
 
+        public List<GoodsReceiptPoItem> ListDetails_ = new List<GoodsReceiptPoItem>();
 
-        public List<GoodsReceiptPoItem> ListDetails_ { get; set; } = new List<GoodsReceiptPoItem>();
+        public GoodsReceiptPoItem_Detail Details_ { get; set; }
+    }
+
+
+    public class GoodsReceiptPoItem_Detail
+    {
+        public List<long> deletedRowKeys { get; set; }
+        public List<StockOpname_DetailModel> insertedRowValues { get; set; }
+        public List<StockOpname_DetailModel> modifiedRowValues { get; set; }
     }
 
     public class GoodsReceiptPoItem
@@ -190,7 +120,6 @@ namespace Models.Transaction
         public List<GoodsReceiptPoItem> ListDetails_ { get; set; } = new List<GoodsReceiptPoItem>();
 
     }
-
 
     public class GoodsReceiptPoItemBatch
     {
@@ -264,13 +193,6 @@ namespace Models.Transaction
 
         public int? ModifiedUser { get; set; }
 
-    }
-
-    public class GoodsReceiptPo_Detail
-    {
-        public List<long> deletedRowKeys { get; set; }
-        public List<GoodsReceiptPoItem> insertedRowValues { get; set; }
-        public List<GoodsReceiptPoItem> modifiedRowValues { get; set; }
     }
 
     //public class GoodsReceiptPo_Approval
@@ -454,7 +376,7 @@ namespace Models.Transaction
 
                 model = CONTEXT.Database.SqlQuery<GoodsReceiptPoModel>(ssql, id).Single();
 
-                model.ListDetails_ = this.GoodsReceiptPo_Details(CONTEXT, id);
+               // model.ListDetails_ = this.GoodsReceiptPo_Details(CONTEXT, id);
 
                 if (model.Status == "Draft")
                 {

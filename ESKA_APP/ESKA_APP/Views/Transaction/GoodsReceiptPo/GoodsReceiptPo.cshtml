@@ -598,16 +598,81 @@
 
     }
 
-    function OnClickChoose_CflGoodsReceiptPoStockOpname(s, e, data) {
-        WhsCode.SetValue(data.WhsCode);
-        WhsName.SetValue(data.WhsName);
+    function OnClickChoose_CflGrpoGoodsReceiptPo(s, e, data) {
+        VendorCode.SetValue(data.VendorCode);
+        VendorName.SetValue(data.VendorName);
+        RefNo.SetValue(data.RefNo);
+        Docnum.SetValue(data.DocNum);
+        Status.SetValue(data.Status);
+        DocDate.SetValue(new Date(parseInt(data.DocDate.match(/\d+/)[0])));
 
-        cflGoodsReceiptPoPopupListStockOpname.Hide();
+        //console.log(new Date(parseInt(data.DocDate.match(/\d+/)[0])))
+
+        //if (data.DocDate) {
+        //    var timestamp = parseInt(data.DocDate.match(/\d+/)[0]);
+        //    var dt = new Date(timestamp);
+        //    var result =
+        //        dt.getFullYear() + '-' +
+        //        String(dt.getMonth() + 1).padStart(2, '0') + '-' +
+        //        String(dt.getDate()).padStart(2, '0');
+        //    DocDate.SetValue(new Date(result));
+        //}
+
+        CflGrpoPopupListGoodsReceiptPo.Hide();
 
     }
 
 </script>
 @Html.Partial("~/Views/_Cfl/_CflGoodsReceiptPo/Partial/_CflGoodsReceiptPo_Panel_List_Partial.cshtml", cflGoodsReceiptPo_ParamModel)
+
+<script type="text/javascript">
+
+    function gvDetailOnBeginCallback(s, e) {
+        e.customArgs['cbId'] = Id.GetValue();
+    }
+
+    function gvDetailOnEndCallback(s, e) {
+
+    }
+
+    function gvDetailOnCustomButtonClick(s, e) {
+    }
+
+
+    function gvDetailOnBatchEditStartEditing(s, e) {
+    }
+
+    function gvDetailOnBatchEditEndEditing(s, e) {
+    }
+
+    function gvDetailOnBatchEditRowValidating(s, e) {
+    }
+
+    function gvDetailCalculateSummary(grid, rowValues, visibleIndex, isDeleting) {
+    }
+
+    function gvRefOnBeginCallback(s, e) {
+        e.customArgs['cbId'] = Id.GetValue();
+    }
+
+    function gvRefOnEndCallback(s, e) {
+
+    }
+
+    function gvRefOnCustomButtonClick(s, e) {
+    }
+
+
+    function gvRefOnBatchEditStartEditing(s, e) {
+    }
+
+    function gvRefOnBatchEditEndEditing(s, e) {
+    }
+
+    function gvRefOnBatchEditRowValidating(s, e) {
+    }
+
+</script>
 
 
 @Html.Partial("Partial/GoodsReceiptPo_Form_Btn_Partial")
