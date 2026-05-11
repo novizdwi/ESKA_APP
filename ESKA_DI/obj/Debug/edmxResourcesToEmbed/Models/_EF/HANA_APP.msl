@@ -970,5 +970,30 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tx_ProcessCard_Detail">
+      <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
+        <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+          <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
+          <ScalarProperty Name="PracticeHours" ColumnName="PracticeHours" />
+          <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+          <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
+          <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+          <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+          <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
+          <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+          <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

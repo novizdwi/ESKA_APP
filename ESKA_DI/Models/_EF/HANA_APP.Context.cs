@@ -86,5 +86,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
     }
 }

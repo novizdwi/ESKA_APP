@@ -66,6 +66,7 @@
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Approval" Width="1.5" PointX="6.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item" Width="1.5" PointX="8.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="10.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_ProcessCard_Detail" Width="1.5" PointX="13.375" PointY="21.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

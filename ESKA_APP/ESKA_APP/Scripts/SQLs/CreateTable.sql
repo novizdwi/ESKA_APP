@@ -369,7 +369,8 @@ CREATE COLUMN TABLE "Tx_ProcessCard"(
     "CreatedDate"   LONGDATE CS_LONGDATE,
     "CreatedUser"   INTEGER CS_INT,
     "ModifiedDate"  LONGDATE CS_LONGDATE,
-    "ModifiedUser"  INTEGER CS_INT,
-    PRIMARY KEY ("Id")
+    "ModifiedUser"  INTEGER CS_INT 
 )
 ;
+
+green leaf ciasuk

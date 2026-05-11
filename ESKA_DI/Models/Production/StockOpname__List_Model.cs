@@ -16,16 +16,16 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 
 
-namespace Models.Transaction
+namespace Models.Production
 {
-    public class ListFindParamStockOpname
+    public class ListFindParamProcess
     {
         public bool IsFindTransDate { get; set; }
         public DateTime? TransDate_From { get; set; }
         public DateTime? TransDate_To { get; set; }
     }
 
-    public class StockOpnameView___
+    public class ProcessView___
     {
         public long Id { get; set; }
 
@@ -33,13 +33,11 @@ namespace Models.Transaction
 
         public DateTime? TransDate { get; set; }
 
-        public string WhsCode { get; set; }
+        public string CardCode { get; set; }
 
-        public string WhsName { get; set; }
+        public string CardName { get; set; }
 
-        public string ToWhsCode { get; set; }
-
-        public string ToWhsName { get; set; }
+        public string ItemCode { get; set; }
 
         public DateTime? DocDate { get; set; }
 
@@ -55,20 +53,20 @@ namespace Models.Transaction
 
     }
 
-    public class StockOpname__List_Model
+    public class Process__List_Model
     {
         static string ViewSql = "SELECT *" +
-                                "FROM \"Tx_StockOpname\" T0 " +
+                                "FROM \"Tx_Process\" T0 " +
                                 "ORDER BY T0.\"CreatedDate\" DESC";
 
-        public static void SetBindingData(GridViewModel state, int userId, ListFindParamStockOpname cflParam)
+        public static void SetBindingData(GridViewModel state, int userId, ListFindParamProcess cflParam)
         {
             string sqlCriteria = GetSqlFromGridViewModelState.getHanaCriteria(state);
             string sqlSort = GetSqlFromGridViewModelState.getHanaSort(state);
 
             using (var CONTEXT = new HANA_APP())
             {
-                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "StockOpname");
+                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "Process");
                 if (!string.IsNullOrEmpty(formAuthorizeSqlWhere))
                 {
                     if (string.IsNullOrEmpty(sqlCriteria))
@@ -103,12 +101,12 @@ namespace Models.Transaction
             e.DataRowCount = dataRowCount;
         }
 
-        public static void GetData(GridViewCustomBindingGetDataArgs e, List<StockOpnameView___> dataList)
+        public static void GetData(GridViewCustomBindingGetDataArgs e, List<ProcessView___> dataList)
         {
             e.Data = dataList;
         }
 
-        public static int GetRowCount(HANA_APP CONTEXT, int userId, ListFindParamStockOpname param, string sqlCriteria)
+        public static int GetRowCount(HANA_APP CONTEXT, int userId, ListFindParamProcess param, string sqlCriteria)
         {
 
             if (sqlCriteria == null)
@@ -160,7 +158,7 @@ namespace Models.Transaction
             return dataRowCount;
         }
 
-        public static List<StockOpnameView___> GetDataList(HANA_APP CONTEXT, int userId, ListFindParamStockOpname param, string sqlCriteria, string sqlSort, int PageIndex, int PageSize)
+        public static List<ProcessView___> GetDataList(HANA_APP CONTEXT, int userId, ListFindParamProcess param, string sqlCriteria, string sqlSort, int PageIndex, int PageSize)
         {
 
 
@@ -184,7 +182,7 @@ namespace Models.Transaction
                 sqlSort = " ORDER BY \"TransDate\" DESC ";
             }
 
-            var views = new List<StockOpnameView___>();
+            var views = new List<ProcessView___>();
 
             string ssql = "";
             ssql = "SELECT T0.* FROM (" + ViewSql + ") T0  WHERE 1=1 " + sqlCriteria;
@@ -199,32 +197,32 @@ namespace Models.Transaction
                     if ((param.TransDate_From != null) && (param.TransDate_To != null))
                     {
                         //ssql = ssql + " AND \"TransDate\">=:p0 AND \"TransDate\"<=:p1 ";
-                        views = CONTEXT.Database.SqlQuery<StockOpnameView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date, param.TransDate_To.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date, param.TransDate_To.Value.Date).ToList();
                     }
                     else if (param.TransDate_From != null)
                     {
                         //ssql = ssql + " AND \"TransDate\">=:p0 ";
-                        views = CONTEXT.Database.SqlQuery<StockOpnameView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date).ToList();
                     }
                     else if (param.TransDate_To != null)
                     {
                         //ssql = ssql + " AND \"TransDate\"<=:p0 ";
-                        views = CONTEXT.Database.SqlQuery<StockOpnameView___>(ssql + sqlSort + ssqlLimit, param.TransDate_To.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_To.Value.Date).ToList();
                     }
                 }
                 else
                 {
-                    views = CONTEXT.Database.SqlQuery<StockOpnameView___>(ssql + sqlSort + ssqlLimit).ToList();
+                    views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit).ToList();
                 }
             }
             else
             {
-                views = CONTEXT.Database.SqlQuery<StockOpnameView___>(ssql + sqlSort + ssqlLimit).ToList();
+                views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit).ToList();
             }
 
             if (views.Count == 0)
             {
-                StockOpnameView___ view = new StockOpnameView___();
+                ProcessView___ view = new ProcessView___();
                 views.Add(view);
             }
 

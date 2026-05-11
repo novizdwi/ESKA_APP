@@ -854,6 +854,32 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ModifiedDate" Type="timestamp" />
           <Property Name="ModifiedUser" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tx_ProcessCard_Detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Tx_ProcessCard_Detail">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="int" />
+          <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="OperatorId" Type="int" />
+          <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProcessingDate" Type="timestamp" />
+          <Property Name="EndDate" Type="timestamp" />
+          <Property Name="MachineId" Type="int" />
+          <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
+          <Property Name="PracticeHours" Type="time" Precision="7" />
+          <Property Name="ActualHours" Type="time" Precision="7" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
         <EntityType Name="Tx_StockOpname">
           <Key>
             <PropertyRef Name="Id" />
@@ -994,6 +1020,29 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
 "Tp_UserAlert"."LastShowTime" AS "LastShowTime"
 FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" store:Type="Tables" store:Schema="ESKA_APP_TEST">
+            <DefiningQuery>SELECT 
+"Tx_ProcessCard_Detail"."Id" AS "Id", 
+"Tx_ProcessCard_Detail"."DetId" AS "DetId", 
+"Tx_ProcessCard_Detail"."RoutingCode" AS "RoutingCode", 
+"Tx_ProcessCard_Detail"."RoutingName" AS "RoutingName", 
+"Tx_ProcessCard_Detail"."RoutingStatus" AS "RoutingStatus", 
+"Tx_ProcessCard_Detail"."OperatorId" AS "OperatorId", 
+"Tx_ProcessCard_Detail"."OperatorName" AS "OperatorName", 
+"Tx_ProcessCard_Detail"."ProcessingDate" AS "ProcessingDate", 
+"Tx_ProcessCard_Detail"."EndDate" AS "EndDate", 
+"Tx_ProcessCard_Detail"."MachineId" AS "MachineId", 
+"Tx_ProcessCard_Detail"."MachineName" AS "MachineName", 
+"Tx_ProcessCard_Detail"."PracticeHours" AS "PracticeHours", 
+"Tx_ProcessCard_Detail"."ActualHours" AS "ActualHours", 
+"Tx_ProcessCard_Detail"."LineStatus" AS "LineStatus", 
+"Tx_ProcessCard_Detail"."Comments" AS "Comments", 
+"Tx_ProcessCard_Detail"."CreatedDate" AS "CreatedDate", 
+"Tx_ProcessCard_Detail"."CreatedUser" AS "CreatedUser", 
+"Tx_ProcessCard_Detail"."ModifiedDate" AS "ModifiedDate", 
+"Tx_ProcessCard_Detail"."ModifiedUser" AS "ModifiedUser"
+FROM "ESKA_APP_TEST"."Tx_ProcessCard_Detail" AS "Tx_ProcessCard_Detail"</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1061,6 +1110,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
           <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
+          <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -1973,6 +2023,30 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="SenderId" Type="Int32" />
           <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="LastShowTime" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="Tx_ProcessCard_Detail">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int32" />
+          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OperatorId" Type="Int32" />
+          <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessingDate" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
+          <Property Name="MachineId" Type="Int32" />
+          <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PracticeHours" Type="Time" />
+          <Property Name="ActualHours" Type="Time" />
+          <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2945,6 +3019,31 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="BaseId" ColumnName="BaseId" />
                 <ScalarProperty Name="BaseType" ColumnName="BaseType" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_ProcessCard_Detail">
+            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
+              <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
+                <ScalarProperty Name="PracticeHours" ColumnName="PracticeHours" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
+                <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+                <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+                <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
+                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

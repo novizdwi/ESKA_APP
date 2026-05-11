@@ -849,6 +849,32 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tx_ProcessCard_Detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Tx_ProcessCard_Detail">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
+    <Property Name="OperatorId" Type="int" />
+    <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ProcessingDate" Type="timestamp" />
+    <Property Name="EndDate" Type="timestamp" />
+    <Property Name="MachineId" Type="int" />
+    <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
+    <Property Name="PracticeHours" Type="time" Precision="7" />
+    <Property Name="ActualHours" Type="time" Precision="7" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="20" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
   <EntityType Name="Tx_StockOpname">
     <Key>
       <PropertyRef Name="Id" />
@@ -988,6 +1014,29 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
 "Tp_UserAlert"."IsRead" AS "IsRead", 
 "Tp_UserAlert"."LastShowTime" AS "LastShowTime"
 FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" store:Type="Tables" store:Schema="ESKA_APP_TEST">
+      <DefiningQuery>SELECT 
+"Tx_ProcessCard_Detail"."Id" AS "Id", 
+"Tx_ProcessCard_Detail"."DetId" AS "DetId", 
+"Tx_ProcessCard_Detail"."RoutingCode" AS "RoutingCode", 
+"Tx_ProcessCard_Detail"."RoutingName" AS "RoutingName", 
+"Tx_ProcessCard_Detail"."RoutingStatus" AS "RoutingStatus", 
+"Tx_ProcessCard_Detail"."OperatorId" AS "OperatorId", 
+"Tx_ProcessCard_Detail"."OperatorName" AS "OperatorName", 
+"Tx_ProcessCard_Detail"."ProcessingDate" AS "ProcessingDate", 
+"Tx_ProcessCard_Detail"."EndDate" AS "EndDate", 
+"Tx_ProcessCard_Detail"."MachineId" AS "MachineId", 
+"Tx_ProcessCard_Detail"."MachineName" AS "MachineName", 
+"Tx_ProcessCard_Detail"."PracticeHours" AS "PracticeHours", 
+"Tx_ProcessCard_Detail"."ActualHours" AS "ActualHours", 
+"Tx_ProcessCard_Detail"."LineStatus" AS "LineStatus", 
+"Tx_ProcessCard_Detail"."Comments" AS "Comments", 
+"Tx_ProcessCard_Detail"."CreatedDate" AS "CreatedDate", 
+"Tx_ProcessCard_Detail"."CreatedUser" AS "CreatedUser", 
+"Tx_ProcessCard_Detail"."ModifiedDate" AS "ModifiedDate", 
+"Tx_ProcessCard_Detail"."ModifiedUser" AS "ModifiedUser"
+FROM "ESKA_APP_TEST"."Tx_ProcessCard_Detail" AS "Tx_ProcessCard_Detail"</DefiningQuery>
     </EntitySet>
   </EntityContainer>
 </Schema>
