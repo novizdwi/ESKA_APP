@@ -18,14 +18,14 @@ using System.Threading.Tasks;
 
 namespace Models.Production
 {
-    public class ListFindParamProcess
+    public class ListFindParamProcessCard
     {
         public bool IsFindTransDate { get; set; }
         public DateTime? TransDate_From { get; set; }
         public DateTime? TransDate_To { get; set; }
     }
 
-    public class ProcessView___
+    public class ProcessCardView___
     {
         public long Id { get; set; }
 
@@ -53,13 +53,13 @@ namespace Models.Production
 
     }
 
-    public class Process__List_Model
+    public class ProcessCard__List_Model
     {
         static string ViewSql = "SELECT *" +
-                                "FROM \"Tx_Process\" T0 " +
+                                "FROM \"Tx_ProcessCard\" T0 " +
                                 "ORDER BY T0.\"CreatedDate\" DESC";
 
-        public static void SetBindingData(GridViewModel state, int userId, ListFindParamProcess cflParam)
+        public static void SetBindingData(GridViewModel state, int userId, ListFindParamProcessCard cflParam)
         {
             string sqlCriteria = GetSqlFromGridViewModelState.getHanaCriteria(state);
             string sqlSort = GetSqlFromGridViewModelState.getHanaSort(state);
@@ -101,12 +101,12 @@ namespace Models.Production
             e.DataRowCount = dataRowCount;
         }
 
-        public static void GetData(GridViewCustomBindingGetDataArgs e, List<ProcessView___> dataList)
+        public static void GetData(GridViewCustomBindingGetDataArgs e, List<ProcessCardView___> dataList)
         {
             e.Data = dataList;
         }
 
-        public static int GetRowCount(HANA_APP CONTEXT, int userId, ListFindParamProcess param, string sqlCriteria)
+        public static int GetRowCount(HANA_APP CONTEXT, int userId, ListFindParamProcessCard param, string sqlCriteria)
         {
 
             if (sqlCriteria == null)
@@ -158,7 +158,7 @@ namespace Models.Production
             return dataRowCount;
         }
 
-        public static List<ProcessView___> GetDataList(HANA_APP CONTEXT, int userId, ListFindParamProcess param, string sqlCriteria, string sqlSort, int PageIndex, int PageSize)
+        public static List<ProcessCardView___> GetDataList(HANA_APP CONTEXT, int userId, ListFindParamProcessCard param, string sqlCriteria, string sqlSort, int PageIndex, int PageSize)
         {
 
 
@@ -182,7 +182,7 @@ namespace Models.Production
                 sqlSort = " ORDER BY \"TransDate\" DESC ";
             }
 
-            var views = new List<ProcessView___>();
+            var views = new List<ProcessCardView___>();
 
             string ssql = "";
             ssql = "SELECT T0.* FROM (" + ViewSql + ") T0  WHERE 1=1 " + sqlCriteria;
@@ -197,32 +197,32 @@ namespace Models.Production
                     if ((param.TransDate_From != null) && (param.TransDate_To != null))
                     {
                         //ssql = ssql + " AND \"TransDate\">=:p0 AND \"TransDate\"<=:p1 ";
-                        views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date, param.TransDate_To.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ProcessCardView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date, param.TransDate_To.Value.Date).ToList();
                     }
                     else if (param.TransDate_From != null)
                     {
                         //ssql = ssql + " AND \"TransDate\">=:p0 ";
-                        views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ProcessCardView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date).ToList();
                     }
                     else if (param.TransDate_To != null)
                     {
                         //ssql = ssql + " AND \"TransDate\"<=:p0 ";
-                        views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_To.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ProcessCardView___>(ssql + sqlSort + ssqlLimit, param.TransDate_To.Value.Date).ToList();
                     }
                 }
                 else
                 {
-                    views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit).ToList();
+                    views = CONTEXT.Database.SqlQuery<ProcessCardView___>(ssql + sqlSort + ssqlLimit).ToList();
                 }
             }
             else
             {
-                views = CONTEXT.Database.SqlQuery<ProcessView___>(ssql + sqlSort + ssqlLimit).ToList();
+                views = CONTEXT.Database.SqlQuery<ProcessCardView___>(ssql + sqlSort + ssqlLimit).ToList();
             }
 
             if (views.Count == 0)
             {
-                ProcessView___ view = new ProcessView___();
+                ProcessCardView___ view = new ProcessCardView___();
                 views.Add(view);
             }
 

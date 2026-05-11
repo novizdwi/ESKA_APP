@@ -12,23 +12,16 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProcessCard_Detail
+    public partial class Tx_ProcessCard_Approval
     {
-        public Nullable<long> Id { get; set; }
-        public long DetId { get; set; }
-        public string RoutingCode { get; set; }
-        public string RoutingName { get; set; }
-        public string RoutingStatus { get; set; }
-        public Nullable<int> OperatorId { get; set; }
-        public string OperatorName { get; set; }
-        public Nullable<System.DateTime> ProcessingDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public Nullable<int> MachineId { get; set; }
-        public string MachineName { get; set; }
-        public Nullable<System.TimeSpan> PracticeHours { get; set; }
-        public Nullable<System.TimeSpan> ActualHours { get; set; }
-        public string LineStatus { get; set; }
+        public Nullable<int> Id { get; set; }
+        public int DetId { get; set; }
+        public Nullable<int> StageId { get; set; }
+        public Nullable<int> UserId { get; set; }
+        public Nullable<int> Step { get; set; }
+        public string Status { get; set; }
         public string Comments { get; set; }
+        public Nullable<System.DateTime> ActionDate { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

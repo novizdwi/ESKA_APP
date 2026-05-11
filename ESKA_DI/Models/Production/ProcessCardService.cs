@@ -18,7 +18,7 @@ namespace Models.Production
 {
     #region Models
 
-    public class StockOpnameModel
+    public class ProcessCardModel
     {
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
 
@@ -86,59 +86,28 @@ namespace Models.Production
 
         public string IsEligibleApprove_ { get; set; }
 
-        public List<StockOpname_DetailModel> ListDetail_ = new List<StockOpname_DetailModel>();
+        public List<ProcessCard_DetailModel> ListDetail_ = new List<ProcessCard_DetailModel>();
 
-        public List<StockOpname_DetailModel> ListDetails_ = new List<StockOpname_DetailModel>();
+        public List<ProcessCard_DetailModel> ListDetails_ = new List<ProcessCard_DetailModel>();
 
-        public StockOpname_Detail Details_ { get; set; }
+        public ProcessCard_Detail Details_ { get; set; }
     }
         
-    public class StockOpname_Detail
+    public class ProcessCard_Detail
     {
         public List<long> deletedRowKeys { get; set; }
-        public List<StockOpname_DetailModel> insertedRowValues { get; set; }
-        public List<StockOpname_DetailModel> modifiedRowValues { get; set; }
+        public List<ProcessCard_DetailModel> insertedRowValues { get; set; }
+        public List<ProcessCard_DetailModel> modifiedRowValues { get; set; }
     }
 
-    public class StockOpname_Approval
+    public class ProcessCard_Approval
     {
         public List<long> deletedRowKeys { get; set; }
-        public List<StockOpname_ApprovalModel> insertedRowValues { get; set; }
-        public List<StockOpname_ApprovalModel> modifiedRowValues { get; set; }
+        public List<ProcessCard_ApprovalModel> insertedRowValues { get; set; }
+        public List<ProcessCard_ApprovalModel> modifiedRowValues { get; set; }
     }
-
-    public class StockOpname_RefModel
-    {
-        private FormModeEnum _FormModeEnum = FormModeEnum.New;
-
-        public FormModeEnum _FormMode
-        {
-            get { return this._FormModeEnum; }
-            set { this._FormModeEnum = value; }
-        }
-
-        public int _UserId { get; set; }
-
-        public long? Id { get; set; }
-
-        public long? DetId { get; set; }
-
-        public long? BaseId { get; set; }
-
-        public string BaseNo { get; set; }
-
-        public DateTime? BaseCreatedDate { get; set; }
-
-        public string ScanDeviceId { get; set; }
-
-        public string Status { get; set; }
-
-        public string Comments { get; set; }
-
-        public string BaseCreatedUser_ { get; set; }
-    }
-
-    public class StockOpname_ApprovalModel
+    
+    public class ProcessCard_ApprovalModel
     {
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
 
@@ -169,7 +138,7 @@ namespace Models.Production
         public DateTime? ActionDate { get; set; }
     }
 
-    public class StockOpname_DetailModel
+    public class ProcessCard_DetailModel
     {
 
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
@@ -218,13 +187,7 @@ namespace Models.Production
 
     }
 
-    public class StockOpnameAddResultModel
-    {
-        public string DocEntry { get; set; }
-        public Dictionary<long, int> LineMapping { get; set; } // LineId -> LineNum
-    }
-
-    public class StockOpnameApprovalView___
+    public class ProcessCardApprovalView___
     {
         public long Id { get; set; }
 
@@ -238,27 +201,27 @@ namespace Models.Production
 
         public DateTime? CreatedDate { get; set; }
 
-        public List<StockOpname_ApprovalModel> ApprovalStepList__ = new List<StockOpname_ApprovalModel>();
+        public List<ProcessCard_ApprovalModel> ApprovalStepList__ = new List<ProcessCard_ApprovalModel>();
 
-        public StockOpname_Approval ApprovalStep__ { get; set; }
+        public ProcessCard_Approval ApprovalStep__ { get; set; }
     }
 
     #endregion
 
     #region Services
 
-    public class StockOpnameService
+    public class ProcessCardService
     {
 
-        public StockOpnameModel GetNewModel(int userId)
+        public ProcessCardModel GetNewModel(int userId)
         {
-            StockOpnameModel model = new StockOpnameModel();
+            ProcessCardModel model = new ProcessCardModel();
             model.Status = "Draft";
             model.TransDate = DateTime.Now;
             return model;
         }
 
-        public StockOpnameModel GetById(int userId, long id = 0, string method = "")
+        public ProcessCardModel GetById(int userId, long id = 0, string method = "")
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -266,34 +229,34 @@ namespace Models.Production
             }
         }
 
-        public StockOpnameModel GetById(HANA_APP CONTEXT, int userId, long id = 0, string method = "")
+        public ProcessCardModel GetById(HANA_APP CONTEXT, int userId, long id = 0, string method = "")
         {
-            StockOpnameModel model = null;
+            ProcessCardModel model = null;
             if (id != 0)
             {
                 string ssql = @"SELECT *,
                             TO_VARCHAR(T0.""CreatedDate"", 'DD/MM/YYYY') AS ""CreatedDate_"",
                             TO_VARCHAR(T0.""ModifiedDate"", 'DD/MM/YYYY') AS ""ModifiedDate_""
-                            FROM ""Tx_StockOpname"" T0
+                            FROM ""Tx_ProcessCard"" T0
                             WHERE T0.""Id"" = :p0 
                             ORDER BY T0.""Id"" ASC
                 ";
 
-                model = CONTEXT.Database.SqlQuery<StockOpnameModel>(ssql, id).Single();
+                model = CONTEXT.Database.SqlQuery<ProcessCardModel>(ssql, id).Single();
                 
-                model.ListDetails_ = this.StockOpname_Details(CONTEXT, id);
+                model.ListDetails_ = this.ProcessCard_Details(CONTEXT, id);
 
                 if (model.Status == "Draft")
                 {
-                    int? approvalId = CONTEXT.Database.SqlQuery<int?>(@"CALL ""SpApproval_CheckNeedApproval""(:p0, 'StockOpname', :p1) ", userId, model.Id).FirstOrDefault();
+                    int? approvalId = CONTEXT.Database.SqlQuery<int?>(@"CALL ""SpApproval_CheckNeedApproval""(:p0, 'ProcessCard', :p1) ", userId, model.Id).FirstOrDefault();
                     model.ApprovalTemplateId_ = approvalId;
                 }
 
                 if (model.ApprovalStatus == "Waiting")
                 {
                     string getDocNum = @"SELECT 'Y'
-			            FROM ""Tx_StockOpname"" T0
-			            INNER JOIN  ""Tx_StockOpname_Approval"" T1 ON T0.""Id"" = T1.""Id"" AND T1.""Status"" = 'Waiting'
+			            FROM ""Tx_ProcessCard"" T0
+			            INNER JOIN  ""Tx_ProcessCard_Approval"" T1 ON T0.""Id"" = T1.""Id"" AND T1.""Status"" = 'Waiting'
 			            WHERE T0.""Id"" = :p0 
 			            AND T1.""UserId"" = :p1
 		            ";
@@ -304,89 +267,68 @@ namespace Models.Production
 
             return model;
         }
+        
 
-        public List<StockOpname_RefModel> StockOpname_Refs(long id = 0)
+        public List<ProcessCard_DetailModel> ProcessCard_Details(long id = 0)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return StockOpname_Refs(CONTEXT, id);
+                return ProcessCard_Details(CONTEXT, id);
             }
 
         }
 
-        public List<StockOpname_RefModel> StockOpname_Refs(HANA_APP CONTEXT, long id = 0)
-        {
-            string ssql = @"SELECT T0.*, T1.""TransDate"", T2.""FirstName"" AS ""BaseCreatedUser_""
-                FROM ""Tx_StockOpname_Ref"" T0
-                INNER JOIN ""Tx_TransferOut"" T1 ON T0.""BaseId"" = T1.""Id""
-                LEFT JOIN ""Tm_User"" T2 ON T0.""BaseCreatedUser"" = T2.""Id""
-                WHERE T0.""Id"" =:p0
-                ORDER BY T0.""DetId"" ASC
-            ";
-            var result = CONTEXT.Database.SqlQuery<StockOpname_RefModel>(ssql, id).ToList();
-            return result;
-        }
-
-        public List<StockOpname_DetailModel> StockOpname_Details(long id = 0)
-        {
-            using (var CONTEXT = new HANA_APP())
-            {
-                return StockOpname_Details(CONTEXT, id);
-            }
-
-        }
-
-        public List<StockOpname_DetailModel> StockOpname_Details(HANA_APP CONTEXT, long id = 0)
+        public List<ProcessCard_DetailModel> ProcessCard_Details(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"
             SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"",
                 T0.*,
                 T2.""OnHand"" AS ""QuantityOnHandSAP_"",
                 CASE WHEN T1.""Status"" IN ('Draft') THEN COALESCE(T2.""OnHand"", 0) - COALESCE(T0.""Quantity"", 0) ELSE NULL END AS ""QtyVariance_""
-            FROM ""Tx_StockOpname_Item"" T0
-            INNER JOIN ""Tx_StockOpname"" T1 ON T0.""Id"" = T1.""Id""
+            FROM ""Tx_ProcessCard_Detail"" T0
+            INNER JOIN ""Tx_ProcessCard"" T1 ON T0.""Id"" = T1.""Id""
             LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OITW"" T2 ON T0.""ItemCode"" = T2.""ItemCode"" AND T1.""WhsCode"" = T2.""WhsCode""
             WHERE T0.""Id"" =:p0
             ORDER BY T0.""DetId"" ASC
             ";
-            var StockOpname = CONTEXT.Database.SqlQuery<StockOpname_DetailModel>(ssql, id).ToList();
-            return StockOpname;
+            var ProcessCard = CONTEXT.Database.SqlQuery<ProcessCard_DetailModel>(ssql, id).ToList();
+            return ProcessCard;
         }
 
-        public List<StockOpname_ApprovalModel> GetStockOpname_ApprovalSteps(long id = 0)
+        public List<ProcessCard_ApprovalModel> GetProcessCard_ApprovalSteps(long id = 0)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return GetStockOpname_ApprovalSteps(CONTEXT, id);
+                return GetProcessCard_ApprovalSteps(CONTEXT, id);
             }
 
         }
 
-        public List<StockOpname_ApprovalModel> GetStockOpname_ApprovalSteps(HANA_APP CONTEXT, long id = 0)
+        public List<ProcessCard_ApprovalModel> GetProcessCard_ApprovalSteps(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"SELECT T0.*, T1.""UserName""  AS Username
-                FROM ""Tx_StockOpname_Approval"" T0
+                FROM ""Tx_ProcessCard_Approval"" T0
                 LEFT JOIN ""Tm_User"" T1 ON T1.""Id"" = T0.""UserId""
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""Step"" ASC
             ";
-            var listData = CONTEXT.Database.SqlQuery<StockOpname_ApprovalModel>(ssql, id).ToList();
+            var listData = CONTEXT.Database.SqlQuery<ProcessCard_ApprovalModel>(ssql, id).ToList();
             return listData;
         }
 
-        public StockOpnameModel NavFirst(int userId)
+        public ProcessCardModel NavFirst(int userId)
         {
-            StockOpnameModel model = null;
+            ProcessCardModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
-                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "StockOpname");
+                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "ProcessCard");
                 if (!string.IsNullOrEmpty(formAuthorizeSqlWhere))
                 {
                     sqlCriteria = " AND " + formAuthorizeSqlWhere;
                 }
 
-                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_StockOpname\" T0 WHERE 1=1 " + sqlCriteria + " ORDER BY T0.\"Id\" ASC").FirstOrDefault();
+                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_ProcessCard\" T0 WHERE 1=1 " + sqlCriteria + " ORDER BY T0.\"Id\" ASC").FirstOrDefault();
 
                 model = this.GetById(CONTEXT, userId, Id.HasValue ? Id.Value : 0);
             }
@@ -394,19 +336,19 @@ namespace Models.Production
             return model;
 
         }
-        public StockOpnameModel NavPrevious(int userId, long id = 0)
+        public ProcessCardModel NavPrevious(int userId, long id = 0)
         {
-            StockOpnameModel model = null;
+            ProcessCardModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
-                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "StockOpname");
+                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "ProcessCard");
                 if (!string.IsNullOrEmpty(formAuthorizeSqlWhere))
                 {
                     sqlCriteria = " AND " + formAuthorizeSqlWhere;
                 }
 
-                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_StockOpname\" T0 WHERE T0.\"Id\"<:p0 " + sqlCriteria + "  ORDER BY T0.\"Id\" DESC", id).FirstOrDefault();
+                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_ProcessCard\" T0 WHERE T0.\"Id\"<:p0 " + sqlCriteria + "  ORDER BY T0.\"Id\" DESC", id).FirstOrDefault();
                 if (Id.HasValue)
                 {
                     model = this.GetById(CONTEXT, userId, Id.Value);
@@ -422,19 +364,19 @@ namespace Models.Production
             return model;
         }
 
-        public StockOpnameModel NavNext(int userId, long id = 0)
+        public ProcessCardModel NavNext(int userId, long id = 0)
         {
-            StockOpnameModel model = null;
+            ProcessCardModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
-                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "StockOpname");
+                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "ProcessCard");
                 if (!string.IsNullOrEmpty(formAuthorizeSqlWhere))
                 {
                     sqlCriteria = " AND " + formAuthorizeSqlWhere;
                 }
 
-                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_StockOpname\" T0 WHERE T0.\"Id\">:p0 " + sqlCriteria + "  ORDER BY T0.\"Id\" ASC", id).FirstOrDefault();
+                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_ProcessCard\" T0 WHERE T0.\"Id\">:p0 " + sqlCriteria + "  ORDER BY T0.\"Id\" ASC", id).FirstOrDefault();
                 if (Id.HasValue)
                 {
                     model = this.GetById(CONTEXT, userId, Id.Value);
@@ -449,19 +391,19 @@ namespace Models.Production
             return model;
         }
 
-        public StockOpnameModel NavLast(int userId)
+        public ProcessCardModel NavLast(int userId)
         {
-            StockOpnameModel model = null;
+            ProcessCardModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
-                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "StockOpname");
+                var formAuthorizeSqlWhere = GeneralGetList.GetFormTransAuthorizeSqlWhere(CONTEXT, userId, "ProcessCard");
                 if (!string.IsNullOrEmpty(formAuthorizeSqlWhere))
                 {
                     sqlCriteria = " AND " + formAuthorizeSqlWhere;
                 }
 
-                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_StockOpname\" T0 WHERE 1=1 " + sqlCriteria + "  ORDER BY T0.\"Id\" DESC").FirstOrDefault();
+                long? Id = CONTEXT.Database.SqlQuery<long?>("SELECT TOP 1 T0.\"Id\" FROM \"Tx_ProcessCard\" T0 WHERE 1=1 " + sqlCriteria + "  ORDER BY T0.\"Id\" DESC").FirstOrDefault();
 
                 model = this.GetById(CONTEXT, userId, Id.HasValue ? Id.Value : 0);
             }
@@ -469,7 +411,7 @@ namespace Models.Production
             return model;
         }
 
-        public long Add(StockOpnameModel model)
+        public long Add(ProcessCardModel model)
         {
             long Id = 0;
 
@@ -482,29 +424,29 @@ namespace Models.Production
                     {
                         try
                         {
-                            Tx_StockOpname tx_StockOpname = new Tx_StockOpname();
-                            CopyProperty.CopyProperties(model, tx_StockOpname, false);
+                            Tx_ProcessCard tx_ProcessCard = new Tx_ProcessCard();
+                            CopyProperty.CopyProperties(model, tx_ProcessCard, false);
 
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
                             
-                            tx_StockOpname.TransType = "StockOpname";
-                            tx_StockOpname.CreatedDate = dtModified;
-                            tx_StockOpname.CreatedUser = model._UserId;
-                            tx_StockOpname.ModifiedDate = dtModified;
-                            tx_StockOpname.ModifiedUser = model._UserId;
+                            tx_ProcessCard.TransType = "ProcessCard";
+                            tx_ProcessCard.CreatedDate = dtModified;
+                            tx_ProcessCard.CreatedUser = model._UserId;
+                            tx_ProcessCard.ModifiedDate = dtModified;
+                            tx_ProcessCard.ModifiedUser = model._UserId;
 
                             string dateX = model.TransDate.Value.ToString("yyyy-MM-dd");
-                            string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + model._UserId.ToString() + ",'StockOpname','" + dateX + "','') ").SingleOrDefault();
-                            tx_StockOpname.TransNo = transNo;
+                            string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + model._UserId.ToString() + ",'ProcessCard','" + dateX + "','') ").SingleOrDefault();
+                            tx_ProcessCard.TransNo = transNo;
 
-                            CONTEXT.Tx_StockOpname.Add(tx_StockOpname);
+                            CONTEXT.Tx_ProcessCard.Add(tx_ProcessCard);
                             CONTEXT.SaveChanges();
-                            Id = tx_StockOpname.Id;
+                            Id = tx_ProcessCard.Id;
 
                             String keyValue;
-                            keyValue = tx_StockOpname.Id.ToString();
+                            keyValue = tx_ProcessCard.Id.ToString();
                             
-                            SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "add", "Id", keyValue);
+                            SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "add", "Id", keyValue);
 
                             CONTEXT_TRANS.Commit();
                         }
@@ -533,7 +475,7 @@ namespace Models.Production
 
         }
 
-        public void Update(StockOpnameModel model, string method ="")
+        public void Update(ProcessCardModel model, string method ="")
         {
             if (model != null)
             {
@@ -548,24 +490,24 @@ namespace Models.Production
                                 String keyValue;
                                 keyValue = model.Id.ToString();
                                 
-                                SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "before", "StockOpname", "update", "Id", keyValue);
+                                SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "before", "ProcessCard", "update", "Id", keyValue);
 
 
-                                Tx_StockOpname tx_StockOpname = CONTEXT.Tx_StockOpname.Find(model.Id);
+                                Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(model.Id);
                                 DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
                              
-                                if (tx_StockOpname != null)
+                                if (tx_ProcessCard != null)
                                 {
                                     var exceptColumns = new string[] { "Id", "TransNo", "CreatedUser" };
-                                    CopyProperty.CopyProperties(model, tx_StockOpname, false, exceptColumns);
+                                    CopyProperty.CopyProperties(model, tx_ProcessCard, false, exceptColumns);
 
-                                    //Tx_StockOpname.ApprovalStatus = isApprovalActive == "Y" && Tx_StockOpname.ApprovalStatus == "" ? "Waiting" : "Approved";
-                                    tx_StockOpname.ModifiedDate = dtModified;
-                                    tx_StockOpname.ModifiedUser = model._UserId;
+                                    //Tx_ProcessCard.ApprovalStatus = isApprovalActive == "Y" && Tx_ProcessCard.ApprovalStatus == "" ? "Waiting" : "Approved";
+                                    tx_ProcessCard.ModifiedDate = dtModified;
+                                    tx_ProcessCard.ModifiedUser = model._UserId;
 
                                     if (method == "Post")
                                     {
-                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItem\"(:p0,:p1)", model._UserId, model.Id);
+                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"ProcessCard_UpdateItem\"(:p0,:p1)", model._UserId, model.Id);
                                     }
 
                                     if (model.Details_ != null)
@@ -590,7 +532,7 @@ namespace Models.Production
                                         {
                                             foreach (var detId in model.Details_.deletedRowKeys)
                                             {
-                                                StockOpname_DetailModel detailModel = new StockOpname_DetailModel();
+                                                ProcessCard_DetailModel detailModel = new ProcessCard_DetailModel();
                                                 detailModel.DetId = detId;
                                                 Detail_Delete(CONTEXT, detailModel);
                                             }
@@ -599,7 +541,7 @@ namespace Models.Production
                                     
                                     CONTEXT.SaveChanges();
 
-                                    SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "update", "Id", keyValue);
+                                    SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "update", "Id", keyValue);
                                     
                                 }
 
@@ -644,7 +586,7 @@ namespace Models.Production
                         {
                             String keyValue;
                             keyValue = Id.ToString();
-                            SpNotif.SpSysTransNotif(UserId, CONTEXT, "before", "StockOpname", "ChooseItem", "Id", keyValue);
+                            SpNotif.SpSysTransNotif(UserId, CONTEXT, "before", "ProcessCard", "ChooseItem", "Id", keyValue);
 
                             string sqlWhere;
                             if (data == null)
@@ -666,11 +608,11 @@ namespace Models.Production
                             }
 
 
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_ChooseItem\"(:p0,:p1,:p2,:p3)", UserId, Id, sqlWhere, sorting);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_ChooseItem\"(:p0,:p1,:p2,:p3)", UserId, Id, sqlWhere, sorting);
 
 
                             keyValue = Id.ToString();
-                            SpNotif.SpSysTransNotif(UserId, CONTEXT, "after", "StockOpname", "ChooseItem", "Id", keyValue);
+                            SpNotif.SpSysTransNotif(UserId, CONTEXT, "after", "ProcessCard", "ChooseItem", "Id", keyValue);
 
 
                             CONTEXT_TRANS.Commit();
@@ -700,27 +642,27 @@ namespace Models.Production
             return true;
         }
 
-        public long Detail_Add(HANA_APP CONTEXT, StockOpname_DetailModel model, long Id, int UserId)
+        public long Detail_Add(HANA_APP CONTEXT, ProcessCard_DetailModel model, long Id, int UserId)
         {
             long DetId = 0;
 
             if (model != null)
             {
 
-                Tx_StockOpname_Item Tx_StockOpname_Item = new Tx_StockOpname_Item();
+                Tx_ProcessCard_Detail Tx_ProcessCard_Detail = new Tx_ProcessCard_Detail();
 
-                CopyProperty.CopyProperties(model, Tx_StockOpname_Item, false);
+                CopyProperty.CopyProperties(model, Tx_ProcessCard_Detail, false);
 
                 DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                Tx_StockOpname_Item.Id = Id;
-                Tx_StockOpname_Item.CreatedDate = dtModified;
-                Tx_StockOpname_Item.CreatedUser = UserId;
-                Tx_StockOpname_Item.ModifiedDate = dtModified;
-                Tx_StockOpname_Item.ModifiedUser = UserId;
+                Tx_ProcessCard_Detail.Id = Id;
+                Tx_ProcessCard_Detail.CreatedDate = dtModified;
+                Tx_ProcessCard_Detail.CreatedUser = UserId;
+                Tx_ProcessCard_Detail.ModifiedDate = dtModified;
+                Tx_ProcessCard_Detail.ModifiedUser = UserId;
 
-                CONTEXT.Tx_StockOpname_Item.Add(Tx_StockOpname_Item);
+                CONTEXT.Tx_ProcessCard_Detail.Add(Tx_ProcessCard_Detail);
                 CONTEXT.SaveChanges();
-                DetId = Tx_StockOpname_Item.DetId;
+                DetId = Tx_ProcessCard_Detail.DetId;
 
             }
 
@@ -728,23 +670,23 @@ namespace Models.Production
 
         }
 
-        public void Detail_Update(HANA_APP CONTEXT, StockOpname_DetailModel model, int UserId)
+        public void Detail_Update(HANA_APP CONTEXT, ProcessCard_DetailModel model, int UserId)
         {
             if (model != null)
             {
 
-                Tx_StockOpname_Item Tx_StockOpname_Item = CONTEXT.Tx_StockOpname_Item.Find(model.DetId);
+                Tx_ProcessCard_Detail Tx_ProcessCard_Detail = CONTEXT.Tx_ProcessCard_Detail.Find(model.DetId);
 
-                if (Tx_StockOpname_Item != null)
+                if (Tx_ProcessCard_Detail != null)
                 {
                     var exceptColumns = new string[] { "DetId", "Id", "QuantityOpen" };
-                    CopyProperty.CopyProperties(model, Tx_StockOpname_Item, false, exceptColumns);
+                    CopyProperty.CopyProperties(model, Tx_ProcessCard_Detail, false, exceptColumns);
 
 
                     DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-                    Tx_StockOpname_Item.ModifiedDate = dtModified;
-                    Tx_StockOpname_Item.ModifiedUser = UserId;
+                    Tx_ProcessCard_Detail.ModifiedDate = dtModified;
+                    Tx_ProcessCard_Detail.ModifiedUser = UserId;
                     //CONTEXT.SaveChanges();
                 }
 
@@ -753,14 +695,14 @@ namespace Models.Production
 
         }
 
-        public void Detail_Delete(HANA_APP CONTEXT, StockOpname_DetailModel model)
+        public void Detail_Delete(HANA_APP CONTEXT, ProcessCard_DetailModel model)
         {
             if (model.DetId != null)
             {
                 if (model.DetId != 0)
                 {
 
-                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_StockOpname_Item\"  WHERE \"DetId\"=:p0", model.DetId);
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProcessCard_Detail\"  WHERE \"DetId\"=:p0", model.DetId);
                     CONTEXT.SaveChanges();
 
 
@@ -769,12 +711,12 @@ namespace Models.Production
 
         }
 
-        public void Post(int userId, StockOpnameModel StockOpnameModel)
+        public void Post(int userId, ProcessCardModel ProcessCardModel)
         {
             try
             {
-                Update(StockOpnameModel, "Post");
-                PostSAP(userId, StockOpnameModel.Id);
+                Update(ProcessCardModel, "Post");
+                PostSAP(userId, ProcessCardModel.Id);
 
             }
             catch (Exception ex)
@@ -797,15 +739,15 @@ namespace Models.Production
                         String keyValue;
                         keyValue = id.ToString();
 
-                        StockOpnameModel syncStockOpname = GetById(userId, id, "Post");
+                        ProcessCardModel syncProcessCard = GetById(userId, id, "Post");
 
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "before", "Tx_StockOpname", "post", "Id", keyValue);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "before", "Tx_ProcessCard", "post", "Id", keyValue);
 
-                        Tx_StockOpname tx_StockOpname = CONTEXT.Tx_StockOpname.Find(id);
-                        if (tx_StockOpname != null)
+                        Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(id);
+                        if (tx_ProcessCard != null)
                         {
 
-                            int docEntry_ = AddInventoryPosting(oCompany, userId, id, syncStockOpname);
+                            int docEntry_ = AddInventoryPosting(oCompany, userId, id, syncProcessCard);
                             if (docEntry_ <= 0)
                             {
                                 throw new Exception($"[VALIDATION] - No inventory posting created");
@@ -819,19 +761,19 @@ namespace Models.Production
 
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-                            tx_StockOpname.PostingDate = dtModified;
-                            tx_StockOpname.DocEntry = Convert.ToInt32(docEntry_);
-                            tx_StockOpname.DocNum = docNum;
-                            tx_StockOpname.PostingDate = dtModified;
+                            tx_ProcessCard.PostingDate = dtModified;
+                            tx_ProcessCard.DocEntry = Convert.ToInt32(docEntry_);
+                            tx_ProcessCard.DocNum = docNum;
+                            tx_ProcessCard.PostingDate = dtModified;
 
-                            tx_StockOpname.Status = "Posted";
-                            tx_StockOpname.IsAfterPosted = "Y";
-                            tx_StockOpname.ModifiedDate = dtModified;
-                            tx_StockOpname.ModifiedUser = userId;
+                            tx_ProcessCard.Status = "Posted";
+                            tx_ProcessCard.IsAfterPosted = "Y";
+                            tx_ProcessCard.ModifiedDate = dtModified;
+                            tx_ProcessCard.ModifiedUser = userId;
 
                             CONTEXT.SaveChanges();
 
-                            SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "after", "Tx_StockOpname", "post", "Id", keyValue);
+                            SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "after", "Tx_ProcessCard", "post", "Id", keyValue);
 
                             if (oCompany.InTransaction)
                             {
@@ -872,7 +814,7 @@ namespace Models.Production
 
         }
 
-        private int AddInventoryPosting(Company oCompany, int userId, long id, StockOpnameModel model)
+        private int AddInventoryPosting(Company oCompany, int userId, long id, ProcessCardModel model)
         {
             int newDocEntry = -1;
             int nErr;
@@ -949,22 +891,22 @@ namespace Models.Production
                         String keyValue;
                         keyValue = Id.ToString();
 
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "before", "Tx_StockOpname", "cancel", "Id", keyValue);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "before", "Tx_ProcessCard", "cancel", "Id", keyValue);
 
-                        Tx_StockOpname tx_StockOpname = CONTEXT.Tx_StockOpname.Find(Id);
-                        if (tx_StockOpname != null)
+                        Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(Id);
+                        if (tx_ProcessCard != null)
                         {
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                            tx_StockOpname.Status = "Cancel";
-                            tx_StockOpname.ApprovalStatus = "Rejected";
-                            tx_StockOpname.CancelReason = cancelReason;
-                            tx_StockOpname.ModifiedDate = dtModified;
-                            tx_StockOpname.ModifiedUser = userId;
+                            tx_ProcessCard.Status = "Cancel";
+                            tx_ProcessCard.ApprovalStatus = "Rejected";
+                            tx_ProcessCard.CancelReason = cancelReason;
+                            tx_ProcessCard.ModifiedDate = dtModified;
+                            tx_ProcessCard.ModifiedUser = userId;
 
                             CONTEXT.SaveChanges();
                         }
 
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "after", "Tx_StockOpname", "cancel", "Id", keyValue);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "after", "Tx_ProcessCard", "cancel", "Id", keyValue);
 
                         
                         CONTEXT_TRANS.Commit();
@@ -995,7 +937,7 @@ namespace Models.Production
         {
             using (var CONTEXT = new HANA_APP())
             {
-                StockOpnameModel StockOpnameModel = GetById(userId, id);
+                ProcessCardModel ProcessCardModel = GetById(userId, id);
 
                 using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
                 {
@@ -1004,24 +946,24 @@ namespace Models.Production
                         String keyValue;
                         keyValue = id.ToString();
 
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "before", "Tx_StockOpname", "requestApproval", "Id", keyValue);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "before", "Tx_ProcessCard", "requestApproval", "Id", keyValue);
 
-                        Tx_StockOpname tx_StockOpname = CONTEXT.Tx_StockOpname.Find(id);
-                        if (tx_StockOpname != null)
+                        Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(id);
+                        if (tx_ProcessCard != null)
                         {
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-                            tx_StockOpname.IsApproval = "Y";
-                            tx_StockOpname.ApprovalMessages = approvalMessages;
-                            tx_StockOpname.ApprovalStatus = "Waiting";
-                            tx_StockOpname.ModifiedDate = dtModified;
-                            tx_StockOpname.ModifiedUser = userId;
+                            tx_ProcessCard.IsApproval = "Y";
+                            tx_ProcessCard.ApprovalMessages = approvalMessages;
+                            tx_ProcessCard.ApprovalStatus = "Waiting";
+                            tx_ProcessCard.ModifiedDate = dtModified;
+                            tx_ProcessCard.ModifiedUser = userId;
 
                             CONTEXT.SaveChanges();
                         }
 
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpApproval_Insert\"(:p0,'StockOpname',:p1, :p2)", userId, id, templateId);
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "after", "Tx_StockOpname", "requestApproval", "Id", keyValue);
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpApproval_Insert\"(:p0,'ProcessCard',:p1, :p2)", userId, id, templateId);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "after", "Tx_ProcessCard", "requestApproval", "Id", keyValue);
                         CONTEXT_TRANS.Commit();
 
                     }
@@ -1056,13 +998,13 @@ namespace Models.Production
 
                 if (approvalStatus == "Approved")
                 {
-                    //StockOpnameModel StockOpnameModel = GetById(userId, id);
-                    //this.Update(StockOpnameModel, "Post");
+                    //ProcessCardModel ProcessCardModel = GetById(userId, id);
+                    //this.Update(ProcessCardModel, "Post");
                     using (var CONTEXT = new HANA_APP())
                     {
                         using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
                         {
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItem\"(:p0,:p1, 'before')", userId, id);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_UpdateItem\"(:p0,:p1, 'before')", userId, id);
                             CONTEXT.SaveChanges();
                         }
                     }
@@ -1088,15 +1030,15 @@ namespace Models.Production
                         String keyValue;
                         keyValue = id.ToString();
 
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "before", "Tx_StockOpname", action.ToLower(), "Id", keyValue);
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpApproval_Authorize\"(:p0, 'StockOpname', :p2, :p3, :p4)", userId, id, action, approvalMessage);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "before", "Tx_ProcessCard", action.ToLower(), "Id", keyValue);
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpApproval_Authorize\"(:p0, 'ProcessCard', :p2, :p3, :p4)", userId, id, action, approvalMessage);
                         CONTEXT.SaveChanges();
-                        SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "after", "Tx_StockOpname", action.ToLower(), "Id", keyValue);
+                        SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "after", "Tx_ProcessCard", action.ToLower(), "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
                         string strApprovalStatus = @"
                             SELECT T0.""ApprovalStatus"" 
-                            FROM ""Tx_StockOpname"" T0
+                            FROM ""Tx_ProcessCard"" T0
                             WHERE T0.""Id"" = :p0 
                         ";
 
@@ -1125,22 +1067,22 @@ namespace Models.Production
 
         }
 
-        public StockOpnameApprovalView___ GetViewApproval(long id)
+        public ProcessCardApprovalView___ GetViewApproval(long id)
         {
-            StockOpnameApprovalView___ model = new StockOpnameApprovalView___();
+            ProcessCardApprovalView___ model = new ProcessCardApprovalView___();
             using (var CONTEXT = new HANA_APP())
             {
                 string sql = @"
                     SELECT TOP 1 T0.""Id"", T0.""Status"", T0.""ApprovalMessages"", T1.""CreatedDate"", T2.""FirstName""
-                    FROM ""Tx_StockOpname"" T0 
-                    LEFT JOIN ""Tx_StockOpname_Approval"" T1 ON T0.""Id"" = T1.""Id"" 
+                    FROM ""Tx_ProcessCard"" T0 
+                    LEFT JOIN ""Tx_ProcessCard_Approval"" T1 ON T0.""Id"" = T1.""Id"" 
                     LEFT JOIN ""Tm_User"" T2 ON T0.""CreatedUser"" = T2.""Id""
                     WHERE T0.""Id""=:p0 
                 ";
 
-                model = CONTEXT.Database.SqlQuery<StockOpnameApprovalView___>(sql, id).FirstOrDefault();
+                model = CONTEXT.Database.SqlQuery<ProcessCardApprovalView___>(sql, id).FirstOrDefault();
 
-                model.ApprovalStepList__ = GetStockOpname_ApprovalSteps(CONTEXT, id);
+                model.ApprovalStepList__ = GetProcessCard_ApprovalSteps(CONTEXT, id);
 
             }
             return model;

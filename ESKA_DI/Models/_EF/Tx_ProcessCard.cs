@@ -30,8 +30,11 @@ namespace ESKA_DI.Models._EF
         public string ItemName { get; set; }
         public Nullable<decimal> Quantity { get; set; }
         public string Comments { get; set; }
-        public string Status { get; set; }
+        public string CancelReason { get; set; }
+        public string IsApproval { get; set; }
         public string ApprovalStatus { get; set; }
+        public string ApprovalMessages { get; set; }
+        public string Status { get; set; }
         public string IsAfterPosted { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
