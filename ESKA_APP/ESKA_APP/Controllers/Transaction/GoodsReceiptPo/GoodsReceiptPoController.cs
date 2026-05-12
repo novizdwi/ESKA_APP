@@ -76,30 +76,30 @@ namespace Controllers.Transaction
         //    return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
         //}
 
-        //[HttpPost, ValidateInput(false)]
-        //public ActionResult Add([ModelBinder(typeof(DevExpressEditorsBinder))]  GoodsReceiptPoModel GoodsReceiptPoModel)
-        //{
-        //    int userId = (int)Session["userId"];
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Add([ModelBinder(typeof(DevExpressEditorsBinder))]  GoodsReceiptPoModel GoodsReceiptPoModel)
+        {
+            int userId = (int)Session["userId"];
 
-        //    GoodsReceiptPoModel._UserId = (int)Session["userId"];
-        //    GoodsReceiptPoService = new GoodsReceiptPoService();
+            GoodsReceiptPoModel._UserId = (int)Session["userId"];
+            goodsReceiptPoService = new GoodsReceiptPoService();
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        long Id = 0;
+            if (ModelState.IsValid)
+            {
+                long Id = 0;
 
-        //        Id = GoodsReceiptPoService.Add(GoodsReceiptPoModel);
-        //        GoodsReceiptPoModel = GoodsReceiptPoService.GetById(userId, Id);
-        //        GoodsReceiptPoModel._FormMode = Models.FormModeEnum.Edit;
-        //    }
-        //    else
-        //    {
-        //        string message = GetErrorModel();
-        //        throw new Exception(string.Format("[VALIDATION] {0}", message));
-        //    }
+                Id = goodsReceiptPoService.Add(GoodsReceiptPoModel);
+                GoodsReceiptPoModel = goodsReceiptPoService.GetById(userId, Id);
+                GoodsReceiptPoModel._FormMode = Models.FormModeEnum.Edit;
+            }
+            else
+            {
+                string message = GetErrorModel();
+                throw new Exception(string.Format("[VALIDATION] {0}", message));
+            }
 
-        //    return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
-        //}
+            return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
+        }
 
         //[HttpPost, ValidateInput(false)]
         //public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))]  GoodsReceiptPoModel GoodsReceiptPoModel)
@@ -135,7 +135,7 @@ namespace Controllers.Transaction
         //    GoodsReceiptPoModel._UserId = (int)Session["userId"];
         //    GoodsReceiptPoService = new GoodsReceiptPoService();
         //    GoodsReceiptPoModel._FormMode = FormModeEnum.Edit;
-            
+
         //    GoodsReceiptPoService.Post(userId, GoodsReceiptPoModel);
         //    GoodsReceiptPoModel = GoodsReceiptPoService.GetById(userId, GoodsReceiptPoModel.Id);
 
@@ -247,6 +247,6 @@ namespace Controllers.Transaction
 
         //    return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
         //}
-        
+
     }
 }

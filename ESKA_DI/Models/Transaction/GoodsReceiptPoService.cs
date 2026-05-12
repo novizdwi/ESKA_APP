@@ -602,7 +602,8 @@ namespace Models.Transaction
                             String keyValue;
                             keyValue = Tx_GoodsReceiptPO.Id.ToString();
 
-                            SpNotif.SpSysControllerTransNotif(model._UserId, "GoodsReceiptPo", CONTEXT, "after", "GoodsReceiptPo", "add", "Id", keyValue);
+                            //SpNotif.SpSysControllerTransNotif(model._UserId, "GoodsReceiptPo", CONTEXT, "after", "GoodsReceiptPo", "add", "Id", keyValue);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpGoodsReceiptPO_AddItemDetail\"(:p0,:p1,'Add')", model._UserId, Id);
 
                             CONTEXT_TRANS.Commit();
                         }
