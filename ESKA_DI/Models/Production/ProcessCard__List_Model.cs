@@ -39,6 +39,8 @@ namespace Models.Production
 
         public string ItemCode { get; set; }
 
+        public string ItemName { get; set; }
+
         public DateTime? DocDate { get; set; }
 
         public string DocNum { get; set; }

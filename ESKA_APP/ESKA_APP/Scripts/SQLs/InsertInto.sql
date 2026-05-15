@@ -1,1 +1,6 @@
 INSERT INTO "Ts_FormatNumbering" VALUES('StockOpname','StockOpname', 'STO-','YYMM',3);
+INSERT INTO "Ts_FormatNumbering" VALUES('ProcessCard','ProcessCard','PC-','YYMM',4);
+
+INSERT INTO "Ts_List" VALUES('BooleanActive',1,'Active','Active', NULL);
+INSERT INTO "Ts_List" VALUES('BooleanActive',2,'Inactive','Inactive', NULL);
+

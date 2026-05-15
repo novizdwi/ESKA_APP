@@ -49,12 +49,20 @@ namespace Models.Production
         public DateTime? PostingDate { get; set; }
 
         [Required(ErrorMessage = "required")]
-        public string WhsCode { get; set; }
+        public string CardCode { get; set; }
 
         [Required(ErrorMessage = "required")]
-        public string WhsName { get; set; }
+        public string CardName{ get; set; }
 
-        public string Address { get; set; }
+        public string SerialNumber { get; set; }
+
+        [Required(ErrorMessage = "required")]
+        public string ItemCode { get; set; }
+
+        [Required(ErrorMessage = "required")]
+        public string ItemName { get; set; }
+
+        public decimal? Quantity { get; set; }
 
         public long? DocEntry { get; set; }
 
@@ -86,11 +94,14 @@ namespace Models.Production
 
         public string IsEligibleApprove_ { get; set; }
 
+        public string SerialNumber_ { get; set; }
+
         public List<ProcessCard_DetailModel> ListDetail_ = new List<ProcessCard_DetailModel>();
 
         public List<ProcessCard_DetailModel> ListDetails_ = new List<ProcessCard_DetailModel>();
 
         public ProcessCard_Detail Details_ { get; set; }
+
     }
         
     public class ProcessCard_Detail
@@ -157,33 +168,29 @@ namespace Models.Production
 
         public long? DetId { get; set; }
 
-        public string ItemCode { get; set; }
+        public string RoutingCode { get; set; }
 
-        public string ItemName { get; set; }
+        public string RoutingName { get; set; }
 
-        public string WhsCode { get; set; }
+        public string RoutingStatus { get; set; }
 
-        public string AcctCode { get; set; }
+        public int?  OperatorId { get; set; }
 
-        public string AcctName { get; set; }
+        public string OperatorName { get; set; }
 
-        public decimal? Quantity { get; set; }
+        public DateTime? ProcessingDate { get; set; }
 
-        public decimal? QtyVariance { get; set; }
+        public DateTime? EndDate { get; set; }
 
-        public decimal? QtyVariance_ { get; set; }
+        public int? MachineId { get; set; }
 
-        public decimal? QuantityOnHandSAP_ { get; set; }
+        public string MachineName { get; set; }
 
-        public int? UomEntry { get; set; }
+        public int? PracticeHours { get; set; }
 
-        public string Uom { get; set; }
+        public int? ActualHours { get; set; }
 
-        public decimal? UnitPriceTc { get; set; }
-
-        public decimal? LineTotal { get; set; }
-
-        public string FreeText { get; set; }
+        public string Comments { get; set; }
 
     }
 
@@ -820,61 +827,61 @@ namespace Models.Production
             int nErr;
             string errMsg;
 
-            SAPbobsCOM.CompanyService oCS = (SAPbobsCOM.CompanyService)oCompany.GetCompanyService();
-            SAPbobsCOM.InventoryPostingsService oInventoryPostingsService = oCS.GetBusinessService(SAPbobsCOM.ServiceTypes.InventoryPostingsService);
-            SAPbobsCOM.InventoryPosting oDocument = oInventoryPostingsService.GetDataInterface(SAPbobsCOM.InventoryPostingsServiceDataInterfaces.ipsInventoryPosting);
+            //SAPbobsCOM.CompanyService oCS = (SAPbobsCOM.CompanyService)oCompany.GetCompanyService();
+            //SAPbobsCOM.InventoryPostingsService oInventoryPostingsService = oCS.GetBusinessService(SAPbobsCOM.ServiceTypes.InventoryPostingsService);
+            //SAPbobsCOM.InventoryPosting oDocument = oInventoryPostingsService.GetDataInterface(SAPbobsCOM.InventoryPostingsServiceDataInterfaces.ipsInventoryPosting);
 
-            oDocument.PostingDate = DateTime.Now;
+            //oDocument.PostingDate = DateTime.Now;
 
-            if (!string.IsNullOrWhiteSpace(model.Comments))
-            {
-                oDocument.Remarks = model.Comments;
-                oDocument.JournalRemark = model.Comments;
-            }
+            //if (!string.IsNullOrWhiteSpace(model.Comments))
+            //{
+            //    oDocument.Remarks = model.Comments;
+            //    oDocument.JournalRemark = model.Comments;
+            //}
 
-            oDocument.UserFields.Item("U_IDU_WebId").Value = Convert.ToInt32(model.Id);
-            oDocument.UserFields.Item("U_IDU_WebTransNo").Value = model.TransNo;
-            if (model.ListDetail_.Count > 0)
-            {
-                foreach (var item in model.ListDetail_)
-                {
-                    if (item.QtyVariance > 0)
-                    {
-                        InventoryPostingLine line = oDocument.InventoryPostingLines.Add();
-                        line.ItemCode = item.ItemCode;
-                        line.WarehouseCode = item.WhsCode;
-                        line.CountedQuantity = Convert.ToDouble(item.QtyVariance);
-                        line.UoMCode = item.Uom ?? "";
+            //oDocument.UserFields.Item("U_IDU_WebId").Value = Convert.ToInt32(model.Id);
+            //oDocument.UserFields.Item("U_IDU_WebTransNo").Value = model.TransNo;
+            //if (model.ListDetail_.Count > 0)
+            //{
+            //    foreach (var item in model.ListDetail_)
+            //    {
+            //        if (item.QtyVariance > 0)
+            //        {
+            //            InventoryPostingLine line = oDocument.InventoryPostingLines.Add();
+            //            line.ItemCode = item.ItemCode;
+            //            line.WarehouseCode = item.WhsCode;
+            //            line.CountedQuantity = Convert.ToDouble(item.QtyVariance);
+            //            line.UoMCode = item.Uom ?? "";
 
-                        line.Price = (double)item.UnitPriceTc;
+            //            line.Price = (double)item.UnitPriceTc;
 
-                        line.InventoryOffsetIncreaseAccount = item.AcctCode;
-                        line.InventoryOffsetDecreaseAccount = item.AcctCode;
+            //            line.InventoryOffsetIncreaseAccount = item.AcctCode;
+            //            line.InventoryOffsetDecreaseAccount = item.AcctCode;
 
-                        //line.CostingCode = item.PillarsCode;
-                        //line.CostingCode2 = item.ClassCode;
-                        //line.CostingCode3 = item.SubClass1Code;
-                        //line.CostingCode4 = item.SubClass2Code;
-                        //line.ProjectCode = item.ProjectCode;
+            //            //line.CostingCode = item.PillarsCode;
+            //            //line.CostingCode2 = item.ClassCode;
+            //            //line.CostingCode3 = item.SubClass1Code;
+            //            //line.CostingCode4 = item.SubClass2Code;
+            //            //line.ProjectCode = item.ProjectCode;
 
-                        line.UserFields.Item("U_IDU_WebId").Value = Convert.ToInt32(item.Id);
-                        line.UserFields.Item("U_IDU_DetId").Value = Convert.ToInt32(item.DetId);
-                    }
-                }
-            }
+            //            line.UserFields.Item("U_IDU_WebId").Value = Convert.ToInt32(item.Id);
+            //            line.UserFields.Item("U_IDU_DetId").Value = Convert.ToInt32(item.DetId);
+            //        }
+            //    }
+            //}
 
-            InventoryPostingParams oParams = oInventoryPostingsService.Add(oDocument);
-            newDocEntry = oParams.DocumentEntry;
+            //InventoryPostingParams oParams = oInventoryPostingsService.Add(oDocument);
+            //newDocEntry = oParams.DocumentEntry;
 
-            if (newDocEntry <= 0)
-            {
-                nErr = oCompany.GetLastErrorCode();
-                errMsg = oCompany.GetLastErrorDescription();
+            //if (newDocEntry <= 0)
+            //{
+            //    nErr = oCompany.GetLastErrorCode();
+            //    errMsg = oCompany.GetLastErrorDescription();
 
-                SapCompany.CleanUp(oDocument);
+            //    SapCompany.CleanUp(oDocument);
 
-                throw new Exception("[VALIDATION] - Inventory Posting : " + nErr.ToString() + "|" + errMsg);
-            }
+            //    throw new Exception("[VALIDATION] - Inventory Posting : " + nErr.ToString() + "|" + errMsg);
+            //}
 
             return newDocEntry;
         }

@@ -841,22 +841,40 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
     <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
     <Property Name="Comments" Type="nvarchar" MaxLength="254" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
     <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tx_ProcessCard_Detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="Tx_ProcessCard_Detail">
+  <EntityType Name="Tx_ProcessCard_Approval">
     <Key>
       <PropertyRef Name="DetId" />
     </Key>
     <Property Name="Id" Type="int" />
     <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_ProcessCard_Detail">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
@@ -998,6 +1016,8 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tx_ProcessCard_Detail' does not 
     <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_ProcessCard" EntityType="Self.Tx_ProcessCard" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Self.Tx_ProcessCard_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -1014,29 +1034,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tx_ProcessCard_Detail' does not 
 "Tp_UserAlert"."IsRead" AS "IsRead", 
 "Tp_UserAlert"."LastShowTime" AS "LastShowTime"
 FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" store:Type="Tables" store:Schema="ESKA_APP_TEST">
-      <DefiningQuery>SELECT 
-"Tx_ProcessCard_Detail"."Id" AS "Id", 
-"Tx_ProcessCard_Detail"."DetId" AS "DetId", 
-"Tx_ProcessCard_Detail"."RoutingCode" AS "RoutingCode", 
-"Tx_ProcessCard_Detail"."RoutingName" AS "RoutingName", 
-"Tx_ProcessCard_Detail"."RoutingStatus" AS "RoutingStatus", 
-"Tx_ProcessCard_Detail"."OperatorId" AS "OperatorId", 
-"Tx_ProcessCard_Detail"."OperatorName" AS "OperatorName", 
-"Tx_ProcessCard_Detail"."ProcessingDate" AS "ProcessingDate", 
-"Tx_ProcessCard_Detail"."EndDate" AS "EndDate", 
-"Tx_ProcessCard_Detail"."MachineId" AS "MachineId", 
-"Tx_ProcessCard_Detail"."MachineName" AS "MachineName", 
-"Tx_ProcessCard_Detail"."PracticeHours" AS "PracticeHours", 
-"Tx_ProcessCard_Detail"."ActualHours" AS "ActualHours", 
-"Tx_ProcessCard_Detail"."LineStatus" AS "LineStatus", 
-"Tx_ProcessCard_Detail"."Comments" AS "Comments", 
-"Tx_ProcessCard_Detail"."CreatedDate" AS "CreatedDate", 
-"Tx_ProcessCard_Detail"."CreatedUser" AS "CreatedUser", 
-"Tx_ProcessCard_Detail"."ModifiedDate" AS "ModifiedDate", 
-"Tx_ProcessCard_Detail"."ModifiedUser" AS "ModifiedUser"
-FROM "ESKA_APP_TEST"."Tx_ProcessCard_Detail" AS "Tx_ProcessCard_Detail"</DefiningQuery>
     </EntitySet>
   </EntityContainer>
 </Schema>
