@@ -75,6 +75,7 @@ C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.SqlServer.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.Utils.v20.1.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.xml
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.SqlServer.xml
+C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csprojAssemblyReference.cache
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\Interop.SAPbobsCOM.dll
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.ResolveComReference.cache
 C:\LegionShared\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInputs.cache

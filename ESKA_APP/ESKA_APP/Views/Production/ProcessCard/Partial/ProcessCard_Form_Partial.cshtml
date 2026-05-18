@@ -638,22 +638,6 @@
          });
     }
 
-    groupItem_Col3.Items.Add(m => Model.Comments, itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
-        itemSettings.Caption = "Remarks";
-        itemSettings.FieldName = "Comments";
-
-        MemoSettings txt = (MemoSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Comments";
-        txt.ShowModelErrors = true;
-        txt.ControlStyle.CssClass = "editornoimage";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Height = Unit.Pixel(55);
-        txt.ReadOnly = false;
-    });
-
     groupItem.Items.AddTabbedGroupItem(group =>
     {
         group.Name = "TabDetail";

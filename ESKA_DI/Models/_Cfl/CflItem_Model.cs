@@ -38,6 +38,8 @@ namespace Models._Cfl
 
         public string UomCode { get; set; }
 
+        public string U_IDU_RoutingGroup { get; set; }
+
         public string ManBtchNum { get; set; }
     }
 
@@ -45,7 +47,8 @@ namespace Models._Cfl
     {
 
 
-        public static string ssql = @"SELECT T0.""ItemCode"",  T0.""ItemName"" ,  T0.""ItemType"" , T0.""IUoMEntry"" , T2.""UomCode"", T1.""ItmsGrpNam"", T0.""ManBtchNum"", COALESCE(T0.""U_IDU_IsItemFG"", 'N') AS ""U_IDU_IsItemFG""
+        public static string ssql = @"SELECT T0.""ItemCode"",  T0.""ItemName"" ,  T0.""ItemType"" , T0.""IUoMEntry"" , T2.""UomCode"", T1.""ItmsGrpNam"", T0.""ManBtchNum"",
+                                    T0.""ItmsGrpCod"",  T0.""U_IDU_ProcessCard"", T0.""U_IDU_RoutingGroup""
                                     FROM  ""{DbSap}"".""OITM"" T0
                                     LEFT OUTER JOIN ""{DbSap}"".""OITB"" T1 ON T0.""ItmsGrpCod"" = T1.""ItmsGrpCod""
                                     LEFT JOIN  ""{DbSap}"".""OUOM"" T2 ON T0.""IUoMEntry"" = T2.""UomEntry""

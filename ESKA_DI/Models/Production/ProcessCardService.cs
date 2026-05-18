@@ -46,6 +46,8 @@ namespace Models.Production
 
         public DateTime? TransDate { get; set; }
 
+        public DateTime? DueDate { get; set; }
+
         public DateTime? PostingDate { get; set; }
         
         public string CardCode { get; set; }
@@ -53,18 +55,15 @@ namespace Models.Production
         [Required(ErrorMessage = "required")]
         public string CardName{ get; set; }
 
-        [Required(ErrorMessage = "required")]
         public string ContractNo { get; set; }
 
-        [Required(ErrorMessage = "required")]
         public string SerialNumber { get; set; }
 
         [Required(ErrorMessage = "required")]
         public string ItemCode { get; set; }
         
         public string ItemName { get; set; }
-
-        [Required(ErrorMessage = "required")]
+        
         public decimal? Quantity { get; set; }
 
         public long? DocEntry { get; set; }
@@ -177,6 +176,8 @@ namespace Models.Production
 
         public string RoutingStatus { get; set; }
 
+        public string LineStatus { get; set; }
+
         public int?  OperatorId { get; set; }
 
         public string OperatorName { get; set; }
@@ -228,7 +229,7 @@ namespace Models.Production
             ProcessCardModel model = new ProcessCardModel();
             model.Status = "Draft";
             model.TransDate = DateTime.Now;
-            model.TransDate = DateTime.Now.AddMonths(1);
+            model.DueDate = DateTime.Now.AddMonths(1);
             return model;
         }
 
@@ -292,15 +293,11 @@ namespace Models.Production
         public List<ProcessCard_DetailModel> ProcessCard_Details(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"
-            SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"",
-                T0.*,
-                T2.""OnHand"" AS ""QuantityOnHandSAP_"",
-                CASE WHEN T1.""Status"" IN ('Draft') THEN COALESCE(T2.""OnHand"", 0) - COALESCE(T0.""Quantity"", 0) ELSE NULL END AS ""QtyVariance_""
-            FROM ""Tx_ProcessCard_Detail"" T0
-            INNER JOIN ""Tx_ProcessCard"" T1 ON T0.""Id"" = T1.""Id""
-            LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OITW"" T2 ON T0.""ItemCode"" = T2.""ItemCode"" AND T1.""WhsCode"" = T2.""WhsCode""
-            WHERE T0.""Id"" =:p0
-            ORDER BY T0.""DetId"" ASC
+                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"",
+                    T0.*
+                FROM ""Tx_ProcessCard_Detail"" T0 
+                WHERE T0.""Id"" =:p0
+                ORDER BY T0.""DetId"" ASC
             ";
             var ProcessCard = CONTEXT.Database.SqlQuery<ProcessCard_DetailModel>(ssql, id).ToList();
             return ProcessCard;
@@ -457,8 +454,8 @@ namespace Models.Production
                             String keyValue;
                             keyValue = tx_ProcessCard.Id.ToString();
                             
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_AddDetail\"(:p0,:p1)", Id, model._UserId);
                             SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "add", "Id", keyValue);
-
                             CONTEXT_TRANS.Commit();
                         }
 

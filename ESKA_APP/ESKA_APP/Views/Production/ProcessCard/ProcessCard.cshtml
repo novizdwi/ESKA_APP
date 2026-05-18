@@ -811,7 +811,7 @@
     }
 
     function BtnCflItemCodePopupListOnClick(s, e) {
-
+        cflItemPopupListProcessCard.Show();
     }
 
 </script>
@@ -924,50 +924,6 @@ new
 
 
 @*
-    ----------------------------------------------------------------------------
-        CflWarehouse
-    ----------------------------------------------------------------------------
-*@
-
-@{
-    var cflWarehouse_ParamModel = new CflWarehouse_ParamModel();
-    cflWarehouse_ParamModel.Name = "ProcessCard";
-    cflWarehouse_ParamModel.Type = "ProcessCard";
-    cflWarehouse_ParamModel.SqlWhere = "   ";
-    cflWarehouse_ParamModel.Header = "";
-
-    cflWarehouse_ParamModel.IsMulti = "N";
-}
-
-<script type="text/javascript">
-
-    function BtnCflWarehousePopupListProcessCardOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("cflWarehousePopupListProcessCard");
-
-        var gv = ASPxClientGridView.Cast('gvCflWarehouseListProcessCard');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
-    }
-
-    function OnClickChoose_CflWarehouseProcessCard(s, e, data) {
-        WhsCode.SetValue(data.WhsCode);
-        WhsName.SetValue(data.WhsName);
-
-        cflWarehousePopupListProcessCard.Hide();
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_Panel_List_Partial.cshtml", cflWarehouse_ParamModel)
-
-@*
     -----------------------------------------------------------------------------
     gvCflCardCodeList
     -----------------------------------------------------------------------------
@@ -983,7 +939,8 @@ new
 }
 
 <script type="text/javascript">
-    function OnClickChoose_CflBpFullAddressBp(s, e, data) {
+
+    function OnClickChoose_CflCardCodeProcessCard(s, e, data) {
         CardCode.SetValue(data.CardCode);
         CardName.SetValue(data.CardName);
         cflCardCodePopupListProcessCard.Hide();
@@ -991,6 +948,31 @@ new
 
 </script>
 @Html.Partial("~/Views/_Cfl/_CflCardCode/Partial/_CflCardCode_Panel_List_Partial.cshtml", cflCardCode_ParamModel)
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflItemList
+    -----------------------------------------------------------------------------
+*@
+
+@{
+    var cflItem_ParamModel = new CflItem_ParamModel();
+    cflItem_ParamModel.Name = "ProcessCard";
+    cflItem_ParamModel.Type = "ProcessCard";
+    cflItem_ParamModel.Header = " ";
+    cflItem_ParamModel.SqlWhere = " ";
+    cflItem_ParamModel.IsMulti = "N";
+}
+
+<script type="text/javascript">
+    function OnClickChoose_CflItemProcessCard(s, e, data) {
+        ItemCode.SetValue(data.ItemCode);
+        ItemName.SetValue(data.ItemName);
+
+        cflItemPopupListProcessCard.Hide();
+    }
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItem_ParamModel)
 
 @*
     -----------------------------------------------------------------------------
