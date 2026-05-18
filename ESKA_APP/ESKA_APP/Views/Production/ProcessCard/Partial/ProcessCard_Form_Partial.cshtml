@@ -176,37 +176,19 @@
 
     groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "grpContractNo";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Contract No";
         itemSettings.FieldName = "ContractNo";
-        var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "ContractNo";
-        txt.ReadOnly = true;
-        txt.ShowModelErrors = true;
+        itemSettings.ClientVisible = true;
 
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ContractNo";
+        txt.ReadOnly = ViewBag.ReadOnly;
+        txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editornoimage";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Properties.ValidationSettings.Display = Display.Dynamic;
-        //txt.Width = 100;
-
-        // Hide the default DropDown button
-        txt.Properties.DropDownButton.Visible = false;
-        txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 230;
-
-        if (Model.Status == "Draft")
-        {
-            EditButton lookUpButton = new EditButton();
-            lookUpButton.Text = "";
-            lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
-            lookUpButton.Image.Width = 15;
-
-            txt.Properties.Buttons.Add(lookUpButton);
-            txt.Properties.ClientSideEvents.ButtonClick = "BtnCflContractNoPopupListOnClick";
-        }
-
     });
 
     groupItem_Col1.Items.Add(itemSettings =>
@@ -224,12 +206,23 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Properties.ValidationSettings.Display = Display.Dynamic;
-        //txt.Width = 100;
 
         // Hide the default DropDown button
         txt.Properties.DropDownButton.Visible = false;
         txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 230;
+
+        if (Model.Status == "Draft")
+        {
+            EditButton lookUpButton = new EditButton();
+            lookUpButton.Text = "";
+            lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+            lookUpButton.Image.Width = 15;
+
+            txt.Properties.Buttons.Add(lookUpButton);
+            txt.Properties.ClientSideEvents.ButtonClick = "BtnCflCustomerCodePopupListOnClick";
+        }
+
     });
 
     groupItem_Col1.Items.Add(itemSettings =>
@@ -238,6 +231,7 @@
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Customer Name";
         itemSettings.FieldName = "CardName";
+
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Name = "CardName";
@@ -257,7 +251,7 @@
         itemSettings.FieldName = "ItemCode";
         var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "ItemCode";
-        txt.ReadOnly = true;//ViewBag.ReadOnly;
+        txt.ReadOnly = true;
         txt.ShowModelErrors = true;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
@@ -269,6 +263,18 @@
         // Hide the default DropDown button
         txt.Properties.DropDownButton.Visible = false;
         txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        if (Model.Status == "Draft")
+        {
+            EditButton lookUpButton = new EditButton();
+            lookUpButton.Text = "";
+            lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+            lookUpButton.Image.Width = 15;
+
+            txt.Properties.Buttons.Add(lookUpButton);
+            txt.Properties.ClientSideEvents.ButtonClick = "BtnCflItemCodePopupListOnClick";
+        }
+
     });
 
     groupItem_Col1.Items.Add(itemSettings =>
@@ -292,19 +298,22 @@
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
         itemSettings.Caption = "Quantity";
         itemSettings.FieldName = "Quantity";
+
         var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
         txt.Properties.NumberType = SpinEditNumberType.Float;
         txt.Properties.DisplayFormatString = "#,###";
         txt.Properties.DisplayFormatInEditMode = true;
-        txt.Properties.AllowMouseWheel = false;
         txt.Name = "Quantity";
+        txt.Properties.AllowMouseWheel = false;
+
         txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
+        txt.ReadOnly = ViewBag.ReadOnly;
         txt.ControlStyle.CssClass = "editornoimage";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
         txt.Width = 230;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
     });
 
     groupItem_Col1.Items.Add(itemSettings =>

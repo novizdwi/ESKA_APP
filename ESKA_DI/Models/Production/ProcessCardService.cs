@@ -47,21 +47,24 @@ namespace Models.Production
         public DateTime? TransDate { get; set; }
 
         public DateTime? PostingDate { get; set; }
-
-        [Required(ErrorMessage = "required")]
+        
         public string CardCode { get; set; }
 
         [Required(ErrorMessage = "required")]
         public string CardName{ get; set; }
 
+        [Required(ErrorMessage = "required")]
+        public string ContractNo { get; set; }
+
+        [Required(ErrorMessage = "required")]
         public string SerialNumber { get; set; }
 
         [Required(ErrorMessage = "required")]
         public string ItemCode { get; set; }
-
-        [Required(ErrorMessage = "required")]
+        
         public string ItemName { get; set; }
 
+        [Required(ErrorMessage = "required")]
         public decimal? Quantity { get; set; }
 
         public long? DocEntry { get; set; }
@@ -225,6 +228,7 @@ namespace Models.Production
             ProcessCardModel model = new ProcessCardModel();
             model.Status = "Draft";
             model.TransDate = DateTime.Now;
+            model.TransDate = DateTime.Now.AddMonths(1);
             return model;
         }
 

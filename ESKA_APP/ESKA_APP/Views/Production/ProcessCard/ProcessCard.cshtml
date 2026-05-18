@@ -13,7 +13,7 @@
 
 @{
     ViewBag.UserId = (int)Session["userId"];
-    ViewBag.Title = "Stock Opname";
+    ViewBag.Title = "Process Card";
 
     string MenuCodePost = "ProcessCard/Post";
     string IsCanPost_ = "Y";
@@ -802,7 +802,16 @@
         }
     }
 
-    function BtnCflContractNoPopupListOnClick(s, e) { 
+    function BtnCflContractNoPopupListOnClick(s, e) {
+
+    }
+
+    function BtnCflCustomerCodePopupListOnClick(s, e) {
+        cflCardCodePopupListProcessCard.Show();
+    }
+
+    function BtnCflItemCodePopupListOnClick(s, e) {
+
     }
 
 </script>
@@ -872,14 +881,14 @@
     }
 
     function gvRefOnBatchEditRowValidating(s, e) {
-    } 
+    }
 
     function QuantityOnValueChanged() {
         var qtyVariance = gvDetail_Quantity.GetValue() - gvDetail_QuantityOnHandSAP_.GetValue();
         gvDetail_QtyVariance_.SetValue(qtyVariance);
 
         var lineTotal = gvDetail_UnitPriceTc.GetValue() * gvDetail_Quantity.GetValue();
-        gvDetail_LineTotal.SetValue(lineTotal );
+        gvDetail_LineTotal.SetValue(lineTotal);
     }
 
 
@@ -958,7 +967,30 @@ new
 </script>
 @Html.Partial("~/Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_Panel_List_Partial.cshtml", cflWarehouse_ParamModel)
 
+@*
+    -----------------------------------------------------------------------------
+    gvCflCardCodeList
+    -----------------------------------------------------------------------------
+*@
 
+@{
+    var cflCardCode_ParamModel = new CflCardCode_ParamModel();
+    cflCardCode_ParamModel.Name = "ProcessCard";
+    cflCardCode_ParamModel.Type = "ProcessCard";
+    cflCardCode_ParamModel.Header = "Business Partner";
+    cflCardCode_ParamModel.SqlWhere = "AND T0.\"CardType\" ='C' ";
+    cflCardCode_ParamModel.IsMulti = "N";
+}
+
+<script type="text/javascript">
+    function OnClickChoose_CflBpFullAddressBp(s, e, data) {
+        CardCode.SetValue(data.CardCode);
+        CardName.SetValue(data.CardName);
+        cflCardCodePopupListProcessCard.Hide();
+    }
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflCardCode/Partial/_CflCardCode_Panel_List_Partial.cshtml", cflCardCode_ParamModel)
 
 @*
     -----------------------------------------------------------------------------
@@ -1020,7 +1052,7 @@ new
         cflItemByWarehousePopupListProcessCard.Hide();
 
         key = Id.GetValue();
-        console.log(SortingItemProcessCard.GetValue()); 
+        console.log(SortingItemProcessCard.GetValue());
 
         $.ajax({
             type: "POST",

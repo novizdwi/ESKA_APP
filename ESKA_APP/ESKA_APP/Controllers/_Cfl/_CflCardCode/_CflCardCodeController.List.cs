@@ -14,14 +14,14 @@ using Models._Cfl;
 
 namespace Controllers._Cfl
 {
-    public partial class _CflBpController : BaseController
+    public partial class _CflCardCodeController : BaseController
     {
-        string VIEW_LIST_PARTIAL = "Partial/_CflBp_List_Partial";
-        string VIEW_PANEL_LIST_PARTIAL = "Partial/_CflBp_Panel_List_Partial";
+        string VIEW_LIST_PARTIAL = "Partial/_CflCardCode_List_Partial";
+        string VIEW_PANEL_LIST_PARTIAL = "Partial/_CflCardCode_Panel_List_Partial";
 
-        public CflBp_ParamModel GetParam(HttpRequestBase Request)
+        public CflCardCode_ParamModel GetParam(HttpRequestBase Request)
         {
-            var cflParam = new CflBp_ParamModel();
+            var cflParam = new CflCardCode_ParamModel();
             cflParam.Type = Request["hidden_CflType"];
             cflParam.Name = Request["hidden_CflName"];
             cflParam.Header = Request["hidden_CflHeader"];
@@ -88,18 +88,18 @@ namespace Controllers._Cfl
 
         static GridViewModel GetListModel(string name)
         {
-            var viewModel = GridViewExtension.GetViewModel("gvCflBpList" + name);
+            var viewModel = GridViewExtension.GetViewModel("gvCflCardCodeList" + name);
             if (viewModel == null)
             {
-                viewModel = CflBp_Model.CreateGridViewModel();
+                viewModel = CflCardCode_Model.CreateGridViewModel();
             }
 
             return viewModel;
         }
 
-        static void ProcessCustomBinding(int userId, CflBp_ParamModel cflParam, GridViewModel viewModel)
+        static void ProcessCustomBinding(int userId, CflCardCode_ParamModel cflParam, GridViewModel viewModel)
         {
-            CflBp_Model.SetBindingData(viewModel, userId, cflParam);
+            CflCardCode_Model.SetBindingData(viewModel, userId, cflParam);
 
 
 

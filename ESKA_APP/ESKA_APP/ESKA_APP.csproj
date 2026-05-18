@@ -716,6 +716,8 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\_Cfl\_CflCardCode\Partial\_CflCardCode_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflCardCode\Partial\_CflCardCode_Panel_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -817,6 +819,8 @@
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.cs" />
