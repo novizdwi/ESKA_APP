@@ -62,8 +62,8 @@
     <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
     <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
     <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
-    <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
     <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
+    <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
   </EntityContainer>
   <EntityType Name="Tm_Alert">
     <Key>
@@ -835,6 +835,10 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedUser" Type="Int32" />
+    <Property Name="UomEntry" Type="Int32" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="21" Scale="2" />
+    <Property Name="BaseEntry" Type="Int64" />
+    <Property Name="BaseLine" Type="Int32" />
   </EntityType>
   <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
     <Key>
@@ -966,30 +970,6 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
-  <EntityType Name="Tx_ProcessCard_Detail">
-    <Key>
-      <PropertyRef Name="DetId" />
-    </Key>
-    <Property Name="Id" Type="Int64" />
-    <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="OperatorId" Type="Int32" />
-    <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ProcessingDate" Type="DateTime" />
-    <Property Name="EndDate" Type="DateTime" />
-    <Property Name="MachineId" Type="Int32" />
-    <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="PracticeHours" Type="Time" />
-    <Property Name="ActualHours" Type="Time" />
-    <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-    <Property Name="CreatedDate" Type="DateTime" />
-    <Property Name="CreatedUser" Type="Int32" />
-    <Property Name="ModifiedDate" Type="DateTime" />
-    <Property Name="ModifiedUser" Type="Int32" />
-  </EntityType>
   <EntityType Name="Tx_ProcessCard">
     <Key>
       <PropertyRef Name="Id" />
@@ -1016,6 +996,29 @@
     <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
     <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Tx_ProcessCard_Detail">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="Int64" />
+    <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="OperatorId" Type="Int32" />
+    <Property Name="ProcessingDate" Type="DateTime" />
+    <Property Name="EndDate" Type="DateTime" />
+    <Property Name="MachineId" Type="Int32" />
+    <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PracticeHours" Type="Time" />
+    <Property Name="ActualHours" Type="Time" />
+    <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
     <Property Name="CreatedDate" Type="DateTime" />
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" />

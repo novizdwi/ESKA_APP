@@ -52,7 +52,6 @@ namespace Models.Production
         
         public string CardCode { get; set; }
 
-        [Required(ErrorMessage = "required")]
         public string CardName{ get; set; }
 
         public string ContractNo { get; set; }
@@ -179,8 +178,6 @@ namespace Models.Production
         public string LineStatus { get; set; }
 
         public int?  OperatorId { get; set; }
-
-        public string OperatorName { get; set; }
 
         public DateTime? ProcessingDate { get; set; }
 
@@ -454,7 +451,7 @@ namespace Models.Production
                             String keyValue;
                             keyValue = tx_ProcessCard.Id.ToString();
                             
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_AddDetail\"(:p0,:p1)", Id, model._UserId);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_AddDetail\"(:p0,:p1, 'add')", model._UserId, Id );
                             SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "add", "Id", keyValue);
                             CONTEXT_TRANS.Commit();
                         }
@@ -485,6 +482,7 @@ namespace Models.Production
 
         public void Update(ProcessCardModel model, string method ="")
         {
+            int changeItem = 0;
             if (model != null)
             {
                 if (model != null)
@@ -500,8 +498,8 @@ namespace Models.Production
                                 
                                 SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "before", "ProcessCard", "update", "Id", keyValue);
 
-
                                 Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(model.Id);
+                                changeItem = model.ItemCode != tx_ProcessCard.ItemCode ? 1 : 0;
                                 DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
                              
                                 if (tx_ProcessCard != null)
@@ -548,7 +546,11 @@ namespace Models.Production
                                     }
                                     
                                     CONTEXT.SaveChanges();
-
+                                    //if change item then repopulate detail
+                                    if (changeItem == 1)
+                                    {
+                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_AddDetail\"(:p0,:p1, 'update')", model._UserId, model.Id );
+                                    }
                                     SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "update", "Id", keyValue);
                                     
                                 }

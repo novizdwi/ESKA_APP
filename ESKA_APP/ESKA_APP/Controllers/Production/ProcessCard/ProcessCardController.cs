@@ -258,6 +258,19 @@ namespace Controllers.Production
 
             return PartialView(VIEW_FORM_PARTIAL, processCardModel);
         }
-        
+
+        public ActionResult GetOperators(string RoutingCode)
+        {
+            var data = Models._Utils.GeneralGetList.GetUserRouting(RoutingCode);
+
+            return PartialView("_OperatorList", data);
+        }
+
+        [HttpPost]
+        public JsonResult GetOperatorByRouting( string routingCode )
+        {
+            var list = Models._Utils.GeneralGetList .GetUserRoutingList(routingCode);
+            return Json(list);
+        }
     }
 }

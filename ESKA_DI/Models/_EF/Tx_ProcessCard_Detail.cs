@@ -20,7 +20,6 @@ namespace ESKA_DI.Models._EF
         public string RoutingName { get; set; }
         public string RoutingStatus { get; set; }
         public Nullable<int> OperatorId { get; set; }
-        public string OperatorName { get; set; }
         public Nullable<System.DateTime> ProcessingDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<int> MachineId { get; set; }

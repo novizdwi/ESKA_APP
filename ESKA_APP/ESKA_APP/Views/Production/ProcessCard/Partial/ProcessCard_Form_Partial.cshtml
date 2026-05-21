@@ -425,6 +425,23 @@
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Serial No";
+        itemSettings.FieldName = "SerialNumber"; 
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "SerialNumber";
+        txt.ReadOnly = ViewBag.ReadOnly;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    /*
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
         itemSettings.Caption = "QR Code";
         itemSettings.FieldName = "SerialNumber_";
 
@@ -452,6 +469,7 @@
             }
         }
     });
+    */
 
     if (!string.IsNullOrEmpty(Model.DocNum_))
     {

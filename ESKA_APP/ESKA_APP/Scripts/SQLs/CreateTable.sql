@@ -374,8 +374,7 @@ CREATE COLUMN TABLE "Tx_ProcessCard_Detail" (
     "RoutingName" NVARCHAR(100),
     "RoutingStatus" NVARCHAR(20),
 
-    "OperatorId" INTEGER,
-    "OperatorName" NVARCHAR(100),
+    "OperatorId" INTEGER, 
 
     "ProcessingDate" TIMESTAMP,
     "EndDate" TIMESTAMP,

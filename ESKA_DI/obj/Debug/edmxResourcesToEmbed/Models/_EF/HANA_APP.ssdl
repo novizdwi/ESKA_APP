@@ -778,11 +778,15 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
     <Property Name="Quantity" Type="int" />
     <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="UnitPrice" Type="decimal" Precision="21" Scale="2" />
     <Property Name="Whse" Type="nvarchar" MaxLength="50" />
     <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
     <Property Name="Department" Type="nvarchar" MaxLength="50" />
     <Property Name="LineNum" Type="int" />
     <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseLine" Type="int" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
@@ -879,7 +883,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
     <Property Name="OperatorId" Type="int" />
-    <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
     <Property Name="ProcessingDate" Type="timestamp" />
     <Property Name="EndDate" Type="timestamp" />
     <Property Name="MachineId" Type="int" />
