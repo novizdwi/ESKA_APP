@@ -93,6 +93,24 @@
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "";
+        itemSettings.FieldName = "BaseEntry";
+        //itemSettings.ClientVisible = false;
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.ClientVisible = false;
+        txt.Name = "BaseEntry";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Trans No.";
         itemSettings.FieldName = "TransNo";
 
@@ -188,7 +206,7 @@
             lookUpButton.Image.Width = 15;
 
             txt.Properties.Buttons.Add(lookUpButton);
-            txt.Properties.ClientSideEvents.ButtonClick = " function (s,e) { BtnCflGrpoPopupListGoodsReceiptPoOnClick(s,e); } ";
+            txt.Properties.ClientSideEvents.ButtonClick = " function (s,e) { BtnCflPurcahaseOrderPopupListGrpoOnClick(s,e); } ";
             //BtnCflGoodIssueHdrPopupListQrcodeGIOnClick 
         }
     });
@@ -231,10 +249,10 @@
         itemSettings.Name = "grpDocnum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "No";
-        itemSettings.FieldName = "Docnum";
+        itemSettings.FieldName = "BaseDocNum";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Name = "Docnum";
+        txt.Name = "BaseDocNum";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
@@ -259,39 +277,39 @@
     });
 
 
-    groupItem_Col3.Items.Add(itemSettings =>
-    {
+    //groupItem_Col3.Items.Add(itemSettings =>
+    //{
 
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-        itemSettings.Caption = "Posting Date";
-        itemSettings.FieldName = "DocDate";
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+    //    itemSettings.Caption = "Posting Date";
+    //    itemSettings.FieldName = "DocDate";
 
-        var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "DocDate";
-        txt.ShowModelErrors = true;
+    //    var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+    //    txt.Name = "DocDate";
+    //    txt.ShowModelErrors = true;
 
-        txt.ControlStyle.CssClass = "editornoimage";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Properties.NullText = "dd/MM/yyyy";
-        txt.Properties.EditFormat = EditFormat.Custom;
-        txt.Properties.EditFormatString = "dd/MM/yyyy";
-        txt.Properties.EditFormat = EditFormat.Date;
-        txt.ReadOnly = false;
+    //    txt.ControlStyle.CssClass = "editornoimage";
+    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    txt.Properties.NullText = "dd/MM/yyyy";
+    //    txt.Properties.EditFormat = EditFormat.Custom;
+    //    txt.Properties.EditFormatString = "dd/MM/yyyy";
+    //    txt.Properties.EditFormat = EditFormat.Date;
+    //    txt.ReadOnly = false;
 
-        //if (Model.Status == "Draft" || Model.Status == "Open")
-        //{
-        //    txt.ReadOnly = false;
-        //}
-        //else
-        //{
-        //    txt.Properties.DropDownButton.Visible = false;
-        //    txt.ReadOnly = true;
-        //}
+    //    //if (Model.Status == "Draft" || Model.Status == "Open")
+    //    //{
+    //    //    txt.ReadOnly = false;
+    //    //}
+    //    //else
+    //    //{
+    //    //    txt.Properties.DropDownButton.Visible = false;
+    //    //    txt.ReadOnly = true;
+    //    //}
 
-        txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e);  } }";
-        txt.Width = 230;
-    });
+    //    txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e);  } }";
+    //    txt.Width = 230;
+    //});
 
     groupItem.Items.AddTabbedGroupItem(group =>
     {

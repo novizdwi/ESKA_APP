@@ -77,49 +77,16 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Ts_List> Ts_List { get; set; }
         public virtual DbSet<Ts_Menu> Ts_Menu { get; set; }
         public virtual DbSet<Ts_ObjectApproval> Ts_ObjectApproval { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn> Tx_AdjustmentIn { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn_Approval> Tx_AdjustmentIn_Approval { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn_Attachment> Tx_AdjustmentIn_Attachment { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn_Item> Tx_AdjustmentIn_Item { get; set; }
-        public virtual DbSet<Tx_AdjustmentIn_Item_Tag> Tx_AdjustmentIn_Item_Tag { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut> Tx_AdjustmentOut { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut_Approval> Tx_AdjustmentOut_Approval { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut_Attachment> Tx_AdjustmentOut_Attachment { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut_Item> Tx_AdjustmentOut_Item { get; set; }
-        public virtual DbSet<Tx_AdjustmentOut_Item_Tag> Tx_AdjustmentOut_Item_Tag { get; set; }
-        public virtual DbSet<Tx_AjustmentIn_Approval> Tx_AjustmentIn_Approval { get; set; }
-        public virtual DbSet<Tx_AjustmentOut_Approval> Tx_AjustmentOut_Approval { get; set; }
-        public virtual DbSet<Tx_ChangeItem> Tx_ChangeItem { get; set; }
-        public virtual DbSet<Tx_ChangeItem_Tag> Tx_ChangeItem_Tag { get; set; }
-        public virtual DbSet<Tx_DeactiveTag> Tx_DeactiveTag { get; set; }
-        public virtual DbSet<Tx_DeactiveTag_Approval> Tx_DeactiveTag_Approval { get; set; }
-        public virtual DbSet<Tx_DeactiveTag_Item> Tx_DeactiveTag_Item { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO> Tx_GoodsReceiptPO { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item> Tx_GoodsReceiptPO_Item { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch> Tx_GoodsReceiptPO_Item_Batch { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch_Scale> Tx_GoodsReceiptPO_Item_Batch_Scale { get; set; }
+        public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Approval> Tx_ProcessCard_Approval { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
-        public virtual DbSet<Tx_TransferIn> Tx_TransferIn { get; set; }
-        public virtual DbSet<Tx_TransferIn_Item> Tx_TransferIn_Item { get; set; }
-        public virtual DbSet<Tx_TransferIn_Item_Tag> Tx_TransferIn_Item_Tag { get; set; }
-        public virtual DbSet<Tx_TransferOut> Tx_TransferOut { get; set; }
-        public virtual DbSet<Tx_TransferOut_Item> Tx_TransferOut_Item { get; set; }
-        public virtual DbSet<Tx_TransferOut_Item_Tag> Tx_TransferOut_Item_Tag { get; set; }
-        public virtual DbSet<Tx_TransferRequest> Tx_TransferRequest { get; set; }
-        public virtual DbSet<Tx_TransferRequest_Approval> Tx_TransferRequest_Approval { get; set; }
-        public virtual DbSet<Tx_TransferRequest_Item> Tx_TransferRequest_Item { get; set; }
-        public virtual DbSet<Tx_TransferSummaryIn> Tx_TransferSummaryIn { get; set; }
-        public virtual DbSet<Tx_TransferSummaryIn_Approval> Tx_TransferSummaryIn_Approval { get; set; }
-        public virtual DbSet<Tx_TransferSummaryIn_Item> Tx_TransferSummaryIn_Item { get; set; }
-        public virtual DbSet<Tx_TransferSummaryIn_Item_tag> Tx_TransferSummaryIn_Item_tag { get; set; }
-        public virtual DbSet<Tx_TransferSummaryIn_Ref> Tx_TransferSummaryIn_Ref { get; set; }
-        public virtual DbSet<Tx_TransferSummaryOut> Tx_TransferSummaryOut { get; set; }
-        public virtual DbSet<Tx_TransferSummaryOut_Approval> Tx_TransferSummaryOut_Approval { get; set; }
-        public virtual DbSet<Tx_TransferSummaryOut_Item> Tx_TransferSummaryOut_Item { get; set; }
-        public virtual DbSet<Tx_TransferSummaryOut_Item_Tag> Tx_TransferSummaryOut_Item_Tag { get; set; }
-        public virtual DbSet<Tx_TransferSummaryOut_Ref> Tx_TransferSummaryOut_Ref { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
     }
 }

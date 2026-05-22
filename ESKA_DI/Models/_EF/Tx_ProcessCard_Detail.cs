@@ -12,12 +12,22 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_AdjustmentIn_Attachment
+    public partial class Tx_ProcessCard_Detail
     {
-        public long Id { get; set; }
+        public Nullable<long> Id { get; set; }
         public long DetId { get; set; }
-        public string FileName { get; set; }
-        public string Guid { get; set; }
+        public string RoutingCode { get; set; }
+        public string RoutingName { get; set; }
+        public string RoutingStatus { get; set; }
+        public Nullable<int> OperatorId { get; set; }
+        public Nullable<System.DateTime> ProcessingDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<int> MachineId { get; set; }
+        public string MachineName { get; set; }
+        public Nullable<System.TimeSpan> PracticeHours { get; set; }
+        public Nullable<System.TimeSpan> ActualHours { get; set; }
+        public string LineStatus { get; set; }
+        public string Comments { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

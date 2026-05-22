@@ -515,7 +515,30 @@
         }
     }
 
+     @*unction OnClickChooseItem(s, e, detId) {
+        key = Id.GetValue();
 
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "GoodsReceiptPO")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+     }*@
+
+    function BtnCflNettoPopupListOnClick(s, e, detId) {
+        key = Id.GetValue();
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "GoodsReceiptPO")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
 
     function btnUpdateReasonOnClick(s, e) {
         key = Id.GetValue();
@@ -574,19 +597,19 @@
 
 
 @{
-    var cflGoodsReceiptPo_ParamModel = new CflGoodsReceiptPo_ParamModel();
-    cflGoodsReceiptPo_ParamModel.Name = "GoodsReceiptPo";
-    cflGoodsReceiptPo_ParamModel.Type = "GoodsReceiptPo";
-    cflGoodsReceiptPo_ParamModel.SqlWhere = "   ";
-    cflGoodsReceiptPo_ParamModel.Header = "";
+    var cflPurchaseOrder_ParamModel = new CflPurchaseOrder_ParamModel();
+    cflPurchaseOrder_ParamModel.Name = "PurchaseOrder";
+    cflPurchaseOrder_ParamModel.Type = "PurchaseOrder";
+    cflPurchaseOrder_ParamModel.SqlWhere = "   ";
+    cflPurchaseOrder_ParamModel.Header = "";
 
-    cflGoodsReceiptPo_ParamModel.IsMulti = "N";
+    cflPurchaseOrder_ParamModel.IsMulti = "N";
 }
 <script type="text/javascript">
-    function BtnCflGrpoPopupListGoodsReceiptPoOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("CflGrpoPopupListGoodsReceiptPo");
+    function BtnCflPurcahaseOrderPopupListGrpoOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("cflPurchaseOrderPopupListPurchaseOrder");
 
-        var gv = ASPxClientGridView.Cast('CflGrpoPopupListGoodsReceiptPo');
+        var gv = ASPxClientGridView.Cast('cflPurchaseOrderPopupListPurchaseOrder');
 
         if (gv == null) {
             popup.Show();
@@ -598,13 +621,14 @@
 
     }
 
-    function OnClickChoose_CflGrpoGoodsReceiptPo(s, e, data) {
+    function OnClickChoose_CflPurchaseOrderPurchaseOrder(s, e, data) {
         VendorCode.SetValue(data.VendorCode);
         VendorName.SetValue(data.VendorName);
         RefNo.SetValue(data.RefNo);
-        Docnum.SetValue(data.DocNum);
-        Status.SetValue(data.Status);
-        DocDate.SetValue(new Date(parseInt(data.DocDate.match(/\d+/)[0])));
+        BaseEntry.SetValue(data.DocEntry);
+        BaseDocNum.SetValue(data.DocNum);
+        //Status.SetValue(data.Status);
+        //DocDate.SetValue(new Date(parseInt(data.DocDate.match(/\d+/)[0])));
 
         //console.log(new Date(parseInt(data.DocDate.match(/\d+/)[0])))
 
@@ -618,12 +642,12 @@
         //    DocDate.SetValue(new Date(result));
         //}
 
-        CflGrpoPopupListGoodsReceiptPo.Hide();
+        cflPurchaseOrderPopupListPurchaseOrder.Hide();
 
     }
 
 </script>
-@Html.Partial("~/Views/_Cfl/_CflGoodsReceiptPo/Partial/_CflGoodsReceiptPo_Panel_List_Partial.cshtml", cflGoodsReceiptPo_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflPurchaseOrder/Partial/_CflPurchaseOrder_Panel_List_Partial.cshtml", cflPurchaseOrder_ParamModel)
 
 <script type="text/javascript">
 
@@ -722,8 +746,33 @@ new
 
 @*
     -----------------------------------------------------------------------------
-    gvShipList
+    gvShipListViewBatch
     -----------------------------------------------------------------------------
 *@
 
 @*@Html.Partial("Partial/GoodsReceiptPo_Panel_List_Partial")*@
+
+@*-------------------------------------------------
+    ViewBatch
+    -------------------------------------------------*@
+<script>
+
+    function popupBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+    function ViewBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
+
+
+</script>
+
+@Html.Partial("Partial/Batch/Batch_Partial")

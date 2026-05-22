@@ -45,7 +45,7 @@
 
 @Html.DevExpress().GridView(settings =>
 {
-    settings.Name = "gvCflPurchaseOrderListGoodsReceiptPO";
+    settings.Name = "gvCflPurchaseOrderListPurchaseOrder";
     settings.KeyFieldName = "DocEntry";
     settings.CallbackRouteValues = new { Controller = "_CflPurchaseOrder", Action = "ListPartial" };
 
@@ -98,33 +98,13 @@
     settings.Settings.ShowFilterRowMenu = true;
 
 
-    settings.Columns.Add("DocEntry", "DocEntry").Width = 0;
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "DocNum";
-        column.Name = "DocNum";
-        column.Caption = "Doc Num";
-        column.Width = 120;
-        column.ColumnType = MVCxGridViewColumnType.TextBox;
-
-        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "TransDate";
-        column.Name = "TransDate";
-        column.Caption = "Doc Date";
-        column.ColumnType = MVCxGridViewColumnType.DateEdit;
-        column.Width = 90;
-        var txt = column.PropertiesEdit as DateEditProperties;
-        txt.DisplayFormatString = "dd/MM/yyyy";
-        txt.EditFormatString = "dd/MM/yyyy";
-    });
-
-    settings.Columns.Add("VendorCode", "Vendor Code").Width = 100;
-    settings.Columns.Add("VendorName", "Vendor Name").Width = 100;
+    settings.Columns.Add("DocEntry", "DocEntry").Width = 90;
+    settings.Columns.Add("DocNum", "DocNum").Width = 90;
+    settings.Columns.Add("DocStatus", "Status").Width = 50;
+    settings.Columns.Add("DocDate", "DocDate").Width = 100;
+    settings.Columns.Add("VendorCode", "Vendor Code").Width = 120;
+    settings.Columns.Add("VendorName", "Vendor Name").Width = 200;
+    settings.Columns.Add("RefNo", "Ref No").Width = 90;
 
 
     settings.SettingsPager.Position = PagerPosition.Bottom;

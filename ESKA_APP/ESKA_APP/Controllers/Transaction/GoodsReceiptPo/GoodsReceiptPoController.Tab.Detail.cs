@@ -1,39 +1,30 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Collections;
-//using System.Linq;
-//using System.Web;
-//using System.Web.Mvc;
-//using DevExpress.Web.Mvc;
-//using System.IO;
-//using System.Threading;
+﻿using Models;
+using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.Mvc;
+using DevExpress.Web.Mvc;
+using Models.Transaction;
+
+namespace Controllers.Transaction
+{
+    public partial class GoodsReceiptPoController : BaseController
+    {
+
+        string VIEW_TAB_CONTENT = "Partial/GoodsReceiptPo_Form_TabDetail_List_Partial";
+
+        public ActionResult TabDetailListPartial()
+        {
+            int userId = (int)Session["userId"];
+
+            goodsReceiptPoService = new GoodsReceiptPoService();
+
+            var Id = Convert.ToInt64(Request["cbId"]);
+            List<GoodsReceiptPoItem> modelList = goodsReceiptPoService.GoodsReceiptPo_Details(Id);
+
+            return PartialView(VIEW_TAB_CONTENT, modelList);
+        }
 
 
-//using System.Net;
-
-//using Models.Transaction;
-
-//namespace Controllers.Transaction
-//{
-//    public partial class StockOpnameController : BaseController
-//    {
-
-//        //string VIEW_TAB_DETAIL_COMPONENT = "Partial/StockOpname_Form_TabDetail_List_Partial";
-
-//        //public ActionResult TabDetailListPartial()
-//        //{
-//        //    int userId = (int)Session["userId"];
-
-//        //    stockOpnameService = new StockOpnameService();
-
-//        //    var Id = Convert.ToInt64(Request["cbId"]);
-
-
-//        //    var modelListDetail = stockOpnameService.StockOpname_Details(Id);
-
-//        //    return PartialView(VIEW_TAB_DETAIL_COMPONENT, modelListDetail);
-//        //}
-        
-
-//    }
-//}
+    }
+}

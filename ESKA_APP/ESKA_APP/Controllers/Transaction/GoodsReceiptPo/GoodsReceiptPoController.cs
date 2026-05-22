@@ -98,6 +98,9 @@ namespace Controllers.Transaction
                 throw new Exception(string.Format("[VALIDATION] {0}", message));
             }
 
+
+
+
             return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
         }
 

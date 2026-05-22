@@ -1,0 +1,260 @@
+﻿@using Models;
+
+@model Models.Transaction.GoodsReceiptPoBatchView___
+
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(Model.Id).GetHtml()
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "DetId";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(Model.DetId).GetHtml()
+
+@Html.DevExpress().HyperLink(settingsHL =>
+{
+    settingsHL.Name = "ViewBatchComponent_btnCancel";
+    settingsHL.NavigateUrl = "javascript:void(0)";
+    settingsHL.Properties.Text = "Cancel";
+    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewBatch_OnClickBtnCancel(s, e) }";
+    settingsHL.Height = 20;
+}).GetHtml()
+
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "ViewBatch_formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = Unit.Percentage(100);
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+        itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.Color.Orange;
+
+    });
+
+    groupItem.Items.AddEmptyItem().Height = 8;
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 4;
+    });
+
+    var groupItem_3 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    var groupItem_Col3 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    //var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    //{
+    //    itemSettings.Caption = "Item Tag";
+    //    itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+    //    itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+    //    itemSettings.ShowCaption = DefaultBoolean.False;
+
+    //    itemSettings.ColCount = 1;
+    //});
+
+    //var groupItem_Col1 = groupItem.Items.AddGroupItem(itemSettings =>
+    //{
+    //    itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+    //    itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+    //    itemSettings.ShowCaption = DefaultBoolean.False;
+    //    itemSettings.ColCount = 1;
+    //    itemSettings.Width = 300;
+    //});
+
+    //var groupItem_Col2 = groupItem.Items.AddGroupItem(itemSettings =>
+    //{
+    //    itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+    //    itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+    //    itemSettings.ShowCaption = DefaultBoolean.False;
+    //    itemSettings.ColCount = 3;
+    //    itemSettings.Width = 150;
+    //    itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+    //});
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemCode";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Code";
+        itemSettings.FieldName = "ItemCode";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ItemCode";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemName";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Name";
+        itemSettings.FieldName = "ItemName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ItemName";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemName123";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Name";
+        itemSettings.FieldName = "ItemName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ItemName123";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemCode1";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Code";
+        itemSettings.FieldName = "ItemCode";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ItemCode1";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemName1";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Name";
+        itemSettings.FieldName = "ItemName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ItemName1";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemName12";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Name";
+        itemSettings.FieldName = "ItemName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ItemName12";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 150;
+    });
+
+
+    //groupItem_Col1.Items.AddTabbedGroupItem(group =>
+    //{
+    //    group.Name = "ViewViewBatch_TabBatch";
+    //    group.ColSpan = 1;
+    //    group.Width = 480;
+    //    group.Height = Unit.Percentage(100);
+
+    //    group.PageControl.ContentStyle.Paddings.Padding = 3;
+    //    group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+    //    group.Items.Add(item =>
+    //    {
+    //        item.Name = "ViewApproval_TabViewBatchContent";
+    //        item.Caption = "           List Item Tag       ";
+    //        item.SetNestedContent(() =>
+    //        {
+    //            ViewContext.Writer.Write(
+    //                Html.Partial("Partial/Batch/Batch_TabBatchList_List_Partial", Model.GoodsReceiptPOBatchModel___)
+    //            );
+    //        });
+    //    });
+
+    //});
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+        itemSettings.Caption = "";
+        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+        btnSettings.Name = "btnCancelViewBatch";
+        btnSettings.Text = "Close";
+        btnSettings.Width = 120;
+        btnSettings.ClientVisible = true;
+        btnSettings.ClientSideEvents.Click = "ViewBatch_OnClickBtnCancel";
+        btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
+        btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
+
+    });
+
+}).GetHtml()
+
+
+

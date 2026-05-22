@@ -31,6 +31,7 @@ namespace Models._Cfl
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
         public string RefNo { get; set; }
+        public int DocEntry { get; set; }
         public int DocNum { get; set; }
         public string Status { get; set; }
         public DateTime DocDate { get; set; }
@@ -44,6 +45,7 @@ namespace Models._Cfl
                             T1.""CardCode"" AS ""VendorCode"",
                             T1.""CardName"" AS ""VendorName"",
                             T1.""NumAtCard"" AS ""RefNo"",
+                            T1.""DocEntry"",
                             T1.""DocNum"",
                             T1.""DocStatus"" AS ""Status"",
                             T1.""DocDate""

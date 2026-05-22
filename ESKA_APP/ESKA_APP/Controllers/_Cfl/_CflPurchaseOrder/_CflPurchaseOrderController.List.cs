@@ -27,17 +27,17 @@ namespace Controllers._Cfl
             cflParam.Header = Request["hidden_CflHeader"];
             cflParam.SqlWhere = Request["hidden_CflSqlWhere"];
 
-            if (cflParam.Type == "InventoryReceipt")
-            {
-                cflParam.SqlWhere = string.Format(@"                 
-                    AND NOT EXISTS(
-                        SELECT T1.""Id""
-                        FROM ""Tx_GoodsReceiptPO"" T1
-                        WHERE T0.""DocEntry"" = T1.""BaseEntry""
-                        AND T1.""Status"" NOT IN('Cancel')
-                    )  
-                ");
-            }
+            //if (cflParam.Type == "InventoryReceipt")
+            //{
+            //    cflParam.SqlWhere = string.Format(@"                 
+            //        AND NOT EXISTS(
+            //            SELECT T1.""Id""
+            //            FROM ""Tx_GoodsReceiptPO"" T1
+            //            WHERE T0.""DocEntry"" = T1.""BaseEntry""
+            //            AND T1.""Status"" NOT IN('Cancel')
+            //        )  
+            //    ");
+            //}
 
             cflParam.IsMulti = Request["hidden_CflIsMulti"];
 

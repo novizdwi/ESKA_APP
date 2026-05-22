@@ -12,18 +12,30 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_AdjustmentIn_Item_Tag
+    public partial class Tx_ProcessCard
     {
-        public Nullable<long> Id { get; set; }
-        public Nullable<long> DetId { get; set; }
-        public long DetDetId { get; set; }
+        public long Id { get; set; }
+        public string TransType { get; set; }
+        public string TransNo { get; set; }
+        public Nullable<int> DocEntry { get; set; }
+        public string DocNum { get; set; }
+        public Nullable<System.DateTime> TransDate { get; set; }
+        public Nullable<System.DateTime> PostingDate { get; set; }
+        public Nullable<System.DateTime> DueDate { get; set; }
+        public string SerialNumber { get; set; }
+        public string ContractNo { get; set; }
+        public string CardCode { get; set; }
+        public string CardName { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
-        public string TagId { get; set; }
         public Nullable<decimal> Quantity { get; set; }
-        public string EventType { get; set; }
+        public string Comments { get; set; }
+        public string CancelReason { get; set; }
+        public string IsApproval { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string ApprovalMessages { get; set; }
         public string Status { get; set; }
-        public string PostResultNote { get; set; }
+        public string IsAfterPosted { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
