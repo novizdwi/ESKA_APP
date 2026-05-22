@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
 using Models.Transaction;
+using System.Linq;
 
 namespace Controllers.Transaction
 {
@@ -104,6 +105,114 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
         }
 
+
+        //public ActionResult Batch_AddNew(GoodsReceiptPoBatchModel model)
+        //{
+        //    var list =
+        //        Session["BatchList"]
+        //        as List<GoodsReceiptPoBatchModel>;
+
+        //    if (list == null)
+        //    {
+        //        list =
+        //            new List<GoodsReceiptPoBatchModel>();
+        //    }
+
+        //    model.RowNo = list.Count + 1;
+
+        //    list.Add(model);
+
+        //    Session["BatchList"] = list;
+
+        //    return PartialView(
+        //        "Partial/Batch/Batch_TabBatchList_List_Partial",
+        //        list
+        //    );
+        //}
+
+        public ActionResult BatchListPartial()
+        {
+            var list =
+                Session["BatchList"]
+                as List<GoodsReceiptPoBatchModel>;
+
+            if (list == null)
+            {
+                list =
+                    new List<GoodsReceiptPoBatchModel>();
+            }
+
+            return PartialView(
+                "Partial/Batch/Batch_TabBatchList_List_Partial",
+                list
+            );
+        }
+
+        public ActionResult Batch_AddEmptyRow()
+        {
+            List<GoodsReceiptPoBatchModel> list;
+
+            if (Session["BatchList"] == null)
+            {
+                list = new List<GoodsReceiptPoBatchModel>();
+            }
+            else
+            {
+                list =
+                    (List<GoodsReceiptPoBatchModel>)
+                    Session["BatchList"];
+            }
+
+            list.Add(new GoodsReceiptPoBatchModel()
+            {
+                RowNo = list.Count + 1,
+                Batch = "",
+                Quantity = 0,
+                Status = "Draft"
+            });
+
+            Session["BatchList"] = list;
+
+            return Json(true);
+        }
+
+        public ActionResult Batch_Delete(int RowNo)
+        {
+            var list =
+                Session["BatchList"]
+                as List<GoodsReceiptPoBatchModel>;
+
+            if (list == null)
+            {
+                list =
+                    new List<GoodsReceiptPoBatchModel>();
+            }
+
+            var data =
+                list.FirstOrDefault(x =>
+                    x.RowNo == RowNo);
+
+            if (data != null)
+            {
+                list.Remove(data);
+            }
+
+            // RENUMBER
+            int no = 1;
+
+            foreach (var item in list)
+            {
+                item.RowNo = no;
+                no++;
+            }
+
+            Session["BatchList"] = list;
+
+            return PartialView(
+                "Partial/Batch/Batch_TabBatchList_List_Partial",
+                list
+            );
+        }
         //[HttpPost, ValidateInput(false)]
         //public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))]  GoodsReceiptPoModel GoodsReceiptPoModel)
         //{

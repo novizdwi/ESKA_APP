@@ -81,4 +81,3 @@ C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompil
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.csproj.CopyComplete
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.dll
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.pdb
-C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.csprojAssemblyReference.cache

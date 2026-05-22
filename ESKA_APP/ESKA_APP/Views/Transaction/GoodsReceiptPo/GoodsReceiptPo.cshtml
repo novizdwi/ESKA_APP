@@ -528,6 +528,31 @@
         }
      }*@
 
+    function AddBatchRow() {
+
+        $.ajax({
+            type: 'POST',
+            url: '/ESKA/GoodsReceiptPO/Batch_AddEmptyRow',
+
+            success: function () {
+
+                GoodsReceiptPO_gvContentBatchList.Refresh();
+
+                setTimeout(function () {
+
+                    var index =
+                        GoodsReceiptPO_gvContentBatchList
+                            .GetVisibleRowsOnPage() - 1;
+
+                    GoodsReceiptPO_gvContentBatchList
+                        .StartEditRow(index);
+
+                }, 300);
+
+            }
+        });
+    }
+
     function BtnCflNettoPopupListOnClick(s, e, detId) {
         key = Id.GetValue();
         var popup = ASPxClientPopupControl.Cast("popupBatch");

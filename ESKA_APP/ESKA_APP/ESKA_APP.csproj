@@ -699,7 +699,7 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabItemTagList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

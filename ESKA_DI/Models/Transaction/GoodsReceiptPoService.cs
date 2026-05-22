@@ -213,11 +213,19 @@ namespace Models.Transaction
     {
         public long Id { get; set; }
 
+        public string BaseDocNum { get; set; }
+
         public long DetId { get; set; }
 
         public string ItemCode { get; set; }
 
         public string ItemName { get; set; }
+
+        public string Whse { get; set; }
+
+        public int? TotalNeeded { get; set; }
+
+        public int? TotalCreated { get; set; }
 
         public List<GoodsReceiptPoBatchModel> GoodsReceiptPoBatchModel___ { get; set; }
     }
@@ -226,23 +234,22 @@ namespace Models.Transaction
     {
         public int RowNo { get; set; }
 
-        public long Id { get; set; }
+        //public long Id { get; set; }
 
         public long DetId { get; set; }
 
         public long DetDetId { get; set; }
 
-        public string ItemCode { get; set; }
-
-        public string ItemName { get; set; }
-
-        public string TagId { get; set; }
+        public string Batch { get; set; }
 
         public decimal? Quantity { get; set; }
 
-        public string EventType { get; set; }
+        public DateTime? AdmissionDate { get; set; }
+
+        public decimal? Netto { get; set; }
 
         public string Status { get; set; }
+
     }
 
     //public class GoodsReceiptPo_Approval
@@ -690,13 +697,13 @@ namespace Models.Transaction
             using (var CONTEXT = new HANA_APP())
             {
                 sql = @"SELECT T0.""Id"", 
-                                T0.""DocNum"",
+                                T0.""BaseDocNum"",
                                 T1.""DetId"", 
                                 T1.""ItemCode"", 
                                 T1.""ItemName"",
                                 T1.""Whse"",
                                 T1.""Quantity"" AS ""TotalNeeded"",
-                                NULL AS ""TotalCreated""
+                                T1.""QuantityCreated"" AS ""TotalCreated""
                                 FROM ""Tx_GoodsReceiptPO"" T0   
                                 LEFT JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""Id"" = T1.""Id"" 
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
