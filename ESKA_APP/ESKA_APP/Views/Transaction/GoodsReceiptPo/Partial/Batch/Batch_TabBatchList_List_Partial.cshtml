@@ -1,87 +1,4 @@
-﻿@*@using Models;
-    @using Models.Transaction;
-
-
-    @Html.DevExpress().GridView(settings =>
-    {
-
-        settings.Name = "GoodsReceiptPO_gvContentBatchList";
-        settings.KeyFieldName = "DetDetId";
-        settings.CommandColumn.Visible = false;
-
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-        settings.Width = Unit.Percentage(100);
-        settings.CommandColumn.Width = 70;
-
-        settings.SettingsEditing.Mode =GridViewEditingMode.Inline;
-        settings.SettingsEditing.NewItemRowPosition =GridViewNewItemRowPosition.Bottom;
-        settings.CommandColumn.Visible = true;
-
-        settings.Settings.ShowFilterRow = false;
-        settings.Settings.ShowFilterRowMenu = false;
-        settings.SettingsBehavior.AllowSort = false;
-
-        //settings.Columns.Add("Id", "Id").Visible = false;
-        settings.Columns.Add("DetId", "DetId").Visible = false;
-        settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
-        settings.Columns.Add("RowNo", "No.").Width = 40;
-
-
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "Batch";
-            column.Name = "Batch";
-            column.Caption = "Batch";
-            column.Width = 200;
-            column.ColumnType = MVCxGridViewColumnType.TextBox;
-            column.Visible = true;
-
-            column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-        });
-
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "Quantity";
-            column.Name = "Quantity";
-            column.Caption = "Quantity";
-            column.Width = 100;
-            column.ColumnType = MVCxGridViewColumnType.TextBox;
-            column.Visible = true;
-
-            column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-        });
-
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "Status";
-            column.Name = "Status";
-            column.Caption = "Status";
-            column.Width = 80;
-            column.ColumnType = MVCxGridViewColumnType.TextBox;
-            column.Visible = true;
-
-            column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-        });
-
-        settings.HtmlDataCellPrepared = (s, e) =>
-        {
-            if (e.VisibleIndex >= 0)
-            {
-                ASPxGridView gridView = (ASPxGridView)s;
-                var Status = Convert.ToString(gridView.GetRowValues(e.VisibleIndex, "Status"));
-                if (Status == "Invalid")
-                {
-                    e.Cell.BackColor = System.Drawing.Color.IndianRed;
-                    e.Cell.ForeColor = System.Drawing.Color.White;
-                }
-            }
-        };
-
-        settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
-
-    }).Bind(Model).GetHtml()*@
-
-@using Models;
+﻿@using Models;
 @using Models.Transaction;
 
 @Html.DevExpress().GridView(settings =>
@@ -93,9 +10,11 @@
     settings.CallbackRouteValues = new
     {
         Controller = "GoodsReceiptPO",
-        Action = "BatchListPartial"
+        Action = "Batch_CustomCallback"
     };
 
+    //settings.ClientSideEvents.EndCallback =
+    //"OnBatchEndCallback";
     // PRIMARY KEY
     settings.KeyFieldName = "RowNo";
 
@@ -121,8 +40,11 @@
     // EDITING
     // =========================
 
+    //settings.SettingsEditing.Mode =
+    //    GridViewEditingMode.Inline;
+
     settings.SettingsEditing.Mode =
-        GridViewEditingMode.Inline;
+    GridViewEditingMode.Inline;
 
     settings.SettingsEditing.NewItemRowPosition =
         GridViewNewItemRowPosition.Bottom;
@@ -156,7 +78,7 @@
     settings.CommandColumn.Visible = true;
     settings.CommandColumn.Width = 150;
 
-    settings.CommandColumn.ShowNewButtonInHeader = true;
+    //settings.CommandColumn.ShowNewButtonInHeader = true;
     settings.CommandColumn.ShowEditButton = true;
     settings.CommandColumn.ShowDeleteButton = true;
     settings.CommandColumn.ShowUpdateButton = true;
@@ -207,6 +129,11 @@
 
         column.Settings.AutoFilterCondition =
             AutoFilterCondition.Contains;
+
+        column.EditorProperties().TextBox(p =>
+        {
+            p.ClientInstanceName = "txtBatch";
+        });
     });
 
     // =========================
@@ -225,6 +152,11 @@
 
         column.Settings.AutoFilterCondition =
             AutoFilterCondition.Contains;
+
+        column.EditorProperties().SpinEdit(p =>
+        {
+            p.ClientInstanceName = "txtQuantity";
+        });
     });
 
     // =========================

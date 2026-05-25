@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using DevExpress.Web.Mvc;
 using Models.Transaction;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Controllers.Transaction
 {
@@ -148,7 +149,97 @@ namespace Controllers.Transaction
             );
         }
 
-        public ActionResult Batch_AddEmptyRow()
+        //public ActionResult Batch_AddEmptyRow()
+        //{
+        //    List<GoodsReceiptPoBatchModel> list;
+
+        //    if (Session["BatchList"] == null)
+        //    {
+        //        list = new List<GoodsReceiptPoBatchModel>();
+        //    }
+        //    else
+        //    {
+        //        list =
+        //            (List<GoodsReceiptPoBatchModel>)
+        //            Session["BatchList"];
+        //    }
+
+        //    list.Add(new GoodsReceiptPoBatchModel()
+        //    {
+        //        RowNo = list.Count + 1,
+        //        Batch = "",
+        //        Quantity = 0,
+        //        Status = "Draft"
+        //    });
+
+        //    Session["BatchList"] = list;
+
+        //    return Json(true);
+        //}
+
+        [HttpPost]
+        public ActionResult Batch_SaveAndAddRow(string rows)
+        {
+            List<GoodsReceiptPoBatchModel> list;
+
+            // DESERIALIZE JSON ROWS
+            if (!string.IsNullOrEmpty(rows))
+            {
+                list =
+                    JsonConvert.DeserializeObject
+                    <
+                        List<GoodsReceiptPoBatchModel>
+                    >(rows);
+            }
+            else
+            {
+                list =
+                    new List<GoodsReceiptPoBatchModel>();
+            }
+
+            // NULL SAFETY
+            if (list == null)
+            {
+                list =
+                    new List<GoodsReceiptPoBatchModel>();
+            }
+
+            // FIX ROW NUMBER
+            int no = 1;
+
+            foreach (var item in list)
+            {
+                item.RowNo = no;
+
+                // DEFAULT STATUS
+                if (string.IsNullOrEmpty(item.Status))
+                {
+                    item.Status = "Draft";
+                }
+
+                no++;
+            }
+
+            // ADD NEW EMPTY ROW
+            list.Add(new GoodsReceiptPoBatchModel()
+            {
+                RowNo = list.Count + 1,
+                Batch = "",
+                Quantity = 0,
+                Status = "Draft"
+            });
+
+            // SAVE SESSION
+            Session["BatchList"] = list;
+
+            return Json(new
+            {
+                Result = true,
+                TotalRow = list.Count
+            });
+        }
+
+        public ActionResult Batch_CustomCallback(string customAction)
         {
             List<GoodsReceiptPoBatchModel> list;
 
@@ -163,17 +254,23 @@ namespace Controllers.Transaction
                     Session["BatchList"];
             }
 
-            list.Add(new GoodsReceiptPoBatchModel()
+            if (customAction == "ADDROW")
             {
-                RowNo = list.Count + 1,
-                Batch = "",
-                Quantity = 0,
-                Status = "Draft"
-            });
+                list.Add(new GoodsReceiptPoBatchModel()
+                {
+                    RowNo = list.Count + 1,
+                    Batch = "",
+                    Quantity = 0,
+                    Status = "Draft"
+                });
+            }
 
             Session["BatchList"] = list;
 
-            return Json(true);
+            return PartialView(
+                "Partial/Batch/Batch_TabBatchList_List_Partial",
+                list
+            );
         }
 
         public ActionResult Batch_Delete(int RowNo)

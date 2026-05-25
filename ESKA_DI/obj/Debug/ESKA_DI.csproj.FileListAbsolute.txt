@@ -75,6 +75,7 @@ C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\bin\Debug\EntityFramework.SqlServer
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\bin\Debug\DevExpress.Utils.v20.1.dll
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\bin\Debug\EntityFramework.xml
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\bin\Debug\EntityFramework.SqlServer.xml
+C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.csprojAssemblyReference.cache
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\Interop.SAPbobsCOM.dll
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.csproj.ResolveComReference.cache
 C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
