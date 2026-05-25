@@ -1105,13 +1105,13 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Model1.Tx_GoodsReceiptPO_Item" />
           <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch" />
           <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch_Scale" />
+          <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
+          <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
+          <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
           <EntitySet Name="Tx_StockOpname" EntityType="Model1.Tx_StockOpname" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
           <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
-          <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
-          <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
-          <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -1874,19 +1874,19 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UomEntry" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="Whse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LineNum" Type="Int32" />
           <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaseEntry" Type="Int64" />
+          <Property Name="BaseLine" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedUser" Type="Int32" />
-          <Property Name="UomEntry" Type="Int32" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="BaseEntry" Type="Int64" />
-          <Property Name="BaseLine" Type="Int32" />
         </EntityType>
         <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
           <Key>
@@ -1919,6 +1919,77 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_ProcessCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocEntry" Type="Int32" />
+          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransDate" Type="DateTime" />
+          <Property Name="PostingDate" Type="DateTime" />
+          <Property Name="DueDate" Type="DateTime" />
+          <Property Name="SerialNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ContractNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CardCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CardName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="CancelReason" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_ProcessCard_Approval">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int32" />
+          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StageId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Step" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ActionDate" Type="DateTime" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_ProcessCard_Detail">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int64" />
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OperatorId" Type="Int32" />
+          <Property Name="ProcessingDate" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
+          <Property Name="MachineId" Type="Int32" />
+          <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PracticeHours" Type="Time" />
+          <Property Name="ActualHours" Type="Time" />
+          <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
         <EntityType Name="Tx_StockOpname">
@@ -2000,77 +2071,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="SenderId" Type="Int32" />
           <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="LastShowTime" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="Tx_ProcessCard_Approval">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int32" />
-          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StageId" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="Step" Type="Int32" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ActionDate" Type="DateTime" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_ProcessCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DocEntry" Type="Int32" />
-          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransDate" Type="DateTime" />
-          <Property Name="PostingDate" Type="DateTime" />
-          <Property Name="DueDate" Type="DateTime" />
-          <Property Name="SerialNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ContractNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CardCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="CardName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CancelReason" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_ProcessCard_Detail">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="OperatorId" Type="Int32" />
-          <Property Name="ProcessingDate" Type="DateTime" />
-          <Property Name="EndDate" Type="DateTime" />
-          <Property Name="MachineId" Type="Int32" />
-          <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PracticeHours" Type="Time" />
-          <Property Name="ActualHours" Type="Time" />
-          <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2881,19 +2881,19 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySetMapping Name="Tx_GoodsReceiptPO_Item">
             <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item">
               <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item">
-                <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
-                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
+                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
                 <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
                 <ScalarProperty Name="LineNum" ColumnName="LineNum" />
                 <ScalarProperty Name="Department" ColumnName="Department" />
                 <ScalarProperty Name="Netto" ColumnName="Netto" />
                 <ScalarProperty Name="Whse" ColumnName="Whse" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
                 <ScalarProperty Name="Uom" ColumnName="Uom" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
@@ -2935,6 +2935,80 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
                 <ScalarProperty Name="DetDetDetId" ColumnName="DetDetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_ProcessCard">
+            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard">
+              <MappingFragment StoreEntitySet="Tx_ProcessCard">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
+                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="CardName" ColumnName="CardName" />
+                <ScalarProperty Name="CardCode" ColumnName="CardCode" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_ProcessCard_Approval">
+            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Approval">
+              <MappingFragment StoreEntitySet="Tx_ProcessCard_Approval">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="StageId" ColumnName="StageId" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_ProcessCard_Detail">
+            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
+              <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
+                <ScalarProperty Name="PracticeHours" ColumnName="PracticeHours" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
+                <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+                <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
+                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3018,80 +3092,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="BaseId" ColumnName="BaseId" />
                 <ScalarProperty Name="BaseType" ColumnName="BaseType" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_ProcessCard_Approval">
-            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Approval">
-              <MappingFragment StoreEntitySet="Tx_ProcessCard_Approval">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Step" ColumnName="Step" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="StageId" ColumnName="StageId" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_ProcessCard">
-            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard">
-              <MappingFragment StoreEntitySet="Tx_ProcessCard">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
-                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
-                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
-                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="CardName" ColumnName="CardName" />
-                <ScalarProperty Name="CardCode" ColumnName="CardCode" />
-                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
-                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
-                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
-                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
-                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
-                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-                <ScalarProperty Name="TransType" ColumnName="TransType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_ProcessCard_Detail">
-            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
-              <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
-                <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
-                <ScalarProperty Name="PracticeHours" ColumnName="PracticeHours" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
-                <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
-                <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
-                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
-                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
