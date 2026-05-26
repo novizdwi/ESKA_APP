@@ -674,57 +674,140 @@
 
     }
 
-    //function AddBatchRow() {
+    //function CalculateTotalCreated() {
 
-    //    // ADA ROW YANG SEDANG EDIT
-    //    if (GoodsReceiptPO_gvContentBatchList.IsEditing()) {
+    //    var gv =
+    //        ASPxClientGridView.Cast(
+    //            'GoodsReceiptPO_gvContentBatchList'
+    //        );
 
-    //        // SAVE DULU ROW YANG SEDANG EDIT
-    //        GoodsReceiptPO_gvContentBatchList.UpdateEdit();
+    //    var totalRow =
+    //        gv.GetVisibleRowsOnPage();
 
-    //        // TUNGGU CALLBACK UPDATE SELESAI
-    //        setTimeout(function () {
+    //    var totalQty = 0;
 
-    //            AddNewEmptyRow();
+    //    var completed = 0;
 
-    //        }, 500);
+    //    // TIDAK ADA ROW
+    //    if (totalRow == 0) {
+
+    //        txtTotalCreated.SetValue(0);
+
+    //        return;
+    //    }
+
+    //    // LOOP ROW
+    //    for (let i = 0; i < totalRow; i++) {
+
+    //        gv.GetRowValues(
+    //            i,
+    //            'Quantity',
+    //            function (value) {
+
+    //                var qty = parseFloat(value);
+
+    //                if (!isNaN(qty)) {
+
+    //                    totalQty += qty;
+
+    //                }
+
+    //                completed++;
+
+    //                // SEMUA LOOP SELESAI
+    //                if (completed == totalRow) {
+
+    //                    txtTotalCreated.SetValue(
+    //                        totalQty
+    //                    );
+
+    //                }
+
+    //            }
+    //        );
 
     //    }
-    //    else {
-
-    //        AddNewEmptyRow();
-
-    //    }
-    //}
-
-    //function AddNewEmptyRow() {
-
-    //    $.ajax({
-
-    //        type: 'POST',
-
-    //        url: '/ESKA/GoodsReceiptPO/Batch_AddEmptyRow',
-
-    //        success: function () {
-
-    //            GoodsReceiptPO_gvContentBatchList.Refresh();
-
-    //            setTimeout(function () {
-
-    //                var index =
-    //                    GoodsReceiptPO_gvContentBatchList
-    //                        .GetVisibleRowsOnPage() - 1;
-
-    //                GoodsReceiptPO_gvContentBatchList
-    //                    .StartEditRow(index);
-
-    //            }, 300);
-
-    //        }
-    //    });
 
     //}
-   
+
+    function CalculateTotalCreated() {
+
+        var gv =
+            ASPxClientGridView.Cast(
+                'GoodsReceiptPO_gvContentBatchList'
+            );
+
+        var totalRow =
+            gv.GetVisibleRowsOnPage();
+
+        var totalQty = 0;
+
+        var completed = 0;
+
+        // GRID KOSONG
+        if (totalRow == 0) {
+
+            txtTotalCreated.SetValue(0);
+
+            return;
+        }
+
+        // LOOP ROW GRID
+        for (let i = 0; i < totalRow; i++) {
+
+            gv.GetRowValues(
+                i,
+                'Quantity',
+                function (value) {
+
+                    var qty =
+                        parseFloat(value);
+
+                    if (!isNaN(qty)) {
+
+                        totalQty += qty;
+
+                    }
+
+                    completed++;
+
+                    // SEMUA ROW SELESAI
+                    if (completed == totalRow) {
+
+                        // JIKA ADA EDITOR AKTIF
+                        if (typeof txtQuantity !==
+                            'undefined') {
+
+                            var editQty =
+                                parseFloat(
+                                    txtQuantity
+                                        .GetValue()
+                                );
+
+                            if (!isNaN(editQty)) {
+
+                                // KURANGI VALUE LAMA
+                                // TAMBAH VALUE EDIT AKTIF
+                                totalQty =
+                                    totalQty -
+                                    qty +
+                                    editQty;
+
+                            }
+
+                        }
+
+                        txtTotalCreated
+                            .SetValue(totalQty);
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
 
 
     function BtnCflNettoPopupListOnClick(s, e, detId) {

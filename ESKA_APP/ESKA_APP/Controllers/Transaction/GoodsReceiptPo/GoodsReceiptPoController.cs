@@ -310,6 +310,52 @@ namespace Controllers.Transaction
                 list
             );
         }
+
+        [HttpPost]
+        public ActionResult Batch_Update(GoodsReceiptPoBatchModel model)
+        {
+            List<GoodsReceiptPoBatchModel> list;
+
+            // AMBIL SESSION
+            if (Session["BatchList"] == null)
+            {
+                list =
+                    new List<GoodsReceiptPoBatchModel>();
+            }
+            else
+            {
+                list =
+                    (List<GoodsReceiptPoBatchModel>)
+                    Session["BatchList"];
+            }
+
+            // CARI DATA
+            var data =
+                list.FirstOrDefault(x =>
+                    x.RowNo == model.RowNo);
+
+            // UPDATE DATA
+            if (data != null)
+            {
+                data.Batch =
+                    model.Batch;
+
+                data.Quantity =
+                    model.Quantity;
+
+                data.Status =
+                    model.Status;
+            }
+
+            // SAVE SESSION
+            Session["BatchList"] = list;
+
+            // RETURN GRID
+            return PartialView(
+                "Partial/Batch/Batch_TabBatchList_List_Partial",
+                list
+            );
+        }
         //[HttpPost, ValidateInput(false)]
         //public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))]  GoodsReceiptPoModel GoodsReceiptPoModel)
         //{

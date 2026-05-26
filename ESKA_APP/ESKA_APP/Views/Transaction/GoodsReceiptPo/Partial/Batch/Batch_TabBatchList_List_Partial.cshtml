@@ -14,6 +14,9 @@
     };
 
     //settings.ClientSideEvents.EndCallback =
+    //"function(s,e){ CalculateTotalCreated(); }";
+
+    //settings.ClientSideEvents.EndCallback =
     //"OnBatchEndCallback";
     // PRIMARY KEY
     settings.KeyFieldName = "RowNo";
@@ -156,7 +159,11 @@
         column.EditorProperties().SpinEdit(p =>
         {
             p.ClientInstanceName = "txtQuantity";
+
+            p.ClientSideEvents.ValueChanged =
+            "function(s,e){ CalculateTotalCreated(); }";
         });
+
     });
 
     // =========================
