@@ -766,6 +766,11 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="DocEntry" Type="bigint" />
           <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
           <Property Name="DocDate" Type="timestamp" />
+          <Property Name="PostingDate" Type="timestamp" />
+          <Property Name="BaseEntry" Type="bigint" />
+          <Property Name="BaseDocNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsAfterPosted" Type="nvarchar" MaxLength="1" />
+          <Property Name="CancelReason" Type="nvarchar" MaxLength="250" />
           <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedDate" Type="timestamp" />
@@ -782,6 +787,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
           <Property Name="Quantity" Type="int" />
+          <Property Name="QuantityCreated" Type="int" />
           <Property Name="Uom" Type="nvarchar" MaxLength="50" />
           <Property Name="UomEntry" Type="int" />
           <Property Name="UnitPrice" Type="decimal" Precision="21" Scale="2" />
@@ -966,6 +972,22 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ModifiedDate" Type="timestamp" />
           <Property Name="ModifiedUser" Type="int" />
         </EntityType>
+        <EntityType Name="Tx_StockOpname_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="Id" Type="bigint" />
+          <Property Name="DetId" Type="bigint" />
+          <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BatchNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="AdmissionDate" Type="timestamp" />
+          <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="FreeText" Type="nvarchar" MaxLength="254" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
         <EntityContainer Name="Model1StoreContainer">
           <EntitySet Name="Tm_Alert" EntityType="Self.Tm_Alert" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Alert_Role" EntityType="Self.Tm_Alert_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -1029,6 +1051,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_StockOpname_Item_Batch" EntityType="Self.Tx_StockOpname_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tp_UserAlert" EntityType="Self.Tp_UserAlert" store:Type="Tables" store:Schema="ESKA_APP_TEST">
             <DefiningQuery>SELECT 
 "Tp_UserAlert"."Id" AS "Id", 
@@ -1112,6 +1135,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
           <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
           <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
+          <EntitySet Name="Tx_StockOpname_Item_Batch" EntityType="Model1.Tx_StockOpname_Item_Batch" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -1863,6 +1887,11 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedUser" Type="Int32" />
+          <Property Name="PostingDate" Type="DateTime" />
+          <Property Name="BaseEntry" Type="Int64" />
+          <Property Name="BaseDocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="CancelReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Tx_GoodsReceiptPO_Item">
           <Key>
@@ -1887,6 +1916,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="UnitPrice" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="BaseEntry" Type="Int64" />
           <Property Name="BaseLine" Type="Int32" />
+          <Property Name="QuantityCreated" Type="Int32" />
         </EntityType>
         <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
           <Key>
@@ -2067,6 +2097,22 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ActualHours" Type="Time" />
           <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_StockOpname_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="Id" Type="Int64" />
+          <Property Name="DetId" Type="Int64" />
+          <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BatchNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdmissionDate" Type="DateTime" />
+          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="FreeText" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -2859,6 +2905,11 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySetMapping Name="Tx_GoodsReceiptPO">
             <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO">
               <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO">
+                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+                <ScalarProperty Name="BaseDocNum" ColumnName="BaseDocNum" />
+                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -2881,6 +2932,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySetMapping Name="Tx_GoodsReceiptPO_Item">
             <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item">
               <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item">
+                <ScalarProperty Name="QuantityCreated" ColumnName="QuantityCreated" />
                 <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
                 <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
@@ -3091,6 +3143,23 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
                 <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
                 <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_StockOpname_Item_Batch">
+            <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item_Batch">
+              <MappingFragment StoreEntitySet="Tx_StockOpname_Item_Batch">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="AdmissionDate" ColumnName="AdmissionDate" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

@@ -88,8 +88,6 @@ namespace Models.Transaction
 
         public List<StockOpname_DetailModel> ListDetail_ = new List<StockOpname_DetailModel>();
 
-        public List<StockOpname_DetailModel> ListDetails_ = new List<StockOpname_DetailModel>();
-
         public StockOpname_Detail Details_ { get; set; }
     }
         
@@ -281,7 +279,7 @@ namespace Models.Transaction
 
                 model = CONTEXT.Database.SqlQuery<StockOpnameModel>(ssql, id).Single();
                 
-                model.ListDetails_ = this.StockOpname_Details(CONTEXT, id);
+                model.ListDetail_ = this.StockOpname_Details(CONTEXT, id);
 
                 if (model.Status == "Draft")
                 {
@@ -890,7 +888,7 @@ namespace Models.Transaction
                 oDocument.JournalRemark = model.Comments;
             }
 
-            oDocument.UserFields.Item("U_IDU_WebId").Value = Convert.ToInt32(model.Id);
+            oDocument.UserFields.Item("U_IDU_WebId").Value = model.Id.ToString();
             oDocument.UserFields.Item("U_IDU_WebTransNo").Value = model.TransNo;
             if (model.ListDetail_.Count > 0)
             {
@@ -915,8 +913,8 @@ namespace Models.Transaction
                         //line.CostingCode4 = item.SubClass2Code;
                         //line.ProjectCode = item.ProjectCode;
 
-                        line.UserFields.Item("U_IDU_WebId").Value = Convert.ToInt32(item.Id);
-                        line.UserFields.Item("U_IDU_DetId").Value = Convert.ToInt32(item.DetId);
+                        line.UserFields.Item("U_IDU_WebId").Value = item.Id.ToString();
+                        line.UserFields.Item("U_IDU_DetId").Value = item.DetId.ToString();
                     }
                 }
             }

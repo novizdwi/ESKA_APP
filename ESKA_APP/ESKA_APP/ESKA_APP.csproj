@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ESKA_APP</RootNamespace>
     <AssemblyName>ESKA_APP</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -314,15 +314,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="QRCoder, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
-      <HintPath>..\packages\QRCoder.1.8.0\lib\net40\QRCoder.dll</HintPath>
-    </Reference>
-    <Reference Include="Sap.Data.Hana.v4.5, Version=2.17.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
+    <Reference Include="Sap.Data.Hana.v4.5, Version=2.8.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\sap\hdbclient\ado.net\v4.5\Sap.Data.Hana.v4.5.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\Program Files\sap\hdbclientold\ado.net\v4.5\Sap.Data.Hana.v4.5.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -373,7 +367,6 @@
     <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
     </Reference>
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Article.html" />
@@ -705,8 +698,8 @@
     <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_TabDetail_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_List_Partial.cshtml" />
@@ -716,8 +709,6 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
-    <Content Include="Views\_Cfl\_CflCardCode\Partial\_CflCardCode_List_Partial.cshtml" />
-    <Content Include="Views\_Cfl\_CflCardCode\Partial\_CflCardCode_Panel_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -753,13 +744,13 @@
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
     <Compile Include="Controllers\Notification\_NotificationController.List.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.List.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Nav.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewApproval.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Approval.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.CancelReason.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.List.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
@@ -812,15 +803,13 @@
     <Compile Include="Controllers\Setting\Report\ReportController.List.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.List.Export.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.Nav.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Approval.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.CancelReason.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.List.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
-    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.cs" />
-    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.Export.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.List.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewApproval.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.cs" />

@@ -33,5 +33,6 @@ namespace ESKA_DI.Models._EF
         public Nullable<decimal> UnitPrice { get; set; }
         public Nullable<long> BaseEntry { get; set; }
         public Nullable<int> BaseLine { get; set; }
+        public Nullable<int> QuantityCreated { get; set; }
     }
 }

@@ -1,0 +1,4 @@
+C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\ESKA_DI.csproj.AssemblyReference.cache
+C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\Interop.SAPbobsCOM.dll
+C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\ESKA_DI.csproj.ResolveComReference.cache
+C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
