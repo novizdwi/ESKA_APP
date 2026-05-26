@@ -241,6 +241,36 @@ namespace Models.Transaction
         public StockOpname_Approval ApprovalStep__ { get; set; }
     }
 
+    public class StockSummaryOpnameItemBatchView___
+    {
+        public long Id { get; set; }
+
+        public long DetId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public List<StockSummaryOpnameItemBatchModel> StockSummaryOpnameItemBatchModel___ { get; set; }
+    }
+
+    public class StockSummaryOpnameItemBatchModel
+    {
+        public int RowNo { get; set; }
+
+        public long Id { get; set; }
+
+        public long DetId { get; set; }
+
+        public long DetDetId { get; set; }
+
+
+        public string BatchNo { get; set; }
+
+        public DateTime? AdmissionDate { get; set; } 
+
+        public decimal? Quantity { get; set; } 
+    }
     #endregion
 
     #region Services
@@ -1144,6 +1174,28 @@ namespace Models.Transaction
             return model;
         }
 
+        public StockSummaryOpnameItemBatchView___ GetItemTags(long id, long detId)
+        {
+            string sql = null;
+            StockSummaryOpnameItemBatchView___ model = new StockSummaryOpnameItemBatchView___();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT T0.""Id"", T0.""DetId"", T0.""ItemCode"", T0.""ItemName""
+                                FROM ""Tx_StockOpname_Item"" T0   
+                                WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
+
+                model = CONTEXT.Database.SqlQuery<StockSummaryOpnameItemBatchView___>(sql, id, detId).FirstOrDefault();
+
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_StockOpname_Item_Batch"" T0   
+                            WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
+
+                model.StockSummaryOpnameItemBatchModel___ = CONTEXT.Database.SqlQuery<StockSummaryOpnameItemBatchModel>(sql, id, detId).ToList();
+            }
+
+            return model;
+        }
     }
 
 
