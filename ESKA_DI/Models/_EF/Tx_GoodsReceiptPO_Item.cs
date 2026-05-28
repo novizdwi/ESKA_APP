@@ -34,9 +34,5 @@ namespace ESKA_DI.Models._EF
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public Nullable<int> UomEntry { get; set; }
-        public Nullable<decimal> UnitPrice { get; set; }
-        public Nullable<long> BaseEntry { get; set; }
-        public Nullable<int> BaseLine { get; set; }
     }
 }

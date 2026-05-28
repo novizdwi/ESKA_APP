@@ -300,6 +300,8 @@
     <Compile Include="Models\Setting\ReportGroupModel.cs" />
     <Compile Include="Models\Setting\ReportModel.cs" />
     <Compile Include="Models\Setting\Report__List_Model.cs" />
+    <Compile Include="Models\Transaction\GoodsReceiptPoService.cs" />
+    <Compile Include="Models\Transaction\GoodsReceiptPo__List_Model.cs" />
     <Compile Include="Models\Transaction\StockOpnameService.cs" />
     <Compile Include="Models\Transaction\StockOpname__List_Model.cs" />
     <Compile Include="Models\_BaseModel\FormModeEnum.cs">
@@ -315,6 +317,7 @@
     <Compile Include="Models\_Cfl\CflBp_Model.cs" />
     <Compile Include="Models\_Cfl\CflCostCenter.cs" />
     <Compile Include="Models\_Cfl\CflDynamic_Model.cs" />
+    <Compile Include="Models\_Cfl\CflGoodsReceiptPo_Model.cs" />
     <Compile Include="Models\_Cfl\CflItemByWarehouse_Model.cs" />
     <Compile Include="Models\_Cfl\CflTag_Model.cs" />
     <Compile Include="Models\_Cfl\CflItem_Model.cs" />
@@ -529,6 +532,12 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_StockOpname_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_StockOpname_Item_Batch.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_StockOpname_Item_Batch_Scale.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_Sap\SAPCachedCompany.cs" />

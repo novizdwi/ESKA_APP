@@ -12,16 +12,15 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_GoodsReceiptPO_Item_Batch
+    public partial class Tx_StockOpname_Item_Batch_Scale
     {
-        public long DetDetId { get; set; }
+        public Nullable<long> Id { get; set; }
         public Nullable<long> DetId { get; set; }
-        public string Batch { get; set; }
+        public Nullable<long> DetDetId { get; set; }
+        public long DetDetDetId { get; set; }
         public Nullable<int> Quantity { get; set; }
-        public Nullable<System.DateTime> AdmissionDate { get; set; }
+        public string Uom { get; set; }
         public Nullable<decimal> Netto { get; set; }
-        public Nullable<int> LineNum { get; set; }
-        public string LineStatus { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }

@@ -12,26 +12,11 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-<<<<<<<< HEAD:ESKA_DI/Models/_EF/Tx_GoodsReceiptPO.cs
-    public partial class Tx_GoodsReceiptPO
-========
     public partial class Tx_ProcessCard
->>>>>>>> origin/Branch-Firman:ESKA_DI/Models/_EF/Tx_ProcessCard.cs
     {
         public long Id { get; set; }
         public string TransType { get; set; }
         public string TransNo { get; set; }
-<<<<<<<< HEAD:ESKA_DI/Models/_EF/Tx_GoodsReceiptPO.cs
-        public Nullable<System.DateTime> TransDate { get; set; }
-        public string VendorCode { get; set; }
-        public string VendorName { get; set; }
-        public string Address { get; set; }
-        public Nullable<long> DocEntry { get; set; }
-        public string DocNum { get; set; }
-        public Nullable<System.DateTime> DocDate { get; set; }
-        public string RefNo { get; set; }
-        public string Status { get; set; }
-========
         public Nullable<int> DocEntry { get; set; }
         public string DocNum { get; set; }
         public Nullable<System.DateTime> TransDate { get; set; }
@@ -51,10 +36,9 @@ namespace ESKA_DI.Models._EF
         public string ApprovalMessages { get; set; }
         public string Status { get; set; }
         public string IsAfterPosted { get; set; }
->>>>>>>> origin/Branch-Firman:ESKA_DI/Models/_EF/Tx_ProcessCard.cs
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
     }
 }
