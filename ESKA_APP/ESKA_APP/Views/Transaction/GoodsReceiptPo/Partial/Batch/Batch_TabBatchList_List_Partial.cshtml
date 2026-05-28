@@ -1,0 +1,216 @@
+﻿@using Models;
+@using Models.Transaction;
+
+@Html.DevExpress().GridView(settings =>
+{
+    // GRID NAME
+    settings.Name = "GoodsReceiptPO_gvContentBatchList";
+
+
+    settings.CallbackRouteValues = new
+    {
+        Controller = "GoodsReceiptPO",
+        Action = "Batch_CustomCallback"
+    };
+
+    //settings.ClientSideEvents.EndCallback =
+    //"function(s,e){ CalculateTotalCreated(); }";
+
+    //settings.ClientSideEvents.EndCallback =
+    //"OnBatchEndCallback";
+    // PRIMARY KEY
+    settings.KeyFieldName = "RowNo";
+
+    // SIZE
+    settings.Width = Unit.Percentage(100);
+
+    // SCROLL
+    settings.Settings.VerticalScrollBarMode =
+        ScrollBarMode.Auto;
+
+    // FILTER
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+
+    // SORT
+    settings.SettingsBehavior.AllowSort = false;
+
+    // PAGER
+    settings.SettingsPager.Mode =
+        GridViewPagerMode.ShowAllRecords;
+
+    // =========================
+    // EDITING
+    // =========================
+
+    //settings.SettingsEditing.Mode =
+    //    GridViewEditingMode.Inline;
+
+    settings.SettingsEditing.Mode =
+    GridViewEditingMode.Inline;
+
+    settings.SettingsEditing.NewItemRowPosition =
+        GridViewNewItemRowPosition.Bottom;
+
+    // CONTROLLER ROUTE
+    settings.SettingsEditing.AddNewRowRouteValues =
+        new
+        {
+            Controller = "GoodsReceiptPO",
+            Action = "Batch_AddNew"
+        };
+
+    settings.SettingsEditing.UpdateRowRouteValues =
+        new
+        {
+            Controller = "GoodsReceiptPO",
+            Action = "Batch_Update"
+        };
+
+    settings.SettingsEditing.DeleteRowRouteValues =
+    new
+    {
+        Controller = "GoodsReceiptPO",
+        Action = "Batch_Delete"
+    };
+
+    // =========================
+    // COMMAND BUTTON
+    // =========================
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.Width = 150;
+
+    //settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowUpdateButton = true;
+    settings.CommandColumn.ShowCancelButton = true;
+
+    // =========================
+    // HIDDEN COLUMN
+    // =========================
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetId";
+        column.Visible = false;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetDetId";
+        column.Visible = false;
+    });
+
+    // =========================
+    // ROW NUMBER
+    // =========================
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RowNo";
+        column.Caption = "No";
+        column.Width = 50;
+
+        column.ReadOnly = true;
+    });
+
+    // =========================
+    // BATCH
+    // =========================
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Batch";
+        column.Caption = "Batch";
+
+        column.Width = 250;
+
+        column.ColumnType =
+            MVCxGridViewColumnType.TextBox;
+
+        column.Settings.AutoFilterCondition =
+            AutoFilterCondition.Contains;
+
+        column.EditorProperties().TextBox(p =>
+        {
+            p.ClientInstanceName = "txtBatch";
+        });
+    });
+
+    // =========================
+    // QUANTITY
+    // =========================
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Caption = "Quantity";
+
+        column.Width = 120;
+
+        column.ColumnType =
+            MVCxGridViewColumnType.SpinEdit;
+
+        column.Settings.AutoFilterCondition =
+            AutoFilterCondition.Contains;
+
+        column.EditorProperties().SpinEdit(p =>
+        {
+            p.ClientInstanceName = "txtQuantity";
+
+            p.ClientSideEvents.ValueChanged =
+            "function(s,e){ CalculateTotalCreated(); }";
+        });
+
+    });
+
+    // =========================
+    // STATUS
+    // =========================
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Caption = "Status";
+
+        column.Width = 120;
+
+        column.ColumnType =
+            MVCxGridViewColumnType.TextBox;
+
+        column.ReadOnly = true;
+    });
+
+    // =========================
+    // COLOR STATUS
+    // =========================
+
+    settings.HtmlDataCellPrepared = (s, e) =>
+    {
+        if (e.VisibleIndex >= 0)
+        {
+            ASPxGridView gridView =
+                (ASPxGridView)s;
+
+            var status =
+                Convert.ToString(
+                    gridView.GetRowValues(
+                        e.VisibleIndex,
+                        "Status"
+                    )
+                );
+
+            if (status == "Invalid")
+            {
+                e.Cell.BackColor =
+                    System.Drawing.Color.IndianRed;
+
+                e.Cell.ForeColor =
+                    System.Drawing.Color.White;
+            }
+        }
+    };
+
+}).Bind(Model).GetHtml()
