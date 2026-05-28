@@ -14,14 +14,14 @@ using Models._Cfl;
 
 namespace Controllers._Cfl
 {
-    public partial class _CflPurchaseOrderController : BaseController
+    public partial class _CflGoodsReceiptPoController : BaseController
     {
-        string VIEW_LIST_PARTIAL = "Partial/_CflPurchaseOrder_List_Partial";
-        string VIEW_PANEL_LIST_PARTIAL = "Partial/_CflPurchaseOrder_Panel_List_Partial";
+        string VIEW_LIST_PARTIAL = "Partial/_CflGoodsReceiptPo_List_Partial";
+        string VIEW_PANEL_LIST_PARTIAL = "Partial/_CflGoodsReceiptPo_Panel_List_Partial";
 
-        public CflPurchaseOrder_ParamModel GetParam(HttpRequestBase Request)
+        public CflGoodsReceiptPo_ParamModel GetParam(HttpRequestBase Request)
         {
-            var cflParam = new CflPurchaseOrder_ParamModel();
+            var cflParam = new CflGoodsReceiptPo_ParamModel();
             cflParam.Type = Request["hidden_CflType"];
             cflParam.Name = Request["hidden_CflName"];
             cflParam.Header = Request["hidden_CflHeader"];
@@ -48,10 +48,10 @@ namespace Controllers._Cfl
         {
             int userId = (int)Session["userId"];
 
-            var cflPurchaseOrderParam = GetParam(Request);
+            var cflGoodsReceiptPoParam = GetParam(Request);
 
-            var viewModel = GetListModel(cflPurchaseOrderParam.Name);
-            ProcessCustomBinding(userId, cflPurchaseOrderParam, viewModel);
+            var viewModel = GetListModel(cflGoodsReceiptPoParam.Name);
+            ProcessCustomBinding(userId, cflGoodsReceiptPoParam, viewModel);
             return PartialView(VIEW_LIST_PARTIAL, viewModel);
         }
 
@@ -60,11 +60,11 @@ namespace Controllers._Cfl
         {
             int userId = (int)Session["userId"];
 
-            var cflPurchaseOrderParam = GetParam(Request);
+            var cflGoodsReceiptPoParam = GetParam(Request);
 
-            var viewModel = GetListModel(cflPurchaseOrderParam.Name);
+            var viewModel = GetListModel(cflGoodsReceiptPoParam.Name);
             viewModel.ApplyPagingState(pager);
-            ProcessCustomBinding(userId, cflPurchaseOrderParam, viewModel);
+            ProcessCustomBinding(userId, cflGoodsReceiptPoParam, viewModel);
 
             return PartialView(VIEW_LIST_PARTIAL, viewModel);
         }
@@ -74,11 +74,11 @@ namespace Controllers._Cfl
         {
             int userId = (int)Session["userId"];
 
-            var cflPurchaseOrderParam = GetParam(Request);
+            var cflGoodsReceiptPoParam = GetParam(Request);
 
-            var viewModel = GetListModel(cflPurchaseOrderParam.Name);
+            var viewModel = GetListModel(cflGoodsReceiptPoParam.Name);
             viewModel.ApplyFilteringState(filteringState);
-            ProcessCustomBinding(userId, cflPurchaseOrderParam, viewModel);
+            ProcessCustomBinding(userId, cflGoodsReceiptPoParam, viewModel);
             return PartialView(VIEW_LIST_PARTIAL, viewModel);
         }
 
@@ -87,11 +87,11 @@ namespace Controllers._Cfl
         {
             int userId = (int)Session["userId"];
 
-            var cflPurchaseOrderParam = GetParam(Request);
+            var cflGoodsReceiptPoParam = GetParam(Request);
 
-            var viewModel = GetListModel(cflPurchaseOrderParam.Name);
+            var viewModel = GetListModel(cflGoodsReceiptPoParam.Name);
             viewModel.ApplySortingState(column, reset);
-            ProcessCustomBinding(userId, cflPurchaseOrderParam, viewModel);
+            ProcessCustomBinding(userId, cflGoodsReceiptPoParam, viewModel);
 
             return PartialView(VIEW_LIST_PARTIAL, viewModel);
         }
@@ -100,28 +100,29 @@ namespace Controllers._Cfl
 
         static GridViewModel GetListModel(string name)
         {
-            var viewModel = GridViewExtension.GetViewModel("gvCflPurchaseOrderList" + name);
+            var viewModel = GridViewExtension.GetViewModel("gvCflGoodsReceiptPoList" + name);
             if (viewModel == null)
             {
-                viewModel = CflPurchaseOrder_Model.CreateGridViewModel();
+                viewModel = CflGoodsReceiptPo_Model.CreateGridViewModel();
             }
 
             return viewModel;
         }
 
-        static void ProcessCustomBinding(int userId, CflPurchaseOrder_ParamModel cflPurchaseOrderParam, GridViewModel viewModel)
+        static void ProcessCustomBinding(int userId, CflGoodsReceiptPo_ParamModel cflGoodsReceiptPoParam, GridViewModel viewModel)
         {
+            CflGoodsReceiptPo_Model.SetBindingData(viewModel, userId, cflGoodsReceiptPoParam);
 
-            viewModel.ProcessCustomBinding(
-              new GridViewCustomBindingGetDataRowCountHandler(args =>
-              {
-                  CflPurchaseOrder_Model.GetDataRowCount(args, userId, cflPurchaseOrderParam);
-              }),
-              new GridViewCustomBindingGetDataHandler(args =>
-              {
-                  CflPurchaseOrder_Model.GetData(args, userId, cflPurchaseOrderParam);
-              })
-          );
+            //viewModel.ProcessCustomBinding(
+            //  new GridViewCustomBindingGetDataRowCountHandler(args =>
+            //  {
+            //      CflGoodsReceiptPo_Model.GetDataRowCount(args, userId, cflGoodsReceiptPoParam);
+            //  }),
+            //  new GridViewCustomBindingGetDataHandler(args =>
+            //  {
+            //      CflGoodsReceiptPo_Model.GetData(args, userId, cflGoodsReceiptPoParam);
+            //  })
+          //);
 
 
         }
@@ -130,14 +131,14 @@ namespace Controllers._Cfl
         {
             int userId = (int)Session["userId"];
 
-            var cflPurchaseOrderParam = GetParam(Request);
+            var cflGoodsReceiptPoParam = GetParam(Request);
 
-            var viewModel = GetListModel(cflPurchaseOrderParam.Name);
-            ProcessCustomBinding(userId, cflPurchaseOrderParam, viewModel);
+            var viewModel = GetListModel(cflGoodsReceiptPoParam.Name);
+            ProcessCustomBinding(userId, cflGoodsReceiptPoParam, viewModel);
 
             ViewBag.viewModel = viewModel;
 
-            return PartialView(VIEW_PANEL_LIST_PARTIAL, cflPurchaseOrderParam);
+            return PartialView(VIEW_PANEL_LIST_PARTIAL, cflGoodsReceiptPoParam);
         }
 
     }

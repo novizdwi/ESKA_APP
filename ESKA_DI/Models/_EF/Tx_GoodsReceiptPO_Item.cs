@@ -19,12 +19,17 @@ namespace ESKA_DI.Models._EF
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> QuantityCreated { get; set; }
         public string Uom { get; set; }
+        public Nullable<int> UomEntry { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
         public string Whse { get; set; }
         public Nullable<decimal> Netto { get; set; }
         public string Department { get; set; }
         public Nullable<int> LineNum { get; set; }
         public string LineStatus { get; set; }
+        public Nullable<long> BaseEntry { get; set; }
+        public Nullable<int> BaseLine { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }

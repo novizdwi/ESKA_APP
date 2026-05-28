@@ -28,39 +28,70 @@ namespace Models._Cfl
 
     public class CflPurchaseOrder_View__
     {
-        public int? DocEntry { get; set; }
-        public string DocNum { get; set; }
+        //public int? DocEntry { get; set; }
+        //public string DocNum { get; set; }
 
-        public DateTime? TransDate { get; set; }
+        //public DateTime? TransDate { get; set; }
+
+        //public string VendorCode { get; set; }
+        //public string VendorName { get; set; }
+
+        //public string Address { get; set; }
+
+        //public string Comments { get; set; }
 
         public string VendorCode { get; set; }
         public string VendorName { get; set; }
-
-        public string Address { get; set; }
-
-        public string Comments { get; set; }
+        public string RefNo { get; set; }
+        public int DocEntry { get; set; }
+        public int DocNum { get; set; }
+        public string Status { get; set; }
+        public DateTime DocDate { get; set; }
 
     }
 
     public class CflPurchaseOrder_Model
     {
+        //  public static string ssql = @"
+        //      SELECT DISTINCT T0.""DocEntry"", T0.""DocNum"", T0.""TransDate"", T0.""VendorCode"", T0.""VendorName"", T0.""Comments""
+        //      FROM ""Tx_PurchaseOrder"" T0
+        //      WHERE T0.""Status"" = 'Posted'
+        //AND NOT EXISTS(
+        // SELECT 1
+        // FROM ""Tx_GoodsReceiptPO"" Tx
+        // INNER JOIN ""Tx_GoodsReceiptPO_Ref"" Ty ON Tx.""Id"" = Ty.""Id""			
+        // WHERE Ty.""BaseId"" = T0.""Id""
+        //          AND Tx.""Status"" != 'Cancel'
+        //)
+        //  ";
+
         public static string ssql = @"
-            SELECT DISTINCT T0.""DocEntry"", T0.""DocNum"", T0.""TransDate"", T0.""VendorCode"", T0.""VendorName"", T0.""Comments""
-            FROM ""Tx_PurchaseOrder"" T0
-            WHERE T0.""Status"" = 'Posted'
-		    AND NOT EXISTS(
-			    SELECT 1
-			    FROM ""Tx_GoodsReceiptPO"" Tx
-			    INNER JOIN ""Tx_GoodsReceiptPO_Ref"" Ty ON Tx.""Id"" = Ty.""Id""			
-			    WHERE Ty.""BaseId"" = T0.""Id""
-                AND Tx.""Status"" != 'Cancel'
-		    )
-        ";
+                                    SELECT 
+                                        T0.""DocEntry"",
+                                        T0.""DocNum"",
+                                        T0.""CardCode"" AS ""VendorCode"",
+                                        T0.""CardName"" AS ""VendorName"",
+                                        T0.""NumAtCard"" AS ""RefNo"",
+                                        T0.""DocStatus"" AS ""Status"",
+                                        T0.""DocDate""
+                                    FROM ""{DbSap}"".""OPOR"" T0
+                                    LEFT JOIN ""{DbSap}"".""POR1"" T1 
+                                        ON T1.""DocEntry"" = T0.""DocEntry""
+                                    LEFT JOIN ""{DbSap}"".""PDN1"" T2 
+                                        ON T2.""BaseEntry"" = T1.""DocEntry"" 
+                                        AND T2.""BaseType"" = T1.""ObjType"" 
+                                        AND T2.""BaseLine"" = T1.""LineNum""
+                                    LEFT JOIN ""{DbSap}"".""OPDN"" T3 
+                                        ON T3.""DocEntry"" = T2.""DocEntry""
+                                    WHERE T0.""DocStatus"" = 'O'
+                                    ORDER BY T0.""DocEntry"" ASC
+                                ";
 
         public static void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e, int userId, CflPurchaseOrder_ParamModel cflPurchaseOrderParam)
         {
             var Cfl_Sql = CflPurchaseOrder_Model.ssql;
-            
+
+            Cfl_Sql = Cfl_Sql.Replace("{DbSap}", DbProvider.dbSap_Name);
             Cfl_Sql = Cfl_Sql.Replace("{UserId}", userId.ToString());
 
             string sqlCriteria = GetSqlFromGridViewModelState.getHanaCriteria(e.State);
@@ -130,6 +161,7 @@ namespace Models._Cfl
 
             var Cfl_Sql = CflPurchaseOrder_Model.ssql;
 
+            Cfl_Sql = Cfl_Sql.Replace("{DbSap}", DbProvider.dbSap_Name);
             Cfl_Sql = Cfl_Sql.Replace("{UserId}", userId.ToString());
 
             if (sqlCriteria == null)

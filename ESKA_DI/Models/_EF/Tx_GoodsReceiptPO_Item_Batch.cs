@@ -12,6 +12,19 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
+<<<<<<<< HEAD:ESKA_DI/Models/_EF/Tx_GoodsReceiptPO_Item.cs
+    public partial class Tx_GoodsReceiptPO_Item
+    {
+        public long DetId { get; set; }
+        public Nullable<long> Id { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemName { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public string Uom { get; set; }
+        public string Whse { get; set; }
+        public Nullable<decimal> Netto { get; set; }
+        public string Department { get; set; }
+========
     public partial class Tx_GoodsReceiptPO_Item_Batch
     {
         public long DetDetId { get; set; }
@@ -20,6 +33,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> Quantity { get; set; }
         public Nullable<System.DateTime> AdmissionDate { get; set; }
         public Nullable<decimal> Netto { get; set; }
+>>>>>>>> origin/Branch-Firman:ESKA_DI/Models/_EF/Tx_GoodsReceiptPO_Item_Batch.cs
         public Nullable<int> LineNum { get; set; }
         public string LineStatus { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
