@@ -41,13 +41,15 @@
         cpGvFind_CflIsMulti = Request["hidden_CflIsMulti"];
     }
 
+  
+    
 }
 
 @Html.DevExpress().GridView(settings =>
 {
-    settings.Name = "gvCflPurchaseOrderListPurchaseOrder";
-    settings.KeyFieldName = "DocEntry";
-    settings.CallbackRouteValues = new { Controller = "_CflPurchaseOrder", Action = "ListPartial" };
+    settings.Name = "gvCflGoodsReceiptPoList" + cpGvFind_CflName;
+    settings.KeyFieldName = "VendorCode";
+    settings.CallbackRouteValues = new { Controller = "_CflGoodsReceiptPo", Action = "ListPartial" };
 
     if (cpGvFind_CflIsMulti == "N")
     {
@@ -62,10 +64,10 @@
 
                  Html.DevExpress().HyperLink(settingsHL =>
                  {
-                     settingsHL.Name = "CflPurchaseOrderChoose_" + cpGvFind_CflName + DataBinder.Eval(c.DataItem, "DocEntry") + "_" + Guid.NewGuid().ToString();
+                     settingsHL.Name = "gvCflGoodsReceiptPoListChoose_" + cpGvFind_CflName + DataBinder.Eval(c.DataItem, "DocNum") + "_" + Guid.NewGuid().ToString();
                      settingsHL.NavigateUrl = "javascript:void(0)";
                      settingsHL.Properties.Text = "Choose";
-                     settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose_CflPurchaseOrder{1}(s, e, {0}); }}", new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(c.DataItem), cpGvFind_CflName);
+                     settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose_CflGrpo{1}(s, e, {0}); }}", new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(c.DataItem), cpGvFind_CflName);
                  }).GetHtml()
 
 
@@ -92,8 +94,6 @@
         settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
         settings.CommandColumn.Width = 70;
     }
-
-
     settings.Settings.ShowFilterRow = true;
     settings.Settings.ShowFilterRowMenu = true;
 
@@ -106,12 +106,11 @@
     settings.Columns.Add("VendorName", "Vendor Name").Width = 200;
     settings.Columns.Add("RefNo", "Ref No").Width = 90;
 
-
     settings.SettingsPager.Position = PagerPosition.Bottom;
     settings.SettingsPager.FirstPageButton.Visible = true;
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.AlwaysShowPager = true;
-    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    //settings.Width = System.Web.UI.WebControls.Unit.Percentage(70); 
 
 
     if (cpGvFind_PageIndex == 0)
@@ -123,25 +122,26 @@
     settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
 
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
-    //settings.Settings.VerticalScrollableHeight = 400;
+    settings.Settings.VerticalScrollableHeight = 400;
 
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
 
     settings.SettingsBehavior.AllowFocusedRow = true;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Hidden;
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Paging,
-        new { Controller = "_CflPurchaseOrder", Action = "ListPaging" }
+        new { Controller = "_CflGoodsReceiptPo", Action = "ListPaging" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Filtering,
-        new { Controller = "_CflPurchaseOrder", Action = "ListFiltering" }
+        new { Controller = "_CflGoodsReceiptPo", Action = "ListFiltering" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Sorting,
-        new { Controller = "_CflPurchaseOrder", Action = "ListSorting" }
+        new { Controller = "_CflGoodsReceiptPo", Action = "ListSorting" }
     );
 
 
@@ -156,58 +156,18 @@
         e.Properties["cpGvFind_CflHeader"] = cpGvFind_CflHeader;
         e.Properties["cpGvFind_CflSqlWhere"] = cpGvFind_CflSqlWhere;
         e.Properties["cpGvFind_CflIsMulti"] = cpGvFind_CflIsMulti;
-
-        //if (cpGvFind_CflType == "HotelVoucher_Hotel")
-        //{
-        //    string cpGvFind_CflHotelType = "";
-
-        //    if (Request["hidden_CflHotelType"] != null)
-        //    {
-        //        cpGvFind_CflHotelType = Request["hidden_CflHotelType"];
-        //        e.Properties["cpGvFind_CflHotelType"] = cpGvFind_CflHotelType;
-        //    }
-        //}
-
     };
 
     string additionParam = "";
+    additionParam = " e.customArgs['hidden_CflDocId']=Id.GetValue(); ";
 
-    if (cpGvFind_CflType == "PaymentIn")
-    {
-        additionParam = " e.customArgs['hidden_CflCustomerCode'] = CustomerCode.GetValue(); ";
-    }else if (cpGvFind_CflType == "PaymentOut")
-    {
-        additionParam = " e.customArgs['hidden_CflVendorCode'] = VendorCode.GetValue(); ";
-    }
-    else if (cpGvFind_CflType == "InventoryTransfer")
-    {
-        additionParam = " e.customArgs['hidden_bpcode'] = BpCode.GetValue(); ";
-    }
-    else if (cpGvFind_CflType == "Ship")
-    {
-        additionParam = " e.customArgs['hidden_bpcode'] = BpCode.GetValue(); ";
-    }
-    else if (cpGvFind_CflType == "Bill")
-    {
-        additionParam = " e.customArgs['hidden_bpcode'] = BpCode.GetValue(); ";
-    }
-    else if (cpGvFind_CflType == "PurchaseOrder")
-    {
-        additionParam = " e.customArgs['hidden_bpcode'] = BpCode.GetValue(); ";
-    }
-    else if (cpGvFind_CflType == "SalesOrder")
-    {
-        additionParam = " e.customArgs['hidden_bpcode'] = BpCode.GetValue(); ";
-    }
-    //additionParam += " e.customArgs['hidden_IsFindCurrentBranch']=IsFindCflPurchaseOrderCurrentBranch" + cpGvFind_CflName + ".GetValue(); ";
+
 
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ {0}  e.customArgs['hidden_CflType']=s.cpGvFind_CflType; e.customArgs['hidden_CflName']=s.cpGvFind_CflName; e.customArgs['hidden_CflHeader']=s.cpGvFind_CflHeader; e.customArgs['hidden_CflSqlWhere']=s.cpGvFind_CflSqlWhere;e.customArgs['hidden_CflIsMulti']=s.cpGvFind_CflIsMulti; }}", additionParam);
-    settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e) {{ OnSelectionChanged_CflPurchaseOrder{0}(s, e); }}", cpGvFind_CflName);
 
     foreach (GridViewDataColumn column in settings.Columns)
     {
         column.Settings.AllowAutoFilterTextInputTimer = DevExpress.Utils.DefaultBoolean.False;
-
     }
 
 
