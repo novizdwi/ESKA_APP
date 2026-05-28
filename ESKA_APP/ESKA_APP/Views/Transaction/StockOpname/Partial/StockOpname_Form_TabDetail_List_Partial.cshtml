@@ -156,7 +156,7 @@
         column.Caption = "Quantity";
         column.Settings.AllowSort = DefaultBoolean.False;
         column.ReadOnly = ViewBag.ReadOnly;
-        column.Width = 130;
+        column.Width = 100;
 
         column.SetDataItemTemplateContent(c =>
         {
@@ -174,13 +174,13 @@
                     childsettings.Properties.DropDownStyle = DropDownStyle.DropDown;
 
                     childsettings.ShowModelErrors = true;
-                    childsettings.Width = 110;
+                    childsettings.Width = 80;
                     childsettings.ReadOnly = true;
 
                     childsettings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+                    childsettings.Properties.DropDownButton.Visible = false;
 
-                    // Hide the default DropDown button
-                    childsettings.Properties.DropDownButton.Visible = true;
+                    // Hide the default DropDown button 
                     childsettings.ControlStyle.CssClass = "editor";
                     childsettings.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
                     EditButton lookUpButton = new EditButton();
@@ -191,7 +191,7 @@
                     lookUpButton.Image.Height = 16;
                     lookUpButton.Image.Width = 16;
                     childsettings.Properties.Buttons.Add(lookUpButton);
-                    childsettings.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflNettoPopupListOnClick(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "DetId"));
+                    childsettings.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "DetId"));
                 }).GetHtml();
             }
         });

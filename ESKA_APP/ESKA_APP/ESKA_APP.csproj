@@ -704,6 +704,28 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -739,6 +761,13 @@
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
     <Compile Include="Controllers\Notification\_NotificationController.List.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Approval.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.CancelReason.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.List.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
@@ -803,6 +832,7 @@
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Nav.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewBatch.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.cs" />
@@ -858,6 +888,7 @@
     <Folder Include="Rpts\Layout\" />
     <Folder Include="Rpts\Models\" />
     <Folder Include="Views\Authentication\Login\Partial\" />
+    <Folder Include="Views\GeneralSetting\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\_Notification\" />
   </ItemGroup>
