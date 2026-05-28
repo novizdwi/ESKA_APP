@@ -314,10 +314,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Sap.Data.Hana.v4.5, Version=2.17.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
+    <Reference Include="Sap.Data.Hana.v4.5, Version=2.8.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\sap\hdbclient\ado.net\v4.5\Sap.Data.Hana.v4.5.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\Program Files\sap\hdbclientold\ado.net\v4.5\Sap.Data.Hana.v4.5.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -666,48 +665,6 @@
     <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\ChangeItem.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_BtnBottom_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\DeactiveTag.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_BtnBottom_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\ItemMaster.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_TabReference_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\RfidMonitoring.cshtml" />
     <Content Include="Views\Master\Position\Position.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Panel_List_Partial.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Form_TabDetail_List_Partial.cshtml" />
@@ -778,25 +735,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonFileHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.CancelReason.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.List.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.Nav.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Approval.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.CancelReason.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.List.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Nav.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.ViewApproval.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.List.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.Nav.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.cs" />
-    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.Tab.Reference.cs" />
-    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.ViewItemTag.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.List.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
