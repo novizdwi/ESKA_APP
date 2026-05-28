@@ -1,0 +1,121 @@
+﻿@using Models;
+@using Models.Transaction;
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "StockOpname_gvContentBatchList";
+    settings.CallbackRouteValues = new { Controller = "StockOpname", Action = "Batch_CustomCallback" };
+
+    settings.KeyFieldName = "RowNo";
+    settings.Width = Unit.Percentage(100);
+    settings.Settings.VerticalScrollBarMode =ScrollBarMode.Auto;
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+    settings.SettingsBehavior.AllowSort = false;
+    settings.SettingsPager.Mode =GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+    
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "StockOpname", Action = "Batch_AddNew" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "StockOpname", Action = "Batch_Update" };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "StockOpname", Action = "Batch_Delete" };
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.Width = 150;
+    
+    settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowUpdateButton = true;
+    settings.CommandColumn.ShowCancelButton = true;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RowNo";
+        column.Caption = "No";
+        column.Width = 50;
+
+        column.ReadOnly = true;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Batch";
+        column.Caption = "Batch";
+
+        column.Width = 250;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.EditorProperties().TextBox(p =>
+        {
+            p.ClientInstanceName = "txtBatch";
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "AdmissionDate";
+        column.Name = "AdmissionDate";
+        column.Caption = "Admission Date";
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = 100;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Netto";
+        column.Name = "Netto";
+        column.Caption = "Netto";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+}).Bind(Model).GetHtml()

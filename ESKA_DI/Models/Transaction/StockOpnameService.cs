@@ -241,8 +241,10 @@ namespace Models.Transaction
         public StockOpname_Approval ApprovalStep__ { get; set; }
     }
 
-    public class StockSummaryOpnameItemBatchView___
+    public class StockOpnameBatchView___
     {
+        public int? RowNo { get; set; }
+
         public long Id { get; set; }
 
         public long DetId { get; set; }
@@ -251,10 +253,14 @@ namespace Models.Transaction
 
         public string ItemName { get; set; }
 
-        public List<StockSummaryOpnameItemBatchModel> StockSummaryOpnameItemBatchModel___ { get; set; }
+        public string WhsCode { get; set; }
+
+        public string WhsName { get; set; }
+
+        public List<StockOpnameBatchModel> StockOpnameBatchModel___ { get; set; }
     }
 
-    public class StockSummaryOpnameItemBatchModel
+    public class StockOpnameBatchModel
     {
         public int RowNo { get; set; }
 
@@ -264,12 +270,13 @@ namespace Models.Transaction
 
         public long DetDetId { get; set; }
 
-
-        public string BatchNo { get; set; }
+        public string Batch { get; set; }
 
         public DateTime? AdmissionDate { get; set; } 
 
-        public decimal? Quantity { get; set; } 
+        public decimal? Quantity { get; set; }
+
+        public decimal? Netto { get; set; } 
     }
     #endregion
 
@@ -1174,24 +1181,25 @@ namespace Models.Transaction
             return model;
         }
 
-        public StockSummaryOpnameItemBatchView___ GetItemTags(long id, long detId)
+        public StockOpnameBatchView___ GetBatch(long id, long detId)
         {
             string sql = null;
-            StockSummaryOpnameItemBatchView___ model = new StockSummaryOpnameItemBatchView___();
+            StockOpnameBatchView___ model = new StockOpnameBatchView___();
 
             using (var CONTEXT = new HANA_APP())
             {
-                sql = @"SELECT T0.""Id"", T0.""DetId"", T0.""ItemCode"", T0.""ItemName""
-                                FROM ""Tx_StockOpname_Item"" T0   
-                                WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
+                sql = @"SELECT T0.""Id"", T0.""DetId"", T0.""ItemCode"", T0.""ItemName"", T1.""WhsCode"", T1.""WhsName""
+                        FROM ""Tx_StockOpname_Item"" T0   
+                        INNER JOIN ""Tx_StockOpname"" T1 ON T0.""Id"" = T1.""Id""   
+                        WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
 
-                model = CONTEXT.Database.SqlQuery<StockSummaryOpnameItemBatchView___>(sql, id, detId).FirstOrDefault();
+                model = CONTEXT.Database.SqlQuery<StockOpnameBatchView___>(sql, id, detId).FirstOrDefault();
 
                 sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
                             FROM ""Tx_StockOpname_Item_Batch"" T0   
                             WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
 
-                model.StockSummaryOpnameItemBatchModel___ = CONTEXT.Database.SqlQuery<StockSummaryOpnameItemBatchModel>(sql, id, detId).ToList();
+                model.StockOpnameBatchModel___ = CONTEXT.Database.SqlQuery<StockOpnameBatchModel>(sql, id, detId).ToList();
             }
 
             return model;

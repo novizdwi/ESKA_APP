@@ -61,14 +61,15 @@
         <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Item" Width="1.5" PointX="20.75" PointY="14.75" />
         <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch" Width="1.5" PointX="20.75" PointY="19.75" />
         <EntityTypeShape EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch_Scale" Width="1.5" PointX="0.75" PointY="21.75" />
-        <EntityTypeShape EntityType="Model1.Tx_StockOpname" Width="1.5" PointX="4.75" PointY="21.75" />
-        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Approval" Width="1.5" PointX="6.75" PointY="21.75" />
-        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item" Width="1.5" PointX="8.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="10.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProcessCard_Approval" Width="1.5" PointX="15.375" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProcessCard" Width="1.5" PointX="17.375" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProcessCard_Detail" Width="1.5" PointX="23.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname" Width="1.5" PointX="3.375" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Approval" Width="1.5" PointX="5.375" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item" Width="1.5" PointX="7.375" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item_Batch" Width="1.5" PointX="23.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item_Batch_Scale" Width="1.5" PointX="23.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

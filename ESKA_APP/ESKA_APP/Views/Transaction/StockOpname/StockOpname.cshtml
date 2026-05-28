@@ -648,58 +648,6 @@
         }
     }
 
-
-    //pillars to project
-    function onPillarsChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            PillarsName.SetText(name);            // isi TextBox
-        } else {
-            PillarsName.SetText("");
-        }
-    }
-
-    function onClassChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            ClassName.SetText(name);            // isi TextBox
-        } else {
-            ClassName.SetText("");
-        }
-    }
-
-    function onSubClass1Changed(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            SubClass1Name.SetText(name);            // isi TextBox
-        } else {
-            SubClass1Name.SetText("");
-        }
-    }
-
-    function onSubClass2Changed(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            SubClass2Name.SetText(name);            // isi TextBox
-        } else {
-            SubClass2Name.SetText("");
-        }
-    }
-
-    function onProjectChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            ProjectName.SetText(name);            // isi TextBox
-        } else {
-            ProjectName.SetText("");
-        }
-    }
-
     function popupCancelReason_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#CancelReason_formDetail");
 
@@ -801,6 +749,19 @@
             popup.ShowAtPos(400, 100);
         }
     }
+
+    function BtnCflQuantityPopupListOnClick(s, e, detId) {
+        key = Id.GetValue();
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
+
 </script>
 
 
@@ -868,7 +829,7 @@
     }
 
     function gvRefOnBatchEditRowValidating(s, e) {
-    } 
+    }
 
     function QuantityOnValueChanged() {
         var qtyVariance = gvDetail_Quantity.GetValue() - gvDetail_QuantityOnHandSAP_.GetValue();
@@ -1016,7 +977,7 @@ new
         cflItemByWarehousePopupListStockOpname.Hide();
 
         key = Id.GetValue();
-        console.log(SortingItemStockOpname.GetValue()); 
+        console.log(SortingItemStockOpname.GetValue());
 
         $.ajax({
             type: "POST",
@@ -1108,3 +1069,27 @@ new
 
 @Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")
 
+@*-------------------------------------------------
+    ViewBatch
+    -------------------------------------------------*@
+<script>
+
+    function popupBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+    function ViewBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
+
+
+</script>
+
+@Html.Partial("Partial/Batch/Batch_Partial")

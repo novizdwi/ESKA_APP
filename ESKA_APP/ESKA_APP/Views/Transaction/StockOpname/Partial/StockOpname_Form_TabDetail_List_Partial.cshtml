@@ -154,23 +154,47 @@
         column.FieldName = "Quantity";
         column.Name = "Quantity";
         column.Caption = "Quantity";
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+        column.Width = 130;
 
-        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
-        column.Width = 120;
-        column.ReadOnly = false;
-        column.PropertiesEdit.DisplayFormatString = "N2";
+        column.SetDataItemTemplateContent(c =>
+        {
+            //var id = DataBinder.Eval(c.DataItem, "ItemCode");
+            if (c.DataItem != null)
+            {
+                var visibleIndex = c.VisibleIndex;
+                var controlName = "gvGoodsReceiptPoContentDetail_Netto_" + visibleIndex;
+                Html.DevExpress().ComboBox(
+                childsettings =>
+                {
+                    childsettings.Name = controlName;
+                    childsettings.Properties.ClientInstanceName = controlName;
+                    childsettings.Properties.DropDownWidth = 200;
+                    childsettings.Properties.DropDownStyle = DropDownStyle.DropDown;
 
-        var txt = column.PropertiesEdit as SpinEditProperties;
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.ClientInstanceName = "gvDetail_Quantity";
-        txt.ClientSideEvents.ValueChanged = "QuantityOnValueChanged";
+                    childsettings.ShowModelErrors = true;
+                    childsettings.Width = 110;
+                    childsettings.ReadOnly = true;
 
-        ASPxSummaryItem summary = new ASPxSummaryItem();
-        summary.FieldName = column.FieldName;
-        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-        summary.DisplayFormat = "{0:#,###}";
-        settings.TotalSummary.Add(summary);
+                    childsettings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+
+                    // Hide the default DropDown button
+                    childsettings.Properties.DropDownButton.Visible = true;
+                    childsettings.ControlStyle.CssClass = "editor";
+                    childsettings.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+                    EditButton lookUpButton = new EditButton();
+                    lookUpButton.Text = "";
+                    //lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                    //lookUpButton.Image.Width = 15;
+                    lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                    lookUpButton.Image.Height = 16;
+                    lookUpButton.Image.Width = 16;
+                    childsettings.Properties.Buttons.Add(lookUpButton);
+                    childsettings.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflNettoPopupListOnClick(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "DetId"));
+                }).GetHtml();
+            }
+        });
     });
 
     settings.Columns.Add(column =>

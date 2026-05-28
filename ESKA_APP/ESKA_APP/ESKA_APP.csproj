@@ -709,6 +709,10 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -803,6 +807,7 @@
     <Compile Include="Controllers\Setting\Report\ReportController.List.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.List.Export.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewBatch.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />

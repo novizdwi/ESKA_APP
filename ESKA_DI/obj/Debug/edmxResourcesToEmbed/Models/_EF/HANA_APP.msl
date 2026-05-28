@@ -782,6 +782,11 @@
     <EntitySetMapping Name="Tx_GoodsReceiptPO">
       <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO">
         <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO">
+          <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+          <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+          <ScalarProperty Name="BaseDocNum" ColumnName="BaseDocNum" />
+          <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
+          <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -804,19 +809,20 @@
     <EntitySetMapping Name="Tx_GoodsReceiptPO_Item">
       <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item">
         <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item">
+          <ScalarProperty Name="QuantityCreated" ColumnName="QuantityCreated" />
+          <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
+          <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
+          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+          <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
-          <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
           <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
           <ScalarProperty Name="LineNum" ColumnName="LineNum" />
           <ScalarProperty Name="Department" ColumnName="Department" />
           <ScalarProperty Name="Netto" ColumnName="Netto" />
           <ScalarProperty Name="Whse" ColumnName="Whse" />
-          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-          <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
           <ScalarProperty Name="Uom" ColumnName="Uom" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           <ScalarProperty Name="ItemName" ColumnName="ItemName" />
@@ -861,6 +867,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Tp_UserAlert">
+      <EntityTypeMapping TypeName="Model1.Tp_UserAlert">
+        <MappingFragment StoreEntitySet="Tp_UserAlert">
+          <ScalarProperty Name="LastShowTime" ColumnName="LastShowTime" />
+          <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+          <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+          <ScalarProperty Name="NotificationMessage" ColumnName="NotificationMessage" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
+          <ScalarProperty Name="BaseId" ColumnName="BaseId" />
+          <ScalarProperty Name="BaseType" ColumnName="BaseType" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_ProcessCard_Approval">
+      <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Approval">
+        <MappingFragment StoreEntitySet="Tx_ProcessCard_Approval">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Step" ColumnName="Step" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StageId" ColumnName="StageId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tx_ProcessCard">
       <EntityTypeMapping TypeName="Model1.Tx_ProcessCard">
         <MappingFragment StoreEntitySet="Tx_ProcessCard">
@@ -889,24 +929,6 @@
           <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
           <ScalarProperty Name="TransNo" ColumnName="TransNo" />
           <ScalarProperty Name="TransType" ColumnName="TransType" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tx_ProcessCard_Approval">
-      <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Approval">
-        <MappingFragment StoreEntitySet="Tx_ProcessCard_Approval">
-          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Step" ColumnName="Step" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="StageId" ColumnName="StageId" />
-          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1003,18 +1025,37 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Tp_UserAlert">
-      <EntityTypeMapping TypeName="Model1.Tp_UserAlert">
-        <MappingFragment StoreEntitySet="Tp_UserAlert">
-          <ScalarProperty Name="LastShowTime" ColumnName="LastShowTime" />
-          <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-          <ScalarProperty Name="SenderId" ColumnName="SenderId" />
-          <ScalarProperty Name="NotificationMessage" ColumnName="NotificationMessage" />
-          <ScalarProperty Name="Action" ColumnName="Action" />
-          <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
-          <ScalarProperty Name="BaseId" ColumnName="BaseId" />
-          <ScalarProperty Name="BaseType" ColumnName="BaseType" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
+    <EntitySetMapping Name="Tx_StockOpname_Item_Batch">
+      <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item_Batch">
+        <MappingFragment StoreEntitySet="Tx_StockOpname_Item_Batch">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="Netto" ColumnName="Netto" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="AdmissionDate" ColumnName="AdmissionDate" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_StockOpname_Item_Batch_Scale">
+      <EntityTypeMapping TypeName="Model1.Tx_StockOpname_Item_Batch_Scale">
+        <MappingFragment StoreEntitySet="Tx_StockOpname_Item_Batch_Scale">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Netto" ColumnName="Netto" />
+          <ScalarProperty Name="Uom" ColumnName="Uom" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="DetDetDetId" ColumnName="DetDetDetId" />
+          <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+          <ScalarProperty Name="DetId" ColumnName="DetId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

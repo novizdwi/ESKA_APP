@@ -1,7 +1,7 @@
+C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.BonusSkins.v20.1.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\ESKA_DI.dll.config
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\ESKA_DI.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\ESKA_DI.pdb
-C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.BonusSkins.v20.1.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.Charts.v20.1.Core.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.CodeParser.v20.1.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.Dashboard.v20.1.Core.dll
@@ -65,6 +65,7 @@ C:\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.SqlServer.xml
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.pdb
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.xml
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.dll.config
+C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csprojAssemblyReference.cache
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\Interop.SAPbobsCOM.dll
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.ResolveComReference.cache
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
