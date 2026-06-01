@@ -93,7 +93,7 @@ namespace Controllers.Transaction
 
             if (ModelState.IsValid)
             {
-                stockOpnameService.StockOpname_DeleteItemBatch(userId, Id, DetDetId);
+                stockOpnameService.StockOpname_DeleteItemBatch(userId, Id, DetId, DetDetId);
             }
 
             return TabBatchListPartial(id, detId);

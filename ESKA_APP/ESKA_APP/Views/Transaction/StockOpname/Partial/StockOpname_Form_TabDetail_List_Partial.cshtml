@@ -155,45 +155,38 @@
         column.Name = "Quantity";
         column.Caption = "Quantity";
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = ViewBag.ReadOnly;
-        column.Width = 100;
+        column.ReadOnly = true;
+        column.Width = 120;
 
         column.SetDataItemTemplateContent(c =>
         {
-            //var id = DataBinder.Eval(c.DataItem, "ItemCode");
-            if (c.DataItem != null)
+            var visibleIndex = c.VisibleIndex;
+            var detId = DataBinder.Eval(c.DataItem, "DetId");
+            var quantity = DataBinder.Eval(c.DataItem, "Quantity");
+
+            Html.DevExpress().ButtonEdit(s =>
             {
-                var visibleIndex = c.VisibleIndex;
-                var controlName = "gvGoodsReceiptPoContentDetail_Netto_" + visibleIndex;
-                Html.DevExpress().ComboBox(
-                childsettings =>
-                {
-                    childsettings.Name = controlName;
-                    childsettings.Properties.ClientInstanceName = controlName;
-                    childsettings.Properties.DropDownWidth = 200;
-                    childsettings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                s.Name = "gStockOpnameContentDetail_Quantity_" + visibleIndex;
+                s.Properties.ClientInstanceName = "gStockOpnameContentDetail_Quantity_" + visibleIndex;
 
-                    childsettings.ShowModelErrors = true;
-                    childsettings.Width = 80;
-                    childsettings.ReadOnly = true;
+                // tampilkan value
+                s.Text = Convert.ToDecimal(quantity).ToString("N0");
 
-                    childsettings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
-                    childsettings.Properties.DropDownButton.Visible = false;
+                s.ReadOnly = true;
+                s.Width = 100;
 
-                    // Hide the default DropDown button 
-                    childsettings.ControlStyle.CssClass = "editor";
-                    childsettings.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
-                    EditButton lookUpButton = new EditButton();
-                    lookUpButton.Text = "";
-                    //lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
-                    //lookUpButton.Image.Width = 15;
-                    lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
-                    lookUpButton.Image.Height = 16;
-                    lookUpButton.Image.Width = 16;
-                    childsettings.Properties.Buttons.Add(lookUpButton);
-                    childsettings.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "DetId"));
-                }).GetHtml();
-            }
+                s.Properties.Buttons.Clear();
+
+                EditButton btn = new EditButton();
+                btn.Text = "";
+                btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                btn.Image.Width = 15;
+
+                s.Properties.Buttons.Add(btn);
+
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", detId);
+
+            }).Render();
         });
     });
 

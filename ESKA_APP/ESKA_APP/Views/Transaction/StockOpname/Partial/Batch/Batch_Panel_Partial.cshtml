@@ -25,7 +25,7 @@
     settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
     settings.ClientSideEvents.EndCallback = "popupBatch_EndCallback"; //popupItemTag_EndCallback
     settings.PopupElementID = "ShowButton";
-    settings.HeaderText = "Item Tag List";
+    settings.HeaderText = "Item Batch List";
 
     settings.SetContent(() =>
     {
@@ -36,7 +36,7 @@
     settings.PreRender = (sender, e) =>
     {
         ASPxPopupControl popup = (ASPxPopupControl)sender; 
-        popup.Width = 300;
+        popup.Width = 620;
         popup.Height = 200;
     };
 

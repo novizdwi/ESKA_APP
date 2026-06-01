@@ -1260,6 +1260,7 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = tx_StockOpname_Item_Batch.Id.ToString();
 
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItemQuantity\"(:p0,:p1)", model._UserId, model.DetId);
                         SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
@@ -1312,6 +1313,7 @@ namespace Models.Transaction
                             tx_StockOpname_Item_Batch.ModifiedUser = model._UserId;
 
                             CONTEXT.SaveChanges();
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItemQuantity\"(:p0,:p1)", model._UserId, model.DetId);
                             SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "updateItemBatch", "Id", keyValue);
 
                         }
@@ -1339,7 +1341,7 @@ namespace Models.Transaction
             }
         }
 
-        public void StockOpname_DeleteItemBatch(int _userId, long Id, long DetDetId)
+        public void StockOpname_DeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -1354,6 +1356,9 @@ namespace Models.Transaction
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_StockOpname_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_StockOpname_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.SaveChanges();
+
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItemQuantity\"(:p0,:p1)", _userId, DetId);
+
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)

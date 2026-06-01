@@ -1134,6 +1134,8 @@ new
     function ViewBatch_OnClickBtnCancel(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupBatch");
         popup.Hide();
+
+        gvDetail.PerformCallback();
     }
 
     function ViewBatch_OnClickBtnSaveChange(s, e) {
