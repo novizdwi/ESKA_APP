@@ -258,20 +258,33 @@ namespace Models.Transaction
         public string WhsName { get; set; }
 
         public List<StockOpnameBatchModel> StockOpnameBatchModel___ { get; set; }
+
+        public StockOpname_DetailBatch DetailBatchs_ { get; set; }
+    }
+
+    public class StockOpname_DetailBatch
+    {
+        public List<long> deletedRowKeys { get; set; }
+        public List<StockOpnameBatchModel> insertedRowValues { get; set; }
+        public List<StockOpnameBatchModel> modifiedRowValues { get; set; }
     }
 
     public class StockOpnameBatchModel
     {
-        public int RowNo { get; set; }
+        public int _UserId { get; set; }
 
-        public long Id { get; set; }
+        public int? RowNo { get; set; }
 
-        public long DetId { get; set; }
+        public long? Id { get; set; }
 
-        public long DetDetId { get; set; }
+        public long? DetId { get; set; }
 
+        public long? DetDetId { get; set; }
+
+        [Required(ErrorMessage = "required")]
         public string Batch { get; set; }
 
+        [Required(ErrorMessage = "required")]
         public DateTime? AdmissionDate { get; set; } 
 
         public decimal? Quantity { get; set; }
@@ -315,7 +328,7 @@ namespace Models.Transaction
                 ";
 
                 model = CONTEXT.Database.SqlQuery<StockOpnameModel>(ssql, id).Single();
-                
+
                 model.ListDetail_ = this.StockOpname_Details(CONTEXT, id);
 
                 if (model.Status == "Draft")
@@ -521,7 +534,7 @@ namespace Models.Transaction
                             CopyProperty.CopyProperties(model, tx_StockOpname, false);
 
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                            
+
                             tx_StockOpname.TransType = "StockOpname";
                             tx_StockOpname.CreatedDate = dtModified;
                             tx_StockOpname.CreatedUser = model._UserId;
@@ -538,7 +551,7 @@ namespace Models.Transaction
 
                             String keyValue;
                             keyValue = tx_StockOpname.Id.ToString();
-                            
+
                             SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "add", "Id", keyValue);
 
                             CONTEXT_TRANS.Commit();
@@ -568,7 +581,7 @@ namespace Models.Transaction
 
         }
 
-        public void Update(StockOpnameModel model, string method ="")
+        public void Update(StockOpnameModel model, string method = "")
         {
             if (model != null)
             {
@@ -582,13 +595,12 @@ namespace Models.Transaction
                             {
                                 String keyValue;
                                 keyValue = model.Id.ToString();
-                                
-                                SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "before", "StockOpname", "update", "Id", keyValue);
 
+                                SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "before", "StockOpname", "update", "Id", keyValue);
 
                                 Tx_StockOpname tx_StockOpname = CONTEXT.Tx_StockOpname.Find(model.Id);
                                 DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                             
+
                                 if (tx_StockOpname != null)
                                 {
                                     var exceptColumns = new string[] { "Id", "TransNo", "CreatedUser" };
@@ -631,11 +643,11 @@ namespace Models.Transaction
                                             }
                                         }
                                     }
-                                    
+
                                     CONTEXT.SaveChanges();
 
                                     SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "update", "Id", keyValue);
-                                    
+
                                 }
 
                                 CONTEXT_TRANS.Commit();
@@ -873,7 +885,7 @@ namespace Models.Transaction
                                 oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                             }
 
-                            CONTEXT_TRANS.Commit();            
+                            CONTEXT_TRANS.Commit();
                         }
 
                     }
@@ -1001,7 +1013,7 @@ namespace Models.Transaction
 
                         SpNotif.SpSysControllerTransNotif(userId, "StockOpname", CONTEXT, "after", "Tx_StockOpname", "cancel", "Id", keyValue);
 
-                        
+
                         CONTEXT_TRANS.Commit();
                     }
 
@@ -1181,7 +1193,7 @@ namespace Models.Transaction
             return model;
         }
 
-        public StockOpnameBatchView___ GetBatch(long id, long detId)
+        public StockOpnameBatchView___ GetStockOpname_Batch(long id, long detId)
         {
             string sql = null;
             StockOpnameBatchView___ model = new StockOpnameBatchView___();
@@ -1204,6 +1216,168 @@ namespace Models.Transaction
 
             return model;
         }
+
+        public List<StockOpnameBatchModel> GetStockOpname_ItemBatchList(long id, long detId)
+        {
+            string sql = null;
+            List<StockOpnameBatchModel> model = new List<StockOpnameBatchModel>();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_StockOpname_Item_Batch"" T0   
+                            WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
+
+                model = CONTEXT.Database.SqlQuery<StockOpnameBatchModel>(sql, id, detId).ToList();
+            }
+            return model;
+        }
+
+
+        public long StockOpname_AddNewItemBatch(StockOpnameBatchModel model)
+        {
+            long detDetId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_StockOpname_Item_Batch tx_StockOpname_Item_Batch = new Tx_StockOpname_Item_Batch();
+                        CopyProperty.CopyProperties(model, tx_StockOpname_Item_Batch, false);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        tx_StockOpname_Item_Batch.CreatedDate = dtModified;
+                        tx_StockOpname_Item_Batch.CreatedUser = model._UserId;
+                        tx_StockOpname_Item_Batch.ModifiedDate = dtModified;
+                        tx_StockOpname_Item_Batch.ModifiedUser = model._UserId;
+
+                        CONTEXT.Tx_StockOpname_Item_Batch.Add(tx_StockOpname_Item_Batch);
+                        CONTEXT.SaveChanges();
+                        detDetId = tx_StockOpname_Item_Batch.DetDetId;
+
+                        String keyValue;
+                        keyValue = tx_StockOpname_Item_Batch.Id.ToString();
+
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "addItemBatch", "Id", keyValue);
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+
+                }
+            }
+
+            return detDetId;
+        }
+
+        public void StockOpname_UpdateItemBatch(StockOpnameBatchModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction()) {
+                    try
+                    {
+                        String keyValue;
+                        keyValue = model.Id.ToString();
+
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "before", "StockOpname", "updateItemBatch", "Id", keyValue);
+
+                        Tx_StockOpname_Item_Batch tx_StockOpname_Item_Batch = CONTEXT.Tx_StockOpname_Item_Batch.Find(model.DetDetId);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (tx_StockOpname_Item_Batch != null)
+                        {
+                            var exceptColumns = new string[] { "Id", "DetId", "DetDetId", "CreatedUser", "CreatedDate"};
+                            CopyProperty.CopyProperties(model, tx_StockOpname_Item_Batch, false, exceptColumns);
+
+                            tx_StockOpname_Item_Batch.ModifiedDate = dtModified;
+                            tx_StockOpname_Item_Batch.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+                            SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "updateItemBatch", "Id", keyValue);
+
+                        }
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
+        }
+
+        public void StockOpname_DeleteItemBatch(int _userId, long Id, long DetDetId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetId != 0)
+                    {
+                        try
+                        {
+                            SpNotif.SpSysControllerTransNotif(_userId, "StockOpname", CONTEXT, "before", "StockOpname", "deleteItemBatch", "Id", Id.ToString());
+
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_StockOpname_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_StockOpname_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.SaveChanges();
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+
+                }
+            }
+        }
+
     }
 
 

@@ -63,7 +63,7 @@
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 3;
+        itemSettings.ColCount = 2;
     });
 
     var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
@@ -160,22 +160,46 @@
 
             item.SetNestedContent(() =>
             {
+                //Html.DevExpress().HyperLink(hyperlink =>
+                //{
+                //    hyperlink.Name = "hlAddBatchRow";
+                //    hyperlink.Properties.Text = "+ Add Row";
+                //    hyperlink.NavigateUrl = "javascript:void(0)";
+                //    hyperlink.Properties.ClientSideEvents.Click = string.Format("function(s,e){{ btnAddBatchOnClick({0}, {1}); }}", Model.Id, Model.DetId);
+                //}).Render();
+
                 ViewContext.Writer.Write(
-                    Html.Partial(
-                        "Partial/Batch/Batch_TabBatchList_List_Partial",
-                        Model.StockOpnameBatchModel___
-                    )
+                    Html.Partial( "Partial/Batch/Batch_TabBatchList_List_Partial", Model.StockOpnameBatchModel___ )
                 );
             });
         });
     });
 
+    /*
     groupItem_3.Items.Add(itemSettings =>
     {
-        itemSettings.ColSpan = 3;
+        itemSettings.ColSpan = 1;
         itemSettings.ShowCaption = DefaultBoolean.False;
 
         itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+
+        btnSettings.Name = "btnSaveChangeViewBatch";
+        btnSettings.Text = "Save Change";
+        btnSettings.Width = 120;
+
+        btnSettings.ClientSideEvents.Click = "ViewBatch_OnClickBtnSaveChange";
+        btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
+    });
+    */
+
+    groupItem_3.Items.Add(itemSettings =>
+    {
+        itemSettings.ColSpan = 1;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+
+        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
         var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
 

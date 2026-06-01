@@ -1073,10 +1073,57 @@ new
     ViewBatch
     -------------------------------------------------*@
 <script>
+    function gvContentBatchListOnCustomButtonClick(s, e, Id, DetId) {
+
+        //if (e.buttonID == "deleteButton") {
+        //    //console.log(s);
+        //    //console.log(s.batchEditApi);
+        //    //console.log(s.batchEditHelper);
+        //    var detDetId = s.batchEditApi.GetCellValue(e.visibleIndex, "DetDetId");
+        //    console.log(detDetId);
+        //    if (detDetId == null || detDetId == "" || detDetId == 0) { 
+        //        s.DeleteRow(e.visibleIndex);
+        //        return;
+        //    }
+        //    else {
+        //        // soft delete atau callback ke server
+        //    }
+
+        //    //s.batchEditApi.StartEdit(e.visibleIndex);
+        //    //var rowValues = s.batchEditHelper.GetRowValues(e.visibleIndex); 
+        //    //s.DeleteRow(e.visibleIndex);
+        //    //s.GetBatchEditHelper().CanUpdate();
+        //}
+    }
+
+    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+
+    }
+
+    function gvContentBatchListOnEndCallback(s, e, Id, DetId) {
+        if (s.IsNewRowEditing && s.IsNewRowEditing()) {
+            s.FocusEditor("Batch");
+        }
+    }
+
+    function gvContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
+    }
+
+    function gvContentBatchListOnBatchEditEndEditing(s, e, Id, DetId) {
+
+    } 
+
+    function gvContentBatchListOnBatchEditRowValidating(s, e, Id, DetId) {
+
+    }
+
+    function btnAddBatchOnClick(s, e, id, detId) {
+        console.log(id);
+        console.log(detId);
+    }
 
     function popupBatch_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Batch_formDetail");
-
         var popup = ASPxClientPopupControl.Cast("popupBatch");
         if (!popup.IsVisible()) {
             loadingPanel.Hide();
@@ -1089,7 +1136,10 @@ new
         popup.Hide();
     }
 
-
+    function ViewBatch_OnClickBtnSaveChange(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
 </script>
 
 @Html.Partial("Partial/Batch/Batch_Partial")
