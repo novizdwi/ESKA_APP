@@ -632,7 +632,7 @@ namespace Models.Transaction
 
                                     if (method == "Post")
                                     {
-                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItem\"(:p0,:p1)", model._UserId, model.Id);
+                                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItem\"(:p0,:p1)", model._UserId, model.Id);
                                     }
 
                                     if (model.Details_ != null)
@@ -1290,7 +1290,7 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = tx_StockOpname_Item_Batch.Id.ToString();
 
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
                         SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
@@ -1343,7 +1343,7 @@ namespace Models.Transaction
                             tx_StockOpname_Item_Batch.ModifiedUser = model._UserId;
 
                             CONTEXT.SaveChanges();
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
                             SpNotif.SpSysControllerTransNotif(model._UserId, "StockOpname", CONTEXT, "after", "StockOpname", "updateItemBatch", "Id", keyValue);
 
                         }
@@ -1387,7 +1387,7 @@ namespace Models.Transaction
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_StockOpname_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.SaveChanges();
 
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"StockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", _userId, DetId, 0);
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)

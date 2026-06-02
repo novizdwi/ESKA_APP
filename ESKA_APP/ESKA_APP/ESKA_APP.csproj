@@ -835,6 +835,8 @@
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewBatch.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCoa\_CflCoaController.List.cs" />
