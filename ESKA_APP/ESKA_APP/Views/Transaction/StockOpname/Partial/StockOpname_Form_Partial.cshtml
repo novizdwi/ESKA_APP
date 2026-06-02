@@ -220,17 +220,17 @@
     });
      
 
-    if (!string.IsNullOrEmpty(Model.DocNum_))
+    if (!string.IsNullOrEmpty(Model.DocNum))
     {
         groupItem_Col2.Items.Add(itemSettings =>
         {
             itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
             itemSettings.Caption = "Inventory No";
-            itemSettings.FieldName = "DocNum_";
+            itemSettings.FieldName = "DocNum";
 
             var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
             txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-            txt.Name = "DocNum_";
+            txt.Name = "DocNum";
             txt.ShowModelErrors = true;
             txt.ReadOnly = true;
             txt.ControlStyle.CssClass = "editornoimage";
@@ -500,7 +500,7 @@
                     );
                 }
                 ViewContext.Writer.Write(
-                    Html.Partial("Partial/StockOpname_Form_TabDetail_List_Partial", Model.ListDetails_)
+                    Html.Partial("Partial/StockOpname_Form_TabDetail_List_Partial", Model.ListDetail_)
                 );
 
             });

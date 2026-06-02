@@ -1,0 +1,2 @@
+C:\Project\ESKA_APP\ESKA_DI\bin\x64\Debug\DevExpress.Pdf.v20.1.Core.dll
+C:\Project\ESKA_APP\ESKA_DI\bin\x64\Debug\DevExpress.Utils.v20.1.dll

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
 using Models.Transaction;
+using Newtonsoft.Json;
 
 namespace Controllers.Transaction
 {
@@ -258,6 +259,29 @@ namespace Controllers.Transaction
 
             return PartialView(VIEW_FORM_PARTIAL, stockOpnameModel);
         }
-        
+
+        [HttpPost]
+        public ActionResult BatchSaveAndAddRow(string rows, long Id, long detId)
+        {
+            List<StockOpnameBatchModel> batchList = new List<StockOpnameBatchModel>();
+            if (!string.IsNullOrEmpty(rows))
+            {
+                batchList = JsonConvert.DeserializeObject<List<StockOpnameBatchModel>>(rows);
+            }
+            
+            batchList.Add(new StockOpnameBatchModel()
+            {
+                Id = Id,
+                DetId = detId, 
+                Batch = "",
+                Quantity = 0,
+                AdmissionDate = null,
+                Netto = 0,
+            }); 
+
+            Session["BatchList"] = batchList;
+            return Json(new{Result = true, TotalRow = batchList.Count});
+        }
+
     }
 }
