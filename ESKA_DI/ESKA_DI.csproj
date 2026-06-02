@@ -313,8 +313,8 @@
     <Compile Include="Models\_BaseModel\ITransactionService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\_Cfl\CflCardCode_Model.cs" />
     <Compile Include="Models\_Cfl\CflBp_Model.cs" />
+    <Compile Include="Models\_Cfl\CflCardCode_Model.cs" />
     <Compile Include="Models\_Cfl\CflCostCenter.cs" />
     <Compile Include="Models\_Cfl\CflDynamic_Model.cs" />
     <Compile Include="Models\_Cfl\CflGoodsReceiptPo_Model.cs" />

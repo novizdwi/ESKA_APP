@@ -154,23 +154,40 @@
         column.FieldName = "Quantity";
         column.Name = "Quantity";
         column.Caption = "Quantity";
-
-        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
         column.Width = 120;
-        column.ReadOnly = false;
-        column.PropertiesEdit.DisplayFormatString = "N2";
 
-        var txt = column.PropertiesEdit as SpinEditProperties;
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.ClientInstanceName = "gvDetail_Quantity";
-        txt.ClientSideEvents.ValueChanged = "QuantityOnValueChanged";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var visibleIndex = c.VisibleIndex;
+            var detId = DataBinder.Eval(c.DataItem, "DetId");
+            var quantity = DataBinder.Eval(c.DataItem, "Quantity");
 
-        ASPxSummaryItem summary = new ASPxSummaryItem();
-        summary.FieldName = column.FieldName;
-        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-        summary.DisplayFormat = "{0:#,###}";
-        settings.TotalSummary.Add(summary);
+            Html.DevExpress().ButtonEdit(s =>
+            {
+                s.Name = "gStockOpnameContentDetail_Quantity_" + visibleIndex;
+                s.Properties.ClientInstanceName = "gStockOpnameContentDetail_Quantity_" + visibleIndex;
+
+                // tampilkan value
+                s.Text = Convert.ToDecimal(quantity).ToString("N0");
+
+                s.ReadOnly = true;
+                s.Width = 100;
+
+                s.Properties.Buttons.Clear();
+
+                EditButton btn = new EditButton();
+                btn.Text = "";
+                btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                btn.Image.Width = 15;
+
+                s.Properties.Buttons.Add(btn);
+
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", detId);
+
+            }).Render();
+        });
     });
 
     settings.Columns.Add(column =>

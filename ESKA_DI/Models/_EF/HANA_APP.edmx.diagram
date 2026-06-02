@@ -69,7 +69,13 @@
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item" Width="1.5" PointX="14.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item_Batch" Width="1.5" PointX="16.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item_Batch_Scale" Width="1.5" PointX="18.75" PointY="21.75" />
-        <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="20.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.sap_hana_xs_formLogin_profile_db__USER_PREFERENCES" Width="1.5" PointX="20.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.sap_hana_xs_selfService_admin_db__ACCESS_LISTS" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model1.sap_hana_xs_selfService_admin_db__USS_EMAIL_TEMPLATES" Width="1.5" PointX="22.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Model1.sap_hana_xs_selfService_user_db__SECURITY_QUESTIONS" Width="1.5" PointX="22.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model1.sap_hana_xs_selfService_user_db__USER_REQUESTS" Width="1.5" PointX="22.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="22.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Model1.sap_hana_xs_i18n__PLACEHOLDER_VALUES" Width="1.5" PointX="22.75" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
