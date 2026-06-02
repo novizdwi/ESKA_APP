@@ -44,7 +44,6 @@ C:\Project\ESKA_APP\ESKA_DI\bin\x64\Debug\Sap.Data.Hana.v4.5.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\x64\Debug\DevExpress.Utils.v20.1.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\x64\Debug\EntityFramework.xml
 C:\Project\ESKA_APP\ESKA_DI\bin\x64\Debug\EntityFramework.SqlServer.xml
-C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\ESKA_DI.csproj.AssemblyReference.cache
 C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\Interop.SAPbobsCOM.dll
 C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\ESKA_DI.csproj.ResolveComReference.cache
 C:\Project\ESKA_APP\ESKA_DI\obj\x64\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
