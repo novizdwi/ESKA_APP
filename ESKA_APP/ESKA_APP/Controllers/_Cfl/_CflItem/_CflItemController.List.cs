@@ -27,11 +27,11 @@ namespace Controllers._Cfl
             cflParam.Header = Request["hidden_CflHeader"];
             cflParam.SqlWhere = Request["hidden_CflSqlWhere"];
 
-            if (cflParam.Type == "OriginItem" || cflParam.Type == "ToItem")
+            if (cflParam.Type == "ProcessCard")
             {
                 var hidden_CflDocId = (string)Request["hidden_CflDocId"];
                 hidden_CflDocId = hidden_CflDocId.Replace("'", "''");
-                cflParam.SqlWhere = string.Format(@" AND  COALESCE(T0.""U_IDU_IsItemFG"", 'N') = 'Y' ");
+                cflParam.SqlWhere = string.Format(@" AND T0.""U_IDU_ProcessCard"" = 'Yes' ");
             }
 
             cflParam.IsMulti = Request["hidden_CflIsMulti"];

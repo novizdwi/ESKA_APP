@@ -26,16 +26,7 @@ namespace Controllers._Cfl
             cflParam.Name = Request["hidden_CflName"];
             cflParam.Header = Request["hidden_CflHeader"];
             cflParam.SqlWhere = Request["hidden_CflSqlWhere"];
-
-            if (cflParam.Type == "Vehicle")
-            {
-                var hidden_CflDestination = (string)Request["hidden_CflDestination"];
-                hidden_CflDestination = hidden_CflDestination.Replace("'", "''");
-
-                cflParam.SqlWhere = string.Format(" AND T0.\"County\" = '{0}' ", hidden_CflDestination);
-            }
-
-
+            
             cflParam.IsMulti = Request["hidden_CflIsMulti"];
 
             return cflParam;

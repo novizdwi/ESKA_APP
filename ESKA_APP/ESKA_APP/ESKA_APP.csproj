@@ -314,6 +314,11 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.8.0\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="Sap.Data.Hana.v4.5, Version=2.17.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files\sap\hdbclient\ado.net\v4.5\Sap.Data.Hana.v4.5.dll</HintPath>
@@ -368,6 +373,7 @@
     <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Article.html" />
@@ -666,48 +672,6 @@
     <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\ChangeItem.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_BtnBottom_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ChangeItem\Partial\ChangeItem_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\DeactiveTag.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\Approval\Approval_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_BtnBottom_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\DeactiveTag_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
-    <Content Include="Views\Master\Item\DeactiveTag\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\ItemMaster.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\ItemMaster\Partial\ItemMaster_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Panel_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\ItemTag\ItemTag_TabItemTagList_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\Partial\RfidMonitoring_Form_TabReference_List_Partial.cshtml" />
-    <Content Include="Views\Master\Item\RfidMonitoring\RfidMonitoring.cshtml" />
     <Content Include="Views\Master\Position\Position.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Panel_List_Partial.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Form_TabDetail_List_Partial.cshtml" />
@@ -734,19 +698,37 @@
     <Content Include="Views\Transaction\StockOpname\StockOpname.cshtml" />
     <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_BtnBottom_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPoStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ProcessCard_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\_Cfl\_CflCardCode\Partial\_CflCardCode_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflCardCode\Partial\_CflCardCode_Panel_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\GoodsReceiptPo.cshtml" />
-    <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_List_Partial.cshtml" />
-    <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_Panel_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPoStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -778,29 +760,22 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonFileHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.CancelReason.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.List.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.Nav.cs" />
-    <Compile Include="Controllers\Master\Item\ChangeItem\ChangeItemController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Approval.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.CancelReason.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.List.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Nav.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Master\Item\DeactiveTag\DeactiveTagController.ViewApproval.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.List.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.Nav.cs" />
-    <Compile Include="Controllers\Master\Item\ItemMaster\ItemMasterController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.cs" />
-    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.Tab.Reference.cs" />
-    <Compile Include="Controllers\Master\Item\RfidMonitoring\RfidMonitoringController.ViewItemTag.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.List.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
     <Compile Include="Controllers\Notification\_NotificationController.List.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.List.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPOController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.List.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewApproval.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
@@ -853,18 +828,15 @@
     <Compile Include="Controllers\Setting\Report\ReportController.List.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.List.Export.cs" />
     <Compile Include="Controllers\Setting\Report\ReportController.Nav.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.List.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Nav.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPOController.ViewBatch.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.List.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Nav.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewApproval.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Approval.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.CancelReason.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.List.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCostCenter\_CflCostCenterController.List.cs" />
@@ -873,10 +845,10 @@
     <Compile Include="Controllers\_Cfl\_CflCoa\_CflCoaController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflDynamic\_CflDynamicController.List.Export.cs" />
-    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.cs" />
-    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflGoodsReceiptPo\_CflGoodsReceiptPoController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflGoodsReceiptPo\_CflGoodsReceiptPoController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflItem\_CflItemController.List.cs" />
@@ -920,6 +892,7 @@
     <Folder Include="Rpts\Layout\" />
     <Folder Include="Rpts\Models\" />
     <Folder Include="Views\Authentication\Login\Partial\" />
+    <Folder Include="Views\GeneralSetting\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\_Notification\" />
   </ItemGroup>

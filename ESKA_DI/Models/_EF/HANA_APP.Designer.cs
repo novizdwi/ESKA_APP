@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Project\ESKA\Development\UAT\ESKA\ESKA_DI\Models\_EF\HANA_APP.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\LegionShared\Project\ESKA_APP\ESKA_DI\Models\_EF\HANA_APP.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -221,6 +221,59 @@ namespace Models._Utils
             }
         }
 
+        public static DataTable GetAllOperators()
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return GetAllOperators(CONTEXT);
+            }
+        }
+
+        public static DataTable GetAllOperators(HANA_APP CONTEXT)
+        {
+            var ssql = @"SELECT T0.""Id"" ""Code"", T0.""FirstName"" AS ""Name"" 
+                         FROM ""Tm_User"" T0   ";
+            return GetDataTable(CONTEXT, ssql);
+
+        }
+        
+        public static List<GetCodeNameModel> GetUserRoutingList(string routingCode)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return GetUserRoutingList(CONTEXT, routingCode);
+            }
+        }
+
+        public static List<GetCodeNameModel> GetUserRoutingList(HANA_APP CONTEXT, string routingCode)
+        {
+            var ssql = @"SELECT T0.""Id"" ""Code"", T1.""FirstName"" AS ""Name""
+                         FROM ""Tm_User_Routing"" T0 
+                         INNER JOIN ""Tm_User"" T1 ON T0.""Id"" = T1.""Id""
+                         WHERE T0.""RoutingCode""=:p0 AND IFNULL(T0.""IsTick"",'') = 'Y' ORDER BY T1.""FirstName"" ASC ";
+            List<GetCodeNameModel> ret = CONTEXT.Database.SqlQuery<GetCodeNameModel>(ssql, routingCode).ToList<GetCodeNameModel>();
+            return ret;
+
+        }
+
+        public static DataTable GetUserRouting(string routingCode)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return GetUserRouting(CONTEXT, routingCode);
+            }
+        }
+
+        public static DataTable GetUserRouting(HANA_APP CONTEXT, string routingCode)
+        {
+            var ssql = @"SELECT T0.""Id"" ""Id"", T1.""FirstName"" AS ""Name""
+                         FROM ""Tm_User_Routing"" T0 
+                         INNER JOIN ""Tm_User"" T1 ON T0.""Id"" = T1.""Id""
+                         WHERE T0.""RoutingCode""=:p0 AND IFNULL(T0.""IsTick"",'') = 'Y' ORDER BY T1.""FirstName"" ASC ";
+            return GetDataTable(CONTEXT, ssql, routingCode); 
+
+        }
+
         public static string GetApprovalActive(string objectCode)
         {
             using (var CONTEXT = new HANA_APP())

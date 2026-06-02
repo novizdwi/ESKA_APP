@@ -37,10 +37,6 @@ namespace Models.Transaction
 
         public string WhsName { get; set; }
 
-        public string TransitWhsCode { get; set; }
-
-        public string TransitWhsName { get; set; }
-
         public string ToWhsCode { get; set; }
 
         public string ToWhsName { get; set; }

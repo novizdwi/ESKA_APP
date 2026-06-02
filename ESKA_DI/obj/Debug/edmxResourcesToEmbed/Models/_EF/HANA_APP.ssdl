@@ -778,11 +778,15 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
     <Property Name="Quantity" Type="int" />
     <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="UomEntry" Type="int" />
+    <Property Name="UnitPrice" Type="decimal" Precision="21" Scale="2" />
     <Property Name="Whse" Type="nvarchar" MaxLength="50" />
     <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
     <Property Name="Department" Type="nvarchar" MaxLength="50" />
     <Property Name="LineNum" Type="int" />
     <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseLine" Type="int" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
@@ -841,9 +845,52 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
     <Property Name="Quantity" Type="decimal" Precision="21" Scale="2" />
     <Property Name="Comments" Type="nvarchar" MaxLength="254" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="254" />
+    <Property Name="IsApproval" Type="varchar" MaxLength="1" />
     <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_ProcessCard_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_ProcessCard_Detail">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="bigint" />
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
+    <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
+    <Property Name="OperatorId" Type="int" />
+    <Property Name="ProcessingDate" Type="timestamp" />
+    <Property Name="EndDate" Type="timestamp" />
+    <Property Name="MachineId" Type="int" />
+    <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
+    <Property Name="PracticeHours" Type="time" Precision="7" />
+    <Property Name="ActualHours" Type="time" Precision="7" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="20" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
@@ -972,6 +1019,8 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_ProcessCard" EntityType="Self.Tx_ProcessCard" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Self.Tx_ProcessCard_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname" EntityType="Self.Tx_StockOpname" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Approval" EntityType="Self.Tx_StockOpname_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
