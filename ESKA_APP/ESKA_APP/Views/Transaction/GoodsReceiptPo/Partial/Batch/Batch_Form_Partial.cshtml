@@ -96,35 +96,6 @@
         itemSettings.CssClass = "groupCol";
     });
 
-    //var groupItem = settings.Items.AddGroupItem(itemSettings =>
-    //{
-    //    itemSettings.Caption = "Item Tag";
-    //    itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-    //    itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
-    //    itemSettings.ShowCaption = DefaultBoolean.False;
-
-    //    itemSettings.ColCount = 1;
-    //});
-
-    //var groupItem_Col1 = groupItem.Items.AddGroupItem(itemSettings =>
-    //{
-    //    itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-    //    itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
-    //    itemSettings.ShowCaption = DefaultBoolean.False;
-    //    itemSettings.ColCount = 1;
-    //    itemSettings.Width = 300;
-    //});
-
-    //var groupItem_Col2 = groupItem.Items.AddGroupItem(itemSettings =>
-    //{
-    //    itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-    //    itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
-    //    itemSettings.ShowCaption = DefaultBoolean.False;
-    //    itemSettings.ColCount = 3;
-    //    itemSettings.Width = 150;
-    //    itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
-    //});
-
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.Name = "txtBaseDocNum";
@@ -217,50 +188,26 @@
     });
 
 
-
-    //groupItem_Col1.Items.AddTabbedGroupItem(group =>
+    //    groupItem_3.Items.Add(itemSettings =>
     //{
-    //    group.Name = "ViewViewBatch_TabBatch";
-    //    group.ColSpan = 1;
-    //    group.Width = 100;
-    //    group.Height = Unit.Percentage(100);
+    //    itemSettings.ColSpan = 3;
+    //    itemSettings.ShowCaption = DefaultBoolean.False;
 
-    //    group.PageControl.ContentStyle.Paddings.Padding = 3;
-    //    group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
-    //    group.Items.Add(item =>
+    //    itemSettings.SetNestedContent(() =>
     //    {
-    //        item.Name = "ViewApproval_TabViewBatchContent";
-    //        item.Caption = "           List Batch     ";
-    //        item.SetNestedContent(() =>
+    //        Html.DevExpress().HyperLink(hyperlink =>
     //        {
-    //            ViewContext.Writer.Write(
-    //                Html.Partial("Partial/Batch/Batch_TabBatchList_List_Partial", Model.GoodsReceiptPoBatchModel___)
-    //            );
-    //        });
+    //            hyperlink.Name = "hlAddBatchRow";
+    //            hyperlink.Properties.Text = "+ Add Row";
+
+    //            hyperlink.NavigateUrl = "javascript:void(0)";
+
+    //            hyperlink.Properties.ClientSideEvents.Click =
+    //                "function(s,e){ AddBatchRow(); }";
+
+    //        }).Render();
     //    });
-
     //});
-
-    groupItem_3.Items.Add(itemSettings =>
-{
-    itemSettings.ColSpan = 3;
-    itemSettings.ShowCaption = DefaultBoolean.False;
-
-    itemSettings.SetNestedContent(() =>
-    {
-        Html.DevExpress().HyperLink(hyperlink =>
-        {
-            hyperlink.Name = "hlAddBatchRow";
-            hyperlink.Properties.Text = "+ Add Row";
-
-            hyperlink.NavigateUrl = "javascript:void(0)";
-
-            hyperlink.Properties.ClientSideEvents.Click =
-                "function(s,e){ AddBatchRow(); }";
-
-        }).Render();
-    });
-});
 
     groupItem_3.Items.AddTabbedGroupItem(group =>
     {
@@ -290,32 +237,22 @@
     });
 
     groupItem_3.Items.Add(itemSettings =>
-{
-    itemSettings.ColSpan = 3;
-    itemSettings.ShowCaption = DefaultBoolean.False;
+    {
+        itemSettings.ColSpan = 3;
+        itemSettings.ShowCaption = DefaultBoolean.False;
 
-    itemSettings.HorizontalAlign =
-        FormLayoutHorizontalAlign.Left;
+        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
 
-    itemSettings.NestedExtensionType =
-        FormLayoutNestedExtensionItemType.Button;
+        btnSettings.Name = "btnCancelViewBatch";
+        btnSettings.Text = "Close";
+        btnSettings.Width = 120;
 
-    var btnSettings =
-        (ButtonSettings)itemSettings.NestedExtensionSettings;
-
-    btnSettings.Name = "btnCancelViewBatch";
-    btnSettings.Text = "Close";
-    btnSettings.Width = 120;
-
-    btnSettings.ClientSideEvents.Click =
-        "ViewBatch_OnClickBtnCancel";
-
-    btnSettings.ControlStyle.ForeColor =
-        System.Drawing.Color.White;
-
-    btnSettings.ControlStyle.BackColor =
-        System.Drawing.Color.Gray;
-});
+        btnSettings.ClientSideEvents.Click =  "ViewBatch_OnClickBtnCancel";
+        btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
+        btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
+    });
     //groupItem_Col3.Items.Add(itemSettings =>
     //{
     //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
