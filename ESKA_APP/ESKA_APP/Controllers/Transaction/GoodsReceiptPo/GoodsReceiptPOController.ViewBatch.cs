@@ -17,15 +17,6 @@ namespace Controllers.Transaction
 
         public ActionResult ViewBatch_PopupListOnDemandPartial(long id = 0, long detId = 0)
         {
-            //int userId = (int)Session["userId"];
-
-            //goodsReceiptPoService = new GoodsReceiptPoService();
-            //var model = new GoodsReceiptPoBatchView___();
-            //if(id != 0 && detId != 0)
-            //{
-            //    model = goodsReceiptPoService.GetBatch(id, detId);
-            //}
-            //return PartialView(VIEW_ITEMTAG_PANEL_PARTIAL, model);
             int userId = (int)Session["userId"];
             ViewBag.Id = id;
             ViewBag.DetId = detId;
@@ -46,7 +37,7 @@ namespace Controllers.Transaction
             ViewBag.DetId = DetId;
             goodsReceiptPoService = new GoodsReceiptPoService();
 
-            var modelList = goodsReceiptPoService.GetStockOpname_ItemBatchList(Id, DetId);
+            var modelList = goodsReceiptPoService.GoodsReceiptPo__ItemBatchList(DetId);
 
             return PartialView(VIEW_TAB_BATCH, modelList);
         }
@@ -61,7 +52,7 @@ namespace Controllers.Transaction
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListAddNewRow([Bind] StockOpnameBatchModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabBatchListAddNewRow([Bind] GoodsReceiptPoBatchModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
@@ -69,17 +60,17 @@ namespace Controllers.Transaction
 
             if (ModelState.IsValid)
             {
-                model.Id = Id;
+                //model.Id = Id;
                 model.DetDetId = DetId;
                 model._UserId = (int)Session["userId"];
-                goodsReceiptPoService.StockOpname_AddNewItemBatch(model);
+                goodsReceiptPoService.GoodsReceiptPo_AddNewItemBatch(model);
             }
 
             return TabBatchListPartial(id, detId);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListUpdateRow([Bind] StockOpnameBatchModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabBatchListUpdateRow([Bind] GoodsReceiptPoBatchModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
@@ -94,23 +85,23 @@ namespace Controllers.Transaction
             return TabBatchListPartial(id, detId);
         }
 
-        [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
-        {
-            long id = Id;
-            long detId = DetId;
-            int userId = (int)Session["userId"];
-            goodsReceiptPoService = new GoodsReceiptPoService();
+        //[HttpPost, ValidateInput(false)]
+        //public ActionResult TabBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
+        //{
+        //    long id = Id;
+        //    long detId = DetId;
+        //    int userId = (int)Session["userId"];
+        //    goodsReceiptPoService = new GoodsReceiptPoService();
 
-            if (ModelState.IsValid)
-            {
-                goodsReceiptPoService.StockOpname_DeleteItemBatch(userId, Id, DetId, DetDetId);
-            }
+        //    if (ModelState.IsValid)
+        //    {
+        //        goodsReceiptPoService.StockOpname_DeleteItemBatch(userId, Id, DetId, DetDetId);
+        //    }
 
-            return TabBatchListPartial(id, detId);
-        }
+        //    return TabBatchListPartial(id, detId);
+        //}
 
-      
+
     }
 
 }
