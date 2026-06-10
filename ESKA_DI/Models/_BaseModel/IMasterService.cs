@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ESKA_DI.Models._EF;
+using Models.Authentication.User;
 
 namespace Models
 { 
@@ -19,5 +20,6 @@ namespace Models
         T_OBJECT NavPrevious(T_KEY id);
         T_OBJECT NavNext(T_KEY id); 
         T_OBJECT NavLast();
+        List<User_RoutingModel> GetRoutingById(int id);
     }
 }
