@@ -103,5 +103,32 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
         }
 
+
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] GoodsReceiptPoModel GoodsReceiptPoModel)
+        {
+            int userId = (int)Session["userId"];
+
+            GoodsReceiptPoModel._UserId = (int)Session["userId"];
+            goodsReceiptPoService = new GoodsReceiptPoService();
+            GoodsReceiptPoModel._FormMode = FormModeEnum.Edit;
+
+
+
+            //if (ModelState.IsValid)
+            //{
+            //goodsReceiptPoService.Update(GoodsReceiptPoModel);
+            GoodsReceiptPoModel = goodsReceiptPoService.GetById(userId, GoodsReceiptPoModel.Id);
+            //}
+            //else
+            //{
+            //    string message = GetErrorModel();
+
+            //    throw new Exception(string.Format("[VALIDATION] {0}", message));
+            //}
+
+            return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
+        }
+
     }
 }

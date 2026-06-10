@@ -38,7 +38,10 @@ namespace Models.Transaction
 
         public DateTime? TransDate { get; set; }
 
+        [Required(ErrorMessage = "required")]
         public string VendorCode { get; set; }
+
+        [Required(ErrorMessage = "required")]
 
         public string VendorName { get; set; }
 
@@ -81,8 +84,8 @@ namespace Models.Transaction
     public class GoodsReceiptPoItem_Detail
     {
         public List<long> deletedRowKeys { get; set; }
-        public List<StockOpname_DetailModel> insertedRowValues { get; set; }
-        public List<StockOpname_DetailModel> modifiedRowValues { get; set; }
+        public List<GoodsReceiptPoItem_Detail> insertedRowValues { get; set; }
+        public List<GoodsReceiptPoItem_Detail> modifiedRowValues { get; set; }
     }
 
     public class GoodsReceiptPoItem
@@ -115,6 +118,7 @@ namespace Models.Transaction
 
         public string Whse { get; set; }
 
+        [Required(ErrorMessage = "required")]
         public decimal? Netto { get; set; }
 
         public string Department { get; set; }
@@ -490,6 +494,103 @@ namespace Models.Transaction
             return Id;
 
         }
+
+        //public void Update(GoodsReceiptPoModel model, string method = "")
+        //{
+        //    if (model != null)
+        //    {
+        //        if (model != null)
+        //        {
+        //            using (var CONTEXT = new HANA_APP())
+        //            {
+        //                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+        //                {
+        //                    try
+        //                    {
+        //                        String keyValue;
+        //                        keyValue = model.Id.ToString();
+
+        //                        SpNotif.SpSysControllerTransNotif(model._UserId, "GoodsReceiptPo", CONTEXT, "before", "GoodsReceiptPo", "update", "Id", keyValue);
+
+        //                        Tx_GoodsReceiptPO tx_GoodsReceiptPO = CONTEXT.Tx_GoodsReceiptPO.Find(model.Id);
+        //                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+        //                        if (tx_GoodsReceiptPO != null)
+        //                        {
+        //                            var exceptColumns = new string[] { "Id", "TransNo", "CreatedUser" };
+        //                            CopyProperty.CopyProperties(model, tx_GoodsReceiptPO, false, exceptColumns);
+
+        //                            //Tx_StockOpname.ApprovalStatus = isApprovalActive == "Y" && Tx_StockOpname.ApprovalStatus == "" ? "Waiting" : "Approved";
+        //                            tx_GoodsReceiptPO.ModifiedDate = dtModified;
+        //                            tx_GoodsReceiptPO.ModifiedUser = model._UserId;
+
+        //                            if (method == "Post")
+        //                            {
+        //                                CONTEXT.Database.ExecuteSqlCommand("CALL \"GoodsReceiptPo_UpdateItem\"(:p0,:p1)", model._UserId, model.Id);
+        //                            }
+
+        //                            if (model.Details_ != null)
+        //                            {
+        //                                if (model.Details_.insertedRowValues != null)
+        //                                {
+        //                                    foreach (var detail in model.Details_.insertedRowValues)
+        //                                    {
+        //                                        Detail_Add(CONTEXT, detail, model.Id, model._UserId);
+        //                                    }
+        //                                }
+
+        //                                if (model.Details_.modifiedRowValues != null)
+        //                                {
+        //                                    foreach (var detail in model.Details_.modifiedRowValues)
+        //                                    {
+        //                                        Detail_Update(CONTEXT, detail, model._UserId);
+        //                                    }
+        //                                }
+
+        //                                if (model.Details_.deletedRowKeys != null)
+        //                                {
+        //                                    foreach (var detId in model.Details_.deletedRowKeys)
+        //                                    {
+        //                                        GoodsReceiptPO_DetailModel detailModel = new GoodsReceiptPO_DetailModel();
+        //                                        detailModel.DetId = detId;
+        //                                        Detail_Delete(CONTEXT, detailModel);
+        //                                    }
+        //                                }
+        //                            }
+
+        //                            CONTEXT.SaveChanges();
+
+        //                            SpNotif.SpSysControllerTransNotif(model._UserId, "GoodsReceiptPo", CONTEXT, "after", "GoodsReceiptPo", "update", "Id", keyValue);
+
+        //                        }
+
+        //                        CONTEXT_TRANS.Commit();
+        //                    }
+
+        //                    catch (Exception ex)
+        //                    {
+        //                        CONTEXT_TRANS.Rollback();
+
+        //                        string errorMassage;
+        //                        if (ex.Message.Substring(12) == "[VALIDATION]")
+        //                        {
+        //                            errorMassage = ex.Message;
+        //                        }
+        //                        else
+        //                        {
+        //                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+        //                        }
+
+        //                        throw new Exception(errorMassage);
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //    }
+
+
+        //}
 
         public GoodsReceiptPoBatchView___ GetBatch(long id, long detId)
         {
@@ -951,7 +1052,7 @@ namespace Models.Transaction
             return detDetId;
         }
 
-        public void StockOpname_UpdateItemBatch(GoodsReceiptPoBatchModel model)
+        public void GoodsReceiptPo_UpdateItemBatch(GoodsReceiptPoBatchModel model)
         {
             using (var CONTEXT = new HANA_APP())
             {

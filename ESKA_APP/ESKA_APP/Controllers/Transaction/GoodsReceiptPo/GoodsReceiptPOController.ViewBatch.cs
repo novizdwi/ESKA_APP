@@ -79,7 +79,7 @@ namespace Controllers.Transaction
             if (ModelState.IsValid)
             {
                 model._UserId = (int)Session["userId"];
-                goodsReceiptPoService.StockOpname_UpdateItemBatch(model);
+                goodsReceiptPoService.GoodsReceiptPo_UpdateItemBatch(model);
             }
 
             return TabBatchListPartial(id, detId);
