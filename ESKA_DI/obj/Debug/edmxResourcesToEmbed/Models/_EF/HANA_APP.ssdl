@@ -842,6 +842,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
     <Property Name="TransDate" Type="timestamp" />
     <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="StartDate" Type="timestamp" />
     <Property Name="DueDate" Type="timestamp" />
     <Property Name="SerialNumber" Type="nvarchar" MaxLength="200" />
     <Property Name="ContractNo" Type="nvarchar" MaxLength="100" />
@@ -885,9 +886,12 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     </Key>
     <Property Name="Id" Type="bigint" />
     <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Sort" Type="int" />
     <Property Name="RoutingCode" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
+    <Property Name="DocEntry" Type="int" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
     <Property Name="OperatorId" Type="int" />
     <Property Name="ProcessingDate" Type="timestamp" />
     <Property Name="EndDate" Type="timestamp" />

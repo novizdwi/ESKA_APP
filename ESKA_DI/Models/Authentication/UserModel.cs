@@ -389,7 +389,7 @@ namespace Models.Authentication.User
                     model = CONTEXT.Database.SqlQuery<UserModel>("SELECT T0.* FROM \"Tm_User\" T0 WHERE T0.\"Id\"=:p0 ", id).Single();
                     model.isSetPassword = false;
 
-                    model.ListRouting_ = this.GetRoutingById(model.Id);
+                    model.ListRouting_ = this.GetRoutingById(CONTEXT, model.Id);
                 }
             }
 
@@ -486,27 +486,31 @@ namespace Models.Authentication.User
 
         }
 
-        private List<User_RoutingModel> GetRoutingById(int id)
+        public List<User_RoutingModel> GetRoutingById(int id) {
+            using (var CONTEXT = new HANA_APP()) {
+                return GetRoutingById(CONTEXT, id);
+            }
+        }
+
+        private List<User_RoutingModel> GetRoutingById(HANA_APP CONTEXT, int id)
         {
             string ssql = "";
-            using (var CONTEXT = new HANA_APP())
-            {
-                ssql = @"SELECT
-                    ROW_NUMBER() OVER (ORDER BY T0.""Code"") AS ""RowNo"",
-                    T1.""Id"" AS ""Id"",
-	                T1.""RoutingCode"" AS ""RoutingCode"",
-	                T1.""IsTick"" AS ""IsTick"",
-	                T0.""Code"" AS ""RoutingCode_"",
-	                T0.""U_RoutingName"" AS ""RoutingName_"",
-                    T0.""U_Level"" AS ""Level_""
-                FROM ""{0}"".""@IDU_MASTER_ROUTING"" T0
-                LEFT JOIN  ""Tm_User_Routing"" T1 ON T0.""Code"" = T1.""RoutingCode"" AND T1.""Id"" = :p0 
-                ORDER BY T0.""Code"", T0.""U_Level"" ASC
-                ";
+            ssql = @"SELECT
+                        ROW_NUMBER() OVER (ORDER BY T0.""Code"") AS ""RowNo"",
+                        T1.""Id"" AS ""Id"",
+	                    T1.""RoutingCode"" AS ""RoutingCode"",
+	                    T1.""IsTick"" AS ""IsTick"",
+	                    T0.""Code"" AS ""RoutingCode_"",
+	                    T0.""U_RoutingName"" AS ""RoutingName_"",
+                        T0.""U_Level"" AS ""Level_""
+                    FROM ""{0}"".""@IDU_MASTER_ROUTING"" T0
+                    LEFT JOIN  ""Tm_User_Routing"" T1 ON T0.""Code"" = T1.""RoutingCode"" AND T1.""Id"" = :p0 
+                    ORDER BY T0.""Code"", T0.""U_Level"" ASC
+                    ";
 
-                ssql = string.Format(ssql, DbProvider.dbSap_Name);
-                return CONTEXT.Database.SqlQuery<User_RoutingModel>(ssql, id).ToList();
-            }
+            ssql = string.Format(ssql, DbProvider.dbSap_Name);
+            return CONTEXT.Database.SqlQuery<User_RoutingModel>(ssql, id).ToList();
+
 
         }
 

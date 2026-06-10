@@ -16,9 +16,12 @@ namespace ESKA_DI.Models._EF
     {
         public Nullable<long> Id { get; set; }
         public long DetId { get; set; }
+        public Nullable<int> Sort { get; set; }
         public string RoutingCode { get; set; }
         public string RoutingName { get; set; }
         public string RoutingStatus { get; set; }
+        public Nullable<int> DocEntry { get; set; }
+        public string DocNum { get; set; }
         public Nullable<int> OperatorId { get; set; }
         public Nullable<System.DateTime> ProcessingDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
