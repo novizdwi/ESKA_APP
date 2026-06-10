@@ -1,4 +1,13 @@
 ﻿@using Models;
+@{
+
+    var Id = Convert.ToInt32(Request["cbId"]);
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+}
 
 @Html.DevExpress().GridView(settings =>
 {
@@ -6,6 +15,7 @@
     settings.Name = "gvUserRoutingDetail";
     settings.KeyFieldName = "RoutingCode_";
     settings.CommandColumn.Visible = false;
+    settings.CallbackRouteValues = new { Controller = "User", Action = "TabRoutingListPartial" };
 
     settings.Width = Unit.Percentage(100);
 
@@ -18,6 +28,9 @@
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
     settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
     settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
 
     settings.CommandColumn.Visible = false;
     settings.CommandColumn.ShowDeleteButton = false;
@@ -34,6 +47,7 @@
         column.Caption = "#";
         column.ColumnType = MVCxGridViewColumnType.CheckBox;
         column.Settings.AllowSort = DefaultBoolean.False;
+        column.Settings.AllowHeaderFilter = DefaultBoolean.False;
 
         column.Width = 60;
 
@@ -98,4 +112,5 @@
         editor.ValidationSettings.Display = Display.Dynamic;
     };
 
+    settings.ClientSideEvents.BeginCallback = "gvUserRoutingDetailOnBeginCallback";
 }).Bind(Model).GetHtml()

@@ -19,7 +19,7 @@
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -750,6 +750,7 @@
     <Compile Include="Controllers\Authentication\Role\RoleController.List.cs" />
     <Compile Include="Controllers\Authentication\Role\RoleController.List.Export.cs" />
     <Compile Include="Controllers\Authentication\Role\RoleController.Nav.cs" />
+    <Compile Include="Controllers\Authentication\User\UserController.Tab.Routing.cs" />
     <Compile Include="Controllers\Authentication\User\UserController.cs" />
     <Compile Include="Controllers\Authentication\User\UserController.List.cs" />
     <Compile Include="Controllers\Authentication\User\UserController.List.Export.cs" />
@@ -938,7 +939,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1109</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/ESKA</IISUrl>
+          <IISUrl>http://localhost:1109/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

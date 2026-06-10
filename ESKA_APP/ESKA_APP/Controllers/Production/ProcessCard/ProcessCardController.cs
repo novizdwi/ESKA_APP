@@ -171,7 +171,7 @@ namespace Controllers.Production
             ProcessCardModel ProcessCardModel;
 
             processCardService = new ProcessCardService();
-            processCardService.Cancel(userId, Id, CancelReason);
+            //processCardService.Cancel(userId, Id, CancelReason);
 
             ProcessCardModel = processCardService.GetById(userId, Id);
             if (ProcessCardModel != null)

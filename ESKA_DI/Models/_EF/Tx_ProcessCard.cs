@@ -21,6 +21,7 @@ namespace ESKA_DI.Models._EF
         public string DocNum { get; set; }
         public Nullable<System.DateTime> TransDate { get; set; }
         public Nullable<System.DateTime> PostingDate { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
         public string SerialNumber { get; set; }
         public string ContractNo { get; set; }

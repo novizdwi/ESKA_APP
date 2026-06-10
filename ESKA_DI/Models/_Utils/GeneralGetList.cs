@@ -23,6 +23,13 @@ namespace Models._Utils
         public string Name { get; set; }
     }
 
+    public class StatusCheckModel
+    {
+        public string Status { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string IsApproval { get; set; }
+    }
+
     public static class GeneralGetList
     {
         //mendapatkan semua url : punya authorize ke form tertentu atau tidak

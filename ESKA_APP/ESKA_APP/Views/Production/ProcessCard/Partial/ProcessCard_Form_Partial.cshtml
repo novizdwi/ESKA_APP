@@ -394,6 +394,38 @@
     groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+        itemSettings.Caption = "Start Date";
+        itemSettings.FieldName = "StartDate";
+
+        var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "StartDate";
+        txt.ShowModelErrors = true;
+
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Properties.NullText = "dd/MM/yyyy";
+        txt.Properties.EditFormat = EditFormat.Custom;
+        txt.Properties.EditFormatString = "dd/MM/yyyy";
+        txt.Properties.EditFormat = EditFormat.Date;
+
+        if (Model.Status == "Draft" || Model.Status == "Open")
+        {
+            txt.ReadOnly = false;
+        }
+        else
+        {
+            txt.Properties.DropDownButton.Visible = false;
+            txt.ReadOnly = true;
+        }
+
+        txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e);  } }";
+        txt.Width = 230;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
         itemSettings.Caption = "Due Date";
         itemSettings.FieldName = "DueDate";
 
@@ -427,7 +459,7 @@
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Serial No";
-        itemSettings.FieldName = "SerialNumber"; 
+        itemSettings.FieldName = "SerialNumber";
 
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "SerialNumber";
