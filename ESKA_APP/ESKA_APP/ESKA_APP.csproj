@@ -870,6 +870,7 @@
     <Compile Include="IduRazorViewEngine.cs" />
     <Compile Include="Rpts\Rpt.aspx.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Rpts\Rpt.aspx.designer.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>
