@@ -126,6 +126,24 @@
         column.ReadOnly = false;
         column.Settings.AllowSort = DefaultBoolean.False;
     });
+    
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DocNum_";
+        column.Name = "DocNum_";
+        column.Caption = "Production No";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = status == "Draft"? 0:120;
+        column.ReadOnly = true;
+        column.Settings.AllowSort = DefaultBoolean.True;
+        column.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
 
     settings.Columns.Add(column =>
     {
@@ -133,7 +151,7 @@
         column.Name = "OperatorId";
         column.Caption = "Operator";
 
-        column.Width = 100;
+        column.Width = 150;
 
         column.ColumnType = MVCxGridViewColumnType.ComboBox;
 
@@ -145,7 +163,7 @@
         cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators();
         cbo.ClientSideEvents.SelectedIndexChanged = "gvProcessCardContentDetail_OperatorOnChanged";
     });
-    
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "ProcessingDate";

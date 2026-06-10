@@ -66,6 +66,7 @@
     <EntitySet Name="Tx_StockOpname_Item_Batch_Scale" EntityType="Model1.Tx_StockOpname_Item_Batch_Scale" />
     <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
     <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
+    <EntitySet Name="WeighbridgeTransactions" EntityType="Model1.WeighbridgeTransactions" />
   </EntityContainer>
   <EntityType Name="Tm_Alert">
     <Key>
@@ -1054,7 +1055,6 @@
     <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="DocEntry" Type="Int32" />
-    <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="OperatorId" Type="Int32" />
     <Property Name="ProcessingDate" Type="DateTime" />
     <Property Name="EndDate" Type="DateTime" />
@@ -1068,5 +1068,17 @@
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
+  <EntityType Name="WeighbridgeTransactions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WeightKg" Type="Int32" Nullable="false" />
+    <Property Name="ScaleStatus" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ComPort" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BaudRate" Type="Int32" Nullable="false" />
+    <Property Name="Message" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SentAt" Type="DateTime" Nullable="false" />
   </EntityType>
 </Schema>

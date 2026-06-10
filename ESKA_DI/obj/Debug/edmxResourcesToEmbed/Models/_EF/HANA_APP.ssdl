@@ -891,7 +891,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
     <Property Name="DocEntry" Type="int" />
-    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
     <Property Name="OperatorId" Type="int" />
     <Property Name="ProcessingDate" Type="timestamp" />
     <Property Name="EndDate" Type="timestamp" />
@@ -1004,6 +1003,18 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
+  <EntityType Name="WeighbridgeTransactions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WeightKg" Type="int" Nullable="false" />
+    <Property Name="ScaleStatus" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="ComPort" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="BaudRate" Type="int" Nullable="false" />
+    <Property Name="Message" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="SentAt" Type="timestamp" Nullable="false" />
+  </EntityType>
   <EntityContainer Name="Model1StoreContainer">
     <EntitySet Name="Tm_Alert" EntityType="Self.Tm_Alert" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tm_Alert_Role" EntityType="Self.Tm_Alert_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -1069,6 +1080,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <EntitySet Name="Tx_StockOpname_Item" EntityType="Self.Tx_StockOpname_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Item_Batch" EntityType="Self.Tx_StockOpname_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_StockOpname_Item_Batch_Scale" EntityType="Self.Tx_StockOpname_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="WeighbridgeTransactions" EntityType="Self.WeighbridgeTransactions" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tp_UserAlert" EntityType="Self.Tp_UserAlert" store:Type="Tables" store:Schema="ESKA_APP_TEST">
       <DefiningQuery>SELECT 
 "Tp_UserAlert"."Id" AS "Id", 

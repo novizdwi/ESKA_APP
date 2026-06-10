@@ -178,6 +178,8 @@ namespace Models.Production
 
         public string RoutingCode { get; set; }
 
+        public string DocNum_ { get; set; }
+        
         public string RoutingName { get; set; }
 
         public string RoutingStatus { get; set; }
@@ -337,6 +339,7 @@ namespace Models.Production
             model.TransDate = DateTime.Now;
             model.StartDate = DateTime.Now;
             model.DueDate = DateTime.Now.AddMonths(1);
+            model.Quantity = 1;
             return model;
         }
 
@@ -362,7 +365,6 @@ namespace Models.Production
                 ";
 
                 model = CONTEXT.Database.SqlQuery<ProcessCardModel>(ssql, id).Single();
-                
                 model.ListDetails_ = this.ProcessCard_Details(CONTEXT, id);
 
                 if (model.Status == "Draft")
@@ -400,12 +402,13 @@ namespace Models.Production
         public List<ProcessCard_DetailModel> ProcessCard_Details(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"
-                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"",
-                    T0.*
+                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.*, T2.""DocNum"" AS ""DocNum_""
                 FROM ""Tx_ProcessCard_Detail"" T0 
+                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWOR"" T2 ON T0.""DocEntry"" = T2.""DocEntry""
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
+            
             var ProcessCard = CONTEXT.Database.SqlQuery<ProcessCard_DetailModel>(ssql, id).ToList();
             return ProcessCard;
         }
@@ -868,76 +871,52 @@ namespace Models.Production
                     try
                     {
                         oCompany = SAPCachedCompany.GetCompany();
+                        oCompany.StartTransaction();
 
-                        String keyValue;
-                        keyValue = id.ToString();
-
+                        string keyValue = id.ToString();
                         ProcessCardModel syncProcessCard = GetById(userId, id, "Post");
-
                         SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "before", "Tx_ProcessCard", "post", "Id", keyValue);
 
                         Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(id);
                         if (tx_ProcessCard != null)
                         {
+                            List<ProductionOrder_ReturnModel> poResults = AddProductionOrder(oCompany, userId, id, syncProcessCard);
 
-                            List<ProductionOrder_ReturnModel> ProductionOrder_ReturnModelList_ = AddProductionOrder(oCompany, userId, id, syncProcessCard);
-                            //if (docEntry_ <= 0)
-                            //{
-                            //      throw new Exception($"[VALIDATION] - No inventory posting created");
-                            //}
+                            if (poResults.Count <= 0)
+                                throw new Exception("[VALIDATION] - No Production Order Created");
 
-                            //string ssql = @"SELECT ""DocNum"" 
-                            //            FROM """ + DbProvider.dbSap_Name + @""".""OIQR"" T0
-                            //            WHERE T0.""DocEntry"" = " + docEntry_ + @" 
-                            //            ";
+                            UpdateProductionOrderDetail(CONTEXT, userId, id, poResults);
 
-                            //string docNum = CONTEXT.Database.SqlQuery<string>(ssql, id).FirstOrDefault();
+                            DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-                            //DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                            tx_ProcessCard.PostingDate = dtModified;
+                            tx_ProcessCard.Status = "Posted";
+                            tx_ProcessCard.IsAfterPosted = "Y";
+                            tx_ProcessCard.ModifiedDate = dtModified;
+                            tx_ProcessCard.ModifiedUser = userId;
 
-                            //tx_ProcessCard.PostingDate = dtModified;
-                            //tx_ProcessCard.DocEntry = Convert.ToInt32(docEntry_);
-                            //tx_ProcessCard.DocNum = docNum;
-                            //tx_ProcessCard.PostingDate = dtModified;
-
-                            //tx_ProcessCard.Status = "Posted";
-                            //tx_ProcessCard.IsAfterPosted = "Y";
-                            //tx_ProcessCard.ModifiedDate = dtModified;
-                            //tx_ProcessCard.ModifiedUser = userId;
-
-                            //CONTEXT.SaveChanges();
+                            CONTEXT.SaveChanges();
 
                             SpNotif.SpSysControllerTransNotif(userId, "ProcessCard", CONTEXT, "after", "Tx_ProcessCard", "post", "Id", keyValue);
 
                             if (oCompany.InTransaction)
-                            {
                                 oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                            }
 
-                            CONTEXT_TRANS.Commit();            
+                            CONTEXT_TRANS.Commit();
                         }
-
                     }
                     catch (Exception ex)
                     {
-                        if (oCompany.InTransaction)
-                        {
+                        if (oCompany != null && oCompany.InTransaction)
                             oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                        }
 
                         CONTEXT_TRANS.Rollback();
 
-                        string errorMassage;
-                        if (ex.Message.Substring(12) == "[VALIDATION]")
-                        {
-                            errorMassage = ex.Message;
-                        }
-                        else
-                        {
-                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
-                        }
+                        string errorMessage = ex.Message.Length >= 12 && ex.Message.Substring(0, 12) == "[VALIDATION]"
+                            ? ex.Message
+                            : string.Format("[VALIDATION] {0}", ex.Message);
 
-                        throw new Exception(errorMassage);
+                        throw new Exception(errorMessage);
                     }
                     finally
                     {
@@ -945,19 +924,22 @@ namespace Models.Production
                     }
                 }
             }
-
         }
+
         private List<ProductionOrder_ReturnModel> AddProductionOrder(Company oCompany, int userId, long id, ProcessCardModel model)
         {
             int nErr;
             string errMsg;
             List<ProductionOrder_ReturnModel> ret = new List<ProductionOrder_ReturnModel>();
 
+            // ----------------------------------------------------------
+            // 1. Tentukan StartRoutingLevel dari ListDetails_
+            //    Rule: Sort pertama yang Active setelah ada Inactive
+            // ----------------------------------------------------------
             int startRoutingLevel = 0;
-            var sortedDetails = model.ListDetails_ .OrderBy(x => x.Sort) .ToList();
 
             bool foundInactive = false;
-            foreach (var det in sortedDetails)
+            foreach (var det in model.ListDetails_.OrderBy(x => x.Sort))
             {
                 if (det.RoutingStatus == "Inactive")
                 {
@@ -971,9 +953,9 @@ namespace Models.Production
             }
 
             // ----------------------------------------------------------
-            // 1. Panggil Stored Procedure → ambil seluruh BOM rows
+            // 2. Panggil Stored Procedure → ambil seluruh BOM rows
             // ----------------------------------------------------------
-            List<BomPropagationModel> bomRows = new List<BomPropagationModel>();
+            List<BomPropagationModel> bomRows;
 
             using (var CONTEXT = new HANA_APP())
             {
@@ -981,11 +963,21 @@ namespace Models.Production
                     "CALL \"{0}\".\"__IDU_ProductionOrder\"(:p0, :p1, :p2)",
                     DbProvider.dbSap_Name);
 
-                bomRows = CONTEXT.Database .SqlQuery<BomPropagationModel>(sql, model.ItemCode, model.Quantity, startRoutingLevel).ToList();
+                bomRows = CONTEXT.Database
+                    .SqlQuery<BomPropagationModel>(sql, model.ItemCode, model.Quantity, startRoutingLevel)
+                    .ToList();
             }
 
             if (bomRows == null || bomRows.Count == 0)
                 throw new Exception("[VALIDATION] - Add Production Order : BOM tidak ditemukan untuk item " + model.ItemCode);
+
+            // ----------------------------------------------------------
+            // 3. Mapping BOM rows → Master Detail
+            //    Group by (RoutingLevel, Parent) → 1 group = 1 Production Order
+            //    DetId dicari dari ListDetails_ berdasarkan Sort == RoutingLevel
+            // ----------------------------------------------------------
+            DateTime startDate = model.StartDate ?? DateTime.Now;
+            DateTime dueDate = model.DueDate ?? DateTime.Now;
 
             List<ProductionOrderModel> poMasters = bomRows
                 .GroupBy(r => new { r.RoutingLevel, r.Parent })
@@ -1002,6 +994,10 @@ namespace Models.Production
                     TreeType = g.First().TreeType,
                     QtyOrder = g.First().QtyOrder,
                     PlannedQty = g.First().TotalQty,
+                    DetId = model.ListDetails_
+                                       .Where(d => d.Sort == g.Key.RoutingLevel)
+                                       .Select(d => d.DetId)
+                                       .FirstOrDefault(),
                     ListDetails_ = g.Select(r => new ProductionOrder_DetailModel
                     {
                         FG = r.FG,
@@ -1018,14 +1014,13 @@ namespace Models.Production
                     }).ToList()
                 }).ToList();
 
-            DateTime startDate = model.StartDate ?? DateTime.Now;
-            DateTime dueDate = model.DueDate ?? DateTime.Now;
-
+            // ----------------------------------------------------------
+            // 4. Loop setiap Production Order → Post ke SAP (bottom-up)
+            //    Jika satu level error → throw → SAP rollback semua
+            // ----------------------------------------------------------
             foreach (var po in poMasters)
             {
-                SAPbobsCOM.ProductionOrders oPO =
-                    (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(
-                        SAPbobsCOM.BoObjectTypes.oProductionOrders);
+                SAPbobsCOM.ProductionOrders oPO = (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oProductionOrders);
 
                 try
                 {
@@ -1037,12 +1032,12 @@ namespace Models.Production
                     oPO.ProductionOrderType = SAPbobsCOM.BoProductionOrderTypeEnum.bopotStandard; 
                     oPO.Remarks = string.Format( "Routing: {0} | Level: {1} | FG: {2} | Ref: {3}", po.RoutingName, po.RoutingLevel, po.FG, po.TransNo);
 
-                    oPO.UserFields.Fields.Item("U_IDU_WebId").Value = Convert.ToInt32(id);
+                    oPO.UserFields.Fields.Item("U_IDU_WebId").Value = id.ToString();
                     oPO.UserFields.Fields.Item("U_IDU_WebTransNo").Value = po.TransNo;
-                    oPO.UserFields.Fields.Item("U_RoutingStage").Value = po.RoutingName;
-                    oPO.UserFields.Fields.Item("U_RoutingLevel").Value = po.RoutingLevel.ToString();
+                    oPO.UserFields.Fields.Item("U_IDU_RoutingStage").Value = po.RoutingName;
+                    oPO.UserFields.Fields.Item("U_IDU_RoutingLevel").Value = Convert.ToInt32(po.RoutingLevel);
 
-
+                    // ---- Lines (WOR1) ----
                     bool firstLine = true;
                     foreach (var det in po.ListDetails_)
                     {
@@ -1051,14 +1046,13 @@ namespace Models.Production
                         if (!firstLine) oPO.Lines.Add();
 
                         oPO.Lines.ItemNo = det.Component;
+                        oPO.Lines.ProductionOrderIssueType = BoIssueMethod.im_Backflush;
                         oPO.Lines.PlannedQuantity = (double)det.TotalQty;
-
-                        oPO.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = Convert.ToInt32(id);
-                        oPO.Lines.UserFields.Fields.Item("U_IDU_BomLevel").Value = det.Level.ToString();
 
                         firstLine = false;
                     }
 
+                    // ---- Add ke SAP ----
                     int docAdd = oPO.Add();
                     if (docAdd != 0)
                     {
@@ -1067,23 +1061,12 @@ namespace Models.Production
 
                         SapCompany.CleanUp(oPO);
 
-                        throw new Exception(string.Format(
-                            "[VALIDATION] - Add Production Order [{0}] RoutingLevel [{1}] : {2}|{3}",
-                            po.Parent, po.RoutingLevel, nErr, errMsg));
+                        throw new Exception(string.Format( "[VALIDATION] - Add Production Order [{0}] RoutingLevel [{1}] : {2}|{3}", po.Parent, po.RoutingLevel, nErr, errMsg));
                     }
-                    
+
+                    // ---- Ambil DocEntry & DocNum ----
                     string newDocEntry = oCompany.GetNewObjectKey();
-
-                    string newDocNum = string.Empty;
-                    using (var CONTEXT = new HANA_APP())
-                    {
-                        string sqlDocNum = string.Format(
-                            "SELECT TOP 1 T0.\"DocNum\" FROM \"{0}\".\"OWOR\" T0 WHERE T0.\"DocEntry\" = :p0",
-                            DbProvider.dbSap_Name);
-
-                        newDocNum = CONTEXT.Database .SqlQuery<string>(sqlDocNum, Convert.ToInt32(newDocEntry)) .FirstOrDefault() ?? string.Empty;
-                    }
-
+                    string newDocNum = string.Empty; 
                     SapCompany.CleanUp(oPO);
 
                     ret.Add(new ProductionOrder_ReturnModel
@@ -1097,13 +1080,35 @@ namespace Models.Production
                 catch
                 {
                     SapCompany.CleanUp(oPO);
-                    throw;  
+                    throw;
                 }
             }
 
             return ret;
         }
 
+        private void UpdateProductionOrderDetail( HANA_APP CONTEXT, int userId, long id, List<ProductionOrder_ReturnModel> poResults)
+        {
+            if (poResults == null || poResults.Count == 0) return;
+
+            DateTime dtModified = CONTEXT.Database
+                .SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY")
+                .FirstOrDefault();
+
+            foreach (var po in poResults)
+            {
+                if (po.DetId == null) continue;
+                Tx_ProcessCard_Detail txDetail = CONTEXT.Tx_ProcessCard_Detail.Find(po.DetId);
+                if (txDetail == null) continue;
+
+                txDetail.DocEntry = po.DocEntry; 
+                txDetail.RoutingStatus = "Ready";
+                txDetail.ModifiedDate = dtModified;
+                txDetail.ModifiedUser = userId;
+            }
+
+            CONTEXT.SaveChanges();
+        }
 
         public void RequestApproval(int userId, long id, int templateId, string approvalMessages)
         {

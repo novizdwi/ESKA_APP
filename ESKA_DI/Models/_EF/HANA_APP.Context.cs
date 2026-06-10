@@ -90,5 +90,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_StockOpname_Item_Batch_Scale> Tx_StockOpname_Item_Batch_Scale { get; set; }
         public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
         public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
+        public virtual DbSet<WeighbridgeTransactions> WeighbridgeTransactions { get; set; }
     }
 }
