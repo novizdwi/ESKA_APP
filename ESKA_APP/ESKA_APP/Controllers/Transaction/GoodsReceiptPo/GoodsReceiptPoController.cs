@@ -117,7 +117,7 @@ namespace Controllers.Transaction
 
             //if (ModelState.IsValid)
             //{
-            //goodsReceiptPoService.Update(GoodsReceiptPoModel);
+            goodsReceiptPoService.Update(GoodsReceiptPoModel);
             GoodsReceiptPoModel = goodsReceiptPoService.GetById(userId, GoodsReceiptPoModel.Id);
             //}
             //else

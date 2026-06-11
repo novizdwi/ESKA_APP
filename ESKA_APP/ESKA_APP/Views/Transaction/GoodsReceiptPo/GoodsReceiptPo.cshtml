@@ -909,27 +909,45 @@
         RefNo.SetValue(data.RefNo);
         BaseEntry.SetValue(data.DocEntry);
         BaseDocNum.SetValue(data.DocNum);
-        //Status.SetValue(data.Status);
-        //DocDate.SetValue(new Date(parseInt(data.DocDate.match(/\d+/)[0])));
-
-        //console.log(new Date(parseInt(data.DocDate.match(/\d+/)[0])))
-
-        //if (data.DocDate) {
-        //    var timestamp = parseInt(data.DocDate.match(/\d+/)[0]);
-        //    var dt = new Date(timestamp);
-        //    var result =
-        //        dt.getFullYear() + '-' +
-        //        String(dt.getMonth() + 1).padStart(2, '0') + '-' +
-        //        String(dt.getDate()).padStart(2, '0');
-        //    DocDate.SetValue(new Date(result));
-        //}
-
         cflPurchaseOrderPopupListPurchaseOrder.Hide();
 
     }
 
 </script>
 @Html.Partial("~/Views/_Cfl/_CflPurchaseOrder/Partial/_CflPurchaseOrder_Panel_List_Partial.cshtml", cflPurchaseOrder_ParamModel)
+
+
+
+
+
+@{
+    var cflItem_ParamModel = new CflItem_ParamModel();
+    cflItem_ParamModel.Name = "PurchaseOrder";
+    cflItem_ParamModel.Type = "PurchaseOrder";
+    cflItem_ParamModel.SqlWhere = "   ";
+    cflItem_ParamModel.Header = "";
+
+    cflItem_ParamModel.IsMulti = "N";
+}
+
+<script type="text/javascript">
+    function BtnCflItemPopupListGoodsReceiptPoOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("cflItemPopupListPurchaseOrder");
+
+        var gv = ASPxClientGridView.Cast('gvCflItemListPurchaseOrder ');
+
+        if (gv == null) {
+            popup.Show();
+        } else {
+            popup.SetContentHtml("");
+            popup.PerformCallback();
+            popup.Show();
+        }
+
+    }
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItem_ParamModel)
 
 <script type="text/javascript">
 

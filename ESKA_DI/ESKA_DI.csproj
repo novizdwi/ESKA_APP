@@ -231,8 +231,8 @@
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>bin\Debug\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
-      <HintPath>bin\Debug\LumenWorks.Framework.IO.dll</HintPath>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\..\..\..\Downloads\LumenWorks.Framework.IO.dll</HintPath>
     </Reference>
     <Reference Include="Sap.Data.Hana.v4.5, Version=2.8.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
