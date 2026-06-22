@@ -1,13 +1,14 @@
 ﻿@using Models;
 
-@model Models.Transaction.StockOpnameModel
+
+@model Models.Transaction.GoodsReceiptPoModel
 
 @Html.DevExpress().TextBox(
         settings =>
         {
             settings.Name = "Id";
             settings.ControlStyle.CssClass = "editor";
-            settings.ClientVisible = false; 
+            settings.ClientVisible = false;
         }
 ).Bind(Model.Id).GetHtml()
 
@@ -50,7 +51,7 @@
         itemSettings.ShowCaption = DefaultBoolean.False;
         itemSettings.ColCount = 1;
     });
-    
+
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
@@ -58,7 +59,7 @@
         itemSettings.FieldName = "CancelReason";
 
         var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "CancelReason2";
+        txt.Name = "CancelReason";
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -77,7 +78,7 @@
         btnSettings.Width = 30;
         btnSettings.ClientSideEvents.Click = "btnUpdateReasonOnClick";
 
- 
+
         btnSettings.Styles.Style.Paddings.Padding = 0;
 
     });

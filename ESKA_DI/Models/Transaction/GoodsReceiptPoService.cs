@@ -273,8 +273,8 @@ namespace Models.Transaction
 
     public class GRPOAddResultModel
     {
-        public string DocEntry { get; set; }
-
+        public long? DocEntry { get; set; }
+        public long? DocNum { get; set; }
         public Dictionary<long, int> LineMapping { get; set; } // LineId -> LineNum
     }
 
@@ -1040,6 +1040,7 @@ namespace Models.Transaction
 
                         tx_GoodsReceiptPO.PostingDate = dtModified;
                         tx_GoodsReceiptPO.DocEntry = Convert.ToInt64(GRPOResult.DocEntry);
+                        //tx_GoodsReceiptPO.DocEntry = Convert.ToInt64(GRPOResult.doc);
                         //tx_GoodsReceiptPO.DocNum = docNum;
 
                         tx_GoodsReceiptPO.Status = "Posted";
@@ -1062,9 +1063,9 @@ namespace Models.Transaction
                         // Update Header
                     string sqlHeader = $@"
                         UPDATE ""Tx_GoodsReceiptPO""
-                        SET ""DocEntry"" = {GRPOResult.DocEntry}
-                        WHERE ""Id"" = {id}
-";
+                        SET ""DocEntry"" = {GRPOResult.DocEntry},
+                        ""DocNum""   = {GRPOResult.DocNum}
+                        WHERE ""Id"" = {id}";
 
                         CONTEXT.Database.ExecuteSqlCommand(sqlHeader);
 
@@ -1229,11 +1230,96 @@ namespace Models.Transaction
                 throw new Exception("[VALIDATION] - Add Goods Receipt PO : " + nErr.ToString() + "|" + errMsg);
             }
 
-            result.DocEntry = oCompany.GetNewObjectKey();
+            int docEntry = Convert.ToInt32(oCompany.GetNewObjectKey());
+            Documents oGRPO = (Documents)oCompany.GetBusinessObject(BoObjectTypes.oPurchaseDeliveryNotes);
+
+            if (oGRPO.GetByKey(docEntry))
+            {
+                result.DocEntry = docEntry;
+                result.DocNum = oGRPO.DocNum;
+            }
+
             result.LineMapping = InsertedLine;
 
             SapCompany.CleanUp(oDocument);
             return result;
+        }
+
+        public static void CancelSAP(SAPbobsCOM.Company oCompany, int docEntry)
+        {
+            SAPbobsCOM.Documents oGRPO = null;
+
+            try
+            {
+                if (!oCompany.InTransaction)
+                    oCompany.StartTransaction();
+
+                //oGRPO = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(
+                //    SAPbobsCOM.BoObjectTypes.oPurchaseDeliveryNotes);
+
+                //if (!oGRPO.GetByKey(docEntry))
+                //    throw new Exception($"GRPO DocEntry [{docEntry}] tidak ditemukan.");
+
+                //if (oGRPO.Cancelled == SAPbobsCOM.BoYesNoEnum.tYES)
+                //    throw new Exception($"GRPO DocEntry [{docEntry}] sudah dicancel.");
+
+                //int ret = oGRPO.Cancel();
+
+                //if (ret != 0)
+                //{
+                //    oCompany.GetLastError(out int errCode, out string errMsg);
+                //    throw new Exception($"Cancel GRPO gagal : {errCode} - {errMsg}");
+                //}
+                oGRPO = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oPurchaseDeliveryNotes);
+
+                if (!oGRPO.GetByKey(docEntry))
+                    throw new Exception("GRPO tidak ditemukan.");
+                var test = oGRPO.DocObjectCode;
+
+                SAPbobsCOM.Documents oCancellation = (SAPbobsCOM.Documents)oGRPO.CreateCancellationDocument();
+
+                if (oCancellation == null)
+                {
+                    oCompany.GetLastError(out int errCode, out string errMsg);
+
+                    throw new Exception(
+                        $"CreateCancellationDocument Error : {errCode} - {errMsg}");
+                }
+
+                int ret = oCancellation.Add();
+
+
+                if (ret != 0)
+                {
+                    oCompany.GetLastError(out int errCode, out string errMsg);
+
+                    throw new Exception(
+                        $"Cancel GRPO gagal : {errCode} - {errMsg}");
+                }
+
+                if (oCompany.InTransaction)
+                    oCompany.EndTransaction(
+                        SAPbobsCOM.BoWfTransOpt.wf_Commit);
+            }
+            catch (Exception)
+            {
+                if (oCompany.InTransaction)
+                    oCompany.EndTransaction(
+                        SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+
+                throw;
+            }
+            finally
+            {
+                if (oGRPO != null)
+                {
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(oGRPO);
+                    oGRPO = null;
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
 
         public void Cancel(int userId, long Id, string cancelReason)
@@ -1248,7 +1334,7 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = Id.ToString();
 
-                        SpNotif.SpSysControllerTransNotif(userId, "GoodsReceiptPo", CONTEXT, "before", "Tx_GoodsReceiptPO", "cancel", "Id", keyValue);
+                       // SpNotif.SpSysControllerTransNotif(userId, "GoodsReceiptPo", CONTEXT, "before", "Tx_GoodsReceiptPO", "cancel", "Id", keyValue);
 
                         Tx_GoodsReceiptPO Tx_GoodsReceiptPO = CONTEXT.Tx_GoodsReceiptPO.Find(Id);
                         if (Tx_GoodsReceiptPO != null)
@@ -1256,14 +1342,22 @@ namespace Models.Transaction
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
                             Tx_GoodsReceiptPO.Status = "Cancel";
                             // Tx_GoodsReceiptPO.ApprovalStatus = "Rejected";
-                            // Tx_GoodsReceiptPO.CancelReason = cancelReason;
+                            Tx_GoodsReceiptPO.CancelReason = cancelReason;
                             Tx_GoodsReceiptPO.ModifiedDate = dtModified;
                             Tx_GoodsReceiptPO.ModifiedUser = userId;
 
                             CONTEXT.SaveChanges();
+
+                            // ==========================
+                            // CANCEL SAP B1
+                            // ==========================
+
+                            var oCompany = SAPCachedCompany.GetCompany();
+
+                            CancelSAP(oCompany, Convert.ToInt32(Tx_GoodsReceiptPO.DocEntry));
                         }
 
-                        SpNotif.SpSysControllerTransNotif(userId, "GoodsReceiptPo", CONTEXT, "after", "Tx_GoodsReceiptPO", "cancel", "Id", keyValue);
+                        //SpNotif.SpSysControllerTransNotif(userId, "GoodsReceiptPo", CONTEXT, "after", "Tx_GoodsReceiptPO", "cancel", "Id", keyValue);
 
 
                         CONTEXT_TRANS.Commit();

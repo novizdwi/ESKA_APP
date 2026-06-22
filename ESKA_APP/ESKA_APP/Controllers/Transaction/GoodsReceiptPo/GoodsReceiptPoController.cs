@@ -155,5 +155,30 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
         }
 
+
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Cancel(long Id, string CancelReason = "")
+        {
+            int userId = (int)Session["userId"];
+
+            GoodsReceiptPoModel GoodsReceiptPoModel;
+
+            goodsReceiptPoService = new GoodsReceiptPoService();
+            goodsReceiptPoService.Cancel(userId, Id, CancelReason);
+
+            GoodsReceiptPoModel = goodsReceiptPoService.GetById(userId, Id);
+            if (GoodsReceiptPoModel != null)
+            {
+                GoodsReceiptPoModel._FormMode = FormModeEnum.Edit;
+            }
+            else
+            {
+                GoodsReceiptPoModel = goodsReceiptPoService.GetNewModel(userId);
+                GoodsReceiptPoModel._FormMode = FormModeEnum.New;
+            }
+
+            return PartialView(VIEW_FORM_PARTIAL, GoodsReceiptPoModel);
+        }
+
     }
 }

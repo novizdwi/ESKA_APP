@@ -730,6 +730,9 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -829,7 +832,8 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.List.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Nav.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPOController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
