@@ -696,14 +696,10 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_TabDetail_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPoStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Panel_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\GoodsReceiptPo.cshtml" />
     <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Partial.cshtml" />
@@ -726,6 +722,10 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

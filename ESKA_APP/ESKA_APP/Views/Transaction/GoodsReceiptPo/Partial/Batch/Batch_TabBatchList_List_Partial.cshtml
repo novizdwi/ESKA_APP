@@ -1,216 +1,184 @@
 ﻿@using Models;
 @using Models.Transaction;
+@model List<Models.Transaction.GoodsReceiptPoBatchModel>
+
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+    var DetId = Convert.ToInt64(Request["cbDetId"]);
+    int userId = (int)Session["userId"];
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+    if (ViewBag.DetId != null)
+    {
+        DetId = ViewBag.DetId;
+    }
+
+    ViewBag.ReadOnly = false;
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_GoodsReceiptPO\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    if (status != "Draft")
+    {
+        ViewBag.ReadOnly = true;
+    }
+}
 
 @Html.DevExpress().GridView(settings =>
 {
-    // GRID NAME
-    settings.Name = "GoodsReceiptPO_gvContentBatchList";
 
-
-    settings.CallbackRouteValues = new
-    {
-        Controller = "GoodsReceiptPO",
-        Action = "Batch_CustomCallback"
-    };
-
-    //settings.ClientSideEvents.EndCallback =
-    //"function(s,e){ CalculateTotalCreated(); }";
-
-    //settings.ClientSideEvents.EndCallback =
-    //"OnBatchEndCallback";
-    // PRIMARY KEY
-    settings.KeyFieldName = "RowNo";
-
-    // SIZE
+    settings.Name = "gvContentBatchList";
+    settings.KeyFieldName = "DetDetId";
     settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListPartial", Id = Id, DetId = DetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId };
 
-    // SCROLL
-    settings.Settings.VerticalScrollBarMode =
-        ScrollBarMode.Auto;
+    settings.SettingsBehavior.ConfirmDelete = true;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 200;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
 
-    // FILTER
+    settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowEditButton = true;
+
+    settings.CommandColumn.Width = 100;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
     settings.Settings.ShowFilterRow = false;
     settings.Settings.ShowFilterRowMenu = false;
 
-    // SORT
-    settings.SettingsBehavior.AllowSort = false;
+    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
 
-    // PAGER
-    settings.SettingsPager.Mode =
-        GridViewPagerMode.ShowAllRecords;
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Id";
+    //    column.Caption = "Id";
+    //    column.Width = 0;
+    //    column.ReadOnly = true;
 
-    // =========================
-    // EDITING
-    // =========================
-
-    //settings.SettingsEditing.Mode =
-    //    GridViewEditingMode.Inline;
-
-    settings.SettingsEditing.Mode =
-    GridViewEditingMode.Inline;
-
-    settings.SettingsEditing.NewItemRowPosition =
-        GridViewNewItemRowPosition.Bottom;
-
-    // CONTROLLER ROUTE
-    settings.SettingsEditing.AddNewRowRouteValues =
-        new
-        {
-            Controller = "GoodsReceiptPO",
-            Action = "Batch_AddNew"
-        };
-
-    settings.SettingsEditing.UpdateRowRouteValues =
-        new
-        {
-            Controller = "GoodsReceiptPO",
-            Action = "Batch_Update"
-        };
-
-    settings.SettingsEditing.DeleteRowRouteValues =
-    new
-    {
-        Controller = "GoodsReceiptPO",
-        Action = "Batch_Delete"
-    };
-
-    // =========================
-    // COMMAND BUTTON
-    // =========================
-
-    settings.CommandColumn.Visible = true;
-    settings.CommandColumn.Width = 150;
-
-    //settings.CommandColumn.ShowNewButtonInHeader = true;
-    settings.CommandColumn.ShowEditButton = true;
-    settings.CommandColumn.ShowDeleteButton = true;
-    settings.CommandColumn.ShowUpdateButton = true;
-    settings.CommandColumn.ShowCancelButton = true;
-
-    // =========================
-    // HIDDEN COLUMN
-    // =========================
+    //    column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    //});
 
     settings.Columns.Add(column =>
     {
         column.FieldName = "DetId";
-        column.Visible = false;
+        column.Caption = "Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
     });
 
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "DetDetId";
-        column.Visible = false;
-    });
-
-    // =========================
-    // ROW NUMBER
-    // =========================
 
     settings.Columns.Add(column =>
     {
         column.FieldName = "RowNo";
-        column.Caption = "No";
-        column.Width = 50;
-
+        column.Caption = "Row No";
+        column.Width = 60;
         column.ReadOnly = true;
-    });
 
-    // =========================
-    // BATCH
-    // =========================
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
 
     settings.Columns.Add(column =>
     {
         column.FieldName = "Batch";
+        column.Name = "Batch";
         column.Caption = "Batch";
 
-        column.Width = 250;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 200;
+        column.ReadOnly = ViewBag.ReadOnly;
 
-        column.ColumnType =
-            MVCxGridViewColumnType.TextBox;
-
-        column.Settings.AutoFilterCondition =
-            AutoFilterCondition.Contains;
-
-        column.EditorProperties().TextBox(p =>
-        {
-            p.ClientInstanceName = "txtBatch";
-        });
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
     });
-
-    // =========================
-    // QUANTITY
-    // =========================
 
     settings.Columns.Add(column =>
     {
         column.FieldName = "Quantity";
+        column.Name = "Quantity";
         column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
 
-        column.Width = 120;
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
 
-        column.ColumnType =
-            MVCxGridViewColumnType.SpinEdit;
-
-        column.Settings.AutoFilterCondition =
-            AutoFilterCondition.Contains;
-
-        column.EditorProperties().SpinEdit(p =>
-        {
-            p.ClientInstanceName = "txtQuantity";
-
-            p.ClientSideEvents.ValueChanged =
-            "function(s,e){ CalculateTotalCreated(); }";
-        });
-
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
     });
-
-    // =========================
-    // STATUS
-    // =========================
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "Status";
-        column.Caption = "Status";
+        column.FieldName = "AdmissionDate";
+        column.Name = "AdmissionDate";
+        column.Caption = "Admission Date";
 
-        column.Width = 120;
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = 100;
+        column.ReadOnly = ViewBag.ReadOnly;
 
-        column.ColumnType =
-            MVCxGridViewColumnType.TextBox;
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
 
-        column.ReadOnly = true;
     });
 
-    // =========================
-    // COLOR STATUS
-    // =========================
-
-    settings.HtmlDataCellPrepared = (s, e) =>
+    settings.Columns.Add(column =>
     {
-        if (e.VisibleIndex >= 0)
-        {
-            ASPxGridView gridView =
-                (ASPxGridView)s;
+        column.FieldName = "Netto";
+        column.Name = "Netto";
+        column.Caption = "Netto";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
 
-            var status =
-                Convert.ToString(
-                    gridView.GetRowValues(
-                        e.VisibleIndex,
-                        "Status"
-                    )
-                );
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
 
-            if (status == "Invalid")
-            {
-                e.Cell.BackColor =
-                    System.Drawing.Color.IndianRed;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
 
-                e.Cell.ForeColor =
-                    System.Drawing.Color.White;
-            }
-        }
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
+
+    settings.InitNewRow = (s, e) =>
+    {
+        e.NewValues["Id"] = Id;
+        e.NewValues["DetId"] = DetId;
+
+        e.NewValues["AdmissionDate"] = DateTime.Today;
     };
 
 }).Bind(Model).GetHtml()
+
+

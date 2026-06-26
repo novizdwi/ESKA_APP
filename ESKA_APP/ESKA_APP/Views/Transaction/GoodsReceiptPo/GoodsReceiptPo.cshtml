@@ -528,151 +528,151 @@
         }
      }*@
 
-    function AddBatchRow() {
+    //function AddBatchRow() {
 
-        var gv =
-            ASPxClientGridView.Cast(
-                'GoodsReceiptPO_gvContentBatchList'
-            );
+    //    var gv =
+    //        ASPxClientGridView.Cast(
+    //            'GoodsReceiptPO_gvContentBatchList'
+    //        );
 
-        var rows = [];
+    //    var rows = [];
 
-        var totalRow =
-            gv.GetVisibleRowsOnPage();
+    //    var totalRow =
+    //        gv.GetVisibleRowsOnPage();
 
-        // JIKA MASIH BELUM ADA ROW
-        if (totalRow == 0) {
+    //    // JIKA MASIH BELUM ADA ROW
+    //    if (totalRow == 0) {
 
-            SaveRowsAndAdd([]);
+    //        SaveRowsAndAdd([]);
 
-            return;
-        }
+    //        return;
+    //    }
 
-        var completed = 0;
+    //    var completed = 0;
 
-        // EDITOR AKTIF
-        var editBatch = "";
+    //    // EDITOR AKTIF
+    //    var editBatch = "";
 
-        var editQty = 0;
+    //    var editQty = 0;
 
-        if (typeof txtBatch !== 'undefined') {
+    //    if (typeof txtBatch !== 'undefined') {
 
-            editBatch =
-                txtBatch.GetValue();
+    //        editBatch =
+    //            txtBatch.GetValue();
 
-        }
+    //    }
 
-        if (typeof txtQuantity !== 'undefined') {
+    //    if (typeof txtQuantity !== 'undefined') {
 
-            editQty =
-                txtQuantity.GetValue();
+    //        editQty =
+    //            txtQuantity.GetValue();
 
-        }
+    //    }
 
-        // LOOP ROW GRID
-        for (let i = 0; i < totalRow; i++) {
+    //    // LOOP ROW GRID
+    //    for (let i = 0; i < totalRow; i++) {
 
-            gv.GetRowValues(
-                i,
-                'RowNo;Batch;Quantity',
-                function (values) {
+    //        gv.GetRowValues(
+    //            i,
+    //            'RowNo;Batch;Quantity',
+    //            function (values) {
 
-                    var rowNo =
-                        values[0];
+    //                var rowNo =
+    //                    values[0];
 
-                    var batch =
-                        values[1];
+    //                var batch =
+    //                    values[1];
 
-                    var qty =
-                        values[2];
+    //                var qty =
+    //                    values[2];
 
-                    // JIKA ROW TERAKHIR SEDANG EDIT
-                    if (rowNo == totalRow) {
+    //                // JIKA ROW TERAKHIR SEDANG EDIT
+    //                if (rowNo == totalRow) {
 
-                        if (editBatch != "") {
+    //                    if (editBatch != "") {
 
-                            batch = editBatch;
+    //                        batch = editBatch;
 
-                        }
+    //                    }
 
-                        if (editQty != 0) {
+    //                    if (editQty != 0) {
 
-                            qty = editQty;
+    //                        qty = editQty;
 
-                        }
+    //                    }
 
-                    }
+    //                }
 
-                    rows.push({
+    //                rows.push({
 
-                        RowNo: rowNo,
+    //                    RowNo: rowNo,
 
-                        Batch: batch,
+    //                    Batch: batch,
 
-                        Quantity: qty
+    //                    Quantity: qty
 
-                    });
+    //                });
 
-                    completed++;
+    //                completed++;
 
-                    // SEMUA LOOP SELESAI
-                    if (completed == totalRow) {
+    //                // SEMUA LOOP SELESAI
+    //                if (completed == totalRow) {
 
-                        SaveRowsAndAdd(rows);
+    //                    SaveRowsAndAdd(rows);
 
-                    }
+    //                }
 
-                }
-            );
+    //            }
+    //        );
 
-        }
+    //    }
 
-    }
+    //}
 
-    function SaveRowsAndAdd(rows) {
+    //function SaveRowsAndAdd(rows) {
 
-        $.ajax({
+    //    $.ajax({
 
-            type: 'POST',
+    //        type: 'POST',
 
-            url: '/ESKA/GoodsReceiptPO/Batch_SaveAndAddRow',
+    //        url: '/ESKA/GoodsReceiptPO/Batch_SaveAndAddRow',
 
-            data:
-            {
-                rows: JSON.stringify(rows)
-            },
+    //        data:
+    //        {
+    //            rows: JSON.stringify(rows)
+    //        },
 
-            success: function () {
+    //        success: function () {
 
-                var gv =
-                    ASPxClientGridView.Cast(
-                        'GoodsReceiptPO_gvContentBatchList'
-                    );
+    //            var gv =
+    //                ASPxClientGridView.Cast(
+    //                    'GoodsReceiptPO_gvContentBatchList'
+    //                );
 
-                // REFRESH GRID
-                gv.Refresh();
+    //            // REFRESH GRID
+    //            gv.Refresh();
 
-                // EDIT ROW TERAKHIR
-                setTimeout(function () {
+    //            // EDIT ROW TERAKHIR
+    //            setTimeout(function () {
 
-                    var lastIndex =
-                        gv.GetVisibleRowsOnPage() - 1;
+    //                var lastIndex =
+    //                    gv.GetVisibleRowsOnPage() - 1;
 
-                    gv.StartEditRow(lastIndex);
+    //                gv.StartEditRow(lastIndex);
 
-                }, 500);
+    //            }, 500);
 
-            },
+    //        },
 
-            error: function (xhr) {
+    //        error: function (xhr) {
 
-                console.log(xhr);
+    //            console.log(xhr);
 
-            }
+    //        }
 
-        });
+    //    });
 
-    }
+    //}
 
     //function CalculateTotalCreated() {
 
@@ -730,84 +730,84 @@
 
     //}
 
-    function CalculateTotalCreated() {
+    //function CalculateTotalCreated() {
 
-        var gv =
-            ASPxClientGridView.Cast(
-                'GoodsReceiptPO_gvContentBatchList'
-            );
+    //    var gv =
+    //        ASPxClientGridView.Cast(
+    //            'GoodsReceiptPO_gvContentBatchList'
+    //        );
 
-        var totalRow =
-            gv.GetVisibleRowsOnPage();
+    //    var totalRow =
+    //        gv.GetVisibleRowsOnPage();
 
-        var totalQty = 0;
+    //    var totalQty = 0;
 
-        var completed = 0;
+    //    var completed = 0;
 
-        // GRID KOSONG
-        if (totalRow == 0) {
+    //    // GRID KOSONG
+    //    if (totalRow == 0) {
 
-            txtTotalCreated.SetValue(0);
+    //        txtTotalCreated.SetValue(0);
 
-            return;
-        }
+    //        return;
+    //    }
 
-        // LOOP ROW GRID
-        for (let i = 0; i < totalRow; i++) {
+    //    // LOOP ROW GRID
+    //    for (let i = 0; i < totalRow; i++) {
 
-            gv.GetRowValues(
-                i,
-                'Quantity',
-                function (value) {
+    //        gv.GetRowValues(
+    //            i,
+    //            'Quantity',
+    //            function (value) {
 
-                    var qty =
-                        parseFloat(value);
+    //                var qty =
+    //                    parseFloat(value);
 
-                    if (!isNaN(qty)) {
+    //                if (!isNaN(qty)) {
 
-                        totalQty += qty;
+    //                    totalQty += qty;
 
-                    }
+    //                }
 
-                    completed++;
+    //                completed++;
 
-                    // SEMUA ROW SELESAI
-                    if (completed == totalRow) {
+    //                // SEMUA ROW SELESAI
+    //                if (completed == totalRow) {
 
-                        // JIKA ADA EDITOR AKTIF
-                        if (typeof txtQuantity !==
-                            'undefined') {
+    //                    // JIKA ADA EDITOR AKTIF
+    //                    if (typeof txtQuantity !==
+    //                        'undefined') {
 
-                            var editQty =
-                                parseFloat(
-                                    txtQuantity
-                                        .GetValue()
-                                );
+    //                        var editQty =
+    //                            parseFloat(
+    //                                txtQuantity
+    //                                    .GetValue()
+    //                            );
 
-                            if (!isNaN(editQty)) {
+    //                        if (!isNaN(editQty)) {
 
-                                // KURANGI VALUE LAMA
-                                // TAMBAH VALUE EDIT AKTIF
-                                totalQty =
-                                    totalQty -
-                                    qty +
-                                    editQty;
+    //                            // KURANGI VALUE LAMA
+    //                            // TAMBAH VALUE EDIT AKTIF
+    //                            totalQty =
+    //                                totalQty -
+    //                                qty +
+    //                                editQty;
 
-                            }
+    //                        }
 
-                        }
+    //                    }
 
-                        txtTotalCreated
-                            .SetValue(totalQty);
+    //                    txtTotalCreated
+    //                        .SetValue(totalQty);
 
-                    }
+    //                }
 
-                }
-            );
+    //            }
+    //        );
 
-        }
+    //    }
 
-    }
+    //}
 
 
     function BtnCflNettoPopupListOnClick(s, e, detId) {
@@ -1026,22 +1026,61 @@ new
         settings.Styles.LoadingDiv.Opacity = 0;
     }).GetHtml()
 
-@*
-    -----------------------------------------------------------------------------
-    gvShipListViewBatch
-    -----------------------------------------------------------------------------
-*@
 
-@*@Html.Partial("Partial/GoodsReceiptPo_Panel_List_Partial")*@
+@*-----------------------------------------------------------------------------
+    gvShipListViewBatch
+    -----------------------------------------------------------------------------*@
+
+
+@Html.Partial("Partial/GoodsReceiptPo_Form_BtnBottom_Partial")
+
+
+@Html.Partial("Partial/GoodsReceiptPo_Panel_List_Partial")
+
+
+@*@Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")*@
 
 @*-------------------------------------------------
     ViewBatch
     -------------------------------------------------*@
 <script>
+    var isUpdate = false;
+    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+        if (e.command == "UPDATEEDIT") {
+            isUpdate = true;
+        }
+    }
+
+    function gvContentBatchListOnEndCallback(s, e, Id, DetId) {
+        if (s.IsNewRowEditing && s.IsNewRowEditing()) {
+            s.FocusEditor("Batch");
+            popupBatch.PerformCallback();
+        }
+
+        if (isUpdate) {
+
+            isUpdate = false;
+
+            popupBatch.PerformCallback();
+            gvDetail.PerformCallback();
+        }
+
+    }
+
+    function gvContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvContentBatchListOnBatchEditEndEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvContentBatchListOnBatchEditRowValidating(s, e, Id, DetId) {
+
+    }
 
     function popupBatch_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Batch_formDetail");
-
         var popup = ASPxClientPopupControl.Cast("popupBatch");
         if (!popup.IsVisible()) {
             loadingPanel.Hide();
@@ -1054,7 +1093,31 @@ new
         popup.Hide();
     }
 
+    function ViewBatch_OnClickBtnSaveChange(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
 
+</script>
+
+<script type="text/javascript">
+
+
+    function OnBatchEditStartEditing(s, e) {
+    }
+
+    function OnBatchEditEndEditing(s, e) {
+
+    }
+
+    function OnGridFocusedRowChanged(s, e) {
+    }
+
+    function setColValue(s, e, value) {
+    }
+
+    function OnLookupBeginCallback(s, e) {
+    }
 </script>
 
 @Html.Partial("Partial/Batch/Batch_Partial")
