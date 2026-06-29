@@ -22,6 +22,7 @@ namespace ESKA_DI.Models._EF
         public string RoutingStatus { get; set; }
         public Nullable<int> DocEntry { get; set; }
         public Nullable<int> OperatorId { get; set; }
+        public string OperatorName { get; set; }
         public Nullable<System.DateTime> ProcessingDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<int> MachineId { get; set; }
@@ -34,6 +35,5 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public string OperatorName { get; set; }
     }
 }
