@@ -848,6 +848,8 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewBatch.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.Nav.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
@@ -893,7 +895,6 @@
     <Compile Include="IduRazorViewEngine.cs" />
     <Compile Include="Rpts\Rpt.aspx.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Rpts\Rpt.aspx.designer.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>

@@ -9,7 +9,7 @@
 
 }
 
-@model Models.Transaction.GoodsReceiptPoModel
+@model Models.Transaction.IssueAndReceiptModel
 
 @Html.DevExpress().TextBox(
         settings =>
@@ -111,6 +111,55 @@
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "No Work Order";
+        itemSettings.FieldName = "BaseProcessCardTransNo";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "NoWorkOrder";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Route Stage";
+        itemSettings.FieldName = "BaseProcessCardRoutingName";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "RouteStage";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Operator";
+        itemSettings.FieldName = "BaseProcessCardOperatorName";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Operator";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+
+    groupItem_Col3.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Trans No.";
         itemSettings.FieldName = "TransNo";
 
@@ -124,7 +173,7 @@
         txt.Width = 230;
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+    groupItem_Col3.Items.Add(itemSettings =>
     {
 
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
@@ -157,90 +206,6 @@
         txt.Width = 230;
     });
 
-
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
-        itemSettings.Caption = "Vendor Code";
-        itemSettings.FieldName = "VendorCode";
-        var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "VendorCode";
-        txt.ReadOnly = true;//ViewBag.ReadOnly;
-        txt.ShowModelErrors = true;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        //txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Properties.ValidationSettings.Display = Display.Dynamic;
-        txt.Width = 230;
-
-        // Hide the default DropDown button
-        txt.Properties.DropDownButton.Visible = false;
-        txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-
-        if (!ViewBag.ReadOnly)
-        {
-            EditButton lookUpButton = new EditButton();
-            lookUpButton.Text = "";
-            lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
-            lookUpButton.Image.Width = 15;
-
-            txt.Properties.Buttons.Add(lookUpButton);
-            txt.Properties.ClientSideEvents.ButtonClick = " function (s,e) { BtnCflPurcahaseOrderPopupListGrpoOnClick(s,e); } ";
-            //BtnCflGoodIssueHdrPopupListQrcodeGIOnClick 
-        }
-    });
-
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "grpVendorName";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Vendor Name";
-        itemSettings.FieldName = "VendorName";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Name = "VendorName";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 230;
-    });
-
-    groupItem_Col1.Items.Add(m => Model.RefNo, itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Vendor Ref No";
-        itemSettings.FieldName = "RefNo";
-
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "RefNo";
-        txt.ReadOnly = true;
-        txt.ShowModelErrors = true;
-        txt.ControlStyle.CssClass = "editornoimage";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Width = 230;
-    });
-
-
-    groupItem_Col3.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "grpDocnum";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "No";
-        itemSettings.FieldName = "BaseDocNum";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Name = "BaseDocNum";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 230;
-    });
-
     groupItem_Col3.Items.Add(itemSettings =>
     {
         itemSettings.Name = "grpStatus";
@@ -257,55 +222,154 @@
         txt.Width = 230;
     });
 
+    //groupItem_Col1.Items.Add(itemSettings =>
+    //{
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+    //    itemSettings.Caption = "Vendor Code";
+    //    itemSettings.FieldName = "VendorCode";
+    //    var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+    //    txt.Name = "VendorCode";
+    //    txt.ReadOnly = true;//ViewBag.ReadOnly;
+    //    txt.ShowModelErrors = true;
+    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
-    if (Model._FormMode != Models.FormModeEnum.New)
-    {
-        groupItem_Col3.Items.Add(itemSettings =>
-        {
-            itemSettings.Caption = "Author";
-        })
-         .SetNestedContent(() =>
-         {
-             ViewContext.Writer.Write("<table  cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0.65em 0 0.67em 0!important;\" ><tr><td  cellspacing=\"0\" cellpadding=\"0\" >");
+    //    txt.ControlStyle.CssClass = "editor";
+    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    //txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    txt.Properties.ValidationSettings.Display = Display.Dynamic;
+    //    txt.Width = 230;
 
-             Html.DevExpress().Label(
-                x =>
-                {
-                    x.Name = "label1";
-                    x.Text = "Created By(" + Models._Utils.GeneralGetList.GetUserNameByUserId(Model.CreatedUser) + ", " + Models._Utils.GeneralGetList.GeFirstNameByUserId(Model.CreatedUser) + " : " + Model.CreatedDate + ")";
-                    x.Properties.EnableClientSideAPI = true;
-                }
-            )
-            .Render();
+    //    // Hide the default DropDown button
+    //    txt.Properties.DropDownButton.Visible = false;
+    //    txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
-             ViewContext.Writer.Write("</td><td>&nbsp;<td>");
+    //    if (!ViewBag.ReadOnly)
+    //    {
+    //        EditButton lookUpButton = new EditButton();
+    //        lookUpButton.Text = "";
+    //        lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+    //        lookUpButton.Image.Width = 15;
 
-             ViewContext.Writer.Write("</td><td cellspacing=\"0\" cellpadding=\"0\">");
+    //        txt.Properties.Buttons.Add(lookUpButton);
+    //        txt.Properties.ClientSideEvents.ButtonClick = " function (s,e) { BtnCflPurcahaseOrderPopupListGrpoOnClick(s,e); } ";
+    //        //BtnCflGoodIssueHdrPopupListQrcodeGIOnClick 
+    //    }
+    //});
 
-             Html.DevExpress().Label(
-                x =>
-                {
-                    x.Name = "label3";
-                    x.Text = "  Modified By(" + Models._Utils.GeneralGetList.GetUserNameByUserId(Model.ModifiedUser) + ", " + Models._Utils.GeneralGetList.GeFirstNameByUserId(Model.ModifiedUser) + " : " + Model.ModifiedDate + ")";
-                    x.Properties.EnableClientSideAPI = true;
-                }
-            )
-            .Render();
+    //groupItem_Col1.Items.Add(itemSettings =>
+    //{
+    //    itemSettings.Name = "grpVendorName";
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+    //    itemSettings.Caption = "Vendor Name";
+    //    itemSettings.FieldName = "VendorName";
+    //    var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    txt.Name = "VendorName";
+    //    txt.ShowModelErrors = true;
+    //    txt.ReadOnly = true;
+    //    txt.ControlStyle.CssClass = "editor";
+    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    txt.Width = 230;
+    //});
 
-             ViewContext.Writer.Write("</td></tr></table>");
-         });
-    }
+    //groupItem_Col1.Items.Add(m => Model.RefNo, itemSettings =>
+    //{
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+    //    itemSettings.Caption = "Vendor Ref No";
+    //    itemSettings.FieldName = "RefNo";
+
+    //    var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+    //    txt.Name = "RefNo";
+    //    txt.ReadOnly = true;
+    //    txt.ShowModelErrors = true;
+    //    txt.ControlStyle.CssClass = "editornoimage";
+    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    txt.Width = 230;
+    //});
+
+
+    //groupItem_Col3.Items.Add(itemSettings =>
+    //{
+    //    itemSettings.Name = "grpDocnum";
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+    //    itemSettings.Caption = "No";
+    //    itemSettings.FieldName = "BaseDocNum";
+    //    var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    txt.Name = "BaseDocNum";
+    //    txt.ShowModelErrors = true;
+    //    txt.ReadOnly = true;
+    //    txt.ControlStyle.CssClass = "editor";
+    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    txt.Width = 230;
+    //});
+
+    //groupItem_Col3.Items.Add(itemSettings =>
+    //{
+    //    itemSettings.Name = "grpStatus";
+    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+    //    itemSettings.Caption = "Status";
+    //    itemSettings.FieldName = "Status";
+    //    var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    //    txt.Name = "Status";
+    //    txt.ShowModelErrors = true;
+    //    txt.ReadOnly = true;
+    //    txt.ControlStyle.CssClass = "editor";
+    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+    //    txt.Width = 230;
+    //});
+
+
+    // if (Model._FormMode != Models.FormModeEnum.New)
+    //{
+    //    groupItem_Col3.Items.Add(itemSettings =>
+    //    {
+    //        itemSettings.Caption = "Author";
+    //    })
+    //     .SetNestedContent(() =>
+    //     {
+    //         ViewContext.Writer.Write("<table  cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0.65em 0 0.67em 0!important;\" ><tr><td  cellspacing=\"0\" cellpadding=\"0\" >");
+
+    //         Html.DevExpress().Label(
+    //            x =>
+    //            {
+    //                x.Name = "label1";
+    //                x.Text = "Created By(" + Models._Utils.GeneralGetList.GetUserNameByUserId(Model.CreatedUser) + ", " + Models._Utils.GeneralGetList.GeFirstNameByUserId(Model.CreatedUser) + " : " + Model.CreatedDate + ")";
+    //                x.Properties.EnableClientSideAPI = true;
+    //            }
+    //        )
+    //        .Render();
+
+    //         ViewContext.Writer.Write("</td><td>&nbsp;<td>");
+
+    //         ViewContext.Writer.Write("</td><td cellspacing=\"0\" cellpadding=\"0\">");
+
+    //         Html.DevExpress().Label(
+    //            x =>
+    //            {
+    //                x.Name = "label3";
+    //                x.Text = "  Modified By(" + Models._Utils.GeneralGetList.GetUserNameByUserId(Model.ModifiedUser) + ", " + Models._Utils.GeneralGetList.GeFirstNameByUserId(Model.ModifiedUser) + " : " + Model.ModifiedDate + ")";
+    //                x.Properties.EnableClientSideAPI = true;
+    //            }
+    //        )
+    //        .Render();
+
+    //         ViewContext.Writer.Write("</td></tr></table>");
+    //     });
+    //}
 
     groupItem.Items.AddTabbedGroupItem(group =>
     {
         group.Name = "TabDetail";
         group.ColSpan = 1;
         group.Width = Unit.Percentage(100);
-        group.Height = Unit.Pixel(50);
+        group.Height = Unit.Pixel(10);
         group.Items.Add(item =>
         {
             item.Name = "TabItem";
-            item.Caption = "  Item        ";
+            item.Caption = "  Issue Item        ";
 
 
             item.SetNestedContent(() =>
@@ -316,17 +380,56 @@
                         Html.DevExpress().Button(
                             settings1 =>
                             {
-                                settings1.Name = "btnRefreshItemGoodsReceiptPo";
+                                settings1.Name = "btnRefreshItemIssueAndReceipt";
                                 settings1.Height = 20;
                                 settings1.RenderMode = ButtonRenderMode.Link;
                                 settings1.Text = "Add Item";
                                 settings1.ImagePosition = ImagePosition.Left;
-                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListGoodsReceiptPoOnClick(s,e); }";
+                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListIssueAndReceiptOnClick(s,e); }";
                             }).GetHtml()
                     );
                 }
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/GoodsReceiptPo_Form_TabDetail_List_Partial", Model.ListDetails_)
+                     Html.Partial("Partial/IssueAndReceipt_Form_TabDetail_List_Partial", Model.ListIssueItem_)
+                );
+
+            });
+
+        });
+
+    });
+
+     groupItem.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "TabDetail";
+        group.ColSpan = 1;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Pixel(10);
+        group.Items.Add(item =>
+        {
+            item.Name = "TabItem";
+            item.Caption = "  Issue Item        ";
+
+
+            item.SetNestedContent(() =>
+            {
+                if ((Model.Id != 0) && (!ViewBag.ReadOnly))
+                {
+                    ViewContext.Writer.Write(
+                        Html.DevExpress().Button(
+                            settings1 =>
+                            {
+                                settings1.Name = "btnRefreshItemIssueAndReceipt";
+                                settings1.Height = 20;
+                                settings1.RenderMode = ButtonRenderMode.Link;
+                                settings1.Text = "Add Item";
+                                settings1.ImagePosition = ImagePosition.Left;
+                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListIssueAndReceiptOnClick(s,e); }";
+                            }).GetHtml()
+                    );
+                }
+                ViewContext.Writer.Write(
+                     Html.Partial("Partial/IssueAndReceipt_Form_TabDetail_List_Partial", Model.ListIssueItem_)
                 );
 
             });

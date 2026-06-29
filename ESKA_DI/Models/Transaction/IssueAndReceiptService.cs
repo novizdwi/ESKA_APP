@@ -50,7 +50,7 @@ namespace Models.Transaction
         public string BaseProcessCardRoutingCode { get; set; }
         public string BaseProcessCardRoutingName { get; set; }
         public int? BaseProcessCardOperatorId { get; set; }
-        public string BaseProcessCardName { get; set; }
+        public string BaseProcessCardOperatorName { get; set; }
 
         // SAP
         public long? IssueDocEntry { get; set; }

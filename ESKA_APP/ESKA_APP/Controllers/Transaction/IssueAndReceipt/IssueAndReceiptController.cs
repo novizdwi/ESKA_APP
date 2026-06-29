@@ -18,7 +18,7 @@ namespace Controllers.Transaction
         string VIEW_PANEL_LIST_PARTIAL = "Partial/IssueAndReceipt_Panel_List_Partial";
 
 
-        IssueAndReceiptService IssueAndReceiptService;
+        IssueAndReceiptService issueAndReceiptService;
 
         public ActionResult Index()
         {
@@ -30,18 +30,18 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
 
 
-            IssueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService = new IssueAndReceiptService();
             IssueAndReceiptModel IssueAndReceiptModel;
             if (Id == 0)
             {
                 ViewBag.initNew = true;
-                IssueAndReceiptModel = IssueAndReceiptService.GetNewModel(userId);
+                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
                 IssueAndReceiptModel._FormMode = FormModeEnum.New;
             }
             else
             {
-                IssueAndReceiptService = new IssueAndReceiptService();
-                IssueAndReceiptModel = IssueAndReceiptService.GetById(userId, Id);
+                issueAndReceiptService = new IssueAndReceiptService();
+                IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
                 IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
             }
 
@@ -55,22 +55,22 @@ namespace Controllers.Transaction
 
             IssueAndReceiptModel IssueAndReceiptModel;
 
-            IssueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService = new IssueAndReceiptService();
             if (Id == 0)
             {
-                IssueAndReceiptModel = IssueAndReceiptService.GetNewModel(userId);
+                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
                 IssueAndReceiptModel._FormMode = FormModeEnum.New;
             }
             else
             {
-                IssueAndReceiptModel = IssueAndReceiptService.GetById(userId, Id);
+                IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
                 if (IssueAndReceiptModel != null)
                 {
                     IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
                 }
                 else
                 {
-                    IssueAndReceiptModel = IssueAndReceiptService.GetNewModel(userId);
+                    IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
                     IssueAndReceiptModel._FormMode = FormModeEnum.New;
                 }
             }
