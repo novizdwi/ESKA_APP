@@ -1,0 +1,265 @@
+﻿@using Models;
+@using Models._Cfl;
+@{
+
+    var Id = Convert.ToInt64(Request["cbId"]);
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvDetail";//"gvDetail";
+    settings.KeyFieldName = "DetId";
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    //settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabDetailListPartial" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;//GridViewEditingMode.Batch;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    //settings.Settings.ShowFilterRow = true;
+    //settings.Settings.ShowFilterRowMenu = true;
+
+    settings.CommandColumn.Width = 70;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    settings.Columns.Add("Id", "Id").Visible = false;
+    settings.Columns.Add("DetId", "DetId").Visible = false;
+    //settings.Columns.Add("IdPDO", "IdPDO").Width = 0;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 220;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        //column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ClientInstanceName = "txtItemCode";
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(90);
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 220;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(90);
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(95);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Uom";
+        column.Name = "Uom";
+        column.Caption = "Uom Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(95);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "UomEntry";
+        column.Name = "UomEntry";
+        column.Caption = "Uom Entry";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(95);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Whse";
+        column.Name = "WhsCode";
+        column.Caption = "Whse Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(95);
+    });
+
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Netto";
+    //    column.Name = "Netto";
+    //    column.Caption = "Netto";
+    //    column.Settings.AllowSort = DefaultBoolean.False;
+    //    column.ReadOnly = ViewBag.ReadOnly;
+    //    column.Width = 130;
+
+    //    column.SetDataItemTemplateContent(c =>
+    //    {
+    //        //var id = DataBinder.Eval(c.DataItem, "ItemCode");
+    //        if (c.DataItem != null)
+    //        {
+    //            var visibleIndex = c.VisibleIndex;
+    //            var controlName = "gvGoodsReceiptPoContentDetail_Netto_" + visibleIndex;
+    //            Html.DevExpress().ComboBox(
+    //            childsettings =>
+    //            {
+    //                childsettings.Name = controlName;
+    //                childsettings.Properties.ClientInstanceName = controlName;
+    //                childsettings.Properties.DropDownWidth = 200;
+    //                childsettings.Properties.DropDownStyle = DropDownStyle.DropDown;
+
+    //                childsettings.ShowModelErrors = true;
+    //                childsettings.Width = 110;
+    //                childsettings.ReadOnly = true;
+
+    //                childsettings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+
+    //                // Hide the default DropDown button
+    //                childsettings.Properties.DropDownButton.Visible = true;
+    //                childsettings.ControlStyle.CssClass = "editor";
+    //                childsettings.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    //                EditButton lookUpButton = new EditButton();
+    //                lookUpButton.Text = "";
+    //                //lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+    //                //lookUpButton.Image.Width = 15;
+    //                lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+    //                lookUpButton.Image.Height = 16;
+    //                lookUpButton.Image.Width = 16;
+    //                childsettings.Properties.Buttons.Add(lookUpButton);
+    //                childsettings.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflNettoPopupListOnClick(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "DetId"));
+    //            }).GetHtml();
+    //        }
+    //    });
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Netto";
+        column.Name = "Netto";
+        column.Caption = "Netto";
+        column.Settings.AllowSort = DefaultBoolean.False;
+       // column.ReadOnly = true;
+        column.Width = 120;
+
+        column.SetDataItemTemplateContent(c =>
+        {
+            var visibleIndex = c.VisibleIndex;
+            var detId = DataBinder.Eval(c.DataItem, "DetId");
+            var quantity = DataBinder.Eval(c.DataItem, "Netto");
+
+            Html.DevExpress().ButtonEdit(s =>
+            {
+                s.Name = "gvGoodsReceiptPoContentDetail_Netto_" + visibleIndex;
+                s.Properties.ClientInstanceName = "gGoodsReceiptPoContentDetail_Netto_" + visibleIndex;
+
+                // tampilkan value
+                s.Text = Convert.ToDecimal(quantity).ToString("N0");
+
+                s.ReadOnly = true;
+                s.Width = 100;
+
+                s.Properties.Buttons.Clear();
+
+                EditButton btn = new EditButton();
+                btn.Text = "";
+                btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                btn.Image.Width = 15;
+
+                s.Properties.Buttons.Add(btn);
+
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflNettoPopupListOnClick(s, e, '{0}'); }}", detId);
+
+            }).Render();
+        });
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Department";
+        column.Name = "Department";
+        column.Caption = "Department";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Width = Unit.Percentage(95);
+    });
+
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.BeginCallback = "gvDetailOnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvDetailOnEndCallback";
+
+    settings.ClientSideEvents.BatchEditStartEditing = "gvDetailOnBatchEditStartEditing";
+    settings.ClientSideEvents.BatchEditEndEditing = "gvDetailOnBatchEditEndEditing";
+    settings.ClientSideEvents.BatchEditRowValidating = "gvDetailOnBatchEditRowValidating";
+
+}).Bind(Model).GetHtml()
+
