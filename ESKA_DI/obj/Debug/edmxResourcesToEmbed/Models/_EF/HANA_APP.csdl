@@ -1077,6 +1077,7 @@
     <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
     <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+    <Property Name="VisOrder" Type="Int32" />
     <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
     <Property Name="CreatedDate" Type="DateTime" />
@@ -1237,7 +1238,9 @@
     <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="DocEntry" Type="Int32" />
+    <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="OperatorId" Type="Int32" />
+    <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="ProcessingDate" Type="DateTime" />
     <Property Name="EndDate" Type="DateTime" />
     <Property Name="MachineId" Type="Int32" />
@@ -1250,6 +1253,5 @@
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
-    <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

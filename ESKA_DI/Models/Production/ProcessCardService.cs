@@ -68,13 +68,7 @@ namespace Models.Production
 
         public string ItemName { get; set; }
 
-        public decimal? Quantity { get; set; }
-
-        public long? DocEntry { get; set; }
-
-        public string DocNum { get; set; }
-
-        public string DocNum_ { get; set; }
+        public decimal? Quantity { get; set; } 
 
         public string Status { get; set; }
 
@@ -179,7 +173,7 @@ namespace Models.Production
 
         public string RoutingCode { get; set; }
 
-        public string DocNum_ { get; set; }
+        public string DocNum { get; set; }
         
         public string RoutingName { get; set; }
 
@@ -409,9 +403,8 @@ namespace Models.Production
         public List<ProcessCard_DetailModel> ProcessCard_Details(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"
-                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.*, T2.""DocNum"" AS ""DocNum_""
-                FROM ""Tx_ProcessCard_Detail"" T0 
-                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWOR"" T2 ON T0.""DocEntry"" = T2.""DocEntry""
+                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.* 
+                FROM ""Tx_ProcessCard_Detail"" T0  
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
@@ -1084,7 +1077,14 @@ namespace Models.Production
 
                     // ---- Ambil DocEntry & DocNum ----
                     string newDocEntry = oCompany.GetNewObjectKey();
-                    string newDocNum = string.Empty; 
+                    string newDocNum = string.Empty;
+                    SAPbobsCOM.Recordset rsDocNum = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    rsDocNum.DoQuery($@"SELECT ""DocNum"" FROM ""{DbProvider.dbSap_Name}"".""OWOR"" WHERE ""DocEntry"" = {newDocEntry}");
+                    if (!rsDocNum.EoF)
+                    {
+                        newDocNum = rsDocNum.Fields.Item("DocNum").Value?.ToString();
+                    }
+
                     SapCompany.CleanUp(oPO);
 
                     ret.Add(new ProductionOrder_ReturnModel
@@ -1094,6 +1094,7 @@ namespace Models.Production
                         DocEntry = Convert.ToInt32(newDocEntry),
                         DocNum = newDocNum
                     });
+
                 }
                 catch
                 {
@@ -1120,6 +1121,7 @@ namespace Models.Production
                 if (txDetail == null) continue;
 
                 txDetail.DocEntry = po.DocEntry; 
+                txDetail.DocNum = po.DocNum;
                 txDetail.RoutingStatus = "Ready";
                 txDetail.ModifiedDate = dtModified;
                 txDetail.ModifiedUser = userId;

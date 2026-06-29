@@ -1046,6 +1046,7 @@
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
           <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="VisOrder" ColumnName="VisOrder" />
           <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
           <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
           <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
@@ -1223,7 +1224,6 @@
     <EntitySetMapping Name="Tx_ProcessCard_Detail">
       <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
         <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
-          <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
@@ -1236,7 +1236,9 @@
           <ScalarProperty Name="MachineId" ColumnName="MachineId" />
           <ScalarProperty Name="EndDate" ColumnName="EndDate" />
           <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
+          <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
           <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+          <ScalarProperty Name="DocNum" ColumnName="DocNum" />
           <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
           <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
           <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />

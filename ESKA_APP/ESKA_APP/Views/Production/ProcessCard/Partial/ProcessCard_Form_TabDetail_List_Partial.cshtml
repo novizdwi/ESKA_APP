@@ -181,6 +181,20 @@
 
     settings.Columns.Add(column =>
     {
+        column.FieldName = "DocNum";
+        column.Name = "DocNum";
+        column.Caption = "Production No";
+        column.Width = 120;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = false;
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None; 
+
+    });
+
+    settings.Columns.Add(column =>
+    {
         column.FieldName = "ProcessingDate";
         column.Name = "ProcessingDate";
         column.Caption = "Processing Date";

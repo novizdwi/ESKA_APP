@@ -1,0 +1,52 @@
+﻿<br />
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayouBtn";
+    settings.EncodeHtml = false;
+
+    var groupBtn = settings.Items.AddGroupItem(groupBtnSettings =>
+    {
+
+
+        groupBtnSettings.Caption = "";
+        groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupBtnSettings.ColCount = 2;
+        groupBtnSettings.CellStyle.Paddings.Padding = 0;
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = "";
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnRefresh";
+            btnSettings.Text = "Refresh";
+            btnSettings.Width = 20;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnRefresh";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/refresh.png";
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = "";
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnListFind";
+            btnSettings.Text = "Find";
+            btnSettings.Width = 50;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnListFind";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/Find.png";
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+
+
+    });
+
+
+}).GetHtml()

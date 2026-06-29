@@ -4,3 +4,5 @@ INSERT INTO "Ts_FormatNumbering" VALUES('ProcessCard','ProcessCard','PC-','YYMM'
 INSERT INTO "Ts_List" VALUES('BooleanActive',1,'Active','Active', NULL);
 INSERT INTO "Ts_List" VALUES('BooleanActive',2,'Inactive','Inactive', NULL);
 
+INSERT INTO "Ts_List" VALUES('ProductionStatus',1,'Hold','Hold', NULL);
+INSERT INTO "Ts_List" VALUES('ProductionStatus',2,'Release','Release', NULL);

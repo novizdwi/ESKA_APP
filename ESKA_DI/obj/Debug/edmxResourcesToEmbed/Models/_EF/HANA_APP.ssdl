@@ -1018,6 +1018,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="IsApproval" Type="varchar" MaxLength="1" />
     <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
     <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+    <Property Name="VisOrder" Type="int" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
     <Property Name="CreatedDate" Type="timestamp" />
@@ -1053,7 +1054,9 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="RoutingName" Type="nvarchar" MaxLength="100" />
     <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
     <Property Name="DocEntry" Type="int" />
+    <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
     <Property Name="OperatorId" Type="int" />
+    <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
     <Property Name="ProcessingDate" Type="timestamp" />
     <Property Name="EndDate" Type="timestamp" />
     <Property Name="MachineId" Type="int" />
@@ -1066,7 +1069,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
-    <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Tx_StockOpname">
     <Key>
