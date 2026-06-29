@@ -877,11 +877,13 @@
     }
 
     function gvProcessCardContentDetail_OperatorOnChanged(s, e) {
+        var visibleIndex = gvDetail.GetFocusedRowIndex();
         var grid = gvDetail;
         var text = s.GetText(); 
-        var value = s.GetValue();
+        var value = s.GetValue(); 
 
-        grid.batchEditApi.SetCellValue(e.visibleIndex, "OperatorId", value);  
+        grid.batchEditApi.SetCellValue(e.visibleIndex, "OperatorId", value); 
+        gvProessCardContentDetail_OperatorName.SetValue(text);
     }
 
     function gvDetailOnBatchEditEndEditing(s, e) {

@@ -831,6 +831,168 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedUser" Type="int" />
   </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransDate" Type="timestamp" />
+    <Property Name="IssueDocEntry" Type="bigint" />
+    <Property Name="IssueDocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="IssueDocDate" Type="timestamp" />
+    <Property Name="ReceiptDocEntry" Type="bigint" />
+    <Property Name="ReceiptDocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReceiptDocDate" Type="timestamp" />
+    <Property Name="PostingDate" Type="timestamp" />
+    <Property Name="BaseEntry" Type="bigint" />
+    <Property Name="BaseDocNum" Type="nvarchar" MaxLength="50" />
+    <Property Name="BaseProcessCardTransNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="BaseProcessCardId" Type="bigint" />
+    <Property Name="BaseProcessCardSort" Type="int" />
+    <Property Name="BaseProcessCardRoutingCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="BaseProcessCardRoutingName" Type="nvarchar" MaxLength="100" />
+    <Property Name="BaseProcessCardOperatorId" Type="int" />
+    <Property Name="BaseProcessCardOperatorName" Type="nvarchar" MaxLength="100" />
+    <Property Name="IsAfterPosted" Type="nvarchar" MaxLength="1" />
+    <Property Name="CancelReason" Type="nvarchar" MaxLength="250" />
+    <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Approval">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="Id" Type="int" />
+    <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Step" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ActionDate" Type="seconddate" />
+    <Property Name="CreatedDate" Type="seconddate" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedDate" Type="seconddate" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Issue_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="bigint" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="MsnPrd" Type="nvarchar" MaxLength="50" />
+    <Property Name="Cost" Type="nvarchar" MaxLength="50" />
+    <Property Name="Department" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Issue_Item_Batch">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="AdmissionDate" Type="timestamp" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale">
+    <Key>
+      <PropertyRef Name="DetDetDetId" />
+    </Key>
+    <Property Name="DetDetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetDetId" Type="bigint" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Receipt_Item">
+    <Key>
+      <PropertyRef Name="DetId" />
+    </Key>
+    <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="bigint" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="MsnPrd" Type="nvarchar" MaxLength="50" />
+    <Property Name="Department" Type="nvarchar" MaxLength="50" />
+    <Property Name="Price" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="DocEntry" Type="bigint" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Receipt_Item_Batch">
+    <Key>
+      <PropertyRef Name="DetDetId" />
+    </Key>
+    <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetId" Type="bigint" />
+    <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="AdmissionDate" Type="timestamp" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
+  <EntityType Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale">
+    <Key>
+      <PropertyRef Name="DetDetDetId" />
+    </Key>
+    <Property Name="DetDetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DetDetId" Type="bigint" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+    <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+    <Property Name="LineNum" Type="int" />
+    <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="timestamp" />
+    <Property Name="ModifiedDate" Type="timestamp" />
+    <Property Name="CreatedUser" Type="int" />
+    <Property Name="ModifiedUser" Type="int" />
+  </EntityType>
   <EntityType Name="Tx_ProcessCard">
     <Key>
       <PropertyRef Name="Id" />
@@ -904,6 +1066,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="CreatedUser" Type="int" />
     <Property Name="ModifiedDate" Type="timestamp" />
     <Property Name="ModifiedUser" Type="int" />
+    <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Tx_StockOpname">
     <Key>
@@ -1072,6 +1235,14 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Self.Tx_GoodsReceiptPO_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt" EntityType="Self.Tx_IssueAndReceipt" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Approval" EntityType="Self.Tx_IssueAndReceipt_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Issue_Item" EntityType="Self.Tx_IssueAndReceipt_Issue_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Issue_Item_Batch" EntityType="Self.Tx_IssueAndReceipt_Issue_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale" EntityType="Self.Tx_IssueAndReceipt_Issue_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item" EntityType="Self.Tx_IssueAndReceipt_Receipt_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item_Batch" EntityType="Self.Tx_IssueAndReceipt_Receipt_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
+    <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale" EntityType="Self.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_ProcessCard" EntityType="Self.Tx_ProcessCard" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Self.Tx_ProcessCard_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
     <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />

@@ -81,15 +81,23 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_GoodsReceiptPO_Item> Tx_GoodsReceiptPO_Item { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch> Tx_GoodsReceiptPO_Item_Batch { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch_Scale> Tx_GoodsReceiptPO_Item_Batch_Scale { get; set; }
-        public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt> Tx_IssueAndReceipt { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Approval> Tx_IssueAndReceipt_Approval { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Issue_Item> Tx_IssueAndReceipt_Issue_Item { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Issue_Item_Batch> Tx_IssueAndReceipt_Issue_Item_Batch { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Issue_Item_Batch_Scale> Tx_IssueAndReceipt_Issue_Item_Batch_Scale { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Receipt_Item> Tx_IssueAndReceipt_Receipt_Item { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Receipt_Item_Batch> Tx_IssueAndReceipt_Receipt_Item_Batch { get; set; }
+        public virtual DbSet<Tx_IssueAndReceipt_Receipt_Item_Batch_Scale> Tx_IssueAndReceipt_Receipt_Item_Batch_Scale { get; set; }
+        public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
         public virtual DbSet<Tx_ProcessCard_Approval> Tx_ProcessCard_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
         public virtual DbSet<Tx_StockOpname_Item_Batch> Tx_StockOpname_Item_Batch { get; set; }
         public virtual DbSet<Tx_StockOpname_Item_Batch_Scale> Tx_StockOpname_Item_Batch_Scale { get; set; }
-        public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
-        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
         public virtual DbSet<WeighbridgeTransactions> WeighbridgeTransactions { get; set; }
+        public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
     }
 }
