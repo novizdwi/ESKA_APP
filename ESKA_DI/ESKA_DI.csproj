@@ -516,6 +516,30 @@
     <Compile Include="Models\_EF\Tx_GoodsReceiptPO_Item_Batch_Scale.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Approval.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Issue_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Issue_Item_Batch.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Issue_Item_Batch_Scale.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Receipt_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Receipt_Item_Batch.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_IssueAndReceipt_Receipt_Item_Batch_Scale.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\_EF\Tx_ProcessCard.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>

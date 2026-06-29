@@ -126,7 +126,7 @@
         column.ReadOnly = false;
         column.Settings.AllowSort = DefaultBoolean.False;
     });
-    
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "DocNum_";
@@ -162,6 +162,21 @@
         cbo.ValueType = typeof(string);
         cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators();
         cbo.ClientSideEvents.SelectedIndexChanged = "gvProcessCardContentDetail_OperatorOnChanged";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "OperatorName";
+        column.Name = "OperatorName";
+        column.Caption = "Operator Name";
+        column.Width = 0;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = false;
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = "gvProessCardContentDetail_OperatorName";
+
     });
 
     settings.Columns.Add(column =>

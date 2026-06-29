@@ -60,6 +60,7 @@ namespace Models.Production
 
         public string ContractNo { get; set; }
 
+        [Required(ErrorMessage = "required")]
         public string SerialNumber { get; set; }
 
         [Required(ErrorMessage = "required")]
@@ -188,6 +189,8 @@ namespace Models.Production
 
         public int?  OperatorId { get; set; }
 
+        public string  OperatorName { get; set; }
+
         public DateTime? ProcessingDate { get; set; }
 
         public DateTime? EndDate { get; set; }
@@ -271,6 +274,10 @@ namespace Models.Production
         public long? DetId { get; set; }   // FK ke Tx_ProcessCard_Detail
 
         public string TransNo { get; set; }   // Nomor transaksi web
+
+        public int? OperatorId { get; set; }
+        
+        public string OperatorName { get; set; }
 
         public string FG { get; set; }   // Root Finished Good
 
@@ -988,6 +995,14 @@ namespace Models.Production
                     TransNo = model.TransNo,
                     FG = g.First().FG,
                     Parent = g.Key.Parent,
+                    OperatorId = model.ListDetails_
+                                       .Where(d => d.Sort == g.Key.RoutingLevel)
+                                       .Select(d => d.OperatorId)
+                                       .FirstOrDefault(),
+                    OperatorName = model.ListDetails_
+                                       .Where(d => d.Sort == g.Key.RoutingLevel)
+                                       .Select(d => d.OperatorName)
+                                       .FirstOrDefault(),
                     RoutingLevel = g.Key.RoutingLevel,
                     RoutingName = g.First().RoutingName,
                     RoutingStage = g.First().RoutingStage,
@@ -1036,6 +1051,9 @@ namespace Models.Production
                     oPO.UserFields.Fields.Item("U_IDU_WebTransNo").Value = po.TransNo;
                     oPO.UserFields.Fields.Item("U_IDU_RoutingStage").Value = po.RoutingName;
                     oPO.UserFields.Fields.Item("U_IDU_RoutingLevel").Value = Convert.ToInt32(po.RoutingLevel);
+                    oPO.UserFields.Fields.Item("U_IDU_HNcode").Value = model.SerialNumber;
+                    oPO.UserFields.Fields.Item("U_IDU_OperatorId").Value = Convert.ToInt32(po.RoutingLevel);
+                    oPO.UserFields.Fields.Item("U_IDU_OperatorName").Value = po.OperatorName;
 
                     // ---- Lines (WOR1) ----
                     bool firstLine = true;

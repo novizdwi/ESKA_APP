@@ -12,21 +12,28 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_GoodsReceiptPO
+    public partial class Tx_IssueAndReceipt
     {
         public long Id { get; set; }
         public string TransType { get; set; }
         public string TransNo { get; set; }
         public Nullable<System.DateTime> TransDate { get; set; }
-        public string VendorCode { get; set; }
-        public string VendorName { get; set; }
-        public string Address { get; set; }
-        public Nullable<long> DocEntry { get; set; }
-        public string DocNum { get; set; }
-        public Nullable<System.DateTime> DocDate { get; set; }
+        public Nullable<long> IssueDocEntry { get; set; }
+        public string IssueDocNum { get; set; }
+        public Nullable<System.DateTime> IssueDocDate { get; set; }
+        public Nullable<long> ReceiptDocEntry { get; set; }
+        public string ReceiptDocNum { get; set; }
+        public Nullable<System.DateTime> ReceiptDocDate { get; set; }
         public Nullable<System.DateTime> PostingDate { get; set; }
         public Nullable<long> BaseEntry { get; set; }
         public string BaseDocNum { get; set; }
+        public string BaseProcessCardTransNo { get; set; }
+        public Nullable<long> BaseProcessCardId { get; set; }
+        public Nullable<int> BaseProcessCardSort { get; set; }
+        public string BaseProcessCardRoutingCode { get; set; }
+        public string BaseProcessCardRoutingName { get; set; }
+        public Nullable<int> BaseProcessCardOperatorId { get; set; }
+        public string BaseProcessCardOperatorName { get; set; }
         public string IsAfterPosted { get; set; }
         public string CancelReason { get; set; }
         public string RefNo { get; set; }

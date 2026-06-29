@@ -836,6 +836,168 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="CreatedUser" Type="int" />
           <Property Name="ModifiedUser" Type="int" />
         </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransType" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransDate" Type="timestamp" />
+          <Property Name="IssueDocEntry" Type="bigint" />
+          <Property Name="IssueDocNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="IssueDocDate" Type="timestamp" />
+          <Property Name="ReceiptDocEntry" Type="bigint" />
+          <Property Name="ReceiptDocNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceiptDocDate" Type="timestamp" />
+          <Property Name="PostingDate" Type="timestamp" />
+          <Property Name="BaseEntry" Type="bigint" />
+          <Property Name="BaseDocNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="BaseProcessCardTransNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="BaseProcessCardId" Type="bigint" />
+          <Property Name="BaseProcessCardSort" Type="int" />
+          <Property Name="BaseProcessCardRoutingCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="BaseProcessCardRoutingName" Type="nvarchar" MaxLength="100" />
+          <Property Name="BaseProcessCardOperatorId" Type="int" />
+          <Property Name="BaseProcessCardOperatorName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsAfterPosted" Type="nvarchar" MaxLength="1" />
+          <Property Name="CancelReason" Type="nvarchar" MaxLength="250" />
+          <Property Name="RefNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Approval">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="int" />
+          <Property Name="DetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StageId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Step" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ActionDate" Type="seconddate" />
+          <Property Name="CreatedDate" Type="seconddate" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="seconddate" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Issue_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+          <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="MsnPrd" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cost" Type="nvarchar" MaxLength="50" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocEntry" Type="bigint" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Issue_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetId" Type="bigint" />
+          <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="AdmissionDate" Type="timestamp" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale">
+          <Key>
+            <PropertyRef Name="DetDetDetId" />
+          </Key>
+          <Property Name="DetDetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetDetId" Type="bigint" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Receipt_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+          <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="MsnPrd" Type="nvarchar" MaxLength="50" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="DocEntry" Type="bigint" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Receipt_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="DetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetId" Type="bigint" />
+          <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="AdmissionDate" Type="timestamp" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale">
+          <Key>
+            <PropertyRef Name="DetDetDetId" />
+          </Key>
+          <Property Name="DetDetDetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetDetId" Type="bigint" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="50" />
+          <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="int" />
+          <Property Name="LineStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
         <EntityType Name="Tx_ProcessCard">
           <Key>
             <PropertyRef Name="Id" />
@@ -861,6 +1023,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="IsApproval" Type="varchar" MaxLength="1" />
           <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
           <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
+          <Property Name="VisOrder" Type="int" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
           <Property Name="CreatedDate" Type="timestamp" />
@@ -897,6 +1060,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="RoutingStatus" Type="nvarchar" MaxLength="20" />
           <Property Name="DocEntry" Type="int" />
           <Property Name="OperatorId" Type="int" />
+          <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
           <Property Name="ProcessingDate" Type="timestamp" />
           <Property Name="EndDate" Type="timestamp" />
           <Property Name="MachineId" Type="int" />
@@ -1077,6 +1241,14 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Self.Tx_GoodsReceiptPO_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Self.Tx_GoodsReceiptPO_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt" EntityType="Self.Tx_IssueAndReceipt" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Approval" EntityType="Self.Tx_IssueAndReceipt_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Issue_Item" EntityType="Self.Tx_IssueAndReceipt_Issue_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Issue_Item_Batch" EntityType="Self.Tx_IssueAndReceipt_Issue_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale" EntityType="Self.Tx_IssueAndReceipt_Issue_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item" EntityType="Self.Tx_IssueAndReceipt_Receipt_Item" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item_Batch" EntityType="Self.Tx_IssueAndReceipt_Receipt_Item_Batch" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale" EntityType="Self.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_ProcessCard" EntityType="Self.Tx_ProcessCard" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Self.Tx_ProcessCard_Approval" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Self.Tx_ProcessCard_Detail" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -1162,16 +1334,24 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_GoodsReceiptPO_Item" EntityType="Model1.Tx_GoodsReceiptPO_Item" />
           <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch" />
           <EntitySet Name="Tx_GoodsReceiptPO_Item_Batch_Scale" EntityType="Model1.Tx_GoodsReceiptPO_Item_Batch_Scale" />
-          <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
+          <EntitySet Name="Tx_IssueAndReceipt" EntityType="Model1.Tx_IssueAndReceipt" />
+          <EntitySet Name="Tx_IssueAndReceipt_Approval" EntityType="Model1.Tx_IssueAndReceipt_Approval" />
+          <EntitySet Name="Tx_IssueAndReceipt_Issue_Item" EntityType="Model1.Tx_IssueAndReceipt_Issue_Item" />
+          <EntitySet Name="Tx_IssueAndReceipt_Issue_Item_Batch" EntityType="Model1.Tx_IssueAndReceipt_Issue_Item_Batch" />
+          <EntitySet Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale" EntityType="Model1.Tx_IssueAndReceipt_Issue_Item_Batch_Scale" />
+          <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item" EntityType="Model1.Tx_IssueAndReceipt_Receipt_Item" />
+          <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item_Batch" EntityType="Model1.Tx_IssueAndReceipt_Receipt_Item_Batch" />
+          <EntitySet Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale" EntityType="Model1.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale" />
+          <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
           <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
+          <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
           <EntitySet Name="Tx_StockOpname" EntityType="Model1.Tx_StockOpname" />
           <EntitySet Name="Tx_StockOpname_Approval" EntityType="Model1.Tx_StockOpname_Approval" />
           <EntitySet Name="Tx_StockOpname_Item" EntityType="Model1.Tx_StockOpname_Item" />
           <EntitySet Name="Tx_StockOpname_Item_Batch" EntityType="Model1.Tx_StockOpname_Item_Batch" />
           <EntitySet Name="Tx_StockOpname_Item_Batch_Scale" EntityType="Model1.Tx_StockOpname_Item_Batch_Scale" />
-          <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
-          <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
           <EntitySet Name="WeighbridgeTransactions" EntityType="Model1.WeighbridgeTransactions" />
+          <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -1917,17 +2097,17 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="DocEntry" Type="Int64" />
           <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DocDate" Type="DateTime" />
+          <Property Name="PostingDate" Type="DateTime" />
+          <Property Name="BaseEntry" Type="Int64" />
+          <Property Name="BaseDocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="CancelReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="RefNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedUser" Type="Int32" />
-          <Property Name="PostingDate" Type="DateTime" />
-          <Property Name="BaseEntry" Type="Int64" />
-          <Property Name="BaseDocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="CancelReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Tx_GoodsReceiptPO_Item">
           <Key>
@@ -1938,21 +2118,21 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
+          <Property Name="QuantityCreated" Type="Int32" />
           <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UomEntry" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="Whse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LineNum" Type="Int32" />
           <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaseEntry" Type="Int64" />
+          <Property Name="BaseLine" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="ModifiedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedUser" Type="Int32" />
-          <Property Name="UomEntry" Type="Int32" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="BaseEntry" Type="Int64" />
-          <Property Name="BaseLine" Type="Int32" />
-          <Property Name="QuantityCreated" Type="Int32" />
         </EntityType>
         <EntityType Name="Tx_GoodsReceiptPO_Item_Batch">
           <Key>
@@ -1987,20 +2167,200 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
-        <EntityType Name="Tp_UserAlert">
+        <EntityType Name="Tx_IssueAndReceipt">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransDate" Type="DateTime" />
+          <Property Name="IssueDocEntry" Type="Int64" />
+          <Property Name="IssueDocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IssueDocDate" Type="DateTime" />
+          <Property Name="ReceiptDocEntry" Type="Int64" />
+          <Property Name="ReceiptDocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDocDate" Type="DateTime" />
+          <Property Name="PostingDate" Type="DateTime" />
+          <Property Name="BaseEntry" Type="Int64" />
+          <Property Name="BaseDocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaseProcessCardTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BaseProcessCardId" Type="Int64" />
+          <Property Name="BaseProcessCardSort" Type="Int32" />
+          <Property Name="BaseProcessCardRoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BaseProcessCardRoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BaseProcessCardOperatorId" Type="Int32" />
+          <Property Name="BaseProcessCardOperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="CancelReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="RefNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Approval">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int32" />
+          <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StageId" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
-          <Property Name="BaseType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BaseId" Type="Int64" />
-          <Property Name="BaseTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Action" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="NotificationMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SenderId" Type="Int32" />
-          <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="LastShowTime" Type="DateTime" />
+          <Property Name="Step" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ActionDate" Type="DateTime" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Issue_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="MsnPrd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocEntry" Type="Int64" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Issue_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetId" Type="Int64" />
+          <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="AdmissionDate" Type="DateTime" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale">
+          <Key>
+            <PropertyRef Name="DetDetDetId" />
+          </Key>
+          <Property Name="DetDetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetDetId" Type="Int64" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Receipt_Item">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="MsnPrd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="DocEntry" Type="Int64" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Receipt_Item_Batch">
+          <Key>
+            <PropertyRef Name="DetDetId" />
+          </Key>
+          <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetId" Type="Int64" />
+          <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="AdmissionDate" Type="DateTime" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale">
+          <Key>
+            <PropertyRef Name="DetDetDetId" />
+          </Key>
+          <Property Name="DetDetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetDetId" Type="Int64" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="LineNum" Type="Int32" />
+          <Property Name="LineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_ProcessCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocEntry" Type="Int32" />
+          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransDate" Type="DateTime" />
+          <Property Name="PostingDate" Type="DateTime" />
+          <Property Name="StartDate" Type="DateTime" />
+          <Property Name="DueDate" Type="DateTime" />
+          <Property Name="SerialNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ContractNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CardCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CardName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="CancelReason" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="VisOrder" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
         <EntityType Name="Tx_ProcessCard_Approval">
           <Key>
@@ -2014,6 +2374,32 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="ActionDate" Type="DateTime" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tx_ProcessCard_Detail">
+          <Key>
+            <PropertyRef Name="DetId" />
+          </Key>
+          <Property Name="Id" Type="Int64" />
+          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sort" Type="Int32" />
+          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DocEntry" Type="Int32" />
+          <Property Name="OperatorId" Type="Int32" />
+          <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessingDate" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
+          <Property Name="MachineId" Type="Int32" />
+          <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PracticeHours" Type="Time" />
+          <Property Name="ActualHours" Type="Time" />
+          <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -2117,63 +2503,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
-        <EntityType Name="Tx_ProcessCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DocEntry" Type="Int32" />
-          <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransDate" Type="DateTime" />
-          <Property Name="PostingDate" Type="DateTime" />
-          <Property Name="StartDate" Type="DateTime" />
-          <Property Name="DueDate" Type="DateTime" />
-          <Property Name="SerialNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ContractNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CardCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="CardName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="21" Scale="2" />
-          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CancelReason" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="IsApproval" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovalMessages" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsAfterPosted" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Tx_ProcessCard_Detail">
-          <Key>
-            <PropertyRef Name="DetId" />
-          </Key>
-          <Property Name="Id" Type="Int64" />
-          <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Sort" Type="Int32" />
-          <Property Name="RoutingCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="RoutingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="RoutingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DocEntry" Type="Int32" />
-          <Property Name="OperatorId" Type="Int32" />
-          <Property Name="ProcessingDate" Type="DateTime" />
-          <Property Name="EndDate" Type="DateTime" />
-          <Property Name="MachineId" Type="Int32" />
-          <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PracticeHours" Type="Time" />
-          <Property Name="ActualHours" Type="Time" />
-          <Property Name="LineStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
-        </EntityType>
         <EntityType Name="WeighbridgeTransactions">
           <Key>
             <PropertyRef Name="Id" />
@@ -2185,6 +2514,21 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="BaudRate" Type="Int32" Nullable="false" />
           <Property Name="Message" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="SentAt" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tp_UserAlert">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="BaseType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BaseId" Type="Int64" />
+          <Property Name="BaseTransNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NotificationMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SenderId" Type="Int32" />
+          <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastShowTime" Type="DateTime" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2973,17 +3317,17 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySetMapping Name="Tx_GoodsReceiptPO">
             <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO">
               <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO">
-                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
-                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
-                <ScalarProperty Name="BaseDocNum" ColumnName="BaseDocNum" />
-                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
-                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="RefNo" ColumnName="RefNo" />
+                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+                <ScalarProperty Name="BaseDocNum" ColumnName="BaseDocNum" />
+                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
                 <ScalarProperty Name="DocDate" ColumnName="DocDate" />
                 <ScalarProperty Name="DocNum" ColumnName="DocNum" />
                 <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
@@ -3000,21 +3344,21 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySetMapping Name="Tx_GoodsReceiptPO_Item">
             <EntityTypeMapping TypeName="Model1.Tx_GoodsReceiptPO_Item">
               <MappingFragment StoreEntitySet="Tx_GoodsReceiptPO_Item">
-                <ScalarProperty Name="QuantityCreated" ColumnName="QuantityCreated" />
-                <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
-                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="BaseLine" ColumnName="BaseLine" />
+                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
                 <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
                 <ScalarProperty Name="LineNum" ColumnName="LineNum" />
                 <ScalarProperty Name="Department" ColumnName="Department" />
                 <ScalarProperty Name="Netto" ColumnName="Netto" />
                 <ScalarProperty Name="Whse" ColumnName="Whse" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
                 <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="QuantityCreated" ColumnName="QuantityCreated" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
@@ -3058,18 +3402,206 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tp_UserAlert">
-            <EntityTypeMapping TypeName="Model1.Tp_UserAlert">
-              <MappingFragment StoreEntitySet="Tp_UserAlert">
-                <ScalarProperty Name="LastShowTime" ColumnName="LastShowTime" />
-                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
-                <ScalarProperty Name="NotificationMessage" ColumnName="NotificationMessage" />
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
-                <ScalarProperty Name="BaseId" ColumnName="BaseId" />
-                <ScalarProperty Name="BaseType" ColumnName="BaseType" />
+          <EntitySetMapping Name="Tx_IssueAndReceipt">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="RefNo" ColumnName="RefNo" />
+                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+                <ScalarProperty Name="BaseProcessCardOperatorName" ColumnName="BaseProcessCardOperatorName" />
+                <ScalarProperty Name="BaseProcessCardOperatorId" ColumnName="BaseProcessCardOperatorId" />
+                <ScalarProperty Name="BaseProcessCardRoutingName" ColumnName="BaseProcessCardRoutingName" />
+                <ScalarProperty Name="BaseProcessCardRoutingCode" ColumnName="BaseProcessCardRoutingCode" />
+                <ScalarProperty Name="BaseProcessCardSort" ColumnName="BaseProcessCardSort" />
+                <ScalarProperty Name="BaseProcessCardId" ColumnName="BaseProcessCardId" />
+                <ScalarProperty Name="BaseProcessCardTransNo" ColumnName="BaseProcessCardTransNo" />
+                <ScalarProperty Name="BaseDocNum" ColumnName="BaseDocNum" />
+                <ScalarProperty Name="BaseEntry" ColumnName="BaseEntry" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
+                <ScalarProperty Name="ReceiptDocDate" ColumnName="ReceiptDocDate" />
+                <ScalarProperty Name="ReceiptDocNum" ColumnName="ReceiptDocNum" />
+                <ScalarProperty Name="ReceiptDocEntry" ColumnName="ReceiptDocEntry" />
+                <ScalarProperty Name="IssueDocDate" ColumnName="IssueDocDate" />
+                <ScalarProperty Name="IssueDocNum" ColumnName="IssueDocNum" />
+                <ScalarProperty Name="IssueDocEntry" ColumnName="IssueDocEntry" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Approval">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Approval">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Approval">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="StageId" ColumnName="StageId" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Issue_Item">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Issue_Item">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Issue_Item">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="MsnPrd" ColumnName="MsnPrd" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Issue_Item_Batch">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Issue_Item_Batch">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Issue_Item_Batch">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="AdmissionDate" ColumnName="AdmissionDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Batch" ColumnName="Batch" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Issue_Item_Batch_Scale">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Issue_Item_Batch_Scale">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Issue_Item_Batch_Scale">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+                <ScalarProperty Name="DetDetDetId" ColumnName="DetDetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Receipt_Item">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Receipt_Item">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Receipt_Item">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="MsnPrd" ColumnName="MsnPrd" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Receipt_Item_Batch">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Receipt_Item_Batch">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Receipt_Item_Batch">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="AdmissionDate" ColumnName="AdmissionDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Batch" ColumnName="Batch" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale">
+            <EntityTypeMapping TypeName="Model1.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale">
+              <MappingFragment StoreEntitySet="Tx_IssueAndReceipt_Receipt_Item_Batch_Scale">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
+                <ScalarProperty Name="Netto" ColumnName="Netto" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
+                <ScalarProperty Name="DetDetDetId" ColumnName="DetDetDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_ProcessCard">
+            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard">
+              <MappingFragment StoreEntitySet="Tx_ProcessCard">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="VisOrder" ColumnName="VisOrder" />
+                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
+                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="CardName" ColumnName="CardName" />
+                <ScalarProperty Name="CardCode" ColumnName="CardCode" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3087,6 +3619,33 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="Step" ColumnName="Step" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="StageId" ColumnName="StageId" />
+                <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tx_ProcessCard_Detail">
+            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
+              <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
+                <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
+                <ScalarProperty Name="PracticeHours" ColumnName="PracticeHours" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
+                <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+                <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+                <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
+                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
+                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -3195,65 +3754,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tx_ProcessCard">
-            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard">
-              <MappingFragment StoreEntitySet="Tx_ProcessCard">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ApprovalMessages" ColumnName="ApprovalMessages" />
-                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
-                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
-                <ScalarProperty Name="CancelReason" ColumnName="CancelReason" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="CardName" ColumnName="CardName" />
-                <ScalarProperty Name="CardCode" ColumnName="CardCode" />
-                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
-                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
-                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-                <ScalarProperty Name="DocNum" ColumnName="DocNum" />
-                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
-                <ScalarProperty Name="TransNo" ColumnName="TransNo" />
-                <ScalarProperty Name="TransType" ColumnName="TransType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tx_ProcessCard_Detail">
-            <EntityTypeMapping TypeName="Model1.Tx_ProcessCard_Detail">
-              <MappingFragment StoreEntitySet="Tx_ProcessCard_Detail">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="LineStatus" ColumnName="LineStatus" />
-                <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
-                <ScalarProperty Name="PracticeHours" ColumnName="PracticeHours" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
-                <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
-                <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
-                <ScalarProperty Name="RoutingStatus" ColumnName="RoutingStatus" />
-                <ScalarProperty Name="RoutingName" ColumnName="RoutingName" />
-                <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
-                <ScalarProperty Name="Sort" ColumnName="Sort" />
-                <ScalarProperty Name="DetId" ColumnName="DetId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="WeighbridgeTransactions">
             <EntityTypeMapping TypeName="Model1.WeighbridgeTransactions">
               <MappingFragment StoreEntitySet="WeighbridgeTransactions">
@@ -3263,6 +3763,22 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="ComPort" ColumnName="ComPort" />
                 <ScalarProperty Name="ScaleStatus" ColumnName="ScaleStatus" />
                 <ScalarProperty Name="WeightKg" ColumnName="WeightKg" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tp_UserAlert">
+            <EntityTypeMapping TypeName="Model1.Tp_UserAlert">
+              <MappingFragment StoreEntitySet="Tp_UserAlert">
+                <ScalarProperty Name="LastShowTime" ColumnName="LastShowTime" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="NotificationMessage" ColumnName="NotificationMessage" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="BaseTransNo" ColumnName="BaseTransNo" />
+                <ScalarProperty Name="BaseId" ColumnName="BaseId" />
+                <ScalarProperty Name="BaseType" ColumnName="BaseType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

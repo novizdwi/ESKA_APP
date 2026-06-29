@@ -389,6 +389,7 @@ CREATE COLUMN TABLE "Tx_ProcessCard"(
     "ApprovalStatus" NVARCHAR(50),
     "ApprovalMessages" NVARCHAR(254),
 
+    "VisOrder" INT,
     "Status" NVARCHAR(50),
     "IsAfterPosted" CHAR(1),
 
@@ -411,8 +412,9 @@ CREATE COLUMN TABLE "Tx_ProcessCard_Detail" (
 	
     "DocEntry" INT, 
     "OperatorId" INTEGER, 
-
-    "ProcessingDate" TIMESTAMP,
+    "OperatorName" NVARCHAR(100),
+    
+	"ProcessingDate" TIMESTAMP,
     "EndDate" TIMESTAMP,
 
     "MachineId" INTEGER,
