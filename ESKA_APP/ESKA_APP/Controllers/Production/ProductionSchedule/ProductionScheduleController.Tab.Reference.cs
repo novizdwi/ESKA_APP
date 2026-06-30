@@ -15,7 +15,7 @@ using Models.Production;
 
 namespace Controllers.Production
 {
-    public partial class ProductionSchedulerController : BaseController
+    public partial class ProductionScheduleController : BaseController
     {
         public ActionResult TabTransListPartial()
         {
@@ -30,13 +30,13 @@ namespace Controllers.Production
             {
                 toDate = Convert.ToDateTime((Request["cbToDate"]).ToString() ); 
             }
-            productionSchedulerService = new ProductionSchedulerService();
+            productionScheduleService = new ProductionScheduleService();
             string itemCode = (Request["cbItemCode"]).ToString();
             string whsCode = (Request["cbWhsCode"]).ToString();
             string tagId = (Request["cbTagId"]).ToString();
             string status = (Request["cbStatus"]).ToString();
 
-            var modelList = productionSchedulerService.ProductionScheduler_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+            var modelList = productionScheduleService.ProductionSchedule_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
 
             return PartialView(VIEW_FORM_TABREFERENCE_PARTIAL, modelList);
         }

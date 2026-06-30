@@ -19,49 +19,35 @@ namespace Models.Production
 
     #region Models
 
-    public class ProductionSchedulerModel
+    public class ProductionScheduleModel
     {
         public int UserId { get; set; } 
 
-        public List<ProductionScheduler_ReferenceModel> ListReferences_ = new List<ProductionScheduler_ReferenceModel>();
+        public List<ProductionSchedule_ReferenceModel> ListReferences_ = new List<ProductionSchedule_ReferenceModel>();
     }
 
 
-    public class ProductionScheduler_ReferenceModel
+    public class ProductionSchedule_ReferenceModel
     {
 
         public int Id { get; set; }
 
+        public string TransNo { get; set; }
+        
         public string ItemCode { get; set; }
 
         public string ItemName { get; set; }
 
-        public string WhsCode { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public string WhsName { get; set; }
+        public decimal? Quantity { get; set; }
 
-        public string TagId { get; set; }
+        public int? VisOrder { get; set; }
 
-        public string Status { get; set; }
+        List<ProductionScheduleDetailModel> ListDetails_ = new List<ProductionScheduleDetailModel>();
+    } 
 
-        public DateTime? CreatedDate { get; set; }
-
-        public string TransactionCode { get; set; }
-
-        public string TransactionName { get; set; }
-
-        public DateTime? LastModifiedDate { get; set; }
-
-    }
-
-    public class ProductionSchedulerItemTagView___
-    {
-        public string TagId { get; set; }
-
-        public List<ProductionSchedulerItemTagModel> ProductionSchedulerItemTagModel___ { get; set; }
-    }
-
-    public class ProductionSchedulerItemTagModel
+    public class ProductionScheduleDetailModel
     {
         public long LogId { get; set; }
 
@@ -102,64 +88,64 @@ namespace Models.Production
 
     #region Services
 
-    public class ProductionSchedulerService
+    public class ProductionScheduleService
     {
 
-        public ProductionSchedulerModel GetNewModel(int userId)
+        public ProductionScheduleModel GetNewModel(int userId)
         {
             DateTime toDate = DateTime.Now;
             DateTime fromDate = toDate.AddMonths(-1);
 
-            ProductionSchedulerModel model = new ProductionSchedulerModel();
+            ProductionScheduleModel model = new ProductionScheduleModel();
             model.UserId = userId; 
 
-            model.ListReferences_ = ProductionScheduler_GetReferences(userId, fromDate, toDate, null, null, null, null);
+            model.ListReferences_ = ProductionSchedule_GetReferences(userId, fromDate, toDate, null, null, null, null);
 
             return model;
         }
 
-        public ProductionSchedulerModel Find(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
+        public ProductionScheduleModel Find(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
         {
-            ProductionSchedulerModel model = new ProductionSchedulerModel();
+            ProductionScheduleModel model = new ProductionScheduleModel();
             model.UserId = userId; 
 
-            model.ListReferences_ = this.ProductionScheduler_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+            model.ListReferences_ = this.ProductionSchedule_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
             return model;
         }
 
 
         //-------------------------------------
-        //Detail  ProductionScheduler_Reference
+        //Detail  ProductionSchedule_Reference
         //-------------------------------------
-        public ProductionSchedulerModel GetListByParam(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
+        public ProductionScheduleModel GetListByParam(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
         {
-            ProductionSchedulerModel model = new ProductionSchedulerModel();
+            ProductionScheduleModel model = new ProductionScheduleModel();
             model.UserId = userId; 
 
-            model.ListReferences_ = this.ProductionScheduler_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+            model.ListReferences_ = this.ProductionSchedule_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
 
             return model;
         }
 
         //-------------------------------------
-        //Detail  ProductionScheduler_Reference
+        //Detail  ProductionSchedule_Reference
         //-------------------------------------
-        public List<ProductionScheduler_ReferenceModel> ProductionScheduler_GetReferences(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
+        public List<ProductionSchedule_ReferenceModel> ProductionSchedule_GetReferences(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return ProductionScheduler_GetReferences(CONTEXT, userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+                return ProductionSchedule_GetReferences(CONTEXT, userId, fromDate, toDate, itemCode, whsCode, tagId, status);
             }
         }
 
-        public List<ProductionScheduler_ReferenceModel> ProductionScheduler_GetReferences(HANA_APP CONTEXT, int userId, DateTime fromDate, DateTime toDate, string itemCode = "", string whsCode = "", string tagId = "", string status = "")
+        public List<ProductionSchedule_ReferenceModel> ProductionSchedule_GetReferences(HANA_APP CONTEXT, int userId, DateTime fromDate, DateTime toDate, string itemCode = "", string whsCode = "", string tagId = "", string status = "")
         {
             string sql = @"
-            CALL ""SpProductionScheduler_GetReferences"" (
+            CALL ""SpProductionSchedule_GetReferences"" (
                 :p0 --userId
             )";
 
-            return CONTEXT.Database.SqlQuery<ProductionScheduler_ReferenceModel>(sql,  
+            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql,  
                 userId 
                 ).ToList();
         }

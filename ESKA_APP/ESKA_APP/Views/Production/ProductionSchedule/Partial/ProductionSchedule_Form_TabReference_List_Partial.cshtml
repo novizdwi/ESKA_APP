@@ -6,7 +6,7 @@
 
 @Html.DevExpress().GridView(settings =>
 {
-    settings.Name = "gvProductionSchedulerReferenceDetail";
+    settings.Name = "gvProductionScheduleReferenceDetail";
     settings.KeyFieldName = "TagId";
     settings.Width = Unit.Percentage(100);
 
@@ -14,7 +14,7 @@
     settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
 
-    settings.CallbackRouteValues = new { Controller = "ProductionScheduler", Action = "TabTransListPartial" };
+    settings.CallbackRouteValues = new { Controller = "ProductionSchedule", Action = "TabTransListPartial" };
 
     settings.Settings.ShowFilterRow = true;
     settings.Settings.ShowFilterRowMenu = true;
@@ -253,7 +253,7 @@
 
     settings.Settings.ShowFooter = true;
 
-    settings.ClientSideEvents.BeginCallback = "gvProductionSchedulerReferenceDetailBeginCallback";
+    settings.ClientSideEvents.BeginCallback = "gvProductionScheduleReferenceDetailBeginCallback";
 
 }).Bind(Model).GetHtml()
 

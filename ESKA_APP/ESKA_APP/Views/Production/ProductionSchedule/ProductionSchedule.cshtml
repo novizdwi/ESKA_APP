@@ -8,11 +8,11 @@
     <script src="~/Scripts/Test/DXR.js"></script>
 }
 
-@model Models.Production.ProductionSchedulerModel
+@model Models.Production.ProductionScheduleModel
 
 
 @{
-    ViewBag.Title = "RFID List";
+    ViewBag.Title = "Production Schedule";
 }
 
 <script type="text/javascript">
@@ -135,7 +135,7 @@
     function OnClickBtnRefresh(s, e) {
         $.ajax({
              type: "POST",
-             url: "@Url.Action("DetailPartial", "ProductionScheduler")",
+             url: "@Url.Action("DetailPartial", "ProductionSchedule")",
              beforeSend: function () {
                  OnBegin();
              },
@@ -178,7 +178,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Find", "ProductionScheduler")',
+            url: '@Url.Action("Find", "ProductionSchedule")',
             data: { fromDate: fromDate, toDate: toDate, itemCode: itemCodes, whsCode: WhsCode.GetValue(), tagId: TagId.GetValue(), status: Status.GetValue() },
             beforeSend: function () {
                 OnBegin();
@@ -197,7 +197,7 @@
         });
     }
 
-        function gvProductionSchedulerReferenceDetailBeginCallback(s, e) {
+        function gvProductionScheduleReferenceDetailBeginCallback(s, e) {
         var resultItemCodes = '';
         if (!((ItemCode.GetValue() == '') || (ItemCode.GetValue() == null))) {
             var objectCode = JSON.parse(ItemCode.GetValue());
@@ -220,7 +220,7 @@
 
         var popup = ASPxClientPopupControl.Cast("popupItemTag");
 
-        popup.callbackUrl = '@Url.Action("ViewItemTag_PopupListOnDemandPartial", "ProductionScheduler")' + '?TagId=' + tagId;
+        popup.callbackUrl = '@Url.Action("ViewItemTag_PopupListOnDemandPartial", "ProductionSchedule")' + '?TagId=' + tagId;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -232,7 +232,7 @@
 
 
 
-@Html.Partial("Partial/ProductionScheduler_Form_Btn_Partial")
+@Html.Partial("Partial/ProductionSchedule_Form_Btn_Partial")
 
 <script type="text/javascript">
 
@@ -302,7 +302,7 @@
 </script>
 
 
-@using (Ajax.BeginForm("mantap", "ProductionScheduler", null,
+@using (Ajax.BeginForm("mantap", "ProductionSchedule", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -323,7 +323,7 @@ new
 }))
 {
     <div id="contentForm">
-        @Html.Partial("Partial/ProductionScheduler_Form_Partial")
+        @Html.Partial("Partial/ProductionSchedule_Form_Partial")
 
     </div>
 }

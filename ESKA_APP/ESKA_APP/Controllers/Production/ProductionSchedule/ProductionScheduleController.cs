@@ -15,14 +15,14 @@ using Models.Production;
 
 namespace Controllers.Production
 {
-    public partial class ProductionSchedulerController : BaseController
+    public partial class ProductionScheduleController : BaseController
     {
 
-        string VIEW_DETAIL = "ProductionScheduler";
-        string VIEW_FORM_PARTIAL = "Partial/ProductionScheduler_Form_Partial";
-        string VIEW_FORM_TABREFERENCE_PARTIAL = "Partial/ProductionScheduler_Form_TabReference_List_Partial";
+        string VIEW_DETAIL = "ProductionSchedule";
+        string VIEW_FORM_PARTIAL = "Partial/ProductionSchedule_Form_Partial";
+        string VIEW_FORM_TABREFERENCE_PARTIAL = "Partial/ProductionSchedule_Form_TabReference_List_Partial";
 
-        ProductionSchedulerService productionSchedulerService;
+        ProductionScheduleService productionScheduleService;
 
         public ActionResult Index()
         {
@@ -33,14 +33,14 @@ namespace Controllers.Production
         {
             int userId = (int)Session["userId"];
 
-            productionSchedulerService = new ProductionSchedulerService();
-            ProductionSchedulerModel productionSchedulerModel;
+            productionScheduleService = new ProductionScheduleService();
+            ProductionScheduleModel productionScheduleModel;
             ViewBag.initNew = true;
 
-            productionSchedulerModel = productionSchedulerService.GetNewModel(userId);
-            productionSchedulerModel.UserId = userId;
+            productionScheduleModel = productionScheduleService.GetNewModel(userId);
+            productionScheduleModel.UserId = userId;
 
-            return View(VIEW_DETAIL, productionSchedulerModel);
+            return View(VIEW_DETAIL, productionScheduleModel);
         }
 
         public ActionResult DetailPartial(DateTime? fromDate = null, DateTime? toDate = null, string itemCode = "", string whsCode = "", string tagId = "", string status = "")
@@ -49,12 +49,12 @@ namespace Controllers.Production
             fromDate = fromDate ?? DateTime.Now.AddMonths(-1);
             toDate = toDate ?? DateTime.Now;
             
-            ProductionSchedulerModel productionSchedulerModel;
+            ProductionScheduleModel productionScheduleModel;
 
-            productionSchedulerService = new ProductionSchedulerService();
-            productionSchedulerModel = productionSchedulerService.GetNewModel(userId);
+            productionScheduleService = new ProductionScheduleService();
+            productionScheduleModel = productionScheduleService.GetNewModel(userId);
 
-            return PartialView(VIEW_FORM_PARTIAL, productionSchedulerModel);
+            return PartialView(VIEW_FORM_PARTIAL, productionScheduleModel);
         }
 
         public ActionResult Find(DateTime? fromDate = null, DateTime? toDate = null, string itemCode = "", string whsCode = "", string tagId = "", string status = "")
@@ -63,8 +63,8 @@ namespace Controllers.Production
             DateTime fromDate2 = fromDate ?? DateTime.Now.AddMonths(-1);
             DateTime toDate2 = toDate ?? DateTime.Now;
 
-            productionSchedulerService = new ProductionSchedulerService();
-            ProductionSchedulerModel models = productionSchedulerService.Find(userId, fromDate2, toDate2, itemCode, whsCode, tagId, status);
+            productionScheduleService = new ProductionScheduleService();
+            ProductionScheduleModel models = productionScheduleService.Find(userId, fromDate2, toDate2, itemCode, whsCode, tagId, status);
 
             return PartialView(VIEW_FORM_PARTIAL, models);
         }
