@@ -1,140 +1,140 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Collections;
-//using System.Linq;
-//using System.Web;
-//using System.Web.Mvc;
-//using DevExpress.Web.Mvc;
-//using System.IO;
-//using System.Threading;
-//using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using DevExpress.Web.Mvc;
+using System.IO;
+using System.Threading;
+using System.Net;
 
-//using Models;
-//using Models.Transaction;
+using Models;
+using Models.Transaction;
 
-//namespace Controllers.Transaction
-//{
-//    public partial class GoodsReceiptPoController : BaseController
-//    {
-//        public ListFindParamGoodsReceiptPo GetParam(HttpRequestBase Request)
-//        {
+namespace Controllers.Transaction
+{
+    public partial class GoodsReceiptPoController : BaseController
+    {
+        public ListFindParamGoodsReceiptPo GetParam(HttpRequestBase Request)
+        {
 
-//            var param = new ListFindParamGoodsReceiptPo();
+            var param = new ListFindParamGoodsReceiptPo();
 
-//            if (string.IsNullOrEmpty(Request["hidden_IsFindTransDate"]))
-//            {
-//                param.IsFindTransDate = true;
-//                param.TransDate_From = DateTime.Now.Date.AddDays((DateTime.Now.Day - 1) * -1);
-//                param.TransDate_To = DateTime.Now.Date;
-//            }
-//            else
-//            {
-//                param.IsFindTransDate = bool.Parse(Request["hidden_IsFindTransDate"]);
-//                if (string.IsNullOrEmpty(Request["hidden_TransDate_From"]))
-//                {
-//                    param.TransDate_From = null;
-//                }
-//                else
-//                {
-//                    param.TransDate_From = DateTime.Parse(Request["hidden_TransDate_From"]);
-//                }
+            if (string.IsNullOrEmpty(Request["hidden_IsFindTransDate"]))
+            {
+                param.IsFindTransDate = true;
+                param.TransDate_From = DateTime.Now.Date.AddDays((DateTime.Now.Day - 1) * -1);
+                param.TransDate_To = DateTime.Now.Date;
+            }
+            else
+            {
+                param.IsFindTransDate = bool.Parse(Request["hidden_IsFindTransDate"]);
+                if (string.IsNullOrEmpty(Request["hidden_TransDate_From"]))
+                {
+                    param.TransDate_From = null;
+                }
+                else
+                {
+                    param.TransDate_From = DateTime.Parse(Request["hidden_TransDate_From"]);
+                }
 
-//                if (string.IsNullOrEmpty(Request["hidden_TransDate_To"]))
-//                {
-//                    param.TransDate_To = null;
-//                }
-//                else
-//                {
-//                    param.TransDate_To = DateTime.Parse(Request["hidden_TransDate_To"]);
-//                }
+                if (string.IsNullOrEmpty(Request["hidden_TransDate_To"]))
+                {
+                    param.TransDate_To = null;
+                }
+                else
+                {
+                    param.TransDate_To = DateTime.Parse(Request["hidden_TransDate_To"]);
+                }
 
-//            }
-
-
-
-//            return param;
-//        }
-
-//        public ActionResult ListPartial()
-//        {
-//            int userId = (int)Session["userId"];
-//            var param = GetParam(Request);
-
-//            var viewModel = GetListModel();
-//            ProcessCustomBinding(userId, viewModel, param);
-//            return PartialView(VIEW_LIST_PARTIAL, viewModel);
-//        }
-
-//        // Paging
-//        public ActionResult ListPaging(GridViewPagerState pager)
-//        {
-//            int userId = (int)Session["userId"];
-//            var param = GetParam(Request);
-
-//            var viewModel = GetListModel();
-//            viewModel.ApplyPagingState(pager);
-//            ProcessCustomBinding(userId, viewModel, param);
-
-//            return PartialView(VIEW_LIST_PARTIAL, viewModel);
-//        }
-
-//        // Filtering
-
-//        public ActionResult ListFiltering(GridViewFilteringState filteringState)
-//        {
-//            int userId = (int)Session["userId"];
-//            var param = GetParam(Request);
-
-//            var viewModel = GetListModel();
-//            viewModel.ApplyFilteringState(filteringState);
-//            ProcessCustomBinding(userId, viewModel, param);
-
-//            return PartialView(VIEW_LIST_PARTIAL, viewModel);
-//        }
-
-//        // Sorting
-//        public ActionResult ListSorting(GridViewColumnState column, bool reset)
-//        {
-//            int userId = (int)Session["userId"];
-//            var param = GetParam(Request);
-
-//            var viewModel = GetListModel();
-//            viewModel.ApplySortingState(column, reset);
-//            ProcessCustomBinding(userId, viewModel, param);
-
-//            return PartialView(VIEW_LIST_PARTIAL, viewModel);
-//        }
+            }
 
 
 
-//        static GridViewModel GetListModel()
-//        {
-//            var viewModel = GridViewExtension.GetViewModel("gvGoodsReceiptPoList");
-//            if (viewModel == null)
-//            {
-//                viewModel = GoodsReceiptPo__List_Model.CreateGridViewModel();
-//            }
+            return param;
+        }
 
-//            return viewModel;
-//        }
+        public ActionResult ListPartial()
+        {
+            int userId = (int)Session["userId"];
+            var param = GetParam(Request);
 
-//        static void ProcessCustomBinding(int userId, GridViewModel viewModel, ListFindParamGoodsReceiptPo param)
-//        {
+            var viewModel = GetListModel();
+            ProcessCustomBinding(userId, viewModel, param);
+            return PartialView(VIEW_LIST_PARTIAL, viewModel);
+        }
 
-//            GoodsReceiptPo__List_Model.SetBindingData(viewModel, userId, param);
+        // Paging
+        public ActionResult ListPaging(GridViewPagerState pager)
+        {
+            int userId = (int)Session["userId"];
+            var param = GetParam(Request);
 
-//        }
+            var viewModel = GetListModel();
+            viewModel.ApplyPagingState(pager);
+            ProcessCustomBinding(userId, viewModel, param);
 
-//        public ActionResult PopupListLoadOnDemandPartial()
-//        {
-//            int userId = (int)Session["userId"];
-//            var param = GetParam(Request);
+            return PartialView(VIEW_LIST_PARTIAL, viewModel);
+        }
 
-//            var viewModel = GetListModel();
-//            ProcessCustomBinding(userId, viewModel, param);
+        // Filtering
 
-//            return PartialView(VIEW_PANEL_LIST_PARTIAL, viewModel);
-//        }
+        public ActionResult ListFiltering(GridViewFilteringState filteringState)
+        {
+            int userId = (int)Session["userId"];
+            var param = GetParam(Request);
 
-//    }
-//}
+            var viewModel = GetListModel();
+            viewModel.ApplyFilteringState(filteringState);
+            ProcessCustomBinding(userId, viewModel, param);
+
+            return PartialView(VIEW_LIST_PARTIAL, viewModel);
+        }
+
+        // Sorting
+        public ActionResult ListSorting(GridViewColumnState column, bool reset)
+        {
+            int userId = (int)Session["userId"];
+            var param = GetParam(Request);
+
+            var viewModel = GetListModel();
+            viewModel.ApplySortingState(column, reset);
+            ProcessCustomBinding(userId, viewModel, param);
+
+            return PartialView(VIEW_LIST_PARTIAL, viewModel);
+        }
+
+
+
+        static GridViewModel GetListModel()
+        {
+            var viewModel = GridViewExtension.GetViewModel("gvGoodsReceiptPoList");
+            if (viewModel == null)
+            {
+                viewModel = GoodsReceiptPo__List_Model.CreateGridViewModel();
+            }
+
+            return viewModel;
+        }
+
+        static void ProcessCustomBinding(int userId, GridViewModel viewModel, ListFindParamGoodsReceiptPo param)
+        {
+
+            GoodsReceiptPo__List_Model.SetBindingData(viewModel, userId, param);
+
+        }
+
+        public ActionResult PopupListLoadOnDemandPartial()
+        {
+            int userId = (int)Session["userId"];
+            var param = GetParam(Request);
+
+            var viewModel = GetListModel();
+            ProcessCustomBinding(userId, viewModel, param);
+
+            return PartialView(VIEW_PANEL_LIST_PARTIAL, viewModel);
+        }
+
+    }
+}

@@ -1,13 +1,13 @@
 ﻿@using Models;
 
-@model Models.Transaction.StockOpname.StockOpnameModel
+@model Models.Transaction.StockOpnameModel
 
 @Html.DevExpress().TextBox(
         settings =>
         {
             settings.Name = "Id";
             settings.ControlStyle.CssClass = "editor";
-            settings.ClientVisible = false;
+            settings.ClientVisible = false; 
         }
 ).Bind(Model.Id).GetHtml()
 

@@ -231,8 +231,8 @@
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>bin\Debug\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
-      <HintPath>bin\Debug\LumenWorks.Framework.IO.dll</HintPath>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\ESKA_APP\ESKA_APP\bin\LumenWorks.Framework.IO.dll</HintPath>
     </Reference>
     <Reference Include="Sap.Data.Hana.v4.5, Version=2.8.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -318,6 +318,7 @@
     <Compile Include="Models\_Cfl\CflCardCode_Model.cs" />
     <Compile Include="Models\_Cfl\CflCostCenter.cs" />
     <Compile Include="Models\_Cfl\CflDynamic_Model.cs" />
+    <Compile Include="Models\_Cfl\CflGoodsReceiptPo_Model.cs" />
     <Compile Include="Models\_Cfl\CflItemByWarehouse_Model.cs" />
     <Compile Include="Models\_Cfl\CflTag_Model.cs" />
     <Compile Include="Models\_Cfl\CflItem_Model.cs" />
@@ -326,7 +327,6 @@
     <Compile Include="Models\_Cfl\CflTransferSummaryOut_Model.cs" />
     <Compile Include="Models\_Cfl\CflPurchaseOrder_Model.cs" />
     <Compile Include="Models\_Cfl\CflToWarehouse_Model.cs" />
-    <Compile Include="Models\_Cfl\CflGoodsReceiptPo_Model.cs" />
     <Compile Include="Models\_Cfl\CflWarehouse_Model.cs" />
     <Compile Include="Models\_CrystalReport\CrystalReportParam.cs" />
     <Compile Include="Models\_EF\EfIduHanaRsExtensionsApp.cs" />

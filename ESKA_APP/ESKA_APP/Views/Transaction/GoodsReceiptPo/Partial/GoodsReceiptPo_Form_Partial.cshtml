@@ -158,25 +158,6 @@
     });
 
 
-    //if (!string.IsNullOrEmpty(Model.DocNum_))
-    //{
-    //    groupItem_Col2.Items.Add(itemSettings =>
-    //    {
-    //        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-    //        itemSettings.Caption = "Inventory No";
-    //        itemSettings.FieldName = "DocNum_";
-
-    //        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-    //        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-    //        txt.Name = "DocNum_";
-    //        txt.ShowModelErrors = true;
-    //        txt.ReadOnly = true;
-    //        txt.ControlStyle.CssClass = "editornoimage";
-    //        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-    //        txt.Width = 230;
-    //    });
-    //}
-
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
@@ -277,39 +258,43 @@
     });
 
 
-    //groupItem_Col3.Items.Add(itemSettings =>
-    //{
+    if (Model._FormMode != Models.FormModeEnum.New)
+    {
+        groupItem_Col3.Items.Add(itemSettings =>
+        {
+            itemSettings.Caption = "Author";
+        })
+         .SetNestedContent(() =>
+         {
+             ViewContext.Writer.Write("<table  cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0.65em 0 0.67em 0!important;\" ><tr><td  cellspacing=\"0\" cellpadding=\"0\" >");
 
-    //    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-    //    itemSettings.Caption = "Posting Date";
-    //    itemSettings.FieldName = "DocDate";
+             Html.DevExpress().Label(
+                x =>
+                {
+                    x.Name = "label1";
+                    x.Text = "Created By(" + Models._Utils.GeneralGetList.GetUserNameByUserId(Model.CreatedUser) + ", " + Models._Utils.GeneralGetList.GeFirstNameByUserId(Model.CreatedUser) + " : " + Model.CreatedDate + ")";
+                    x.Properties.EnableClientSideAPI = true;
+                }
+            )
+            .Render();
 
-    //    var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
-    //    txt.Name = "DocDate";
-    //    txt.ShowModelErrors = true;
+             ViewContext.Writer.Write("</td><td>&nbsp;<td>");
 
-    //    txt.ControlStyle.CssClass = "editornoimage";
-    //    txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-    //    txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-    //    txt.Properties.NullText = "dd/MM/yyyy";
-    //    txt.Properties.EditFormat = EditFormat.Custom;
-    //    txt.Properties.EditFormatString = "dd/MM/yyyy";
-    //    txt.Properties.EditFormat = EditFormat.Date;
-    //    txt.ReadOnly = false;
+             ViewContext.Writer.Write("</td><td cellspacing=\"0\" cellpadding=\"0\">");
 
-    //    //if (Model.Status == "Draft" || Model.Status == "Open")
-    //    //{
-    //    //    txt.ReadOnly = false;
-    //    //}
-    //    //else
-    //    //{
-    //    //    txt.Properties.DropDownButton.Visible = false;
-    //    //    txt.ReadOnly = true;
-    //    //}
+             Html.DevExpress().Label(
+                x =>
+                {
+                    x.Name = "label3";
+                    x.Text = "  Modified By(" + Models._Utils.GeneralGetList.GetUserNameByUserId(Model.ModifiedUser) + ", " + Models._Utils.GeneralGetList.GeFirstNameByUserId(Model.ModifiedUser) + " : " + Model.ModifiedDate + ")";
+                    x.Properties.EnableClientSideAPI = true;
+                }
+            )
+            .Render();
 
-    //    txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e);  } }";
-    //    txt.Width = 230;
-    //});
+             ViewContext.Writer.Write("</td></tr></table>");
+         });
+    }
 
     groupItem.Items.AddTabbedGroupItem(group =>
     {
@@ -336,7 +321,7 @@
                                 settings1.RenderMode = ButtonRenderMode.Link;
                                 settings1.Text = "Add Item";
                                 settings1.ImagePosition = ImagePosition.Left;
-                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemByWarehousePopupListGoodsReceiptPoOnClick(s,e); }";
+                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListGoodsReceiptPoOnClick(s,e); }";
                             }).GetHtml()
                     );
                 }

@@ -14,9 +14,9 @@
 
 @Html.DevExpress().GridView(settings=>
 {
-    settings.Name = "gvStockOpnameList";
+    settings.Name = "gvGoodsReceiptPoList";
     settings.KeyFieldName = "Id";
-    settings.CallbackRouteValues =  new { Controller = "StockOpname", Action = "ListPartial" };
+    settings.CallbackRouteValues =  new { Controller = "GoodsReceiptPo", Action = "ListPartial" };
 
     settings.Columns.Add(column =>
     {
@@ -28,7 +28,7 @@
             ViewContext.Writer.Write(
 
              Html.DevExpress().HyperLink(settingsHL => {
-                 settingsHL.Name = "gvStockOpnameListChoose_" + Guid.NewGuid();
+                 settingsHL.Name = "gvGoodsReceiptPoListChoose_" + Guid.NewGuid();
                  settingsHL.NavigateUrl = "javascript:void(0)";
                  settingsHL.Properties.Text = "Choose";
                  settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "Id"));
@@ -147,17 +147,17 @@
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Paging,
-        new { Controller = "StockOpname", Action = "ListPaging" }
+        new { Controller = "GoodsReceiptPo", Action = "ListPaging" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Filtering,
-        new { Controller = "StockOpname", Action = "ListFiltering" }
+        new { Controller = "GoodsReceiptPo", Action = "ListFiltering" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Sorting,
-        new { Controller = "StockOpname", Action = "ListSorting" }
+        new { Controller = "GoodsReceiptPo", Action = "ListSorting" }
     );
 
 

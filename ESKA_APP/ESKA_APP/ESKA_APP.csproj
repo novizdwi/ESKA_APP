@@ -297,6 +297,9 @@
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\..\dlls\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
@@ -696,14 +699,10 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_TabDetail_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPoStockOpname_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Panel_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\GoodsReceiptPo.cshtml" />
     <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
-    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Partial.cshtml" />
@@ -725,13 +724,20 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
-    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
-    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />    
+	<Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\ProductionSchedule.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_DetailPartial.cshtml" />
-    <None Include="Web.Debug.config">
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
+        <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
@@ -833,7 +839,8 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.List.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Nav.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPOController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
@@ -947,7 +954,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1109</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1109/</IISUrl>
+          <IISUrl>http://localhost/ESKA</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
