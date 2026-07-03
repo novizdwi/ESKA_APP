@@ -891,6 +891,7 @@ namespace Models.Production
 
                             tx_ProcessCard.PostingDate = dtModified;
                             tx_ProcessCard.Status = "Posted";
+                            tx_ProcessCard.ProductionStatus = "Pending";
                             tx_ProcessCard.IsAfterPosted = "Y";
                             tx_ProcessCard.ModifiedDate = dtModified;
                             tx_ProcessCard.ModifiedUser = userId;
@@ -1039,7 +1040,8 @@ namespace Models.Production
                     oPO.StartDate = startDate;
                     oPO.ProductionOrderType = SAPbobsCOM.BoProductionOrderTypeEnum.bopotStandard; 
                     oPO.Remarks = string.Format( "Routing: {0} | Level: {1} | FG: {2} | Ref: {3}", po.RoutingName, po.RoutingLevel, po.FG, po.TransNo);
-
+                    
+                    //oPO.ProductionOrderStatus = BoProductionOrderStatusEnum.boposReleased;
                     oPO.UserFields.Fields.Item("U_IDU_WebId").Value = id.ToString();
                     oPO.UserFields.Fields.Item("U_IDU_WebTransNo").Value = po.TransNo;
                     oPO.UserFields.Fields.Item("U_IDU_RoutingStage").Value = po.RoutingName;
@@ -1078,6 +1080,13 @@ namespace Models.Production
                     // ---- Ambil DocEntry & DocNum ----
                     string newDocEntry = oCompany.GetNewObjectKey();
                     string newDocNum = string.Empty;
+                    //update to released
+                    
+                    ProductionOrders oProd = (ProductionOrders)oCompany.GetBusinessObject(BoObjectTypes.oProductionOrders);
+                    oProd.GetByKey(Convert.ToInt32(newDocEntry) );
+                    oProd.ProductionOrderStatus = BoProductionOrderStatusEnum.boposReleased;
+                    oProd.Update();
+
                     SAPbobsCOM.Recordset rsDocNum = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
                     rsDocNum.DoQuery($@"SELECT ""DocNum"" FROM ""{DbProvider.dbSap_Name}"".""OWOR"" WHERE ""DocEntry"" = {newDocEntry}");
                     if (!rsDocNum.EoF)
@@ -1121,8 +1130,7 @@ namespace Models.Production
                 if (txDetail == null) continue;
 
                 txDetail.DocEntry = po.DocEntry; 
-                txDetail.DocNum = po.DocNum;
-                txDetail.RoutingStatus = "Ready";
+                txDetail.DocNum = po.DocNum; 
                 txDetail.ModifiedDate = dtModified;
                 txDetail.ModifiedUser = userId;
             }

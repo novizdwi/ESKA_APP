@@ -132,6 +132,10 @@
 
     }
 
+    function OnClickBtnSave(s, e) {
+    
+    }
+
     function OnClickBtnRefresh(s, e) {
         $.ajax({
              type: "POST",
@@ -155,78 +159,11 @@
         });
 
     }
+     
+    function gvProductionScheduleReferenceDetailBeginCallback(s, e) {
 
-    function OnClickBtnListFind(s, e) {
-        var itemCodes = '';
-        if (!((ItemCode.GetValue() == '') || (ItemCode.GetValue() == null))) {
-            var objectCode = JSON.parse(ItemCode.GetValue());
-            itemCodes = objectCode.map(function (val) {
-                return val
-            }).join(',');
-
-        }
-
-        var fromDate = null;
-        if (FromDate.GetValue() != null) {
-            fromDate = FromDate.GetDate().ToIduyyyymmdd();
-        }
-
-        var toDate = null;
-        if (ToDate.GetValue() != null) {
-            toDate = ToDate.GetDate().ToIduyyyymmdd();
-        }
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Find", "ProductionSchedule")',
-            data: { fromDate: fromDate, toDate: toDate, itemCode: itemCodes, whsCode: WhsCode.GetValue(), tagId: TagId.GetValue(), status: Status.GetValue() },
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                RefreshAfterSuccess(response);
-                OnSuccess();
-
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-            }
-        });
     }
-
-        function gvProductionScheduleReferenceDetailBeginCallback(s, e) {
-        var resultItemCodes = '';
-        if (!((ItemCode.GetValue() == '') || (ItemCode.GetValue() == null))) {
-            var objectCode = JSON.parse(ItemCode.GetValue());
-            resultItemCodes = objectCode.map(function (val) {
-                return val
-            }).join(',');
-
-        }
-            console.log(ToDate.GetValue());
-        e.customArgs['cbFromDate'] = FromDate.GetValue().ToIduyyyymmdd();
-        e.customArgs['cbToDate'] = ToDate.GetValue().ToIduyyyymmdd();
-        e.customArgs['cbItemCode'] = resultItemCodes;
-        e.customArgs['cbWhsCode'] = WhsCode.GetValue();
-
-        e.customArgs['cbTagId'] = TagId.GetValue();
-        e.customArgs['cbStatus'] = Status.GetValue();
-    }
-
-    function OnClickChooseItem(s, e, tagId) {
-
-        var popup = ASPxClientPopupControl.Cast("popupItemTag");
-
-        popup.callbackUrl = '@Url.Action("ViewItemTag_PopupListOnDemandPartial", "ProductionSchedule")' + '?TagId=' + tagId;
-        popup.PerformCallback();
-
-        if (!popup.IsVisible()) {
-            loadingPanel.Show();
-        }
-    }
+     
 
 </script>
 
@@ -327,32 +264,7 @@ new
 
     </div>
 }
-
-
-@*-------------------------------------------------
-    ViewItemTag
-    -------------------------------------------------*@
-<script>
-
-    function popupItemTag_EndCallback(s, e) {
-        $.validator.unobtrusive.parse("#ItemTag_formDetail");
-
-        var popup = ASPxClientPopupControl.Cast("popupItemTag");
-        if (!popup.IsVisible()) {
-            loadingPanel.Hide();
-            popup.ShowAtPos(400, 100);
-        }
-    }
-
-    function ViewItemTag_OnClickBtnCancel(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupItemTag");
-        popup.Hide();
-    }
-
-
-</script>
-
-@Html.Partial("Partial/ItemTag/ItemTag_Partial")
+ 
 
 
 

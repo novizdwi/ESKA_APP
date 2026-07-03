@@ -22,6 +22,7 @@ namespace Models.Production
     public class ProductionScheduleModel
     {
         public int UserId { get; set; } 
+        public int Id { get; set; }
 
         public List<ProductionSchedule_ReferenceModel> ListReferences_ = new List<ProductionSchedule_ReferenceModel>();
     }
@@ -32,7 +33,11 @@ namespace Models.Production
 
         public int Id { get; set; }
 
+        public int? VisOrder { get; set; }
+
         public string TransNo { get; set; }
+
+        public string SerialNumber { get; set; }
         
         public string ItemCode { get; set; }
 
@@ -42,46 +47,47 @@ namespace Models.Production
 
         public decimal? Quantity { get; set; }
 
-        public int? VisOrder { get; set; }
+        public string Status { get; set; }
+
+        public string ProductionStatus { get; set; }
 
         List<ProductionScheduleDetailModel> ListDetails_ = new List<ProductionScheduleDetailModel>();
-    } 
+    }
 
     public class ProductionScheduleDetailModel
     {
-        public long LogId { get; set; }
-
-        public string TransType { get; set; }
-
-        public long? BaseId { get; set; }
-
-        public string BaseTransNo { get; set; }
-
-        public string TransactionName_ { get; set; }
-
+        
+        public int? Id {get; set;}
+        
+        public int? DetId { get; set; }
+        
+        public int? DocEntry { get; set; }
+        
+        public string DocNum { get; set; }
+        
         public string ItemCode { get; set; }
-
+        
         public string ItemName { get; set; }
-
-        public string NewItemCode { get; set; }
-
-        public string NewItemName { get; set; }
-
-        public string WhsCode { get; set; }
-
-        public string WhsName { get; set; }
-
-        public string OldTagId { get; set; }
-
-        public string NewTagId { get; set; }
-
+        
+        public int? Sort { get; set; }
+        
+        public string RoutingName { get; set; }
+        
+        public string OperatorName { get; set; }
+        
+        public DateTime? ProcessingDate { get; set; }
+        
+        public TimeSpan? Clock { get; set; }
+        
+        public TimeSpan? PracticeHours { get; set; }
+        
+        public int MachineNo { get; set; }
+        
         public string Status { get; set; }
+        
+        public decimal? PlannedQty { get; set; }
 
-        public string Event { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        public string CreatedUser { get; set; }
+        public decimal? Quantity { get; set; }
     }
 
     #endregion
@@ -93,23 +99,19 @@ namespace Models.Production
 
         public ProductionScheduleModel GetNewModel(int userId)
         {
-            DateTime toDate = DateTime.Now;
-            DateTime fromDate = toDate.AddMonths(-1);
-
             ProductionScheduleModel model = new ProductionScheduleModel();
             model.UserId = userId; 
-
-            model.ListReferences_ = ProductionSchedule_GetReferences(userId, fromDate, toDate, null, null, null, null);
+            model.ListReferences_ = ProductionSchedule_GetReferences(userId);
 
             return model;
         }
 
-        public ProductionScheduleModel Find(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
+        public ProductionScheduleModel Find(int userId)
         {
             ProductionScheduleModel model = new ProductionScheduleModel();
             model.UserId = userId; 
 
-            model.ListReferences_ = this.ProductionSchedule_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+            model.ListReferences_ = this.ProductionSchedule_GetReferences(userId);
             return model;
         }
 
@@ -122,7 +124,7 @@ namespace Models.Production
             ProductionScheduleModel model = new ProductionScheduleModel();
             model.UserId = userId; 
 
-            model.ListReferences_ = this.ProductionSchedule_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+            model.ListReferences_ = this.ProductionSchedule_GetReferences(userId);
 
             return model;
         }
@@ -130,24 +132,45 @@ namespace Models.Production
         //-------------------------------------
         //Detail  ProductionSchedule_Reference
         //-------------------------------------
-        public List<ProductionSchedule_ReferenceModel> ProductionSchedule_GetReferences(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
+        public List<ProductionSchedule_ReferenceModel> ProductionSchedule_GetReferences(int userId)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return ProductionSchedule_GetReferences(CONTEXT, userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+                return ProductionSchedule_GetReferences(CONTEXT, userId);
             }
         }
 
-        public List<ProductionSchedule_ReferenceModel> ProductionSchedule_GetReferences(HANA_APP CONTEXT, int userId, DateTime fromDate, DateTime toDate, string itemCode = "", string whsCode = "", string tagId = "", string status = "")
+        public List<ProductionSchedule_ReferenceModel> ProductionSchedule_GetReferences(HANA_APP CONTEXT, int userId)
         {
             string sql = @"
             CALL ""SpProductionSchedule_GetReferences"" (
                 :p0 --userId
             )";
+            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql, userId).ToList();
+        }
 
-            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql,  
-                userId 
-                ).ToList();
+        public List<ProductionScheduleDetailModel> ProductionSchedule_TabReferenceDetails(long id)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return ProductionSchedule_TabReferenceDetails(CONTEXT, id);
+            }
+        }
+
+        public List<ProductionScheduleDetailModel> ProductionSchedule_TabReferenceDetails(HANA_APP CONTEXT, long id)
+        {
+            string ssql = @"
+                SELECT T0.*,
+                    T1.""ItemCode"",
+                    T1.""ProdName"" AS ""ItemName"",
+                    T1.""PlannedQty"" AS ""PlannedQty""
+                    FROM ""Tx_ProcessCard_Detail"" T0
+                INNER JOIN """ + DbProvider.dbSap_Name + @""".""OWOR"" T1 ON T0.""Id"" = T1.""U_IDU_WebId"" AND T0.""Sort"" = T1.""U_IDU_RoutingLevel""
+                WHERE T0.""Id"" = :p0
+                ORDER BY T0.""Sort"" ASC
+            ";
+            var detailModel = CONTEXT.Database.SqlQuery<ProductionScheduleDetailModel>(ssql, id).ToList();
+            return detailModel;
         }
 
     }

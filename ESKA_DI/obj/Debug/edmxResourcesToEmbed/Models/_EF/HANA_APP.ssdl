@@ -1020,6 +1020,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ApprovalMessages" Type="nvarchar" MaxLength="254" />
     <Property Name="VisOrder" Type="int" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProductionStatus" Type="nvarchar" MaxLength="50" />
     <Property Name="IsAfterPosted" Type="varchar" MaxLength="1" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />

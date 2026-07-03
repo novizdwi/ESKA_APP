@@ -391,6 +391,7 @@ CREATE COLUMN TABLE "Tx_ProcessCard"(
 
     "VisOrder" INT,
     "Status" NVARCHAR(50),
+    "ProductionStatus" NVARCHAR(50),	
     "IsAfterPosted" CHAR(1),
 
     "CreatedDate"   LONGDATE CS_LONGDATE,

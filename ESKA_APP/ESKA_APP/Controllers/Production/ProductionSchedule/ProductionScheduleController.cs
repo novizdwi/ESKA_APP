@@ -57,16 +57,5 @@ namespace Controllers.Production
             return PartialView(VIEW_FORM_PARTIAL, productionScheduleModel);
         }
 
-        public ActionResult Find(DateTime? fromDate = null, DateTime? toDate = null, string itemCode = "", string whsCode = "", string tagId = "", string status = "")
-        {
-            int userId = (int)Session["userId"];
-            DateTime fromDate2 = fromDate ?? DateTime.Now.AddMonths(-1);
-            DateTime toDate2 = toDate ?? DateTime.Now;
-
-            productionScheduleService = new ProductionScheduleService();
-            ProductionScheduleModel models = productionScheduleService.Find(userId, fromDate2, toDate2, itemCode, whsCode, tagId, status);
-
-            return PartialView(VIEW_FORM_PARTIAL, models);
-        }
     }
 }

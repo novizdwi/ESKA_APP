@@ -19,24 +19,10 @@ namespace Controllers.Production
     {
         public ActionResult TabTransListPartial()
         {
-            int userId = (int)Session["userId"];
-            DateTime toDate = DateTime.Now;
-            DateTime fromDate = toDate.AddMonths(-1);
-            if (!string.IsNullOrEmpty(Request["cbFromDate"]))
-            {
-                fromDate = Convert.ToDateTime((Request["cbFromDate"]).ToString() ); 
-            }
-            if (!string.IsNullOrEmpty(Request["cbToDate"]))
-            {
-                toDate = Convert.ToDateTime((Request["cbToDate"]).ToString() ); 
-            }
-            productionScheduleService = new ProductionScheduleService();
-            string itemCode = (Request["cbItemCode"]).ToString();
-            string whsCode = (Request["cbWhsCode"]).ToString();
-            string tagId = (Request["cbTagId"]).ToString();
-            string status = (Request["cbStatus"]).ToString();
+            int userId = (int)Session["userId"]; 
+            productionScheduleService = new ProductionScheduleService(); 
 
-            var modelList = productionScheduleService.ProductionSchedule_GetReferences(userId, fromDate, toDate, itemCode, whsCode, tagId, status);
+            var modelList = productionScheduleService.ProductionSchedule_GetReferences(userId);
 
             return PartialView(VIEW_FORM_TABREFERENCE_PARTIAL, modelList);
         }

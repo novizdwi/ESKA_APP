@@ -730,6 +730,7 @@
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\ProductionSchedule.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_DetailPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -773,6 +774,7 @@
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.Detail.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
