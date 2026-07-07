@@ -84,10 +84,29 @@
 
     settings.Columns.Add(column =>
     {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item ItemCode";
+        column.Width = 200;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
         column.FieldName = "ItemName";
         column.Name = "ItemName";
         column.Caption = "Item Name";
-        column.Width = 300;
+        column.Width = 320;
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.ReadOnly = true;

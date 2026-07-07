@@ -47,13 +47,15 @@
 
     settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
 
+    settings.Columns.Add("Id", "Id").Visible = false;
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "VisOrder";
         column.Name = "VisOrder";
         column.Caption = "Vis Order";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
-        column.Width = 100;
+        column.Width = 70;
         column.ReadOnly = !canUpdate;
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.Settings.AllowSort = DefaultBoolean.False;
@@ -64,6 +66,7 @@
         txt.DisplayFormatInEditMode = true;
         txt.AllowMouseWheel = false;
         txt.Width = 90;
+        txt.MinValue = 0;
 
         txt.SpinButtons.ShowIncrementButtons = false;
         txt.SpinButtons.ShowLargeIncrementButtons = false;
@@ -72,6 +75,36 @@
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
         txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransNo";
+        column.Name = "TransNo";
+        column.Caption = "Process No";
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.Width = 100;
+         
+        column.SetDataItemTemplateContent(c =>
+        {
+            if (c.ItemIndex >= 0)
+            {
+                string ProgressNo = (string)DataBinder.Eval(c.DataItem, "TransNo"); 
+
+                Html.DevExpress().HyperLink(settingsHL =>
+                {
+                    settingsHL.Name = "ChooseDocument_" + DataBinder.Eval(c.DataItem, "TransNo") + "_" + Guid.NewGuid().ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = ProgressNo;
+                    settings.ClientVisible = true;
+                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChooseTransNo(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "Id"));
+                    settingsHL.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+
+                }).Render();
+            }
+        });
     });
 
     settings.Columns.Add(column =>

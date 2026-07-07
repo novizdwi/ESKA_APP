@@ -4,6 +4,7 @@ C:\Project\ESKA_APP\ESKA_DI\bin\Debug\ESKA_DI.pdb
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.BonusSkins.v20.1.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.SqlServer.dll
+C:\Project\ESKA_APP\ESKA_DI\bin\Debug\LumenWorks.Framework.IO.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\Sap.Data.Hana.v4.5.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\DevExpress.Utils.v20.1.dll
 C:\Project\ESKA_APP\ESKA_DI\bin\Debug\EntityFramework.xml

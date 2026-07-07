@@ -893,6 +893,7 @@ namespace Models.Production
                             tx_ProcessCard.Status = "Posted";
                             tx_ProcessCard.ProductionStatus = "Pending";
                             tx_ProcessCard.IsAfterPosted = "Y";
+                            tx_ProcessCard.IsCreatedActivity = "N";
                             tx_ProcessCard.ModifiedDate = dtModified;
                             tx_ProcessCard.ModifiedUser = userId;
 

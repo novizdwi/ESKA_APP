@@ -24,7 +24,7 @@ INSERT INTO "Ts_Menu" VALUES ('ProcessCard/Print', 'Print', 'ProcessCard/Print',
 INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule', 'Production Schedule', '', 'Production', 2003);
 INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Detail#User', 'Detail - User', 'ProductionSchedule/Detail', 'ProductionSchedule', 200301);
 INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Detail#All', 'Detail - All', 'ProductionSchedule/Detail', 'ProductionSchedule', 200302);
-INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Update', 'Post', 'ProductionSchedule/Update', 'ProductionSchedule', 200303);
+INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Update', 'Update', 'ProductionSchedule/Update', 'ProductionSchedule', 200303);
 
 INSERT INTO "Ts_Menu" VALUES ('Transaction', 'Transaction', '', '', 30);
 

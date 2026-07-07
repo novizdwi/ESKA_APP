@@ -32,7 +32,7 @@
 
     var groupItem = settings.Items.AddGroupItem(itemSettings =>
     {
-        itemSettings.Caption = "<b>RFID List</b>";
+        itemSettings.Caption = "<b>Production Schedule</b>";
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
         itemSettings.ColCount = 1;
@@ -84,7 +84,7 @@
         group.Items.Add(item =>
         {
             item.Name = "TabReference";
-            item.Caption = "   Reference      ";
+            item.Caption = "   Lists      ";
             item.SetNestedContent(() =>
             {
                 ViewContext.Writer.Write(

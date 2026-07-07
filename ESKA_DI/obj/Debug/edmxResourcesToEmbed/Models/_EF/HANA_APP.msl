@@ -1176,6 +1176,7 @@
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsCreatedActivity" ColumnName="IsCreatedActivity" />
           <ScalarProperty Name="IsAfterPosted" ColumnName="IsAfterPosted" />
           <ScalarProperty Name="ProductionStatus" ColumnName="ProductionStatus" />
           <ScalarProperty Name="Status" ColumnName="Status" />
@@ -1246,6 +1247,34 @@
           <ScalarProperty Name="RoutingCode" ColumnName="RoutingCode" />
           <ScalarProperty Name="Sort" ColumnName="Sort" />
           <ScalarProperty Name="DetId" ColumnName="DetId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tx_ProductionActivity">
+      <EntityTypeMapping TypeName="Model1.Tx_ProductionActivity">
+        <MappingFragment StoreEntitySet="Tx_ProductionActivity">
+          <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
+          <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
+          <ScalarProperty Name="QuantityActual" ColumnName="QuantityActual" />
+          <ScalarProperty Name="QuantityPlanned" ColumnName="QuantityPlanned" />
+          <ScalarProperty Name="ActualDate" ColumnName="ActualDate" />
+          <ScalarProperty Name="PlannedDate" ColumnName="PlannedDate" />
+          <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+          <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+          <ScalarProperty Name="DocNum" ColumnName="DocNum" />
+          <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
+          <ScalarProperty Name="BaseDetId" ColumnName="BaseDetId" />
+          <ScalarProperty Name="BaseId" ColumnName="BaseId" />
+          <ScalarProperty Name="TransNo" ColumnName="TransNo" />
+          <ScalarProperty Name="TransType" ColumnName="TransType" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

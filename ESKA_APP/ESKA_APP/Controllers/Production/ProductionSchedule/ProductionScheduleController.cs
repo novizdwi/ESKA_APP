@@ -57,5 +57,18 @@ namespace Controllers.Production
             return PartialView(VIEW_FORM_PARTIAL, productionScheduleModel);
         }
 
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] ProductionSchedule_Detail productionScheduleModel)
+        {
+            int userId = (int)Session["userId"];
+
+            productionScheduleModel.UserId = (int)Session["userId"];
+            productionScheduleService = new ProductionScheduleService();
+
+            productionScheduleService.Update(productionScheduleModel);
+            ProductionScheduleModel model = productionScheduleService.GetNewModel(userId);
+
+            return PartialView(VIEW_FORM_PARTIAL, model);
+        }
     }
 }

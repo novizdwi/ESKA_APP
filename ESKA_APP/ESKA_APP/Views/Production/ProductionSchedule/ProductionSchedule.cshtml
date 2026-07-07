@@ -11,20 +11,62 @@
 @model Models.Production.ProductionScheduleModel
 
 
-@{
+@{    
+    int userId = (int)Session["userId"];
     ViewBag.Title = "Production Schedule";
+    ViewBag.UserId = Model.UserId;
+
+    string canUpdate = "Y";
+
+    string strCanUpdate = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(@"
+        SELECT TOP 1 COALESCE(T1.""IsAccess"", 'N')
+        FROM ""Tm_User"" T0X
+        INNER JOIN ""Tm_Role"" T0 ON T0.""Id"" = T0X.""RoleId""
+        INNER JOIN ""Tm_Role_Auth"" T1 ON T1.""Id"" = T0.""Id""
+        WHERE T0X.""Id"" = 1 AND T1.""MenuCode"" = 'ProductionSchedule/Update'
+        ", userId).FirstOrDefault();
+
+    if (userId != 1)
+    {
+        canUpdate = strCanUpdate;
+    }
+
 }
 
 <script type="text/javascript">
-
+    var canUpdate = '@canUpdate.ToString()';
+    var timer;
 
     $(document).ready(function () {
-
-        //SetBtnStatus();
+        SetBtnStatus();
+        MyTimer();
     }
     );
 
+    function SetBtnStatus() {
+        var grpBtnAdd = formLayouBtn.GetItemByName('grpBtnSave');
+        var btnUpdate = ASPxClientButton.Cast('btnUpdate');
+         
+        btnUpdate.SetEnabled(false);
+        if (canUpdate == "Y") { 
+            btnUpdate.SetEnabled(true);
+        }
+    }
 
+    function MyTimer() {
+        var sec = '@System.Configuration.ConfigurationManager.AppSettings["RefreshSeconds"]';
+        clearInterval(timer);
+        timer = setInterval(function () {
+            $('#timer').text(sec--);
+            if (sec == -1) {
+                clearInterval(timer);
+                OnClickBtnRefresh();
+                MyTimer();
+                console.log("masuk pak eko");
+            }
+        }, 1000);
+
+    }
 </script>
 
 
@@ -116,6 +158,14 @@
 
     }
 
+    function getFormData() {
+        //var formData = $('#formDetail').serializeObject();
+
+        var Details_ = GetGvDetails('gvProductionScheduleReferenceDetail');
+        //$.extend(formData, { Details_ : Details_ });
+
+        return Details_;
+    }
 
     function RefreshAfterSuccess(response) {
         var tab = ASPxClientTabControl.Cast("TabDetail");
@@ -133,7 +183,30 @@
     }
 
     function OnClickBtnSave(s, e) {
-    
+        var formData = getFormData();
+        console.log(formData);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Update", "ProductionSchedule")',
+            data: formData,
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                OnSuccessMsgBox();
+                OnClickBtnRefresh(s, e);
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+
+            }
+        });
+
     }
 
     function OnClickBtnRefresh(s, e) {
@@ -159,11 +232,18 @@
         });
 
     }
-     
+
+    function OnClickChooseTransNo(s, e, Id) {
+        var guid = CreateGuid();
+        window.open('', guid);
+        SubmitForm(guid, '@Url.Action("Detail", "ProcessCard")', 'post', {
+            Id: Id
+        });
+    }
     function gvProductionScheduleReferenceDetailBeginCallback(s, e) {
 
     }
-     
+
 
 </script>
 

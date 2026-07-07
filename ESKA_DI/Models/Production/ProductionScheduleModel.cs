@@ -21,10 +21,15 @@ namespace Models.Production
 
     public class ProductionScheduleModel
     {
-        public int UserId { get; set; } 
-        public int Id { get; set; }
+        public int UserId { get; set; }
+
+        public int? Id { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
 
         public List<ProductionSchedule_ReferenceModel> ListReferences_ = new List<ProductionSchedule_ReferenceModel>();
+
+        public ProductionSchedule_Detail Details_ = new ProductionSchedule_Detail();
     }
 
 
@@ -38,7 +43,7 @@ namespace Models.Production
         public string TransNo { get; set; }
 
         public string SerialNumber { get; set; }
-        
+
         public string ItemCode { get; set; }
 
         public string ItemName { get; set; }
@@ -53,10 +58,18 @@ namespace Models.Production
 
         List<ProductionScheduleDetailModel> ListDetails_ = new List<ProductionScheduleDetailModel>();
     }
+     
+    public class ProductionSchedule_Detail
+    {
+        public int? UserId { get; set; }
+        public List<long> deletedRowKeys { get; set; }
+        public List<ProductionSchedule_ReferenceModel> insertedRowValues { get; set; }
+        public List<ProductionSchedule_ReferenceModel> modifiedRowValues { get; set; }
+    }
 
     public class ProductionScheduleDetailModel
     {
-        
+
         public int? Id {get; set;}
         
         public int? DetId { get; set; }
@@ -88,6 +101,21 @@ namespace Models.Production
         public decimal? PlannedQty { get; set; }
 
         public decimal? Quantity { get; set; }
+
+    }
+    public class ProductionActivityModel
+    {
+        public int? Sort { get; set; }
+		public long? BaseId { get; set; }
+        public long BaseDetId { get; set; }
+        public int? DocEntry { get; set; }
+        public string DocNum { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemName { get; set; }
+        public int OperatorId { get; set; }
+        public string OperatorName { get; set; }
+        public DateTime? PlannedDate { get; set; }
+        public decimal? QuantityPlanned { get; set; } 
     }
 
     #endregion
@@ -173,6 +201,107 @@ namespace Models.Production
             return detailModel;
         }
 
+
+        public void Update(ProductionSchedule_Detail model)
+        {            
+            if (model != null)
+            {
+                using (var CONTEXT = new HANA_APP())
+                {
+                    using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                    {
+                        try
+                        {  
+                            if(model.modifiedRowValues != null )
+                            {
+                                SpNotif.SpSysControllerTransNotif((int)model.UserId, "ProductionSchedule", CONTEXT, "before", "ProductionSchedule", "update", "Id", "0");
+                                if (model.modifiedRowValues.Count > 0)
+                                {
+                                    foreach (var detail in model.modifiedRowValues)
+                                    {
+                                        UpdateDetail(CONTEXT, (int)model.UserId, detail);
+
+                                    }
+                                    CONTEXT.SaveChanges();
+                                }
+                                SpNotif.SpSysControllerTransNotif((int)model.UserId, "ProductionSchedule", CONTEXT, "after", "ProductionSchedule", "update", "Id", "0");
+                                CONTEXT_TRANS.Commit();
+                            } 
+                        }
+
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        private void UpdateDetail(HANA_APP CONTEXT, int userId, ProductionSchedule_ReferenceModel model)
+        {
+            if (model != null)
+            {
+                Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(model.Id);
+                if (tx_ProcessCard != null)
+                {
+                    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                    tx_ProcessCard.ProductionStatus = model.ProductionStatus;
+                    tx_ProcessCard.VisOrder = model.VisOrder;
+
+                    tx_ProcessCard.ModifiedDate = dtModified;
+                    tx_ProcessCard.ModifiedUser = userId;
+                    if(model.ProductionStatus == "Released" && tx_ProcessCard.IsCreatedActivity != "Y" )
+                    {
+                        tx_ProcessCard.IsCreatedActivity = "Y";
+                        string sql = @" CALL ""SpProductionSchedule_GenerateProductionActivity"" (:p0, :p1)";
+                        List<ProductionActivityModel> productionActivities = CONTEXT.Database.SqlQuery<ProductionActivityModel>(sql, userId, model.Id).ToList();
+                        if(productionActivities != null)
+                        {
+                            if(productionActivities.Count != 0)
+                            {
+                                foreach(var activites in productionActivities)
+                                {
+                                    Tx_ProductionActivity tx_ProductionActivity = new Tx_ProductionActivity();
+                                    CopyProperty.CopyProperties(activites, tx_ProductionActivity, false);
+
+                                    tx_ProductionActivity.TransType = "ProductionActivity";
+
+                                    string dateX = DateTime.Now.ToString("yyyy-MM-dd");
+                                    string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + userId + ",'ProductionActivity','" + dateX + "','') ").SingleOrDefault();
+                                    tx_ProductionActivity.TransNo = transNo;
+
+                                    tx_ProductionActivity.CreatedDate = dtModified;
+                                    tx_ProductionActivity.CreatedUser = userId;
+                                    tx_ProductionActivity.ModifiedDate = dtModified;
+                                    tx_ProductionActivity.ModifiedUser = userId;
+
+                                    CONTEXT.Tx_ProductionActivity.Add(tx_ProductionActivity);
+                                    CONTEXT.SaveChanges();
+
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
     }
 
     #endregion
