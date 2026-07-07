@@ -41,138 +41,8 @@ namespace Models.Notification
 
     public class Notification_Model
     {
-        public static string ssql = @"
-            SELECT
-                Tx.*,
-                Ty.""FirstName"",
-                Tz.""ObjectName""
-            FROM(
-            SELECT                     
-                    NULL AS ""Id"",
-                    NULL AS ""TransType"",
-                    NULL AS ""TransNo"" ,
-                    NULL AS ""Message"",
-                    NULL AS ""RequestDate"", 
-                    NULL AS ""CreatedUser""
-            FROM DUMMY
-        )Tx
-            LEFT JOIN ""Tm_User"" Ty ON Tx.""CreatedUser"" = Ty.""Id""
-            LEFT JOIN ""Ts_ObjectApproval"" Tz ON Tx.""TransType"" = Tz.""ObjectCode"" 
-            
-            ORDER BY Tx.""RequestDate"" DESC
-        ";
-
-        /*
-        public static string ssql = @"
-            SELECT
-                Tx.*,
-                Ty.""FirstName"",
-                Tz.""ObjectName""
-            FROM(
-                SELECT
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_AdjustmentIn"" T0
-                INNER JOIN ""Tx_AdjustmentIn_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')
-                UNION 
-
-                SELECT 
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_AdjustmentOut"" T0
-                INNER JOIN ""Tx_AdjustmentOut_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')            
-                UNION
-
-                SELECT 
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_GoodsReceiptPO"" T0
-                INNER JOIN ""Tx_GoodsReceiptPO_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')            
-                UNION
-
-                 SELECT 
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_StockOpname"" T0
-                INNER JOIN ""Tx_StockOpname_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')            
-                UNION
-
-                SELECT 
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_TransferRequest"" T0
-                INNER JOIN ""Tx_TransferRequest_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')            
-                UNION
-            
-                SELECT 
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_TransferSummaryOut"" T0
-                INNER JOIN ""Tx_TransferSummaryOut_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')
-            
-                UNION
-            
-                SELECT 
-                    T0.""Id"",
-                    T0.""TransType"",
-                    T0.""TransNo"" AS ""TransNo"" ,
-                    T0.""ApprovalMessages"" AS ""Message"",
-                    T0.""CreatedDate"" AS ""RequestDate"", 
-                    T0.""CreatedUser"" AS ""CreatedUser""
-                FROM ""Tx_TransferSummaryIn"" T0
-                INNER JOIN ""Tx_TransferSummaryIn_Approval"" T1 ON T1.""Id"" = T0.""Id""
-                WHERE T0.""ApprovalStatus"" = 'Waiting' 
-                AND T1.""UserId"" = {UserId}
-                AND T0.""Status"" NOT IN ('Cancel', 'Posted')
-            ) Tx
-            LEFT JOIN ""Tm_User"" Ty ON Tx.""CreatedUser"" = Ty.""Id""
-            LEFT JOIN ""Ts_ObjectApproval"" Tz ON Tx.""TransType"" = Tz.""ObjectCode"" 
-            
-            ORDER BY Tx.""RequestDate"" DESC
-        ";
-        */
+        public static string ssql = @"  ""FnNotification_CheckNotification"" ( {UserId} ) ";
+         
         public static void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e, int userId, Notification_ParamModel notificationParam)
         {
             var Cfl_Sql = Notification_Model.ssql;
@@ -192,7 +62,7 @@ namespace Models.Notification
 
             int dataRowCount;
             string ssql = "";
-            ssql = "SELECT COUNT(*) AS IDU FROM (" + Cfl_Sql + ") T0  WHERE 1=1 " + sqlCriteria;
+            ssql = "SELECT COUNT(*) AS IDU FROM  " + Cfl_Sql + "  T0  WHERE 1=1 " + sqlCriteria;
             dataRowCount = DbProvider.dbApp.Database.SqlQuery<int>(ssql).FirstOrDefault<int>();
 
             e.DataRowCount = dataRowCount;
@@ -208,7 +78,7 @@ namespace Models.Notification
 
             int dataRowCount;
             string ssql = "";
-            ssql = "SELECT COUNT(*) AS IDU FROM (" + Cfl_Sql + ") T0  WHERE 1=1 " ;
+            ssql = "SELECT COUNT(*) AS IDU FROM  " + Cfl_Sql + "  T0  WHERE 1=1 " ;
             dataRowCount = DbProvider.dbApp.Database.SqlQuery<int>(ssql).FirstOrDefault<int>();
 
             return dataRowCount;
@@ -273,7 +143,7 @@ namespace Models.Notification
             }
 
             string ssql = "";
-            ssql = "SELECT T0.* FROM (" + Cfl_Sql + ") T0  WHERE 1=1 " + sqlCriteria;
+            ssql = "SELECT T0.* FROM  " + Cfl_Sql + "  T0  WHERE 1=1 " + sqlCriteria;
             string ssqlLimit = string.Format(" LIMIT {0} OFFSET {1} ", PageSize, (PageIndex) * PageSize);
 
             var items = DbProvider.dbApp.Database.SqlQuery<Notification_View__>(ssql + sqlSort + ssqlLimit).ToList();

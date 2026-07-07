@@ -724,7 +724,12 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
-    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />    
+	<Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\ProductionSchedule.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_DetailPartial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
@@ -732,7 +737,7 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <None Include="Web.Debug.config">
+        <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
@@ -775,6 +780,9 @@
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.Detail.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />

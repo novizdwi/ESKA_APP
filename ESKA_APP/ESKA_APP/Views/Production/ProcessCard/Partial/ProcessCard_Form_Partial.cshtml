@@ -503,26 +503,6 @@
     });
     */
 
-    if (!string.IsNullOrEmpty(Model.DocNum_))
-    {
-        groupItem_Col2.Items.Add(itemSettings =>
-        {
-            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-            itemSettings.Caption = "Inventory No";
-            itemSettings.FieldName = "DocNum_";
-
-            var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-            txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-            txt.Name = "DocNum_";
-            txt.ShowModelErrors = true;
-            txt.ReadOnly = true;
-            txt.ControlStyle.CssClass = "editornoimage";
-            txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-            txt.Width = 230;
-        });
-    }
-
-
     groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.Name = "grpIsApproval";
@@ -693,7 +673,7 @@
         group.Name = "TabDetail";
         group.ColSpan = 1;
         group.Width = Unit.Percentage(100);
-        group.Height = Unit.Pixel(50);
+        group.Height = Unit.Pixel(200);
         group.Items.Add(item =>
         {
             item.Name = "TabItem";

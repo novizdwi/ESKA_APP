@@ -232,7 +232,7 @@
       <HintPath>bin\Debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="LumenWorks.Framework.IO">
-      <HintPath>..\ESKA_APP\ESKA_APP\bin\LumenWorks.Framework.IO.dll</HintPath>
+      <HintPath>..\dlls\LumenWorks.Framework.IO.dll</HintPath>
     </Reference>
     <Reference Include="Sap.Data.Hana.v4.5, Version=2.8.22.0, Culture=neutral, PublicKeyToken=0326b8ea63db4bc4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -270,6 +270,7 @@
     <Compile Include="Models\Notification\Notification_Model.cs" />
     <Compile Include="Models\Production\ProcessCardService.cs" />
     <Compile Include="Models\Production\ProcessCard__List_Model.cs" />
+    <Compile Include="Models\Production\ProductionScheduleModel.cs" />
     <Compile Include="Models\Report\ReportAlertDetail__List_Model.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -547,6 +548,9 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_ProcessCard_Detail.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_ProductionTask.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_StockOpname.cs">

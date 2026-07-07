@@ -12,34 +12,26 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProcessCard
+    public partial class Tx_ProductionTask
     {
         public long Id { get; set; }
         public string TransType { get; set; }
         public string TransNo { get; set; }
+        public Nullable<long> BaseId { get; set; }
+        public Nullable<long> BaseDetId { get; set; }
         public Nullable<int> DocEntry { get; set; }
         public string DocNum { get; set; }
-        public Nullable<System.DateTime> TransDate { get; set; }
-        public Nullable<System.DateTime> PostingDate { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
-        public string SerialNumber { get; set; }
-        public string ContractNo { get; set; }
-        public string CardCode { get; set; }
-        public string CardName { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
-        public Nullable<decimal> Quantity { get; set; }
+        public Nullable<int> OperatorId { get; set; }
+        public string OperatorName { get; set; }
+        public Nullable<System.DateTime> PlannedDate { get; set; }
+        public Nullable<System.DateTime> ActualDate { get; set; }
+        public Nullable<decimal> QuantityPlanned { get; set; }
+        public Nullable<decimal> QuantityActual { get; set; }
+        public Nullable<System.TimeSpan> EstimatedHours { get; set; }
+        public Nullable<System.TimeSpan> ActualHours { get; set; }
         public string Comments { get; set; }
-        public string CancelReason { get; set; }
-        public string IsApproval { get; set; }
-        public string ApprovalStatus { get; set; }
-        public string ApprovalMessages { get; set; }
-        public Nullable<int> VisOrder { get; set; }
-        public string Status { get; set; }
-        public string ProductionStatus { get; set; }
-        public string IsAfterPosted { get; set; }
-        public string IsCreatedActivity { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

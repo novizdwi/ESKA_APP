@@ -1,0 +1,52 @@
+﻿<br />
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayouBtn";
+    settings.EncodeHtml = false;
+
+    var groupBtn = settings.Items.AddGroupItem(groupBtnSettings =>
+    {
+
+
+        groupBtnSettings.Caption = "";
+        groupBtnSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        groupBtnSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupBtnSettings.ColCount = 4;
+        groupBtnSettings.CellStyle.Paddings.Padding = 0;
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = "";
+            itemSettings.Name = "grpBtnSave";
+            
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnUpdate";
+            btnSettings.Text = "Save";
+            btnSettings.Width = 80;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnSave";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/save.png";
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+        groupBtnSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = "";
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnRefresh";
+            btnSettings.Text = "Refresh";
+            btnSettings.Width = 40;
+            btnSettings.ClientSideEvents.Click = "OnClickBtnRefresh";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/refresh.png";
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+
+    });
+
+
+}).GetHtml()
