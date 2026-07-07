@@ -75,7 +75,7 @@
     <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
     <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
     <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
-    <EntitySet Name="Tx_ProductionActivity" EntityType="Model1.Tx_ProductionActivity" />
+    <EntitySet Name="Tx_ProductionTask" EntityType="Model1.Tx_ProductionTask" />
   </EntityContainer>
   <EntityType Name="Tm_Alert">
     <Key>
@@ -1257,7 +1257,7 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
-  <EntityType Name="Tx_ProductionActivity">
+  <EntityType Name="Tx_ProductionTask">
     <Key>
       <PropertyRef Name="Id" />
     </Key>

@@ -103,7 +103,7 @@ namespace Models.Production
         public decimal? Quantity { get; set; }
 
     }
-    public class ProductionActivityModel
+    public class ProductionTaskModel
     {
         public int? Sort { get; set; }
 		public long? BaseId { get; set; }
@@ -268,29 +268,29 @@ namespace Models.Production
                     if(model.ProductionStatus == "Released" && tx_ProcessCard.IsCreatedActivity != "Y" )
                     {
                         tx_ProcessCard.IsCreatedActivity = "Y";
-                        string sql = @" CALL ""SpProductionSchedule_GenerateProductionActivity"" (:p0, :p1)";
-                        List<ProductionActivityModel> productionActivities = CONTEXT.Database.SqlQuery<ProductionActivityModel>(sql, userId, model.Id).ToList();
+                        string sql = @" CALL ""SpProductionSchedule_GenerateProductionTask"" (:p0, :p1)";
+                        List<ProductionTaskModel> productionActivities = CONTEXT.Database.SqlQuery<ProductionTaskModel>(sql, userId, model.Id).ToList();
                         if(productionActivities != null)
                         {
                             if(productionActivities.Count != 0)
                             {
                                 foreach(var activites in productionActivities)
                                 {
-                                    Tx_ProductionActivity tx_ProductionActivity = new Tx_ProductionActivity();
-                                    CopyProperty.CopyProperties(activites, tx_ProductionActivity, false);
+                                    Tx_ProductionTask tx_ProductionTask = new Tx_ProductionTask();
+                                    CopyProperty.CopyProperties(activites, tx_ProductionTask, false);
 
-                                    tx_ProductionActivity.TransType = "ProductionActivity";
+                                    tx_ProductionTask.TransType = "ProductionTask";
 
                                     string dateX = DateTime.Now.ToString("yyyy-MM-dd");
-                                    string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + userId + ",'ProductionActivity','" + dateX + "','') ").SingleOrDefault();
-                                    tx_ProductionActivity.TransNo = transNo;
+                                    string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + userId + ",'ProductionTask','" + dateX + "','') ").SingleOrDefault();
+                                    tx_ProductionTask.TransNo = transNo;
 
-                                    tx_ProductionActivity.CreatedDate = dtModified;
-                                    tx_ProductionActivity.CreatedUser = userId;
-                                    tx_ProductionActivity.ModifiedDate = dtModified;
-                                    tx_ProductionActivity.ModifiedUser = userId;
+                                    tx_ProductionTask.CreatedDate = dtModified;
+                                    tx_ProductionTask.CreatedUser = userId;
+                                    tx_ProductionTask.ModifiedDate = dtModified;
+                                    tx_ProductionTask.ModifiedUser = userId;
 
-                                    CONTEXT.Tx_ProductionActivity.Add(tx_ProductionActivity);
+                                    CONTEXT.Tx_ProductionTask.Add(tx_ProductionTask);
                                     CONTEXT.SaveChanges();
 
                                 }

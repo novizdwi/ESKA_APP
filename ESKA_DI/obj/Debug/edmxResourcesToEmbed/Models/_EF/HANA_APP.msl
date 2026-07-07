@@ -1251,9 +1251,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Tx_ProductionActivity">
-      <EntityTypeMapping TypeName="Model1.Tx_ProductionActivity">
-        <MappingFragment StoreEntitySet="Tx_ProductionActivity">
+    <EntitySetMapping Name="Tx_ProductionTask">
+      <EntityTypeMapping TypeName="Model1.Tx_ProductionTask">
+        <MappingFragment StoreEntitySet="Tx_ProductionTask">
           <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
