@@ -27,7 +27,7 @@
     settingsHL.Name = "ViewBatchComponent_btnCancel";
     settingsHL.NavigateUrl = "javascript:void(0)";
     settingsHL.Properties.Text = "Cancel";
-    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewBatch_OnClickBtnCancel(s, e) }";
+    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewReceiptBatch_OnClickBtnCancel(s, e) }";
     settingsHL.Height = 20;
 }).GetHtml()
 
@@ -201,7 +201,7 @@
                 //}).Render();
 
                 ViewContext.Writer.Write(
-                    Html.Partial("Partial/Batch/Batch_TabBatchList_List_Partial", Model.GoodsReceiptPoBatchModel___)
+                    Html.Partial("Partial/BatchReceipt/BatchReceipt_TabBatchList_List_Partial", Model.GoodsReceiptPoBatchModel___)
                 );
             });
         });
@@ -239,7 +239,7 @@
         btnSettings.Text = "Close";
         btnSettings.Width = 120;
 
-        btnSettings.ClientSideEvents.Click = "ViewBatch_OnClickBtnCancel";
+        btnSettings.ClientSideEvents.Click = "ViewReceiptBatch_OnClickBtnCancel";
         btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
         btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
     });

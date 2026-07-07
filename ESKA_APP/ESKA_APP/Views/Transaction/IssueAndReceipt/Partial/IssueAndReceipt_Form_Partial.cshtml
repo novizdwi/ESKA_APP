@@ -362,7 +362,7 @@
 
     groupItem.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "TabDetail";
+        group.Name = "TabIssueDetail";
         group.ColSpan = 1;
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Pixel(10);
@@ -390,7 +390,7 @@
                     );
                 }
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/IssueAndReceipt_Form_TabDetail_List_Partial", Model.ListIssueItem_)
+                     Html.Partial("Partial/IssueAndReceipt_Form_TabIssueDetail_List_Partial", Model.ListIssueItem_)
                 );
 
             });
@@ -401,14 +401,14 @@
 
      groupItem.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "TabDetail";
+        group.Name = "TabReceiptDetail";
         group.ColSpan = 1;
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Pixel(10);
         group.Items.Add(item =>
         {
             item.Name = "TabItem";
-            item.Caption = "  Issue Item        ";
+            item.Caption = "  Receipt Item        ";
 
 
             item.SetNestedContent(() =>
@@ -429,7 +429,7 @@
                     );
                 }
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/IssueAndReceipt_Form_TabDetail_List_Partial", Model.ListIssueItem_)
+                     Html.Partial("Partial/IssueAndReceipt_Form_TabReceiptDetail_List_Partial", Model.ListReceiptItem_)
                 );
 
             });

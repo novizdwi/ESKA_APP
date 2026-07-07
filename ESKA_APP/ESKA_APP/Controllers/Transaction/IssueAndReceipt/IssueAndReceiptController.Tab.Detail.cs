@@ -13,7 +13,7 @@ namespace Controllers.Transaction
 
         string VIEW_TAB_CONTENT = "Partial/IssueAndReceipt_Form_TabDetail_List_Partial";
 
-        public ActionResult TabDetailListPartial()
+        public ActionResult TabIssueDetailListPartial()
         {
             int userId = (int)Session["userId"];
 
@@ -21,6 +21,18 @@ namespace Controllers.Transaction
 
             var Id = Convert.ToInt64(Request["cbId"]);
             List<IssueReceipt_IssueItemModel> modelList = issueAndReceiptService.IssueAndReceipt_IssueItemDetails(Id);
+
+            return PartialView(VIEW_TAB_CONTENT, modelList);
+        }
+
+        public ActionResult TabReceiptDetailListPartial()
+        {
+            int userId = (int)Session["userId"];
+
+            issueAndReceiptService = new IssueAndReceiptService();
+
+            var Id = Convert.ToInt64(Request["cbId"]);
+            List<IssueReceipt_ReceiptItemModel> modelList = issueAndReceiptService.IssueAndReceipt_ReceiptItemDetails(Id);
 
             return PartialView(VIEW_TAB_CONTENT, modelList);
         }
