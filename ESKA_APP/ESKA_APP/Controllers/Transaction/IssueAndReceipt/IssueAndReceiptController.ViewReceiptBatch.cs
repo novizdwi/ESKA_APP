@@ -86,7 +86,7 @@ namespace Controllers.Transaction
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
+        public ActionResult TabReceiptBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;

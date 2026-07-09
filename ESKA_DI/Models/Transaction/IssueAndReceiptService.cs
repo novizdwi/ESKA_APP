@@ -224,11 +224,9 @@ namespace Models.Transaction
 
         public string ItemName { get; set; }
 
-        public string Whse { get; set; }
+        public string WhsCode { get; set; }
 
-        public int? TotalNeeded { get; set; }
-
-        public int? TotalCreated { get; set; }
+        public int? Quantity { get; set; }
 
         public List<IssueAndReceiptBatchReceiptModel> IssueAndReceiptBatchReceiptModel___ { get; set; }
     }
@@ -587,9 +585,8 @@ namespace Models.Transaction
                                 T1.""DetId"", 
                                 T1.""ItemCode"", 
                                 T1.""ItemName"",
-                                T1.""Whse"",
-                                T1.""Quantity"" AS ""TotalNeeded"",
-                                T1.""QuantityCreated"" AS ""TotalCreated""
+                                T1.""WhsCode"",
+                                T1.""Quantity""
                                 FROM ""Tx_IssueAndReceipt"" T0   
                                 LEFT JOIN ""Tx_IssueAndReceipt_Receipt_Item"" T1 ON T0.""Id"" = T1.""Id"" 
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
@@ -648,7 +645,7 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = tx_IssueAndReceipt_Item_Batch.DetId.ToString();
 
-                        //CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
                        // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
@@ -702,9 +699,9 @@ namespace Models.Transaction
                             tx_IssueAndReceipt_Item_Batch.ModifiedUser = model._UserId;
 
                             CONTEXT.SaveChanges();
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
 
-                            SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
+                            //SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
 
                         }
 
@@ -747,7 +744,7 @@ namespace Models.Transaction
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.SaveChanges();
 
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpStockOpname_UpdateItemQuantity\"(:p0, 'Tx_StockOpname_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Item_Batch',:p1, :p2)", _userId, DetId, 0);
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)

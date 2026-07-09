@@ -1,7 +1,7 @@
 ﻿@using Models;
 
 
-@model Models.Transaction.GoodsReceiptPoBatchView___
+@model Models.Transaction.IssueAndReceiptBatchReceiptView___
 
 
 @Html.DevExpress().TextBox(
@@ -115,7 +115,23 @@
         txt.Width = 250;
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "WhsCode";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Whs Code";
+        itemSettings.FieldName = "WhsCode";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "WhsCode";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
+
+    groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.Name = "ItemName";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
@@ -130,51 +146,6 @@
         txt.Width = 250;
     });
 
-    groupItem_Col2.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "WhsCode";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Whs Code";
-        itemSettings.FieldName = "Whse";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "WhsCode";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col2.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "TotalNeeded";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Total Needed";
-        itemSettings.FieldName = "TotalNeeded";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "TotalNeeded";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col2.Items.Add(itemSettings =>
-        {
-            itemSettings.Name = "TotalCreated";
-            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-            itemSettings.Caption = "Total Created";
-            itemSettings.FieldName = "TotalCreated";
-            var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-            txt.Name = "TotalCreated";
-            txt.ShowModelErrors = true;
-            txt.ReadOnly = true;
-            txt.ControlStyle.CssClass = "editor";
-            txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-            txt.Width = 250;
-        });
-
     groupItem_3.Items.AddTabbedGroupItem(group =>
     {
         group.Name = "ViewViewBatch_TabBatch";
@@ -188,7 +159,7 @@
         group.Items.Add(item =>
         {
             item.Name = "ViewApproval_TabViewBatchContent";
-            item.Caption = "       List Batch       ";
+            item.Caption = "       List Batch Receipt      ";
 
             item.SetNestedContent(() =>
             {
@@ -201,7 +172,7 @@
                 //}).Render();
 
                 ViewContext.Writer.Write(
-                    Html.Partial("Partial/BatchReceipt/BatchReceipt_TabBatchList_List_Partial", Model.GoodsReceiptPoBatchModel___)
+                    Html.Partial("Partial/BatchReceipt/BatchReceipt_TabBatchList_List_Partial", Model.IssueAndReceiptBatchReceiptModel___)
                 );
             });
         });

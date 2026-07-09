@@ -562,7 +562,7 @@
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
-            //loadingPanel.Show();
+            loadingPanel.Show();
         }
     }
 
@@ -763,8 +763,8 @@
 
             isUpdate = false;
 
-            popupBatch.PerformCallback();
-            gvDetail.PerformCallback();
+            popupBatchReceipt.PerformCallback();
+            gvReceiptDetail.PerformCallback();
         }
 
     }
@@ -789,14 +789,14 @@
             popup.ShowAtPos(400, 100);
         }
     }
-
-    function ViewBReceiptatch_OnClickBtnCancel(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
+    
+    function ViewReceiptBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
         popup.Hide();
     }
 
     function ViewReceiptBatch_OnClickBtnSaveChange(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
         popup.Hide();
     }
 
@@ -919,10 +919,10 @@
         }
     }
 
-    function ViewReceiptBatch_OnClickBtnCancel(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
-        popup.Hide();
-    }
+    //function ViewReceiptBatch_OnClickBtnCancel(s, e) {
+    //    var popup = ASPxClientPopupControl.Cast("popupBatch");
+    //    popup.Hide();
+    //}
 
     function ViewBatch_OnClickBtnSaveChange(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupBatch");
