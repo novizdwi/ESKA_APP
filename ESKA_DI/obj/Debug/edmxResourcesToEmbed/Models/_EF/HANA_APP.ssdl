@@ -1085,6 +1085,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
     <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
     <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Uom" Type="nvarchar" MaxLength="100" />
     <Property Name="OperatorId" Type="int" />
     <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
     <Property Name="PlannedDate" Type="timestamp" />
@@ -1093,6 +1094,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="QuantityActual" Type="decimal" Precision="16" Scale="4" />
     <Property Name="EstimatedHours" Type="time" Precision="7" />
     <Property Name="ActualHours" Type="time" Precision="7" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
     <Property Name="Comments" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />

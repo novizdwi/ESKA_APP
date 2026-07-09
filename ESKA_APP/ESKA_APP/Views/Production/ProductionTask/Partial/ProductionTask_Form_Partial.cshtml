@@ -1,0 +1,123 @@
+﻿@using Models.Production;
+@using System.Web.Script.Serialization;
+
+@{
+    ViewBag.UserId = Model.UserId;
+
+}
+
+@model Models.Production.ProductionTaskModel
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "ProductionTaskForm";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
+
+).Bind(Model.Id).GetHtml()
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "<b>Task List</b>";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        itemSettings.ColCount = 2;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+
+    });
+
+
+    groupItem.Items.AddEmptyItem().Height = 8;
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 3;
+    });
+
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = 500;
+    });
+
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.Width = 500;
+    });
+
+    groupItem.Items.Add(item =>
+    {
+        item.Name = "ItemList";
+        item.Caption = "Lists";
+        item.ColSpan = 1;
+        item.Width = Unit.Percentage(100); 
+        item.Height = Unit.Percentage(100); 
+
+        item.ShowCaption = DefaultBoolean.False;
+        item.SetNestedContent(() =>
+        {
+            ViewContext.Writer.Write(
+                 Html.Partial("Partial/ProductionTask_Form_TabReference_List_Partial", Model.ListReferences_)
+             );
+        });
+    });
+
+    //groupItem.Items.AddTabbedGroupItem(group =>
+    //{
+    //    group.Name = "TabDetail";
+    //    group.ColSpan = 1;
+    //    group.Width = Unit.Percentage(100);
+    //    group.Height = Unit.Percentage(100);
+    //    group.PageControl.ContentStyle.Paddings.Padding = 0;
+    //    group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+    //    group.Items.Add(item =>
+    //    {
+    //        item.Name = "TabReference";
+    //        item.Caption = "   Lists      ";
+    //        item.SetNestedContent(() =>
+    //        {
+    //            ViewContext.Writer.Write(
+    //                 Html.Partial("Partial/ProductionTask_Form_TabReference_List_Partial", Model.ListReferences_)
+    //             );
+    //        });
+
+    //    });
+
+
+
+    //});
+
+
+
+}).GetHtml()
+
+
+

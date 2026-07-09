@@ -1259,6 +1259,7 @@
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
           <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
           <ScalarProperty Name="QuantityActual" ColumnName="QuantityActual" />
@@ -1267,6 +1268,7 @@
           <ScalarProperty Name="PlannedDate" ColumnName="PlannedDate" />
           <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
           <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+          <ScalarProperty Name="Uom" ColumnName="Uom" />
           <ScalarProperty Name="ItemName" ColumnName="ItemName" />
           <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
           <ScalarProperty Name="DocNum" ColumnName="DocNum" />

@@ -26,6 +26,10 @@ INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Detail#User', 'Detail - User',
 INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Detail#All', 'Detail - All', 'ProductionSchedule/Detail', 'ProductionSchedule', 200302);
 INSERT INTO "Ts_Menu" VALUES ('ProductionSchedule/Update', 'Update', 'ProductionSchedule/Update', 'ProductionSchedule', 200303);
 
+INSERT INTO "Ts_Menu" VALUES ('ProductionTask', 'Production Task', '', 'Production', 2004);
+INSERT INTO "Ts_Menu" VALUES ('ProductionTask/Detail#User', 'Detail - User', 'ProductionTask/Detail', 'ProductionTask', 2004);
+INSERT INTO "Ts_Menu" VALUES ('ProductionTask/Detail#All', 'Detail - All', 'ProductionTask/Detail', 'ProductionTask', 2004);
+
 INSERT INTO "Ts_Menu" VALUES ('Transaction', 'Transaction', '', '', 30);
 
 INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt', 'Issue And Receipt', '', 'Transaction', 3001);

@@ -1,0 +1,74 @@
+﻿@using Models;
+
+@{ 
+    int userId = (int)Session["userId"];
+    var Id = Convert.ToInt64(Request["cbId"]);
+    bool canUpdate = true; 
+}
+
+@Html.DevExpress().CardView(settings =>
+{
+    settings.Name = "cvProductionTaskReferenceDetail";
+    settings.KeyFieldName = "Id";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 300;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;
+
+    settings.CallbackRouteValues = new { Controller = "ProductionTask", Action = "TabTransListPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityPlanned";
+        column.Name = "QuantityPlanned";
+        column.Caption = "Target";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var qty = DataBinder.Eval(c.DataItem, "QuantityPlanned");
+            var uom = DataBinder.Eval(c.DataItem, "Uom");
+            ViewContext.Writer.Write(
+                string.Format("{0:N3} {1}", qty, uom)
+            );
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Status";
+        column.Name = "Status";
+        column.Caption = "Status";
+
+    });
+
+    settings.SettingsPager.PageSizeItemSettings.Visible = false;
+    settings.ClientSideEvents.BeginCallback = "cvProductionTaskReferenceDetailBeginCallback";
+
+}).Bind(Model).GetHtml()
+
+
+

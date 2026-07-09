@@ -49,7 +49,7 @@
         column.FieldName = "Sort";
         column.Name = "Sort";
         column.Caption = "Level";
-        column.Width = 80;
+        column.Width = 50;
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.ReadOnly = true;
@@ -68,7 +68,7 @@
         column.FieldName = "DocNum";
         column.Name = "DocNum";
         column.Caption = "Work Order";
-        column.Width = 120;
+        column.Width = 100;
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.ReadOnly = true;
@@ -86,7 +86,7 @@
     {
         column.FieldName = "ItemCode";
         column.Name = "ItemCode";
-        column.Caption = "Item ItemCode";
+        column.Caption = "ItemC ode";
         column.Width = 200;
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
@@ -107,6 +107,25 @@
         column.Name = "ItemName";
         column.Caption = "Item Name";
         column.Width = 320;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    }); 
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ProductionTaskTransNo";
+        column.Name = "ProductionTaskTransNo";
+        column.Caption = "Task No";
+        column.Width = 100;
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.ReadOnly = true;
@@ -164,9 +183,10 @@
         column.Name = "PlannedQty";
         column.Caption = "Planned Qty";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
-        column.Width = 120;
+        column.Width = 100;
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
 
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.NumberType = SpinEditNumberType.Float;
@@ -178,6 +198,26 @@
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
 
     });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ProductionStatus";
+        column.Name = "ProductionStatus";
+        column.Caption = "Production Status";
+        column.Width = 80;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
     settings.Settings.ShowFooter = true;
 
 }).Bind(Model).GetHtml()

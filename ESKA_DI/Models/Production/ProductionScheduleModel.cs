@@ -47,7 +47,7 @@ namespace Models.Production
         public string ItemCode { get; set; }
 
         public string ItemName { get; set; }
-
+        
         public DateTime? StartDate { get; set; }
 
         public decimal? Quantity { get; set; }
@@ -81,7 +81,13 @@ namespace Models.Production
         public string ItemCode { get; set; }
         
         public string ItemName { get; set; }
-        
+
+        public string Uom { get; set; }
+
+        public int? ProductionTaskId { get; set; }
+
+        public string ProductionTaskTransNo { get; set; }
+
         public int? Sort { get; set; }
         
         public string RoutingName { get; set; }
@@ -95,15 +101,15 @@ namespace Models.Production
         public TimeSpan? PracticeHours { get; set; }
         
         public int MachineNo { get; set; }
-        
-        public string Status { get; set; }
-        
+
+        public string ProductionStatus { get; set; }
+
         public decimal? PlannedQty { get; set; }
 
         public decimal? Quantity { get; set; }
 
     }
-    public class ProductionTaskModel
+    public class ProductionTaskGenerateModel
     {
         public int? Sort { get; set; }
 		public long? BaseId { get; set; }
@@ -116,6 +122,7 @@ namespace Models.Production
         public string OperatorName { get; set; }
         public DateTime? PlannedDate { get; set; }
         public decimal? QuantityPlanned { get; set; } 
+        public string Uom { get; set; } 
     }
 
     #endregion
@@ -191,9 +198,14 @@ namespace Models.Production
                 SELECT T0.*,
                     T1.""ItemCode"",
                     T1.""ProdName"" AS ""ItemName"",
-                    T1.""PlannedQty"" AS ""PlannedQty""
+                    T1.""PlannedQty"" AS ""PlannedQty"",
+                    T1.""Uom"" AS ""Uom"",
+                    T2.""Id"" AS ""ProductionTaskId"",
+                    T2.""TransNo"" AS ""ProductionTaskTransNo"",
+                    T2.""Status"" AS ""ProductionStatus""
                     FROM ""Tx_ProcessCard_Detail"" T0
                 INNER JOIN """ + DbProvider.dbSap_Name + @""".""OWOR"" T1 ON T0.""Id"" = T1.""U_IDU_WebId"" AND T0.""Sort"" = T1.""U_IDU_RoutingLevel""
+                LEFT JOIN ""Tx_ProductionTask"" T2 ON T0.""Id"" = T2.""BaseId"" AND T0.""DetId"" = T2.""BaseDetId"" 
                 WHERE T0.""Id"" = :p0
                 ORDER BY T0.""Sort"" ASC
             ";
@@ -269,7 +281,7 @@ namespace Models.Production
                     {
                         tx_ProcessCard.IsCreatedActivity = "Y";
                         string sql = @" CALL ""SpProductionSchedule_GenerateProductionTask"" (:p0, :p1)";
-                        List<ProductionTaskModel> productionActivities = CONTEXT.Database.SqlQuery<ProductionTaskModel>(sql, userId, model.Id).ToList();
+                        List<ProductionTaskGenerateModel> productionActivities = CONTEXT.Database.SqlQuery<ProductionTaskGenerateModel>(sql, userId, model.Id).ToList();
                         if(productionActivities != null)
                         {
                             if(productionActivities.Count != 0)
@@ -284,6 +296,8 @@ namespace Models.Production
                                     string dateX = DateTime.Now.ToString("yyyy-MM-dd");
                                     string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + userId + ",'ProductionTask','" + dateX + "','') ").SingleOrDefault();
                                     tx_ProductionTask.TransNo = transNo;
+                                    tx_ProductionTask.Status = "Open";
+                                    tx_ProductionTask.Uom = activites.Uom;
 
                                     tx_ProductionTask.CreatedDate = dtModified;
                                     tx_ProductionTask.CreatedUser = userId;

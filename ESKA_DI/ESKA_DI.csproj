@@ -270,6 +270,7 @@
     <Compile Include="Models\Notification\Notification_Model.cs" />
     <Compile Include="Models\Production\ProcessCardService.cs" />
     <Compile Include="Models\Production\ProcessCard__List_Model.cs" />
+    <Compile Include="Models\Production\ProductionTaskModel.cs" />
     <Compile Include="Models\Production\ProductionScheduleModel.cs" />
     <Compile Include="Models\Report\ReportAlertDetail__List_Model.cs">
       <SubType>Code</SubType>

@@ -470,7 +470,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask" (
 
     "ItemCode" NVARCHAR(50),
     "ItemName" NVARCHAR(200),
-
+    "Uom" NVARCHAR(100),
+	
     "OperatorId" INTEGER, 
     "OperatorName" NVARCHAR(100),
     
@@ -482,7 +483,7 @@ CREATE COLUMN TABLE "Tx_ProductionTask" (
 
     "EstimatedHours" TIME,
     "ActualHours" TIME,
-
+    "Status" NVARCHAR(50),
     "Comments" NVARCHAR(254),
 
     "CreatedDate" TIMESTAMP,

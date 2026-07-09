@@ -1090,6 +1090,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Uom" Type="nvarchar" MaxLength="100" />
           <Property Name="OperatorId" Type="int" />
           <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
           <Property Name="PlannedDate" Type="timestamp" />
@@ -1098,6 +1099,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="QuantityActual" Type="decimal" Precision="16" Scale="4" />
           <Property Name="EstimatedHours" Type="time" Precision="7" />
           <Property Name="ActualHours" Type="time" Precision="7" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="Comments" Type="nvarchar" MaxLength="254" />
           <Property Name="CreatedDate" Type="timestamp" />
           <Property Name="CreatedUser" Type="int" />
@@ -2578,6 +2580,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Uom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="OperatorId" Type="Int32" />
           <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PlannedDate" Type="DateTime" />
@@ -2586,6 +2589,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="QuantityActual" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="EstimatedHours" Type="Time" />
           <Property Name="ActualHours" Type="Time" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
@@ -3856,6 +3860,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
                 <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
                 <ScalarProperty Name="QuantityActual" ColumnName="QuantityActual" />
@@ -3864,6 +3869,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="PlannedDate" ColumnName="PlannedDate" />
                 <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
                 <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+                <ScalarProperty Name="Uom" ColumnName="Uom" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
                 <ScalarProperty Name="DocNum" ColumnName="DocNum" />

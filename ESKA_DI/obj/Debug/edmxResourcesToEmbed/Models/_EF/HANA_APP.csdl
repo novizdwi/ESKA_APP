@@ -1270,6 +1270,7 @@
     <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Uom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="OperatorId" Type="Int32" />
     <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="PlannedDate" Type="DateTime" />
@@ -1278,6 +1279,7 @@
     <Property Name="QuantityActual" Type="Decimal" Precision="16" Scale="4" />
     <Property Name="EstimatedHours" Type="Time" />
     <Property Name="ActualHours" Type="Time" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
     <Property Name="CreatedDate" Type="DateTime" />
     <Property Name="CreatedUser" Type="Int32" />
