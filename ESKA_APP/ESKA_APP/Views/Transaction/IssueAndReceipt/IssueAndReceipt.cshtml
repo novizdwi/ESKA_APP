@@ -553,17 +553,31 @@
         }
     }
 
-    function BtnCflNettoPopupListOnClick(s, e, detId) {
-        key = Id.GetValue();
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
 
-        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + key + '&DetId=' + detId;
+    function BtnCflNettoReceiptPopupListOnClick(s, e, detId) {
+        key = Id.GetValue();
+        var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
+
+        popup.callbackUrl = '@Url.Action("ViewReceiptBatch_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + key + '&DetId=' + detId;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
             loadingPanel.Show();
         }
     }
+
+     @*function BtnCflNettoIssuePopupListOnClick(s, e, detId) {
+        key = Id.GetValue();
+        var popup = ASPxClientPopupControl.Cast("popupBatchIssue");
+
+        popup.callbackUrl = '@Url.Action("ViewIssueBatch_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }*@
+
 
     function btnUpdateReasonOnClick(s, e) {
         key = Id.GetValue();
@@ -692,6 +706,140 @@
 </script>
 @Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItem_ParamModel)
 
+
+<!------------------------------------------------BATCH RECEIPT--------------------------------------------------->
+<script type="text/javascript">
+
+    function gvReceiptDetailOnBeginCallback(s, e) {
+        e.customArgs['cbId'] = Id.GetValue();
+    }
+
+    function gvReceiptDetailOnEndCallback(s, e) {
+
+    }
+
+    function gvReceiptDetailOnCustomButtonClick(s, e) {
+    }
+
+
+    function gvReceiptDetailOnBatchEditStartEditing(s, e) {
+    }
+
+    function gvReceiptDetailOnBatchEditEndEditing(s, e) {
+    }
+
+    function gvReceiptDetailOnBatchEditRowValidating(s, e) {
+    }
+
+    function gvReceiptDetailCalculateSummary(grid, rowValues, visibleIndex, isDeleting) {
+    }
+
+    function gvReceiptRefOnBeginCallback(s, e) {
+        e.customArgs['cbId'] = Id.GetValue();
+    }
+
+    function gvReceiptRefOnEndCallback(s, e) {
+
+    }
+
+    function gvReceiptRefOnCustomButtonClick(s, e) {
+    }
+
+
+    function gvReceiptRefOnBatchEditStartEditing(s, e) {
+    }
+
+    function gvReceiptRefOnBatchEditEndEditing(s, e) {
+    }
+
+    function gvReceiptRefOnBatchEditRowValidating(s, e) {
+    }
+
+</script>
+
+<script>
+    var isUpdate = false;
+    var isDelete = false;
+
+    function gvContentReceiptBatchListOnBeginCallback(s, e) {
+
+        if (e.command == "UPDATEEDIT") {
+            isUpdate = true;
+        }
+
+        if (e.command == "DELETEROW") {
+            isDelete = true;
+        }
+    }
+
+    function gvContentReceiptBatchListOnEndCallback(s, e) {
+
+        if (isUpdate || isDelete) {
+
+            isUpdate = false;
+            isDelete = false;
+
+            popupBatchReceipt.PerformCallback();
+            gvReceiptDetail.PerformCallback();
+        }
+    }
+
+    function gvReceiptContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvReceiptContentBatchListOnBatchEditEndEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvReceiptContentBatchListOnBatchEditRowValidating(s, e, Id, DetId) {
+
+    }
+
+    function popupReceiptBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+        var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+    
+    function ViewReceiptBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
+        popup.Hide();
+    }
+
+    function ViewReceiptBatch_OnClickBtnSaveChange(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
+        popup.Hide();
+    }
+
+</script>
+
+<script type="text/javascript">
+
+
+    function OnReceiptBatchEditStartEditing(s, e) {
+    }
+
+    function OnReceiptBatchEditEndEditing(s, e) {
+
+    }
+
+    function OnReceiptGridFocusedRowChanged(s, e) {
+    }
+
+    function setReceiptColValue(s, e, value) {
+    }
+
+    function OnReceiptLookupBeginCallback(s, e) {
+    }
+</script>
+
+
+<!------------------------------------------------BATCH RECEIPT--------------------------------------------------->
+<!------------------------------------------------BATCH ISSUE--------------------------------------------------->
 <script type="text/javascript">
 
     function gvDetailOnBeginCallback(s, e) {
@@ -741,6 +889,87 @@
 
 </script>
 
+<script>
+    var isUpdate = false;
+    var isDelete = false;
+
+    function gvContentIssueBatchListOnBeginCallback(s, e) {
+
+        if (e.command == "UPDATEEDIT") {
+            isUpdate = true;
+        }
+
+        if (e.command == "DELETEROW") {
+            isDelete = true;
+        }
+    }
+
+    function gvContentIssueBatchListOnEndCallback(s, e) {
+
+        if (isUpdate || isDelete) {
+
+            isUpdate = false;
+            isDelete = false;
+
+            popupBatchIssue.PerformCallback();
+            gvIssueDetail.PerformCallback();
+        }
+    }
+
+    function gvContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvContentBatchListOnBatchEditEndEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvContentBatchListOnBatchEditRowValidating(s, e, Id, DetId) {
+
+    }
+
+    function popupIssueBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+        var popup = ASPxClientPopupControl.Cast("popupBatchIssue");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+    //function ViewReceiptBatch_OnClickBtnCancel(s, e) {
+    //    var popup = ASPxClientPopupControl.Cast("popupBatch");
+    //    popup.Hide();
+    //}
+
+    function ViewBatch_OnClickBtnSaveChange(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
+
+</script>
+
+<script type="text/javascript">
+
+
+    function OnBatchEditStartEditing(s, e) {
+    }
+
+    function OnBatchEditEndEditing(s, e) {
+
+    }
+
+    function OnGridFocusedRowChanged(s, e) {
+    }
+
+    function setColValue(s, e, value) {
+    }
+
+    function OnLookupBeginCallback(s, e) {
+    }
+</script>
+
+<!------------------------------------------------BATCH ISSUE--------------------------------------------------->
 
 @Html.Partial("Partial/IssueAndReceipt_Form_Btn_Partial")
 
@@ -810,81 +1039,8 @@ new
 @*-------------------------------------------------
     ViewBatch
     -------------------------------------------------*@
-<script>
-    var isUpdate = false;
-    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
-        if (e.command == "UPDATEEDIT") {
-            isUpdate = true;
-        }
-    }
 
-    function gvContentBatchListOnEndCallback(s, e, Id, DetId) {
-        //if (s.IsNewRowEditing && s.IsNewRowEditing()) {
-        //    s.FocusEditor("Batch");
-        //    popupBatch.PerformCallback();
-        //}
-
-        if (isUpdate) {
-
-            isUpdate = false;
-
-            popupBatch.PerformCallback();
-            gvDetail.PerformCallback();
-        }
-
-    }
-
-    function gvContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
-
-    }
-
-    function gvContentBatchListOnBatchEditEndEditing(s, e, Id, DetId) {
-
-    }
-
-    function gvContentBatchListOnBatchEditRowValidating(s, e, Id, DetId) {
-
-    }
-
-    function popupBatch_EndCallback(s, e) {
-        $.validator.unobtrusive.parse("#Batch_formDetail");
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
-        if (!popup.IsVisible()) {
-            loadingPanel.Hide();
-            popup.ShowAtPos(400, 100);
-        }
-    }
-
-    function ViewBatch_OnClickBtnCancel(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
-        popup.Hide();
-    }
-
-    function ViewBatch_OnClickBtnSaveChange(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
-        popup.Hide();
-    }
-
-</script>
-
-<script type="text/javascript">
+@Html.Partial("Partial/BatchIssue/BatchIssue_Partial")
 
 
-    function OnBatchEditStartEditing(s, e) {
-    }
-
-    function OnBatchEditEndEditing(s, e) {
-
-    }
-
-    function OnGridFocusedRowChanged(s, e) {
-    }
-
-    function setColValue(s, e, value) {
-    }
-
-    function OnLookupBeginCallback(s, e) {
-    }
-</script>
-
-@Html.Partial("Partial/Batch/Batch_Partial")
+@Html.Partial("Partial/BatchReceipt/BatchReceipt_Partial")
