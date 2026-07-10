@@ -498,9 +498,11 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\SQLs\Create Schema.sql" />
-    <Content Include="Scripts\SQLs\Insert Into.sql" />
+    <Content Include="Scripts\SQLs\AlterTable.sql" />
+    <Content Include="Scripts\SQLs\CreateStoredProcedure.sql" />
+    <Content Include="Scripts\SQLs\CreateTable.sql" />
     <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
+    <Content Include="Scripts\SQLs\InsertInto.sql" />
     <Content Include="Scripts\Test\DXR.js" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -739,17 +741,12 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\IssueAndReceipt.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Partial.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_BtnBottom_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabDetail_List_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_List_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Panel_List_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Btn_Partial.cshtml" />
