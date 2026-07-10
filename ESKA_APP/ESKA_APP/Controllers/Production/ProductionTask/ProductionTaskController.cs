@@ -70,5 +70,22 @@ namespace Controllers.Production
 
             return PartialView(VIEW_FORM_PARTIAL, model);
         }
+
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Close(long Id)
+        {
+
+            int userId = (int)Session["userId"];
+            
+            productionTaskService = new ProductionTaskService();
+            productionTaskService.Close(Id, userId);
+            ProductionTaskModel productionTaskModel;
+            ViewBag.initNew = true;
+
+            productionTaskModel = productionTaskService.GetNewModel(userId);
+            productionTaskModel.UserId = userId;
+
+            return View(VIEW_DETAIL, productionTaskModel);
+        }
     }
 }

@@ -109,6 +109,7 @@ namespace Models.Production
             WHERE T0.""Status"" = 'Open' 
             AND T1.""ProductionStatus"" = 'Released' ";
 
+
         public ProductionTaskModel GetNewModel(int userId)
         {
             ProductionTaskModel model = new ProductionTaskModel();
@@ -234,6 +235,30 @@ namespace Models.Production
             }
 
 
+        }
+
+        public void Close(long id, int userId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction()) 
+                { 
+                    Tx_ProductionTask tx_ProductionTask = CONTEXT.Tx_ProductionTask.Find(id);
+                    {
+                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "before", "ProductionTask", "close", "Id", id.ToString() );
+                        
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                        tx_ProductionTask.Status = "Closed";
+                        tx_ProductionTask.ModifiedDate = dtModified;
+                        tx_ProductionTask.ModifiedUser = userId;
+
+                        CONTEXT.SaveChanges();
+
+                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "after", "ProductionTask", "close", "Id", id.ToString() );
+                        CONTEXT_TRANS.Commit();
+                    }
+                }
+            }
         }
 
     }

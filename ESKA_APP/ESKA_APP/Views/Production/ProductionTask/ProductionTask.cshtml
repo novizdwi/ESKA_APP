@@ -67,7 +67,8 @@
 
 
 
-<script type="text/javascript">     
+<script type="text/javascript">
+
     $.ajaxSetup({
         cache: false
     });
@@ -160,7 +161,7 @@
 
     function RefreshAfterSuccess(response) {
         var tab = ASPxClientTabControl.Cast("TabDetail");
-         
+
 
         $("#contentForm").html(response);
 
@@ -230,6 +231,35 @@
     }
     function cvProductionTaskReferenceDetailBeginCallback(s, e) {
 
+    }
+
+    function OnStartTask(s, e, Id) {
+
+
+    }
+
+    function OnCloseTask(s, e, Id) {
+        if (confirm('End this Task?')) {
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("Close", "ProductionTask")',
+                Id: Id,
+                beforeSend: function () {
+                    OnBegin();
+                },
+                success: function (response) {
+                    RefreshAfterSuccess(response);
+                    OnSuccessMsgBox();
+
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    OnFailure(jqXhr, textStatus, errorThrown)
+                },
+                complete: function () {
+                    OnComplete()
+                }
+            });
+        }
     }
 
 
