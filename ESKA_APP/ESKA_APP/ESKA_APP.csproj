@@ -19,7 +19,7 @@
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -725,8 +725,8 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
-    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />    
-	<Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_Partial.cshtml" />
     <Content Include="Views\Production\ProductionSchedule\ProductionSchedule.cshtml" />
@@ -738,26 +738,35 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\IssueAndReceipt.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Form_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Panel_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_Btn_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_BtnBottom_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabDetail_List_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_List_Partial.cshtml" />
-	  <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Panel_List_Partial.cshtml" />
-	  <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Btn_Partial.cshtml" />
-	  <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Partial.cshtml" />
-	  <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_TabReference_List_Partial.cshtml" />
-	  <Content Include="Views\Production\ProductionTask\ProductionTask.cshtml" />
-
-	  <None Include="Web.Debug.config">
+    <Content Include="Views\Transaction\IssueAndReceipt\IssueAndReceipt.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_TabReference_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\ProductionTask.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchIssue\BatchIssue_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchIssue\BatchIssue_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchIssue\BatchIssue_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchIssue\BatchIssue_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchReceipt\BatchReceipt_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchReceipt\BatchReceipt_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchReceipt\BatchReceipt_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchReceipt\BatchReceipt_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabIssueDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabReceiptDetail_List_Partial.cshtml" />
+    <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
@@ -803,6 +812,8 @@
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.Detail.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
+    <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.cs" />
+    <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Reference.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
