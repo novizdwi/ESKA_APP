@@ -362,7 +362,7 @@
 
     groupItem.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "TabDetail";
+        group.Name = "TabIssueDetail";
         group.ColSpan = 1;
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Pixel(10);
@@ -374,23 +374,23 @@
 
             item.SetNestedContent(() =>
             {
-                if ((Model.Id != 0) && (!ViewBag.ReadOnly))
-                {
-                    ViewContext.Writer.Write(
-                        Html.DevExpress().Button(
-                            settings1 =>
-                            {
-                                settings1.Name = "btnRefreshItemIssueAndReceipt";
-                                settings1.Height = 20;
-                                settings1.RenderMode = ButtonRenderMode.Link;
-                                settings1.Text = "Add Item";
-                                settings1.ImagePosition = ImagePosition.Left;
-                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListIssueAndReceiptOnClick(s,e); }";
-                            }).GetHtml()
-                    );
-                }
+                //if ((Model.Id != 0) && (!ViewBag.ReadOnly))
+                //{
+                //    ViewContext.Writer.Write(
+                //        Html.DevExpress().Button(
+                //            settings1 =>
+                //            {
+                //                settings1.Name = "btnIssueItemRefreshItemIssueAndReceipt";
+                //                settings1.Height = 20;
+                //                settings1.RenderMode = ButtonRenderMode.Link;
+                //                settings1.Text = "Add Item";
+                //                settings1.ImagePosition = ImagePosition.Left;
+                //                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListIssueAndReceiptOnClick(s,e); }";
+                //            }).GetHtml()
+                //    );
+                //}
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/IssueAndReceipt_Form_TabDetail_List_Partial", Model.ListIssueItem_)
+                     Html.Partial("Partial/IssueAndReceipt_Form_TabIssueDetail_List_Partial", Model.ListIssueItem_)
                 );
 
             });
@@ -399,37 +399,37 @@
 
     });
 
-     groupItem.Items.AddTabbedGroupItem(group =>
+    groupItem.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "TabDetail";
+        group.Name = "TabReceiptDetail";
         group.ColSpan = 1;
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Pixel(10);
         group.Items.Add(item =>
         {
             item.Name = "TabItem";
-            item.Caption = "  Issue Item        ";
+            item.Caption = "  Receipt Item        ";
 
 
             item.SetNestedContent(() =>
             {
-                if ((Model.Id != 0) && (!ViewBag.ReadOnly))
-                {
-                    ViewContext.Writer.Write(
-                        Html.DevExpress().Button(
-                            settings1 =>
-                            {
-                                settings1.Name = "btnRefreshItemIssueAndReceipt";
-                                settings1.Height = 20;
-                                settings1.RenderMode = ButtonRenderMode.Link;
-                                settings1.Text = "Add Item";
-                                settings1.ImagePosition = ImagePosition.Left;
-                                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListIssueAndReceiptOnClick(s,e); }";
-                            }).GetHtml()
-                    );
-                }
+                //if ((Model.Id != 0) && (!ViewBag.ReadOnly))
+                //{
+                //    ViewContext.Writer.Write(
+                //        Html.DevExpress().Button(
+                //            settings1 =>
+                //            {
+                //                settings1.Name = "btnReceiptItemRefreshItemIssueAndReceipt";
+                //                settings1.Height = 20;
+                //                settings1.RenderMode = ButtonRenderMode.Link;
+                //                settings1.Text = "Add Item";
+                //                settings1.ImagePosition = ImagePosition.Left;
+                //                settings1.ClientSideEvents.Click = "function (s,e) { BtnCflItemPopupListIssueAndReceiptOnClick(s,e); }";
+                //            }).GetHtml()
+                //    );
+                //}
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/IssueAndReceipt_Form_TabDetail_List_Partial", Model.ListIssueItem_)
+                     Html.Partial("Partial/IssueAndReceipt_Form_TabReceiptDetail_List_Partial", Model.ListReceiptItem_)
                 );
 
             });
