@@ -42,6 +42,27 @@
         }, 1000);
 
     }
+
+    function pad(n) { return n < 10 ? '0' + n : n; }
+    function updateRtClock() {
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        var now = new Date();
+        var text = days[now.getDay()] + ', ' +
+            pad(now.getDate()) + ' ' +
+            months[now.getMonth()] + ' ' +
+            now.getFullYear() + ' ' +
+            pad(now.getHours()) + ':' +
+            pad(now.getMinutes());
+
+        var el = document.getElementById('rtClock');
+        if (el) el.innerText = text;
+    }
+
+    updateRtClock();
+    setInterval(updateRtClock, 1000);
+
 </script>
 
 
@@ -139,10 +160,7 @@
 
     function RefreshAfterSuccess(response) {
         var tab = ASPxClientTabControl.Cast("TabDetail");
-
-        if (tab.GetActiveTabIndex != 0) {
-            tab.SetActiveTabIndex(0);
-        }
+         
 
         $("#contentForm").html(response);
 

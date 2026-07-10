@@ -72,31 +72,50 @@
         itemSettings.Width = 500;
     });
 
-    groupItem.Items.AddTabbedGroupItem(group =>
+    groupItem.Items.Add(item =>
     {
-        group.Name = "TabDetail";
-        group.ColSpan = 1;
-        group.Width = Unit.Percentage(100);
-        group.Height = Unit.Percentage(100);
-        group.PageControl.ContentStyle.Paddings.Padding = 3;
-        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+        item.Name = "ItemList";
+        item.Caption = "Lists";
+        item.ColSpan = 1;
+        item.Width = Unit.Percentage(100);
+        item.Height = Unit.Percentage(100);
 
-        group.Items.Add(item =>
+        item.ShowCaption = DefaultBoolean.False;
+        item.SetNestedContent(() =>
         {
-            item.Name = "TabReference";
-            item.Caption = "   Lists      ";
-            item.SetNestedContent(() =>
-            {
-                ViewContext.Writer.Write(
-                     Html.Partial("Partial/ProductionSchedule_Form_TabReference_List_Partial", Model.ListReferences_)
-                 );
-            });
-
+            ViewContext.Writer.Write(
+                 Html.Partial("Partial/ProductionSchedule_Form_TabReference_List_Partial", Model.ListReferences_)
+             );
         });
 
 
-
     });
+
+    //groupItem.Items.AddTabbedGroupItem(group =>
+    //{
+    //    group.Name = "TabDetail";
+    //    group.ColSpan = 1;
+    //    group.Width = Unit.Percentage(100);
+    //    group.Height = Unit.Percentage(100);
+    //    group.PageControl.ContentStyle.Paddings.Padding = 3;
+    //    group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+
+    //    group.Items.Add(item =>
+    //    {
+    //        item.Name = "TabReference";
+    //        item.Caption = "   Lists      ";
+    //        item.SetNestedContent(() =>
+    //        {
+    //            ViewContext.Writer.Write(
+    //                 Html.Partial("Partial/ProductionSchedule_Form_TabReference_List_Partial", Model.ListReferences_)
+    //             );
+    //        });
+
+    //    });
+
+
+
+    //});
 
 
 

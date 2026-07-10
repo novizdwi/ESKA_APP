@@ -32,7 +32,10 @@
 
     var groupItem = settings.Items.AddGroupItem(itemSettings =>
     {
-        itemSettings.Caption = "<b>Task List</b>";
+        itemSettings.Caption = "<div style='width:100%;'>" +
+                                "<b>Task List</b>" +
+                                "<span id='rtClock' style='font-weight:normal;font-size:13px;'></span>" +
+                                "</div>";
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
         itemSettings.ColCount = 2;
@@ -77,8 +80,8 @@
         item.Name = "ItemList";
         item.Caption = "Lists";
         item.ColSpan = 1;
-        item.Width = Unit.Percentage(100); 
-        item.Height = Unit.Percentage(100); 
+        item.Width = Unit.Percentage(100);
+        item.Height = Unit.Percentage(100);
 
         item.ShowCaption = DefaultBoolean.False;
         item.SetNestedContent(() =>
