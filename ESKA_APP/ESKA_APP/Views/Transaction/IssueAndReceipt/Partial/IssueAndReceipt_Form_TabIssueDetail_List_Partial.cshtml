@@ -163,7 +163,7 @@
 
                 s.Properties.Buttons.Add(btn);
 
-                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflNettoPopupListOnClick(s, e, '{0}'); }}", detId);
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflNettoIssuePopupListOnClick(s, e, '{0}'); }}", detId);
 
             }).Render();
         });

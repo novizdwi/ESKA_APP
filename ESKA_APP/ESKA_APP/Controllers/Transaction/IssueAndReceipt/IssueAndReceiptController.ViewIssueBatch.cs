@@ -11,51 +11,52 @@ namespace Controllers.Transaction
     public partial class IssueAndReceiptController : BaseController
     {
 
-        string VIEW_ITEMTAG_PANEL_PARTIAL = "Partial/BatchReceipt/BatchReceipt_Panel_Partial";
-        string VIEW_ITEMTAG_FORM_PARTIAL = "Partial/BatchReceipt/BatchReceipt_Form_Partial";
-        string VIEW_TAB_BATCH = "Partial/BatchReceipt/BatchReceipt_TabBatchList_List_Partial";
+        string VIEW_ISSUE_ITEMTAG_PANEL_PARTIAL = "Partial/BatchIssue/BatchIssue_Panel_Partial";
+        string VIEW_ISSUE_ITEMTAG_FORM_PARTIAL = "Partial/BatchIssue/BatchIssue_Form_Partial";
+        string VIEW_ISSUE_TAB_BATCH = "Partial/BatchIssue/BatchIssue_TabBatchList_List_Partial";
 
-        public ActionResult ViewReceiptBatch_PopupListOnDemandPartial(long id = 0, long detId = 0)
+        public ActionResult ViewIssueBatch_PopupListOnDemandPartial(long id = 0, long detId = 0)
         {
             int userId = (int)Session["userId"];
             ViewBag.Id = id;
             ViewBag.DetId = detId;
 
             issueAndReceiptService = new IssueAndReceiptService();
-            var model = new IssueAndReceiptBatchReceiptView___();
+            var model = new IssueAndReceiptBatchIssueView___();
             if (id != 0 && detId != 0)
             {
-                model = issueAndReceiptService.GetReceiptBatch(id, detId);
+                model = issueAndReceiptService.GetIssueBatch(id, detId);
             }
-            return PartialView(VIEW_ITEMTAG_PANEL_PARTIAL, model);
+            return PartialView(VIEW_ISSUE_ITEMTAG_PANEL_PARTIAL, model);
         }
 
-        public ActionResult TabReceiptBatchListPartial(long Id = 0, long DetId = 0)
+        public ActionResult TabIssueBatchListPartial(long Id = 0, long DetId = 0)
         {
             int userId = (int)Session["userId"];
             ViewBag.Id = Id;
             ViewBag.DetId = DetId;
             issueAndReceiptService = new IssueAndReceiptService();
 
-            var modelList = issueAndReceiptService.IssueAndReceipt__ReceiptItemBatchList(DetId);
+            var modelList = issueAndReceiptService.IssueAndReceipt__IssueItemBatchList(DetId);
 
-            return PartialView(VIEW_TAB_BATCH, modelList);
+            return PartialView(VIEW_ISSUE_TAB_BATCH, modelList);
         }
 
-        public ActionResult PopupItemTagLoadOnDemandPartial()
+        public ActionResult PopupIssueItemTagLoadOnDemandPartial()
         {
 
             int userId = (int)Session["userId"];
             var model = new IssueAndReceiptModel();
 
-            return PartialView(VIEW_ITEMTAG_FORM_PARTIAL, model);
+            return PartialView(VIEW_ISSUE_ITEMTAG_FORM_PARTIAL, model);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabReceiptBatchListAddNewRow([Bind] IssueAndReceiptBatchReceiptModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabIssueBatchListAddNewRow([Bind] IssueAndReceiptBatchIssueModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
+
             issueAndReceiptService = new IssueAndReceiptService();
 
             if (ModelState.IsValid)
@@ -63,30 +64,31 @@ namespace Controllers.Transaction
                 //model.Id = Id;
                 model.DetDetId = DetId;
                 model._UserId = (int)Session["userId"];
-                issueAndReceiptService.IssueAndReceipt__ReceiptAddNewItemBatch(model);
+                issueAndReceiptService.IssueAndReceipt__IssueAddNewItemBatch(model);
             }
 
-            return TabReceiptBatchListPartial(id, detId);
+            return TabIssueBatchListPartial(id, detId);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabReceiptBatchListUpdateRow([Bind] IssueAndReceiptBatchReceiptModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabIssueBatchListUpdateRow([Bind] IssueAndReceiptBatchIssueModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
+
             issueAndReceiptService = new IssueAndReceiptService();
 
             if (ModelState.IsValid)
             {
                 model._UserId = (int)Session["userId"];
-                issueAndReceiptService.IssueAndReceipt_ReceiptUpdateItemBatch(model);
+                issueAndReceiptService.IssueAndReceipt_IssueUpdateItemBatch(model);
             }
 
-            return TabReceiptBatchListPartial(id, detId);
+            return TabIssueBatchListPartial(id, detId);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabReceiptBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
+        public ActionResult TabIssueBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
@@ -98,7 +100,7 @@ namespace Controllers.Transaction
                 issueAndReceiptService.IssueAndReceipt_ReceiptDeleteItemBatch(userId, Id, DetId, DetDetId);
             }
 
-            return TabReceiptBatchListPartial(id, detId);
+            return TabIssueBatchListPartial(id, detId);
         }
 
     }

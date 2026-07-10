@@ -566,6 +566,19 @@
         }
     }
 
+     function BtnCflNettoIssuePopupListOnClick(s, e, detId) {
+        key = Id.GetValue();
+        var popup = ASPxClientPopupControl.Cast("popupBatchIssue");
+
+        popup.callbackUrl = '@Url.Action("ViewIssueBatch_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
+
+
     function btnUpdateReasonOnClick(s, e) {
         key = Id.GetValue();
         var reason = CancelReason.GetValue();
@@ -746,27 +759,29 @@
 
 <script>
     var isUpdate = false;
+    var isDelete = false;
 
-    function gvContentReceiptBatchListOnBeginCallback(s, e, Id, DetId) {
+    function gvContentReceiptBatchListOnBeginCallback(s, e) {
+
         if (e.command == "UPDATEEDIT") {
             isUpdate = true;
         }
+
+        if (e.command == "DELETEROW") {
+            isDelete = true;
+        }
     }
 
-    function gvContentReceiptBatchListOnEndCallback(s, e, Id, DetId) {
-        //if (s.IsNewRowEditing && s.IsNewRowEditing()) {
-        //    s.FocusEditor("Batch");
-        //    popupBatch.PerformCallback();
-        //}
+    function gvContentReceiptBatchListOnEndCallback(s, e) {
 
-        if (isUpdate) {
+        if (isUpdate || isDelete) {
 
             isUpdate = false;
+            isDelete = false;
 
             popupBatchReceipt.PerformCallback();
             gvReceiptDetail.PerformCallback();
         }
-
     }
 
     function gvReceiptContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
@@ -876,26 +891,29 @@
 
 <script>
     var isUpdate = false;
-    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+    var isDelete = false;
+
+    function gvContentIssueBatchListOnBeginCallback(s, e) {
+
         if (e.command == "UPDATEEDIT") {
             isUpdate = true;
         }
+
+        if (e.command == "DELETEROW") {
+            isDelete = true;
+        }
     }
 
-    function gvContentBatchListOnEndCallback(s, e, Id, DetId) {
-        //if (s.IsNewRowEditing && s.IsNewRowEditing()) {
-        //    s.FocusEditor("Batch");
-        //    popupBatch.PerformCallback();
-        //}
+    function gvContentIssueBatchListOnEndCallback(s, e) {
 
-        if (isUpdate) {
+        if (isUpdate || isDelete) {
 
             isUpdate = false;
+            isDelete = false;
 
-            popupBatch.PerformCallback();
-            gvDetail.PerformCallback();
+            popupBatchIssue.PerformCallback();
+            gvIssueDetail.PerformCallback();
         }
-
     }
 
     function gvContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
@@ -910,9 +928,9 @@
 
     }
 
-    function popupBatch_EndCallback(s, e) {
+    function popupIssueBatch_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Batch_formDetail");
-        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        var popup = ASPxClientPopupControl.Cast("popupBatchIssue");
         if (!popup.IsVisible()) {
             loadingPanel.Hide();
             popup.ShowAtPos(400, 100);

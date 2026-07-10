@@ -1,7 +1,7 @@
 ﻿@Html.DevExpress().PopupControl(settings =>
 {
     settings.Name = "popupBatchIssue";
-    //settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "ViewBatch_PopupListOnDemandPartial" };
+    settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "ViewIssueBatch_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -23,9 +23,9 @@
     settings.PopupAnimationType = AnimationType.Fade;
 
     settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
-    settings.ClientSideEvents.EndCallback = "popupBatch_EndCallback"; //popupItemTag_EndCallback
+    settings.ClientSideEvents.EndCallback = "popupIssueBatch_EndCallback"; //popupItemTag_EndCallback
     settings.PopupElementID = "ShowButton";
-    settings.HeaderText = "Item Batch List";
+    settings.HeaderText = "Issue Item Batch List";
 
     settings.SetContent(() =>
     {
