@@ -275,11 +275,9 @@ namespace Models.Transaction
 
         public string ItemName { get; set; }
 
-        public string Whse { get; set; }
+        public string WhsCode { get; set; }
 
-        public int? TotalNeeded { get; set; }
-
-        public int? TotalCreated { get; set; }
+        public int? Quantity { get; set; }
 
         public List<IssueAndReceiptBatchIssueModel> IssueAndReceiptBatchIssueModel___ { get; set; }
     }
@@ -746,7 +744,7 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = tx_IssueAndReceipt_issue_Item_Batch.DetId.ToString();
 
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        //CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
                         // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();

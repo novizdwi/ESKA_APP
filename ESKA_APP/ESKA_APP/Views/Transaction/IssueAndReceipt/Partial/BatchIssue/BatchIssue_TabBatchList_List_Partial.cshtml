@@ -1,6 +1,6 @@
 ﻿@using Models;
 @using Models.Transaction;
-@model List<Models.Transaction.GoodsReceiptPoBatchModel>
+@model List<Models.Transaction.IssueAndReceiptBatchIssueModel>
 
 @{
     var Id = Convert.ToInt64(Request["cbId"]);
@@ -25,9 +25,8 @@
 }
 
 @Html.DevExpress().GridView(settings =>
-{
-
-    settings.Name = "gvContentBatchList";
+{ 
+    settings.Name = "gvContentIssueBatchList";
     settings.KeyFieldName = "DetDetId";
     settings.Width = Unit.Percentage(100);
     settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "TabIssueBatchListPartial", Id = Id, DetId = DetId };
