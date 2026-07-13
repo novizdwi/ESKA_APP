@@ -84,8 +84,8 @@
         <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="24.75" PointY="13.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProcessCard" Width="1.5" PointX="25.75" PointY="17.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProcessCard_Approval" Width="1.5" PointX="19.75" PointY="25.75" />
-        <EntityTypeShape EntityType="Model1.Tx_ProcessCard_Detail" Width="1.5" PointX="25.75" PointY="25.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProductionTask" Width="1.5" PointX="0.75" PointY="26.75" />
+        <EntityTypeShape EntityType="Model1.Tx_ProcessCard_Detail" Width="1.5" PointX="25.375" PointY="25.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

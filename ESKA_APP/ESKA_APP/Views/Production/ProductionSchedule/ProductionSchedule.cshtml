@@ -43,6 +43,9 @@
     }
     );
 
+    $(window).on('resize', AdjustGridViewHeight);
+    $(document).ready(AdjustGridViewHeight);
+
     function SetBtnStatus() {
         var grpBtnAdd = formLayouBtn.GetItemByName('grpBtnSave');
         var btnUpdate = ASPxClientButton.Cast('btnUpdate');
@@ -238,8 +241,43 @@
             Id: Id
         });
     }
+
+    function gvProductionScheduleReferenceDetailInitCallback(s, e) {
+        AdjustGridViewHeight();
+    }
+
     function gvProductionScheduleReferenceDetailBeginCallback(s, e) {
 
+    }
+
+    function gvProductionScheduleReferenceDetailEndCallback(s, e) {
+        AdjustGridViewHeight();
+    }
+    function AdjustGridViewHeight() {
+        var gridEl = document.getElementById('gvProductionScheduleReferenceDetail');
+        if (!gridEl) return;
+
+        var top = gridEl.getBoundingClientRect().top;
+        var bottomMargin = 50;
+        var target = window.innerHeight - top - bottomMargin;
+        if (target < 150) target = 150;
+
+        setGridHeight(target);
+
+        setTimeout(function () {
+            var overflow = document.documentElement.scrollHeight - window.innerHeight;
+            if (overflow > 0) {
+                var corrected = Math.max(target - overflow - 2, 150);
+                setGridHeight(corrected);
+                console.log('corrected height:', corrected, 'overflow was:', overflow);
+            }
+        }, 50);
+    }
+
+    function setGridHeight(height) {
+        if (typeof gvProductionScheduleReferenceDetail !== 'undefined') {
+            gvProductionScheduleReferenceDetail.SetHeight(height);
+        }
     }
 
 

@@ -86,12 +86,12 @@
         column.ReadOnly = true;
         column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
         column.Width = 100;
-         
+
         column.SetDataItemTemplateContent(c =>
         {
             if (c.ItemIndex >= 0)
             {
-                string ProgressNo = (string)DataBinder.Eval(c.DataItem, "TransNo"); 
+                string ProgressNo = (string)DataBinder.Eval(c.DataItem, "TransNo");
 
                 Html.DevExpress().HyperLink(settingsHL =>
                 {
@@ -234,7 +234,9 @@
 
     settings.Settings.ShowFooter = true;
 
+    settings.ClientSideEvents.Init = "gvProductionScheduleReferenceDetailInitCallback";
     settings.ClientSideEvents.BeginCallback = "gvProductionScheduleReferenceDetailBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvProductionScheduleReferenceDetailEndCallback";
 
 }).Bind(Model).GetHtml()
 

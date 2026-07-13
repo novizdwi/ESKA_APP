@@ -17,14 +17,14 @@ namespace Controllers.Production
 {
     public partial class ProductionTaskController : BaseController
     {
-        public ActionResult TabTransListPartial()
+        public ActionResult TabOutstandingListPartial()
         {
             int userId = (int)Session["userId"]; 
             productionTaskService = new ProductionTaskService(); 
 
             var modelList = productionTaskService.ProductionTask_GetReferences(userId, "today");
 
-            return PartialView(VIEW_FORM_TABREFERENCE_PARTIAL, modelList);
+            return PartialView(VIEW_FORM_TABOUTSTANDING_PARTIAL, modelList);
         }
 
 

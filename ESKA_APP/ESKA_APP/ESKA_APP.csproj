@@ -763,6 +763,7 @@
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\BatchReceipt\BatchReceipt_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabIssueDetail_List_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabReceiptDetail_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_TabOutstanding_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -810,6 +811,7 @@
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.cs" />
+    <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Oustanding.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Reference.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />

@@ -98,7 +98,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
         public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
         public virtual DbSet<Tx_ProcessCard_Approval> Tx_ProcessCard_Approval { get; set; }
-        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
         public virtual DbSet<Tx_ProductionTask> Tx_ProductionTask { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
     }
 }

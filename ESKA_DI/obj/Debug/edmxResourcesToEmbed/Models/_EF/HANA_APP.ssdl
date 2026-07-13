@@ -1064,8 +1064,6 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="MachineId" Type="int" />
     <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
     <Property Name="PracticeHours" Type="time" Precision="7" />
-    <Property Name="ActualHours" Type="time" Precision="7" />
-    <Property Name="LineStatus" Type="nvarchar" MaxLength="20" />
     <Property Name="Comments" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
     <Property Name="CreatedUser" Type="int" />
@@ -1092,6 +1090,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="ActualDate" Type="timestamp" />
     <Property Name="QuantityPlanned" Type="decimal" Precision="16" Scale="4" />
     <Property Name="QuantityActual" Type="decimal" Precision="16" Scale="4" />
+    <Property Name="IsRunningTask" Type="varchar" MaxLength="1" />
     <Property Name="EstimatedHours" Type="time" Precision="7" />
     <Property Name="ActualHours" Type="time" Precision="7" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />

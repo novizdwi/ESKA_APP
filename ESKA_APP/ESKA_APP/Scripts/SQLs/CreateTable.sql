@@ -424,9 +424,7 @@ CREATE COLUMN TABLE "Tx_ProcessCard_Detail" (
     "MachineName" NVARCHAR(100),
 
     "PracticeHours" TIME,
-    "ActualHours" TIME,
 
-    "LineStatus" NVARCHAR(20),
     "Comments" NVARCHAR(254),
 
     "CreatedDate" TIMESTAMP,
@@ -480,7 +478,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask" (
 
     "QuantityPlanned" DECIMAL(16,4),
     "QuantityActual" DECIMAL(16,4),
-
+	"IsRunningTask" CHAR(1),
+	
     "EstimatedHours" TIME,
     "ActualHours" TIME,
     "Status" NVARCHAR(50),

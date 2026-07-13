@@ -21,6 +21,7 @@ namespace Controllers.Production
         string VIEW_DETAIL = "ProductionTask";
         string VIEW_FORM_PARTIAL = "Partial/ProductionTask_Form_Partial";
         string VIEW_FORM_TABREFERENCE_PARTIAL = "Partial/ProductionTask_Form_TabReference_List_Partial";
+        string VIEW_FORM_TABOUTSTANDING_PARTIAL = "Partial/ProductionTask_Form_TabOutstanding_List_Partial";
 
         ProductionTaskService productionTaskService;
 
@@ -85,7 +86,7 @@ namespace Controllers.Production
             productionTaskModel = productionTaskService.GetNewModel(userId);
             productionTaskModel.UserId = userId;
 
-            return View(VIEW_DETAIL, productionTaskModel);
+            return View(VIEW_FORM_PARTIAL, productionTaskModel);
         }
     }
 }

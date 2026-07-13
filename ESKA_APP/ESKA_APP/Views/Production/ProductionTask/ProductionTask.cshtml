@@ -18,6 +18,8 @@
 
 <script type="text/javascript"> 
     var timer;
+    var beforeSaveActiveTabName = '';
+    var beforeSaveActiveTabIndex = 0;
 
     $(document).ready(function () {
         SetBtnStatus();
@@ -71,6 +73,14 @@
 
     $.ajaxSetup({
         cache: false
+    });
+
+    $(window).on('resize', function () {
+        AdjustCardViewHeight();
+    });
+
+    $(document).ready(function () {
+        AdjustCardViewHeight();
     });
 
     function OnBegin() {
@@ -162,6 +172,9 @@
     function RefreshAfterSuccess(response) {
         var tab = ASPxClientTabControl.Cast("TabDetail");
 
+        if (tab.GetActiveTabIndex != 0) {
+            tab.SetActiveTabIndex(0);
+        }
 
         $("#contentForm").html(response);
 
@@ -222,29 +235,48 @@
 
     }
 
-    function OnClickChooseTransNo(s, e, Id) {
-        var guid = CreateGuid();
-        window.open('', guid);
-        SubmitForm(guid, '@Url.Action("Detail", "ProcessCard")', 'post', {
-            Id: Id
-        });
-    }
     function cvProductionTaskReferenceDetailBeginCallback(s, e) {
 
     }
 
-    function OnStartTask(s, e, Id) {
+    function cvProductionTaskOutstandingDetailInitCallback(s, e) {
+        AdjustCardViewHeight();
+    }
 
+    function cvProductionTaskReferenceDetailInitCallback(s, e) {
+        AdjustCardViewHeight();
+    }
+
+    function cvProductionTaskOutstandingDetailBeginCallback(s, e) {
 
     }
 
-    function OnCloseTask(s, e, Id) {
-        if (confirm('End this Task?')) {
+    function cvProductionTaskReferenceDetailEndCallback(s, e) {
+        AdjustCardViewHeight();
+    }
+
+    function cvProductionTaskOutstandingDetailEndCallback(s, e) {
+        AdjustCardViewHeight();
+    }
+
+    function OnStartTask(s, e, Id) {
+        console.log(Id);
+
+    }
+
+    function ViewRunningTask(s, e, Id)
+    {
+
+    }
+
+    function OnCloseTask(s, e, Id) { 
+        if (confirm('Close this Task?')) {
              $.ajax({
                 type: "POST",
                 url: '@Url.Action("Close", "ProductionTask")',
-                Id: Id,
-                beforeSend: function () {
+                 data: { Id: Id },
+
+                 beforeSend: function () {
                     OnBegin();
                 },
                 success: function (response) {
@@ -261,8 +293,45 @@
             });
         }
     }
+    function AdjustCardViewHeight() {
+        // Cari elemen CardView yang sedang terlihat (bukan yang display:none)
+        var activeEl = null;
+        var outstandingEl = document.getElementById('cvProductionTaskOutstandingDetail');
+        var referenceEl = document.getElementById('cvProductionTaskReferenceDetail');
 
+        if (outstandingEl && outstandingEl.offsetParent !== null) {
+            activeEl = outstandingEl;
+        } else if (referenceEl && referenceEl.offsetParent !== null) {
+            activeEl = referenceEl;
+        }
 
+        if (!activeEl) return;
+
+        var top = activeEl.getBoundingClientRect().top;
+        var bottomMargin = 10;
+        var target = window.innerHeight - top - bottomMargin;
+        if (target < 150) target = 150;
+
+        setHeightBoth(target);
+
+        setTimeout(function () {
+            var overflow = document.documentElement.scrollHeight - window.innerHeight;
+            if (overflow > 0) {
+                var corrected = Math.max(target - overflow - 2, 150);
+                setHeightBoth(corrected);
+                console.log('corrected height:', corrected, 'overflow was:', overflow);
+            }
+        }, 50);
+    }
+
+    function setHeightBoth(height) {
+        if (typeof cvProductionTaskOutstandingDetail !== 'undefined') {
+            cvProductionTaskOutstandingDetail.SetHeight(height);
+        }
+        if (typeof cvProductionTaskReferenceDetail !== 'undefined') {
+            cvProductionTaskReferenceDetail.SetHeight(height);
+        }
+    }
 </script>
 
 

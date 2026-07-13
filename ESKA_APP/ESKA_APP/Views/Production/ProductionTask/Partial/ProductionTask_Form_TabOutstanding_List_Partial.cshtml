@@ -8,18 +8,19 @@
 
 @Html.DevExpress().CardView(settings =>
 {
-    settings.Name = "cvProductionTaskReferenceDetail";
+    settings.Name = "cvProductionTaskOutstandingDetail";
     settings.KeyFieldName = "Id";
     settings.Width = Unit.Percentage(100);
 
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 100;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-    settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;     
 
     settings.SettingsPager.Visible = false;          // sembunyikan pager
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 
-    settings.CallbackRouteValues = new { Controller = "ProductionTask", Action = "TabTransListPartial" };
+    settings.CallbackRouteValues = new { Controller = "ProductionTask", Action = "TabOutstandingListPartial" };
 
     settings.Width = Unit.Percentage(100);
     settings.Height = Unit.Percentage(100);
@@ -102,9 +103,9 @@
     });
 
     settings.SettingsPager.PageSizeItemSettings.Visible = false;
-    settings.ClientSideEvents.Init = "cvProductionTaskReferenceDetailInitCallback";
-    settings.ClientSideEvents.BeginCallback = "cvProductionTaskReferenceDetailBeginCallback";
-    settings.ClientSideEvents.EndCallback = "cvProductionTaskReferenceDetailEndCallback";
+    settings.ClientSideEvents.Init = "cvProductionTaskOutstandingDetailInitCallback";
+    settings.ClientSideEvents.BeginCallback = "cvProductionTaskOutstandingDetailBeginCallback";
+    settings.ClientSideEvents.EndCallback = "cvProductionTaskOutstandingDetailEndCallback";
 
 }).Bind(Model).GetHtml()
 

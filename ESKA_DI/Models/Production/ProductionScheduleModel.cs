@@ -297,6 +297,7 @@ namespace Models.Production
                                     string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + userId + ",'ProductionTask','" + dateX + "','') ").SingleOrDefault();
                                     tx_ProductionTask.TransNo = transNo;
                                     tx_ProductionTask.Status = "Open";
+                                    tx_ProductionTask.IsRunningTask = "N";
                                     tx_ProductionTask.Uom = activites.Uom;
 
                                     tx_ProductionTask.CreatedDate = dtModified;

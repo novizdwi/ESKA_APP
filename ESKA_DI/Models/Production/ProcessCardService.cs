@@ -179,7 +179,7 @@ namespace Models.Production
 
         public string RoutingStatus { get; set; }
 
-        public string LineStatus { get; set; }
+        public string LineStatus_ { get; set; }
 
         public int?  OperatorId { get; set; }
 

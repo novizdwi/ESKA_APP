@@ -22,12 +22,18 @@ namespace Models.Production
     public class ProductionTaskModel
     {
         public int UserId { get; set; }
+        
+        public int? CurrentTaskId { get; set;}
+
+        public string RunningTaskNo {get; set;}
 
         public int? Id { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 
         public List<ProductionTask_ReferenceModel> ListReferences_ = new List<ProductionTask_ReferenceModel>();
+
+        public List<ProductionTask_ReferenceModel> ListOutstanding_ = new List<ProductionTask_ReferenceModel>();
 
         public ProductionTask_Detail Details_ = new ProductionTask_Detail();
     }
@@ -38,12 +44,18 @@ namespace Models.Production
 
         public int Id { get; set; }   
 
+        public string TransNo { get; set; }
+        
         public string ItemCode { get; set; }
 
         public string ItemName { get; set; }
 
         public DateTime? PlannedDate { get; set; }
 
+        public decimal? QuantityActual { get; set; }
+
+        public decimal? QuantityActual_ { get; set; }
+ 
         public decimal? QuantityPlanned { get; set; }
 
         public string Uom { get; set; }
@@ -103,7 +115,8 @@ namespace Models.Production
     public class ProductionTaskService
     {
         private static string SqlSelect = @"SELECT 
-            T0.* 
+            T0.*,
+            COALESCE(T0.""QuantityActual"",0) AS ""QuantityActual_""
             FROM ""Tx_ProductionTask"" T0 
             INNER JOIN ""Tx_ProcessCard"" T1 ON T0.""BaseId"" = T1.""Id"" 
             WHERE T0.""Status"" = 'Open' 
@@ -113,8 +126,11 @@ namespace Models.Production
         public ProductionTaskModel GetNewModel(int userId)
         {
             ProductionTaskModel model = new ProductionTaskModel();
-            model.UserId = userId; 
-            model.ListReferences_ = ProductionTask_GetReferences(userId);
+            model.UserId = userId;
+            model.CurrentTaskId = this.GetRunningTaskId(userId);
+            model.RunningTaskNo = this.GetRunningTask(userId);
+            model.ListReferences_ = ProductionTask_GetReferences(userId, "today");
+            model.ListOutstanding_ = ProductionTask_GetReferences(userId, "outstanding");
 
             return model;
         }
@@ -122,12 +138,47 @@ namespace Models.Production
         public ProductionTaskModel Find(int userId)
         {
             ProductionTaskModel model = new ProductionTaskModel();
-            model.UserId = userId; 
-
-            model.ListReferences_ = this.ProductionTask_GetReferences(userId);
+            model.UserId = userId;
+            model.CurrentTaskId = this.GetRunningTaskId(userId);
+            model.RunningTaskNo = this.GetRunningTask(userId); 
+            model.ListReferences_ = ProductionTask_GetReferences(userId, "today");
+            model.ListOutstanding_ = ProductionTask_GetReferences(userId, "outstanding");
             return model;
         }
 
+        public string GetRunningTask(int userId)
+        {
+            string ret = string.Empty;
+            using (var CONTEXT = new HANA_APP())
+            {
+                string ssql = @" SELECT ""TransNo"" AS IDU 
+                    FROM ""Tx_ProductionTask"" 
+                    WHERE ""Status"" = 'Open'
+                    AND ""IsRunningTask"" = 'Y' 
+                    AND  ""OperatorId"" = :p0 
+                ";
+                ret = CONTEXT.Database.SqlQuery<string>(ssql, userId).FirstOrDefault();
+            }
+
+            return ret;
+        }
+
+        public int? GetRunningTaskId(int userId)
+        {
+            int? ret;
+            using (var CONTEXT = new HANA_APP())
+            {
+                string ssql = @" SELECT ""Id"" AS IDU 
+                    FROM ""Tx_ProductionTask"" 
+                    WHERE ""Status"" = 'Open'
+                    AND ""IsRunningTask"" = 'Y' 
+                    AND  ""OperatorId"" = :p0 
+                ";
+                ret = CONTEXT.Database.SqlQuery<int?>(ssql, userId).FirstOrDefault();
+            }
+
+            return ret;
+        }
 
         //-------------------------------------
         //Detail  ProductionTask_Reference
@@ -135,9 +186,10 @@ namespace Models.Production
         public ProductionTaskModel GetListByParam(int userId, DateTime fromDate, DateTime toDate, string itemCode, string whsCode, string tagId, string status)
         {
             ProductionTaskModel model = new ProductionTaskModel();
-            model.UserId = userId; 
+            model.UserId = userId;
 
-            model.ListReferences_ = this.ProductionTask_GetReferences(userId);
+            model.ListReferences_ = ProductionTask_GetReferences(userId, "today");
+            model.ListOutstanding_ = ProductionTask_GetReferences(userId, "outstanding");
 
             return model;
         }
@@ -145,20 +197,27 @@ namespace Models.Production
         //-------------------------------------
         //Detail  ProductionTask_Reference
         //-------------------------------------
-        public List<ProductionTask_ReferenceModel> ProductionTask_GetReferences(int userId)
+        public List<ProductionTask_ReferenceModel> ProductionTask_GetReferences(int userId, string type)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return ProductionTask_GetReferences(CONTEXT, userId);
+                return ProductionTask_GetReferences(CONTEXT, userId, type);
             }
         }
 
-        public List<ProductionTask_ReferenceModel> ProductionTask_GetReferences(HANA_APP CONTEXT, int userId)
+        public List<ProductionTask_ReferenceModel> ProductionTask_GetReferences(HANA_APP CONTEXT, int userId, string type)
         {
             string sql = SqlSelect;
             if (userId != 1)
             {
                 sql += @" AND ""OperatorId"" = "+userId+" ";
+            }
+            if (type == "outstanding")
+            {
+                sql += @" AND CAST(""PlannedDate"" AS DATE) < CURRENT_DATE";
+            }
+            else {
+                sql += @" AND CAST(""PlannedDate"" AS DATE) = CURRENT_DATE";
             }
             return CONTEXT.Database.SqlQuery<ProductionTask_ReferenceModel>(sql).ToList();
         }

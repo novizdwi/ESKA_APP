@@ -29,13 +29,9 @@
     settings.AlignItemCaptionsInAllGroups = true;
     settings.ShowItemCaptionColon = false;
 
-
     var groupItem = settings.Items.AddGroupItem(itemSettings =>
     {
-        itemSettings.Caption = "<div style='width:100%;'>" +
-                                "<b>Task List</b>" +
-                                "<span id='rtClock' style='font-weight:normal;font-size:13px;'></span>" +
-                                "</div>";
+        itemSettings.Caption = "Task List";
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
         itemSettings.ColCount = 2;
@@ -45,80 +41,86 @@
 
     });
 
-
-    groupItem.Items.AddEmptyItem().Height = 8;
-
     var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
     {
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 3;
+        itemSettings.ColCount = 2;
     });
-
 
     var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
     {
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 1;
-        itemSettings.Width = 500;
+        itemSettings.ColCount = 2;
+        itemSettings.CssClass = "groupCol";
     });
 
-    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
-        itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 1;
-        itemSettings.Width = 500;
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ButtonEdit;
+        itemSettings.Caption = "Running Task No";
+        itemSettings.Name = "RunningTaskNo";
+        itemSettings.FieldName = "RunningTaskNo";
+
+        var txt = (ButtonEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "RunningTaskNo";
+        txt.Width = 300;
+        txt.Text = Model.RunningTaskNo;
+        txt.ReadOnly = true;
+
+        txt.Properties.Buttons.Add("View");   // <-- ganti dari txt.Buttons ke txt.Properties.Buttons
+        txt.Properties.ClientSideEvents.ButtonClick = "function(s,e){ ViewRunningTask(" + Model.CurrentTaskId + "); }";
     });
 
-    groupItem.Items.Add(item =>
+    groupItem_Col1.Items.Add(itemSettings =>
     {
-        item.Name = "ItemList";
-        item.Caption = "Lists";
-        item.ColSpan = 1;
-        item.Width = Unit.Percentage(100);
-        item.Height = Unit.Percentage(100);
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+        itemSettings.Caption = "";
+        itemSettings.Name = "Clock";
 
-        item.ShowCaption = DefaultBoolean.False;
-        item.SetNestedContent(() =>
+        var lbl = (LabelSettings)itemSettings.NestedExtensionSettings;
+        lbl.Name = "rtClock";
+        lbl.Text = "--:--:--";
+        lbl.ControlStyle.Font.Size = 13;
+        lbl.ControlStyle.Font.Bold = true;
+        lbl.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+        lbl.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+    });
+    groupItem_Col1.Items.AddTabbedGroupItem(tabGroup =>
+    {
+        tabGroup.Name = "TabDetail";
+        tabGroup.ColSpan = 2;
+        tabGroup.Width = Unit.Percentage(100); 
+
+        tabGroup.Items.Add(tab =>
         {
-            ViewContext.Writer.Write(
-                 Html.Partial("Partial/ProductionTask_Form_TabReference_List_Partial", Model.ListReferences_)
-             );
+            tab.Name = "TabReference";
+            tab.Caption = "Today Task";
+
+            tab.SetNestedContent(() =>
+            {
+                Html.RenderPartial(
+                    "Partial/ProductionTask_Form_TabReference_List_Partial",
+                    Model.ListReferences_);
+            });
+        });
+
+        tabGroup.Items.Add(tab =>
+        {
+            tab.Name = "TabOutstanding";
+            tab.Caption = "Oustanding Task";
+
+            tab.SetNestedContent(() =>
+            {
+                Html.RenderPartial(
+                    "Partial/ProductionTask_Form_TabOutstanding_List_Partial",
+                    Model.ListOutstanding_);
+            });
         });
     });
-
-    //groupItem.Items.AddTabbedGroupItem(group =>
-    //{
-    //    group.Name = "TabDetail";
-    //    group.ColSpan = 1;
-    //    group.Width = Unit.Percentage(100);
-    //    group.Height = Unit.Percentage(100);
-    //    group.PageControl.ContentStyle.Paddings.Padding = 0;
-    //    group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
-
-    //    group.Items.Add(item =>
-    //    {
-    //        item.Name = "TabReference";
-    //        item.Caption = "   Lists      ";
-    //        item.SetNestedContent(() =>
-    //        {
-    //            ViewContext.Writer.Write(
-    //                 Html.Partial("Partial/ProductionTask_Form_TabReference_List_Partial", Model.ListReferences_)
-    //             );
-    //        });
-
-    //    });
-
-
-
-    //});
-
-
 
 }).GetHtml()
 
