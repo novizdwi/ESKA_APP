@@ -15,7 +15,7 @@
     ViewBag.UserId = (int)Session["userId"];
     ViewBag.Title = "Goods Receipt Po";
 
-    string MenuCodePost = "StockOpname/Post";
+    string MenuCodePost = "GoodsReceiptPo/Post";
     string IsCanPost_ = "Y";
     if (ViewBag.UserId != 1)
     {
@@ -667,9 +667,9 @@
     var cflItem_ParamModel = new CflItem_ParamModel();
     cflItem_ParamModel.Name = "PurchaseOrder";
     cflItem_ParamModel.Type = "PurchaseOrder";
-    cflItem_ParamModel.SqlWhere = "   ";
+    cflItem_ParamModel.SqlWhere = "";
     cflItem_ParamModel.Header = "";
-
+    cflItem_ParamModel.SourceType = "PO"; // sumber item = PO; DocEntry PO otomatis diambil dari field BaseEntry di form. PO belum dipilih -> fallback master
     cflItem_ParamModel.IsMulti = "N";
 }
 
@@ -687,6 +687,31 @@
             popup.Show();
         }
 
+    }
+
+    function OnClickChoose_CflItemPurchaseOrder(s, e, data) {
+        cflItemPopupListPurchaseOrder.Hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChooseItem", "GoodsReceiptPo")',
+            data: {
+                Id: Id.GetValue(),
+                BaseEntry: (typeof (BaseEntry) != 'undefined' && BaseEntry != null) ? BaseEntry.GetValue() : '',
+                BaseLine: data.LineNum,
+                ItemCode: data.ItemCode,
+                ItemName: data.ItemName,
+                Quantity: data.OpenQty ? Math.floor(data.OpenQty) : 0,
+                Uom: data.UomCode,
+                UomEntry: data.IUoMEntry,
+                Whse: data.WhsCode,
+                UnitPrice: data.UnitPrice
+            },
+            beforeSend: function () { OnBegin(); },
+            success: function () { gvDetail.PerformCallback(); OnSuccessMsgBox(); },
+            error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
+            complete: function () { OnComplete(); }
+        });
     }
 
 </script>

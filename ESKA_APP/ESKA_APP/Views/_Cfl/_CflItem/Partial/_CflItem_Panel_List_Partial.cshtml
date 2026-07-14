@@ -83,6 +83,7 @@
         e.Properties["cpPopupFind_CflHeader"] = Model.Header;
         e.Properties["cpPopupFind_CflSqlWhere"] = Model.SqlWhere;
         e.Properties["cpPopupFind_CflIsMulti"] = Model.IsMulti;
+        e.Properties["cpPopupFind_CflSourceType"] = Model.SourceType;
     };
 
     string additionParam = "";
@@ -98,7 +99,7 @@
         popup.Height = 500;
     };
 
-    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ {0}  e.customArgs['hidden_CflType']=s.cpPopupFind_CflType; e.customArgs['hidden_CflName']=s.cpPopupFind_CflName; e.customArgs['hidden_CflHeader']=s.cpPopupFind_CflHeader; e.customArgs['hidden_CflSqlWhere']=s.cpPopupFind_CflSqlWhere;e.customArgs['hidden_CflIsMulti']=s.cpPopupFind_CflIsMulti; }}", additionParam);
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ {0}  e.customArgs['hidden_CflType']=s.cpPopupFind_CflType; e.customArgs['hidden_CflName']=s.cpPopupFind_CflName; e.customArgs['hidden_CflHeader']=s.cpPopupFind_CflHeader; e.customArgs['hidden_CflSqlWhere']=s.cpPopupFind_CflSqlWhere;e.customArgs['hidden_CflIsMulti']=s.cpPopupFind_CflIsMulti; e.customArgs['hidden_CflSourceType']=s.cpPopupFind_CflSourceType; e.customArgs['hidden_CflSourceDocEntry']=(typeof(BaseEntry)!='undefined' && BaseEntry!=null && BaseEntry.GetValue())?BaseEntry.GetValue():''; }}", additionParam);
     settings.ClientSideEvents.Resize = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(cflItemPopupList{0},gvCflItemList{0}); }}", Model.Name);
     settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ GridviewInPopupAdjustSize(cflItemPopupList{0},gvCflItemList{0}); }}", Model.Name);
 
