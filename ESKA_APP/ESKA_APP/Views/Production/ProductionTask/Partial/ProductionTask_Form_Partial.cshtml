@@ -73,7 +73,7 @@
         txt.ReadOnly = true;
 
         txt.Properties.Buttons.Add("View");   // <-- ganti dari txt.Buttons ke txt.Properties.Buttons
-        txt.Properties.ClientSideEvents.ButtonClick = "function(s,e){ ViewRunningTask(" + Model.CurrentTaskId + "); }";
+        txt.Properties.ClientSideEvents.ButtonClick = "function(s,e){ ViewRunningTask(s, e, " + Model.CurrentTaskId + "); }";
     });
 
     groupItem_Col1.Items.Add(itemSettings =>
