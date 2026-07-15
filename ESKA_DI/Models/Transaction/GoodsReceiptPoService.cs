@@ -117,6 +117,8 @@ namespace Models.Transaction
 
         public string UomEntry { get; set; }
 
+        public decimal? UnitPrice { get; set; }
+
         public string Whse { get; set; }
 
         [Required(ErrorMessage = "required")]
@@ -779,6 +781,61 @@ namespace Models.Transaction
 
         //    }
         //}
+
+        // Wrapper publik: buka context + transaksi sendiri, dipakai action ChooseItem (tambah 1 item ke detail GRPO)
+        public long Detail_Add(long Id, GoodsReceiptPoItem model, int UserId)
+        {
+            long detId = 0;
+
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    if (model.Netto == null) model.Netto = 0; // kolom Netto Required / NOT NULL
+
+                    if (string.IsNullOrEmpty(model.LineStatus)) model.LineStatus = "O"; // default Open
+
+                    // LineNum lanjutkan dari baris yang sudah ada di GRPO ini (max + 1, mulai 0)
+                    if (model.LineNum == null)
+                    {
+                        int? maxLine = CONTEXT.Tx_GoodsReceiptPO_Item
+                            .Where(x => x.Id == Id)
+                            .Select(x => x.LineNum)
+                            .Max();
+                        model.LineNum = (maxLine ?? -1) + 1;
+                    }
+
+                    // UomEntry di model bertipe string, tetapi di tabel (entity) bertipe int?.
+                    // Detail_Add memakai CopyProperties (reflection SetValue tanpa konversi), sehingga
+                    // string non-null ke int? akan error. Kosongkan dulu, lalu set setelah insert.
+                    string uomEntryStr = model.UomEntry;
+                    model.UomEntry = null;
+
+                    detId = Detail_Add(CONTEXT, model, Id, UserId);
+
+                    int uomEntryInt;
+                    if (int.TryParse(uomEntryStr, out uomEntryInt))
+                    {
+                        var ent = CONTEXT.Tx_GoodsReceiptPO_Item.Find(detId);
+                        if (ent != null)
+                        {
+                            ent.UomEntry = uomEntryInt;
+                            CONTEXT.SaveChanges();
+                        }
+                    }
+
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw;
+                }
+            }
+
+            return detId;
+        }
 
         public long Detail_Add(HANA_APP CONTEXT, GoodsReceiptPoItem model, long Id, int UserId)
         {
@@ -1639,6 +1696,47 @@ namespace Models.Transaction
 
                         throw new Exception(errorMassage);
                     }
+                }
+            }
+        }
+
+        public void GoodsReceiptPo_DeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetId != 0)
+                    {
+                        try
+                        {
+                            //SpNotif.SpSysControllerTransNotif(_userId, "StockOpname", CONTEXT, "before", "StockOpname", "deleteItemBatch", "Id", Id.ToString());
+
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.SaveChanges();
+
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpGoodsReceiptPo_UpdateItemQuantity\"(:p0, 'Tx_GoodsReceiptPO_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+
                 }
             }
         }

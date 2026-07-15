@@ -97,7 +97,7 @@ namespace Controllers.Transaction
 
             if (ModelState.IsValid)
             {
-                issueAndReceiptService.IssueAndReceipt_ReceiptDeleteItemBatch(userId, Id, DetId, DetDetId);
+                issueAndReceiptService.IssueAndReceipt_IssueDeleteItemBatch(userId, Id, DetId, DetDetId);
             }
 
             return TabIssueBatchListPartial(id, detId);

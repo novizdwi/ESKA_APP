@@ -275,11 +275,9 @@ namespace Models.Transaction
 
         public string ItemName { get; set; }
 
-        public string Whse { get; set; }
+        public string WhsCode { get; set; }
 
-        public int? TotalNeeded { get; set; }
-
-        public int? TotalCreated { get; set; }
+        public int? Quantity { get; set; }
 
         public List<IssueAndReceiptBatchIssueModel> IssueAndReceiptBatchIssueModel___ { get; set; }
     }
@@ -460,7 +458,7 @@ namespace Models.Transaction
 
             string ssql = $@"
                             SELECT T0.*
-                            FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0
+                            FROM ""Tx_IssueAndReceipt_Receipt_Item_Batch"" T0
                             WHERE T0.""DetId"" IN ({string.Join(",", detIds)})
                             ORDER BY T0.""DetDetId"" ASC
                         ";
@@ -649,18 +647,18 @@ namespace Models.Transaction
             return model;
         }
 
-        public List<IssueAndReceiptBatchReceiptModel> IssueAndReceipt__IssueItemBatchList(long detId)
+        public List<IssueAndReceiptBatchIssueModel> IssueAndReceipt__IssueItemBatchList(long detId)
         {
             string sql = null;
-            List<IssueAndReceiptBatchReceiptModel> model = new List<IssueAndReceiptBatchReceiptModel>();
+            List<IssueAndReceiptBatchIssueModel> model = new List<IssueAndReceiptBatchIssueModel>();
 
             using (var CONTEXT = new HANA_APP())
             {
-                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
-                            FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0   
-                            WHERE ""DetId"" = :p1 ";
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.*
+                            FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0
+                            WHERE ""DetId"" = :p0 ";
 
-                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptModel>(sql, detId).ToList();
+                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueModel>(sql, detId).ToList();
             }
             return model;
         }
@@ -746,7 +744,7 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = tx_IssueAndReceipt_issue_Item_Batch.DetId.ToString();
 
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
                         // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
