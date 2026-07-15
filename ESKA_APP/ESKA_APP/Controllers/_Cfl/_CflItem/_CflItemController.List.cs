@@ -26,6 +26,8 @@ namespace Controllers._Cfl
             cflParam.Name = Request["hidden_CflName"];
             cflParam.Header = Request["hidden_CflHeader"];
             cflParam.SqlWhere = Request["hidden_CflSqlWhere"];
+            cflParam.SourceType = Request["hidden_CflSourceType"];
+            cflParam.SourceDocEntry = Request["hidden_CflSourceDocEntry"];
 
             if (cflParam.Type == "ProcessCard")
             {

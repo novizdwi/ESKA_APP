@@ -111,6 +111,7 @@ namespace Models.Transaction
         public string WhsCode { get; set; }
         public string MsnPrd { get; set; }
         public string Cost { get; set; }
+        public decimal? Price { get; set; }
         public string Department { get; set; }
         public long? DocEntry { get; set; }
         public int? LineNum { get; set; }
@@ -210,6 +211,110 @@ namespace Models.Transaction
         public string ReceiptDocEntry { get; set; }
         public Dictionary<long, int> LineMapping { get; set; } 
     }
+
+    public class IssueAndReceiptBatchReceiptView___
+    {
+        public long Id { get; set; }
+
+        public string BaseDocNum { get; set; }
+
+        public long DetId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string WhsCode { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public List<IssueAndReceiptBatchReceiptModel> IssueAndReceiptBatchReceiptModel___ { get; set; }
+    }
+
+    public class IssueAndReceiptBatchReceiptModel
+    {
+        public int? RowNo { get; set; }
+
+        public int _UserId { get; set; }
+
+        public long? DetId { get; set; }
+
+        public long? DetDetId { get; set; }
+
+        public string Batch { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? AdmissionDate { get; set; }
+
+        public decimal? Netto { get; set; }
+
+        public long? LineNum { get; set; }
+
+        public string LineStatus { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
+        public int? CreatedUser { get; set; }
+
+        public int? ModifiedUser { get; set; }
+
+    }
+
+    public class IssueAndReceiptBatchIssueView___
+    {
+        public long Id { get; set; }
+
+        public string BaseDocNum { get; set; }
+
+        public long DetId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string WhsCode { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public List<IssueAndReceiptBatchIssueModel> IssueAndReceiptBatchIssueModel___ { get; set; }
+    }
+
+    public class IssueAndReceiptBatchIssueModel
+    {
+        public int? RowNo { get; set; }
+
+        public int _UserId { get; set; }
+
+        public long? DetId { get; set; }
+
+        public long? DetDetId { get; set; }
+
+        public string Batch { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? AdmissionDate { get; set; }
+
+        public decimal? Netto { get; set; }
+
+        public long? LineNum { get; set; }
+
+        public string LineStatus { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
+        public int? CreatedUser { get; set; }
+
+        public int? ModifiedUser { get; set; }
+
+    }
+
+
 
     #endregion
 
@@ -333,7 +438,7 @@ namespace Models.Transaction
         public List<IssueReceipt_ReceiptItemModel> IssueAndReceipt_ReceiptItemDetails(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"SELECT T0.*
-                FROM ""Tx_IssueAndReceipt_Issue_Item"" T0
+                FROM ""Tx_IssueAndReceipt_Receipt_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
@@ -353,7 +458,7 @@ namespace Models.Transaction
 
             string ssql = $@"
                             SELECT T0.*
-                            FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0
+                            FROM ""Tx_IssueAndReceipt_Receipt_Item_Batch"" T0
                             WHERE T0.""DetId"" IN ({string.Join(",", detIds)})
                             ORDER BY T0.""DetDetId"" ASC
                         ";
@@ -466,6 +571,399 @@ namespace Models.Transaction
             return model;
         }
 
+        public IssueAndReceiptBatchReceiptView___ GetReceiptBatch(long id, long detId)
+        {
+            string sql = null;
+            IssueAndReceiptBatchReceiptView___ model = new IssueAndReceiptBatchReceiptView___();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT T0.""Id"", 
+                                T0.""BaseDocNum"",
+                                T1.""DetId"", 
+                                T1.""ItemCode"", 
+                                T1.""ItemName"",
+                                T1.""WhsCode"",
+                                T1.""Quantity""
+                                FROM ""Tx_IssueAndReceipt"" T0   
+                                LEFT JOIN ""Tx_IssueAndReceipt_Receipt_Item"" T1 ON T0.""Id"" = T1.""Id"" 
+                                WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
+
+                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptView___>(sql, id, detId).FirstOrDefault();
+
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_IssueAndReceipt_Receipt_Item_Batch"" T0   
+                            WHERE ""DetId"" = :p0 ";
+
+                model.IssueAndReceiptBatchReceiptModel___ = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptModel>(sql, detId).ToList();
+            }
+
+            return model;
+        }
+
+        public IssueAndReceiptBatchIssueView___ GetIssueBatch(long id, long detId)
+        {
+            string sql = null;
+            IssueAndReceiptBatchIssueView___ model = new IssueAndReceiptBatchIssueView___();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT T0.""Id"", 
+                                T0.""BaseDocNum"",
+                                T1.""DetId"", 
+                                T1.""ItemCode"", 
+                                T1.""ItemName"",
+                                T1.""WhsCode"",
+                                T1.""Quantity""
+                                FROM ""Tx_IssueAndReceipt"" T0   
+                                LEFT JOIN ""Tx_IssueAndReceipt_Issue_Item"" T1 ON T0.""Id"" = T1.""Id"" 
+                                WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
+
+                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueView___>(sql, id, detId).FirstOrDefault();
+
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0   
+                            WHERE ""DetId"" = :p0 ";
+
+                model.IssueAndReceiptBatchIssueModel___ = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueModel>(sql, detId).ToList();
+            }
+
+            return model;
+        }
+
+        public List<IssueAndReceiptBatchReceiptModel> IssueAndReceipt__ReceiptItemBatchList(long detId)
+        {
+            string sql = null;
+            List<IssueAndReceiptBatchReceiptModel> model = new List<IssueAndReceiptBatchReceiptModel>();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_IssueAndReceipt_Receipt_Item_Batch"" T0   
+                            WHERE ""DetId"" = :p1 ";
+
+                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptModel>(sql, detId).ToList();
+            }
+            return model;
+        }
+
+        public List<IssueAndReceiptBatchIssueModel> IssueAndReceipt__IssueItemBatchList(long detId)
+        {
+            string sql = null;
+            List<IssueAndReceiptBatchIssueModel> model = new List<IssueAndReceiptBatchIssueModel>();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.*
+                            FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0
+                            WHERE ""DetId"" = :p0 ";
+
+                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueModel>(sql, detId).ToList();
+            }
+            return model;
+        }
+
+        public long IssueAndReceipt__ReceiptAddNewItemBatch(IssueAndReceiptBatchReceiptModel model)
+        {
+            long detDetId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_IssueAndReceipt_Receipt_Item_Batch tx_IssueAndReceipt_Receipt_Item_Batch = new Tx_IssueAndReceipt_Receipt_Item_Batch();
+                        CopyProperty.CopyProperties(model, tx_IssueAndReceipt_Receipt_Item_Batch, false);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        tx_IssueAndReceipt_Receipt_Item_Batch.CreatedDate = dtModified;
+                        tx_IssueAndReceipt_Receipt_Item_Batch.CreatedUser = model._UserId;
+                        tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedDate = dtModified;
+                        tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedUser = model._UserId;
+
+                        CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch.Add(tx_IssueAndReceipt_Receipt_Item_Batch);
+                        CONTEXT.SaveChanges();
+                        detDetId = tx_IssueAndReceipt_Receipt_Item_Batch.DetDetId;
+
+                        String keyValue;
+                        keyValue = tx_IssueAndReceipt_Receipt_Item_Batch.DetId.ToString();
+
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                       // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+
+                }
+            }
+
+            return detDetId;
+        }
+
+        public long IssueAndReceipt__IssueAddNewItemBatch(IssueAndReceiptBatchIssueModel model)
+        {
+            long detDetId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_IssueAndReceipt_Issue_Item_Batch tx_IssueAndReceipt_issue_Item_Batch = new Tx_IssueAndReceipt_Issue_Item_Batch();
+                        CopyProperty.CopyProperties(model, tx_IssueAndReceipt_issue_Item_Batch, false);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        tx_IssueAndReceipt_issue_Item_Batch.CreatedDate = dtModified;
+                        tx_IssueAndReceipt_issue_Item_Batch.CreatedUser = model._UserId;
+                        tx_IssueAndReceipt_issue_Item_Batch.ModifiedDate = dtModified;
+                        tx_IssueAndReceipt_issue_Item_Batch.ModifiedUser = model._UserId;
+
+                        CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch.Add(tx_IssueAndReceipt_issue_Item_Batch);
+                        CONTEXT.SaveChanges();
+                        detDetId = tx_IssueAndReceipt_issue_Item_Batch.DetDetId;
+
+                        String keyValue;
+                        keyValue = tx_IssueAndReceipt_issue_Item_Batch.DetId.ToString();
+
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+
+                }
+            }
+
+            return detDetId;
+        }
+
+
+        public void IssueAndReceipt_ReceiptUpdateItemBatch(IssueAndReceiptBatchReceiptModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        String keyValue;
+                        keyValue = model.DetId.ToString();
+
+                        // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "before", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
+
+                        Tx_IssueAndReceipt_Receipt_Item_Batch tx_IssueAndReceipt_Receipt_Item_Batch = CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch.Find(model.DetDetId);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (tx_IssueAndReceipt_Receipt_Item_Batch != null)
+                        {
+                            var exceptColumns = new string[] { "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            CopyProperty.CopyProperties(model, tx_IssueAndReceipt_Receipt_Item_Batch, false, exceptColumns);
+
+                            tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedDate = dtModified;
+                            tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Receipt_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+
+                            //SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
+
+                        }
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
+        }
+
+        public void IssueAndReceipt_IssueUpdateItemBatch(IssueAndReceiptBatchIssueModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        String keyValue;
+                        keyValue = model.DetId.ToString();
+
+                        // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "before", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
+
+                        Tx_IssueAndReceipt_Issue_Item_Batch tx_IssueAndReceipt_Issue_Item_Batch = CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch.Find(model.DetDetId);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (tx_IssueAndReceipt_Issue_Item_Batch != null)
+                        {
+                            var exceptColumns = new string[] { "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            CopyProperty.CopyProperties(model, tx_IssueAndReceipt_Issue_Item_Batch, false, exceptColumns);
+
+                            tx_IssueAndReceipt_Issue_Item_Batch.ModifiedDate = dtModified;
+                            tx_IssueAndReceipt_Issue_Item_Batch.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+
+                            //SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
+
+                        }
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
+        }
+
+
+        public void IssueAndReceipt_ReceiptDeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetId != 0)
+                    {
+                        try
+                        {
+                            //SpNotif.SpSysControllerTransNotif(_userId, "StockOpname", CONTEXT, "before", "StockOpname", "deleteItemBatch", "Id", Id.ToString());
+
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.SaveChanges();
+
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        public void IssueAndReceipt_IssueDeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetId != 0)
+                    {
+                        try
+                        {
+                            //SpNotif.SpSysControllerTransNotif(_userId, "StockOpname", CONTEXT, "before", "StockOpname", "deleteItemBatch", "Id", Id.ToString());
+
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Issue_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.SaveChanges();
+
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+
+                }
+            }
+        }
 
     }
 

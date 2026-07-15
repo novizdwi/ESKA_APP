@@ -85,21 +85,21 @@ namespace Controllers.Transaction
             return TabBatchListPartial(id, detId);
         }
 
-        //[HttpPost, ValidateInput(false)]
-        //public ActionResult TabBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
-        //{
-        //    long id = Id;
-        //    long detId = DetId;
-        //    int userId = (int)Session["userId"];
-        //    goodsReceiptPoService = new GoodsReceiptPoService();
+        [HttpPost, ValidateInput(false)]
+        public ActionResult TabBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
+        {
+            long id = Id;
+            long detId = DetId;
+            int userId = (int)Session["userId"];
+            goodsReceiptPoService = new GoodsReceiptPoService();
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        goodsReceiptPoService.StockOpname_DeleteItemBatch(userId, Id, DetId, DetDetId);
-        //    }
+            if (ModelState.IsValid)
+            {
+                goodsReceiptPoService.GoodsReceiptPo_DeleteItemBatch(userId, Id, DetId, DetDetId);
+            }
 
-        //    return TabBatchListPartial(id, detId);
-        //}
+            return TabBatchListPartial(id, detId);
+        }
 
 
     }

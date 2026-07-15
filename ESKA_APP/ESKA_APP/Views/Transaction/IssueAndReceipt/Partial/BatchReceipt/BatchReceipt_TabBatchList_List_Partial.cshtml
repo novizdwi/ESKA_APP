@@ -1,7 +1,7 @@
 ﻿@using Models;
 @using Models.Transaction;
-@model List<Models.Transaction.GoodsReceiptPoBatchModel>
 
+@model List<Models.Transaction.IssueAndReceiptBatchReceiptModel>
 @{
     var Id = Convert.ToInt64(Request["cbId"]);
     var DetId = Convert.ToInt64(Request["cbDetId"]);
@@ -17,7 +17,7 @@
     }
 
     ViewBag.ReadOnly = false;
-    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_GoodsReceiptPO\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_IssueAndReceipt\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
     if (status != "Draft")
     {
         ViewBag.ReadOnly = true;
@@ -27,13 +27,13 @@
 @Html.DevExpress().GridView(settings =>
 {
 
-    settings.Name = "gvContentBatchList";
+    settings.Name = "gvContentReceiptBatchList";
     settings.KeyFieldName = "DetDetId";
     settings.Width = Unit.Percentage(100);
-    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListPartial", Id = Id, DetId = DetId };
-    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId };
+    settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "TabReceiptBatchListPartial", Id = Id, DetId = DetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "IssueAndReceipt", Action = "TabReceiptBatchListAddNewRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "IssueAndReceipt", Action = "TabReceiptBatchListUpdateRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "IssueAndReceipt", Action = "TabReceiptBatchListDeleteRow", Id = Id, DetId = DetId };
 
     settings.SettingsBehavior.ConfirmDelete = true;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
@@ -167,9 +167,9 @@
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
     });
 
-    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
-    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
-    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentReceiptBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentReceiptBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentReceiptBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
 
     settings.InitNewRow = (s, e) =>
     {

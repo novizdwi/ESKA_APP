@@ -1,7 +1,9 @@
 ﻿@using Models;
 
 
-@model Models.Transaction.GoodsReceiptPoBatchView___
+@model  Models.Transaction.IssueAndReceiptBatchIssueView___
+
+
 
 
 @Html.DevExpress().TextBox(
@@ -27,7 +29,7 @@
     settingsHL.Name = "ViewBatchComponent_btnCancel";
     settingsHL.NavigateUrl = "javascript:void(0)";
     settingsHL.Properties.Text = "Cancel";
-    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewBatch_OnClickBtnCancel(s, e) }";
+    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewIssueBatch_OnClickBtnCancel(s, e) }";
     settingsHL.Height = 20;
 }).GetHtml()
 
@@ -115,7 +117,23 @@
         txt.Width = 250;
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "WhsCode";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Whs Code";
+        itemSettings.FieldName = "WhsCode";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "WhsCode";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
+
+    groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.Name = "ItemName";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
@@ -129,55 +147,9 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Width = 250;
     });
-
-    groupItem_Col2.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "WhsCode";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Whs Code";
-        itemSettings.FieldName = "Whse";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "WhsCode";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col2.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "TotalNeeded";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Total Needed";
-        itemSettings.FieldName = "TotalNeeded";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "TotalNeeded";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col2.Items.Add(itemSettings =>
-        {
-            itemSettings.Name = "TotalCreated";
-            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-            itemSettings.Caption = "Total Created";
-            itemSettings.FieldName = "TotalCreated";
-            var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-            txt.Name = "TotalCreated";
-            txt.ShowModelErrors = true;
-            txt.ReadOnly = true;
-            txt.ControlStyle.CssClass = "editor";
-            txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-            txt.Width = 250;
-        });
-
     groupItem_3.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "ViewViewBatch_TabBatch";
+        group.Name = "ViewBatch_TabBatch";
         group.ColSpan = 2; // penting
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Percentage(100);
@@ -188,7 +160,7 @@
         group.Items.Add(item =>
         {
             item.Name = "ViewApproval_TabViewBatchContent";
-            item.Caption = "       List Batch       ";
+            item.Caption = "       Issue Batch List       ";
 
             item.SetNestedContent(() =>
             {
@@ -201,7 +173,7 @@
                 //}).Render();
 
                 ViewContext.Writer.Write(
-                    Html.Partial("Partial/Batch/Batch_TabBatchList_List_Partial", Model.GoodsReceiptPoBatchModel___)
+                    Html.Partial("Partial/BatchIssue/BatchIssue_TabBatchList_List_Partial", Model.IssueAndReceiptBatchIssueModel___)
                 );
             });
         });
@@ -239,7 +211,7 @@
         btnSettings.Text = "Close";
         btnSettings.Width = 120;
 
-        btnSettings.ClientSideEvents.Click = "ViewBatch_OnClickBtnCancel";
+        btnSettings.ClientSideEvents.Click = "ViewIssueBatch_OnClickBtnCancel";
         btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
         btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
     });
