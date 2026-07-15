@@ -525,7 +525,10 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity_Detail" (
 
     "DetailType" NVARCHAR(100),
     "Comments" NVARCHAR(1000),
-     
+
+    "StartTime" TIMESTAMP,
+    "EndTime" TIMESTAMP,
+	
     "CreatedDate" TIMESTAMP,
     "CreatedUser" INTEGER,
 

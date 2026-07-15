@@ -19,6 +19,8 @@ namespace ESKA_DI.Models._EF
         public long DetDetId { get; set; }
         public string DetailType { get; set; }
         public string Comments { get; set; }
+        public Nullable<System.DateTime> StartTime { get; set; }
+        public Nullable<System.DateTime> EndTime { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

@@ -138,10 +138,14 @@ namespace Models.Production
         {
             ProductionTaskModel model = new ProductionTaskModel();
             CurrentTaskModel currentTaskModel = this.GetCurrentTask(userId);
-
             model.UserId = userId;
-            model.CurrentTaskId = currentTaskModel.CurrentTaskId;
-            model.RunningTaskNo = currentTaskModel.CurrentTaskNo;
+
+            if(currentTaskModel != null)
+            {
+                model.CurrentTaskId = currentTaskModel.CurrentTaskId;
+                model.RunningTaskNo = currentTaskModel.CurrentTaskNo;
+            }
+
             model.ListReferences_ = ProductionTask_GetReferences(userId, "today");
             model.ListOutstanding_ = ProductionTask_GetReferences(userId, "outstanding");
 
@@ -313,6 +317,74 @@ namespace Models.Production
 
         }
 
+        public void StartTask(long id, int userId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction()) 
+                { 
+                    
+                    try{
+                        string sSQl = @"
+                            SELECT 1
+                            FROM ""Tx_ProductionTask_Activity"" T0
+                            WHERE T0.""Status"" = 'OnProgress'
+                            AND ""OperatorId"" = :p0
+                        ";
+
+                        int? runningOperatorId = CONTEXT.Database.SqlQuery<int?>(sSQl, userId).FirstOrDefault();
+                        if (runningOperatorId.HasValue)
+                        {
+                            if (runningOperatorId.Value == userId)
+                            {
+                                // Task ini memang sedang dijalankan oleh user yang sama
+                                CONTEXT_TRANS.Commit();
+                                return;
+                            }
+
+                            throw new Exception("[VALIDATION] This task is already running");
+                        }
+
+                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "before", "starttask", "close", "Id", id.ToString() );
+
+                        InsertProductionTaskActivity(CONTEXT, id, userId);
+                        
+                        // Set flag IsRunningTask setelah activity & detail berhasil di-insert
+                        Tx_ProductionTask tx_ProductionTask = CONTEXT.Tx_ProductionTask.Find(id);
+                        if (tx_ProductionTask == null)
+                        {
+                            throw new Exception("[VALIDATION] Production task not found");
+                        }
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                        tx_ProductionTask.IsRunningTask = "Y";
+                        tx_ProductionTask.ModifiedDate = dtModified;
+                        tx_ProductionTask.ModifiedUser = userId;
+                        CONTEXT.SaveChanges();
+
+                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "after", "starttask", "close", "Id", id.ToString() );
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
+        }
+
         public void Close(long id, int userId)
         {
             using (var CONTEXT = new HANA_APP())
@@ -335,6 +407,50 @@ namespace Models.Production
                     }
                 }
             }
+        }
+
+        private void InsertProductionTaskActivity(HANA_APP CONTEXT, long id, int userId)
+        {
+            DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+            string userName = CONTEXT.Database.SqlQuery<string>(@"SELECT ""FirstName"" AS IDU FROM ""Tm_User"" WHERE ""Id"" = :p0 ", userId).FirstOrDefault();
+
+            Tx_ProductionTask_Activity tx_ProductionTask_Activity = new Tx_ProductionTask_Activity
+            {
+                Id = id,
+                OperatorId = userId,
+                OperatorName = userName,
+                StartTime = dtModified,
+                Quantity = 0,
+                Status = "OnProgress",
+                CreatedDate = dtModified,
+                CreatedUser = userId,
+                ModifiedDate = dtModified,
+                ModifiedUser = userId
+            };
+
+            CONTEXT.Tx_ProductionTask_Activity.Add(tx_ProductionTask_Activity);
+            CONTEXT.SaveChanges();
+
+            long? detId = tx_ProductionTask_Activity.Id;
+            if (!detId.HasValue)
+            {
+                throw new Exception("[VALIDATION] invalid Det Id");
+            }
+
+            Tx_ProductionTask_Activity_Detail tx_ProductionTask_Activity_Detail = new Tx_ProductionTask_Activity_Detail
+            {
+                Id = id,
+                DetId = detId,
+                DetailType = "Production",
+                StartTime = dtModified,
+                CreatedDate = dtModified,
+                CreatedUser = userId,
+                ModifiedDate = dtModified,
+                ModifiedUser = userId
+            };
+
+            CONTEXT.Tx_ProductionTask_Activity_Detail.Add(tx_ProductionTask_Activity_Detail);
+            CONTEXT.SaveChanges();
         }
 
     }

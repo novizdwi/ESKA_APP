@@ -88,5 +88,22 @@ namespace Controllers.Production
 
             return View(VIEW_FORM_PARTIAL, productionTaskModel);
         }
+
+        [HttpPost, ValidateInput(false)]
+        public ActionResult StartTask(long Id)
+        {
+
+            int userId = (int)Session["userId"];
+            
+            productionTaskService = new ProductionTaskService();
+            productionTaskService.StartTask(Id, userId);
+            ProductionTaskModel productionTaskModel;
+            ViewBag.initNew = true;
+
+            productionTaskModel = productionTaskService.GetNewModel(userId);
+            productionTaskModel.UserId = userId;
+
+            return View(VIEW_FORM_PARTIAL, productionTaskModel);
+        }
     }
 }
