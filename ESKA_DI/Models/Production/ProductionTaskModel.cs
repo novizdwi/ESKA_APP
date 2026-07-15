@@ -23,7 +23,7 @@ namespace Models.Production
     {
         public int UserId { get; set; }
         
-        public int? CurrentTaskId { get; set;}
+        public long? CurrentTaskId { get; set;}
 
         public string RunningTaskNo {get; set;}
 
@@ -45,6 +45,10 @@ namespace Models.Production
         public int Id { get; set; }   
 
         public string TransNo { get; set; }
+
+        public string DocNum { get; set; }
+
+        public string RoutingName { get; set; }
         
         public string ItemCode { get; set; }
 
@@ -62,7 +66,7 @@ namespace Models.Production
 
         public string Status { get; set; }  
     }
-     
+
     public class ProductionTask_Detail
     {
         public int? UserId { get; set; }
@@ -107,7 +111,12 @@ namespace Models.Production
         public decimal? Quantity { get; set; }
 
     }
-     
+    
+    public class CurrentTaskModel {
+        public long? CurrentTaskId{ get; set; }
+        public string CurrentTaskNo { get; set; }
+    }
+
     #endregion
 
     #region Services
@@ -116,9 +125,11 @@ namespace Models.Production
     {
         private static string SqlSelect = @"SELECT 
             T0.*,
+            T2.""RoutingName"",
             COALESCE(T0.""QuantityActual"",0) AS ""QuantityActual_""
             FROM ""Tx_ProductionTask"" T0 
             INNER JOIN ""Tx_ProcessCard"" T1 ON T0.""BaseId"" = T1.""Id"" 
+            INNER JOIN ""Tx_ProcessCard_Detail"" T2 ON T0.""BaseId"" = T2.""Id"" AND T0.""BaseDetId"" = T2.""DetId""  
             WHERE T0.""Status"" = 'Open' 
             AND T1.""ProductionStatus"" = 'Released' ";
 
@@ -126,9 +137,11 @@ namespace Models.Production
         public ProductionTaskModel GetNewModel(int userId)
         {
             ProductionTaskModel model = new ProductionTaskModel();
+            CurrentTaskModel currentTaskModel = this.GetCurrentTask(userId);
+
             model.UserId = userId;
-            model.CurrentTaskId = this.GetRunningTaskId(userId);
-            model.RunningTaskNo = this.GetRunningTask(userId);
+            model.CurrentTaskId = currentTaskModel.CurrentTaskId;
+            model.RunningTaskNo = currentTaskModel.CurrentTaskNo;
             model.ListReferences_ = ProductionTask_GetReferences(userId, "today");
             model.ListOutstanding_ = ProductionTask_GetReferences(userId, "outstanding");
 
@@ -138,29 +151,14 @@ namespace Models.Production
         public ProductionTaskModel Find(int userId)
         {
             ProductionTaskModel model = new ProductionTaskModel();
+            CurrentTaskModel currentTaskModel = this.GetCurrentTask(userId);
+
             model.UserId = userId;
-            model.CurrentTaskId = this.GetRunningTaskId(userId);
-            model.RunningTaskNo = this.GetRunningTask(userId); 
+            model.CurrentTaskId = currentTaskModel.CurrentTaskId;
+            model.RunningTaskNo = currentTaskModel.CurrentTaskNo;
             model.ListReferences_ = ProductionTask_GetReferences(userId, "today");
             model.ListOutstanding_ = ProductionTask_GetReferences(userId, "outstanding");
             return model;
-        }
-
-        public string GetRunningTask(int userId)
-        {
-            string ret = string.Empty;
-            using (var CONTEXT = new HANA_APP())
-            {
-                string ssql = @" SELECT ""TransNo"" AS IDU 
-                    FROM ""Tx_ProductionTask"" 
-                    WHERE ""Status"" = 'Open'
-                    AND ""IsRunningTask"" = 'Y' 
-                    AND  ""OperatorId"" = :p0 
-                ";
-                ret = CONTEXT.Database.SqlQuery<string>(ssql, userId).FirstOrDefault();
-            }
-
-            return ret;
         }
 
         public int? GetRunningTaskId(int userId)
@@ -175,6 +173,23 @@ namespace Models.Production
                     AND  ""OperatorId"" = :p0 
                 ";
                 ret = CONTEXT.Database.SqlQuery<int?>(ssql, userId).FirstOrDefault();
+            }
+
+            return ret;
+        }
+
+        public CurrentTaskModel GetCurrentTask(int userId)
+        {
+            CurrentTaskModel ret = new CurrentTaskModel();
+            using (var CONTEXT = new HANA_APP())
+            {
+                string ssql = @" SELECT ""Id"" AS ""CurrentTaskId"", ""TransNo"" AS ""CurrentTaskNo""
+                    FROM ""Tx_ProductionTask"" 
+                    WHERE ""Status"" = 'Open'
+                    AND ""IsRunningTask"" = 'Y' 
+                    AND  ""OperatorId"" = :p0 
+                ";
+                ret = CONTEXT.Database.SqlQuery<CurrentTaskModel>(ssql, userId).FirstOrDefault();
             }
 
             return ret;
@@ -219,6 +234,8 @@ namespace Models.Production
             else {
                 sql += @" AND CAST(""PlannedDate"" AS DATE) = CURRENT_DATE";
             }
+            sql +=  @" 
+                ORDER BY T1.""VisOrder"", T0.""PlannedDate"" ";
             return CONTEXT.Database.SqlQuery<ProductionTask_ReferenceModel>(sql).ToList();
         }
 

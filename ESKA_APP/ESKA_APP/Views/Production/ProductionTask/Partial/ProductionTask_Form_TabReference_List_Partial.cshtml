@@ -3,7 +3,16 @@
 @{ 
     int userId = (int)Session["userId"];
     var Id = Convert.ToInt64(Request["cbId"]);
-    bool canUpdate = true; 
+    bool canUpdate = true;
+
+    int? currentTaskId = Models._Ef.DbProvider.dbApp.Database.SqlQuery<int?>(@"
+    SELECT ""Id"" AS ""CurrentTaskId"" 
+                FROM ""Tx_ProductionTask"" 
+                WHERE ""Status"" = 'Open'
+                AND ""IsRunningTask"" = 'Y' 
+                AND  ""OperatorId"" = :p0
+        ", userId).FirstOrDefault();
+
 }
 
 @Html.DevExpress().CardView(settings =>
@@ -36,8 +45,17 @@
         column.SetDataItemTemplateContent(c =>
         {
             var transNo = DataBinder.Eval(c.DataItem, "TransNo");
-            ViewContext.Writer.Write("<span style='font-size:125%;' > <b>" + transNo + "</b></span>");
+            var routingName = DataBinder.Eval(c.DataItem, "RoutingName");
+
+            ViewContext.Writer.Write("<span style='font-size:125%;' > [ <b>" + transNo + "</b> ] </span>" + routingName);
         });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DocNum";
+        column.Name = "DocNum";
+        column.Caption = "Work Order No";
     });
 
     settings.Columns.Add(column =>
@@ -106,6 +124,16 @@
     settings.ClientSideEvents.BeginCallback = "cvProductionTaskReferenceDetailBeginCallback";
     settings.ClientSideEvents.EndCallback = "cvProductionTaskReferenceDetailEndCallback";
 
+    settings.HtmlCardPrepared = (sender, e) =>
+    {
+        var cardView = (MVCxCardView)sender;
+        var cardId = cardView.GetCardValues(e.VisibleIndex, "Id");
+
+        if (cardId != null && currentTaskId.HasValue && Convert.ToInt64(cardId) == currentTaskId.Value)
+        {
+            e.Card.BackColor = System.Drawing.ColorTranslator.FromHtml("#F5DAC2");
+        }
+    };
 }).Bind(Model).GetHtml()
 
 
