@@ -22,7 +22,18 @@ namespace Controllers.Transaction
             var Id = Convert.ToInt64(Request["cbId"]);
             List<GoodsReceiptPoItem> modelList = goodsReceiptPoService.GoodsReceiptPo_Details(Id);
 
+            ViewBag.Status = goodsReceiptPoService.GetStatus(Id);
+
             return PartialView(VIEW_TAB_CONTENT, modelList);
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult DeleteItem(long Id, long DetId)
+        {
+            goodsReceiptPoService = new GoodsReceiptPoService();
+            goodsReceiptPoService.Detail_Delete(DetId);
+
+            return Content("OK");
         }
 
         [HttpPost, ValidateInput(false)]

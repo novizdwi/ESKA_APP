@@ -871,8 +871,19 @@ namespace Models.Transaction
             {
                 if (model.DetId != 0)
                 {
+                    long detId = model.DetId;
 
-                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item\"  WHERE \"DetId\"=:p0", model.DetId);
+                    // Hapus berjenjang (relasi): scale -> batch -> item, agar tidak ada baris orphan.
+                    // Ambil semua DetDetId batch milik item ini, lalu hapus scale per batch (pola sama dgn GoodsReceiptPo_DeleteItemBatch).
+                    var detDetIds = CONTEXT.Database.SqlQuery<long>("SELECT \"DetDetId\" FROM \"Tx_GoodsReceiptPO_Item_Batch\" WHERE \"DetId\"=:p0", detId).ToList();
+
+                    foreach (var detDetId in detDetIds)
+                    {
+                        CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", detDetId);
+                    }
+
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch\"  WHERE \"DetId\"=:p0", detId);
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item\"  WHERE \"DetId\"=:p0", detId);
                     CONTEXT.SaveChanges();
 
 
@@ -880,6 +891,35 @@ namespace Models.Transaction
             }
 
         }
+
+        // Wrapper publik: buka context + transaksi sendiri, dipakai action DeleteItem (hapus 1 baris detail GRPO)
+        public void Detail_Delete(long DetId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    Detail_Delete(CONTEXT, new GoodsReceiptPoItem { DetId = DetId });
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        // Ambil status header GRPO (dipakai grid detail untuk menampilkan/menyembunyikan tombol Delete)
+        public string GetStatus(long id)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return CONTEXT.Database.SqlQuery<string>("SELECT \"Status\" FROM \"Tx_GoodsReceiptPO\" WHERE \"Id\"=:p0", id).FirstOrDefault();
+            }
+        }
+
         public void Detail_Update(HANA_APP CONTEXT, GoodsReceiptPoItem model, int UserId)
         {
             if (model != null)
@@ -1071,6 +1111,24 @@ namespace Models.Transaction
                         if (syncGRPO.ListDetails_.All(q => q.Quantity == 0))
                         {
                             throw new Exception($"[VALIDATION] - No record created");
+                        }
+
+                        // Validasi: Total Created (QuantityCreated) harus SAMA dengan Total Needed (Quantity) tiap item.
+                        // Kurang -> tampilkan kekurangannya; lebih -> tidak boleh.
+                        var qtyErrors = new List<string>();
+                        foreach (var item in syncGRPO.ListDetails_.Where(x => (x.Quantity ?? 0) > 0))
+                        {
+                            int needed = item.Quantity ?? 0;
+                            int created = item.QuantityCreated ?? 0;
+
+                            if (created < needed)
+                                qtyErrors.Add(string.Format("{0}: Total Created {1} < Total Needed {2} (kurang {3})", item.ItemCode, created, needed, needed - created));
+                            else if (created > needed)
+                                qtyErrors.Add(string.Format("{0}: Total Created {1} > Total Needed {2} (lebih {3}, tidak boleh)", item.ItemCode, created, needed, created - needed));
+                        }
+                        if (qtyErrors.Any())
+                        {
+                            throw new Exception("[VALIDATION] - Total Created harus sama dengan Total Needed:\n" + string.Join("\n", qtyErrors));
                         }
 
                         GRPOAddResultModel GRPOResult = AddGoodsReceiptPO(oCompany, userId, id, syncGRPO);
