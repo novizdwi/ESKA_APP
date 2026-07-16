@@ -480,8 +480,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask" (
     "QuantityActual" DECIMAL(16,4),
 	"IsRunningTask" CHAR(1),
 	
-    "EstimatedHours" TIME,
-    "ActualHours" TIME,
+    "EstimatedHours" BIGINT,
+    "ActualHours" BIGINT,
     "Status" NVARCHAR(50),
     "Comments" NVARCHAR(254),
 
@@ -505,8 +505,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity" (
 	
     "StartTime" TIMESTAMP,
     "EndTime" TIMESTAMP,
-    "TotalWorkDuration" TIME, 
-    "TotalPauseDuration" TIME,
+    "TotalWorkDuration" BIGINT, 
+    "TotalPauseDuration" BIGINT,
     
     "Status" NVARCHAR(50),
     "Comments" NVARCHAR(500),

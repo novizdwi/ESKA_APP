@@ -74,8 +74,8 @@
     <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
     <EntitySet Name="Tx_ProcessCard" EntityType="Model1.Tx_ProcessCard" />
     <EntitySet Name="Tx_ProcessCard_Approval" EntityType="Model1.Tx_ProcessCard_Approval" />
-    <EntitySet Name="Tx_ProductionTask" EntityType="Model1.Tx_ProductionTask" />
     <EntitySet Name="Tx_ProcessCard_Detail" EntityType="Model1.Tx_ProcessCard_Detail" />
+    <EntitySet Name="Tx_ProductionTask" EntityType="Model1.Tx_ProductionTask" />
     <EntitySet Name="Tx_ProductionTask_Activity" EntityType="Model1.Tx_ProductionTask_Activity" />
     <EntitySet Name="Tx_ProductionTask_Activity_Detail" EntityType="Model1.Tx_ProductionTask_Activity_Detail" />
   </EntityContainer>
@@ -1232,36 +1232,6 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
-  <EntityType Name="Tx_ProductionTask">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BaseId" Type="Int64" />
-    <Property Name="BaseDetId" Type="Int64" />
-    <Property Name="DocEntry" Type="Int32" />
-    <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Uom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="OperatorId" Type="Int32" />
-    <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="PlannedDate" Type="DateTime" />
-    <Property Name="ActualDate" Type="DateTime" />
-    <Property Name="QuantityPlanned" Type="Decimal" Precision="16" Scale="4" />
-    <Property Name="QuantityActual" Type="Decimal" Precision="16" Scale="4" />
-    <Property Name="IsRunningTask" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="EstimatedHours" Type="Time" />
-    <Property Name="ActualHours" Type="Time" />
-    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-    <Property Name="CreatedDate" Type="DateTime" />
-    <Property Name="CreatedUser" Type="Int32" />
-    <Property Name="ModifiedDate" Type="DateTime" />
-    <Property Name="ModifiedUser" Type="Int32" />
-  </EntityType>
   <EntityType Name="Tx_ProcessCard_Detail">
     <Key>
       <PropertyRef Name="DetId" />
@@ -1287,6 +1257,36 @@
     <Property Name="ModifiedDate" Type="DateTime" />
     <Property Name="ModifiedUser" Type="Int32" />
   </EntityType>
+  <EntityType Name="Tx_ProductionTask">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TransType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BaseId" Type="Int64" />
+    <Property Name="BaseDetId" Type="Int64" />
+    <Property Name="DocEntry" Type="Int32" />
+    <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Uom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="OperatorId" Type="Int32" />
+    <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PlannedDate" Type="DateTime" />
+    <Property Name="ActualDate" Type="DateTime" />
+    <Property Name="QuantityPlanned" Type="Decimal" Precision="16" Scale="4" />
+    <Property Name="QuantityActual" Type="Decimal" Precision="16" Scale="4" />
+    <Property Name="IsRunningTask" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="EstimatedHours" Type="Int64" />
+    <Property Name="ActualHours" Type="Int64" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" />
+    <Property Name="CreatedUser" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="ModifiedUser" Type="Int32" />
+  </EntityType>
   <EntityType Name="Tx_ProductionTask_Activity">
     <Key>
       <PropertyRef Name="DetId" />
@@ -1298,8 +1298,8 @@
     <Property Name="Quantity" Type="Decimal" Precision="16" Scale="4" />
     <Property Name="StartTime" Type="DateTime" />
     <Property Name="EndTime" Type="DateTime" />
-    <Property Name="TotalWorkDuration" Type="Time" />
-    <Property Name="TotalPauseDuration" Type="Time" />
+    <Property Name="TotalWorkDuration" Type="Int64" />
+    <Property Name="TotalPauseDuration" Type="Int64" />
     <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Comments" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="CreatedDate" Type="DateTime" />

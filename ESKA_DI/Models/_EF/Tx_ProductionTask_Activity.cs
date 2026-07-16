@@ -21,8 +21,8 @@ namespace ESKA_DI.Models._EF
         public Nullable<decimal> Quantity { get; set; }
         public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> EndTime { get; set; }
-        public Nullable<System.TimeSpan> TotalWorkDuration { get; set; }
-        public Nullable<System.TimeSpan> TotalPauseDuration { get; set; }
+        public Nullable<long> TotalWorkDuration { get; set; }
+        public Nullable<long> TotalPauseDuration { get; set; }
         public string Status { get; set; }
         public string Comments { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }

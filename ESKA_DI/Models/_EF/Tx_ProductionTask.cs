@@ -31,8 +31,8 @@ namespace ESKA_DI.Models._EF
         public Nullable<decimal> QuantityPlanned { get; set; }
         public Nullable<decimal> QuantityActual { get; set; }
         public string IsRunningTask { get; set; }
-        public Nullable<System.TimeSpan> EstimatedHours { get; set; }
-        public Nullable<System.TimeSpan> ActualHours { get; set; }
+        public Nullable<long> EstimatedHours { get; set; }
+        public Nullable<long> ActualHours { get; set; }
         public string Status { get; set; }
         public string Comments { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }

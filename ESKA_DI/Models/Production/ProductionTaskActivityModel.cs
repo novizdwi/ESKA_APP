@@ -43,9 +43,9 @@ namespace Models.Production
         
         public decimal? QuantityRemain { get; set; }
 
-        public TimeSpan? EstimatedHours { get; set; }
+        public long? EstimatedHours { get; set; }
 
-        public TimeSpan? ActualHours { get; set; }
+        public long? ActualHours { get; set; }
 
         public DateTime? ActivityDate { get; set; }
 
@@ -95,7 +95,8 @@ namespace Models.Production
         FROM ""Tx_ProductionTask"" T0
         INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
         INNER JOIN ""Tx_ProcessCard_Detail"" T2 ON T0.""BaseId"" = T2.""Id"" AND T0.""BaseDetId"" = T2.""DetId""
-        WHERE T0.""Id"" = :p0
+        WHERE T1.""Status"" NOT IN ('Finished')
+        AND T0.""Id"" = :p0
         ";
 
         public void PauseActivity(int userId, int id)
@@ -223,10 +224,14 @@ namespace Models.Production
             }
 
             ProductionTaskActivityModel model = new ProductionTaskActivityModel();
+
             if (currentTaskId != 0)
             {
-
                 model = CONTEXT.Database.SqlQuery<ProductionTaskActivityModel>(SqlSelect, currentTaskId).SingleOrDefault();
+            }
+            if (model == null)
+            {
+                model = new ProductionTaskActivityModel { Id = 0 };
             }
 
             return model;

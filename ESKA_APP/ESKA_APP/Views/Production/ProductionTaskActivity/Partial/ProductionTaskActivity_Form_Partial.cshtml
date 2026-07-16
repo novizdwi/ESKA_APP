@@ -8,7 +8,8 @@
 @model Models.Production.ProductionTaskActivityModel
 
 @{
-    ViewBag.Id = Model.Id;
+
+    ViewBag.Id = Model.Id ?? 0;
 
     // ---- WAKTU MULAI : ambil jam dari ActivityDate ----
     string waktuMulai = Model.ActivityDate.HasValue
@@ -203,6 +204,8 @@
         var btn = (ButtonSettings)item.NestedExtensionSettings;
         btn.Name = "btnPause";
         btn.Text = pauseText;
+
+        btn.Enabled = ViewBag.Id == 0 ? false : true;
         btn.ClientSideEvents.Click = pauseClientHandler;
         btn.Width = new Unit(40, UnitType.Em);
     });
@@ -216,6 +219,8 @@
         var btn = (ButtonSettings)item.NestedExtensionSettings;
         btn.Name = "btnFinish";
         btn.Text = "Finish";
+
+        btn.Enabled = ViewBag.Id == 0 ? false : true;
         btn.ClientSideEvents.Click = "OnClickBtnFinish";
         btn.Width = new Unit(40, UnitType.Em);
     });

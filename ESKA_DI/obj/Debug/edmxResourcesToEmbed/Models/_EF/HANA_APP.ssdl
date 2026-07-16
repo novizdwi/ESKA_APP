@@ -1091,8 +1091,8 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="QuantityPlanned" Type="decimal" Precision="16" Scale="4" />
     <Property Name="QuantityActual" Type="decimal" Precision="16" Scale="4" />
     <Property Name="IsRunningTask" Type="varchar" MaxLength="1" />
-    <Property Name="EstimatedHours" Type="time" Precision="7" />
-    <Property Name="ActualHours" Type="time" Precision="7" />
+    <Property Name="EstimatedHours" Type="bigint" />
+    <Property Name="ActualHours" Type="bigint" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
     <Property Name="Comments" Type="nvarchar" MaxLength="254" />
     <Property Name="CreatedDate" Type="timestamp" />
@@ -1111,8 +1111,8 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
     <Property Name="Quantity" Type="decimal" Precision="16" Scale="4" />
     <Property Name="StartTime" Type="timestamp" />
     <Property Name="EndTime" Type="timestamp" />
-    <Property Name="TotalWorkDuration" Type="time" Precision="7" />
-    <Property Name="TotalPauseDuration" Type="time" Precision="7" />
+    <Property Name="TotalWorkDuration" Type="bigint" />
+    <Property Name="TotalPauseDuration" Type="bigint" />
     <Property Name="Status" Type="nvarchar" MaxLength="50" />
     <Property Name="Comments" Type="nvarchar" MaxLength="500" />
     <Property Name="CreatedDate" Type="timestamp" />

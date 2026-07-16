@@ -536,7 +536,7 @@ new
             success: function (response) {
                 popupFinish.Hide();
                 RefreshAfterSuccess(response);
-                OnSuccessMsgBox();
+                OnSuccessMsgBox(); 
             },
             error: function (jqXhr, textStatus, errorThrown) {
                 OnFailure(jqXhr, textStatus, errorThrown);
