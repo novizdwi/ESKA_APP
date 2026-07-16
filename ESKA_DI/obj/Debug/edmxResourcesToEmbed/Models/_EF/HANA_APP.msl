@@ -1287,6 +1287,7 @@
           <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
           <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="TotalPauseDuration" ColumnName="TotalPauseDuration" />
           <ScalarProperty Name="TotalWorkDuration" ColumnName="TotalWorkDuration" />
@@ -1310,6 +1311,7 @@
           <ScalarProperty Name="EndTime" ColumnName="EndTime" />
           <ScalarProperty Name="StartTime" ColumnName="StartTime" />
           <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="PauseType" ColumnName="PauseType" />
           <ScalarProperty Name="DetailType" ColumnName="DetailType" />
           <ScalarProperty Name="DetDetId" ColumnName="DetDetId" />
           <ScalarProperty Name="DetId" ColumnName="DetId" />

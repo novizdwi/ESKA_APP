@@ -1,0 +1,25 @@
+﻿@using (Ajax.BeginForm("mantap", "ProductionTaskActivity", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "Finish_contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "Finish_formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="Finish_contentForm">
+        @Html.Partial("Partial/Finish/Finish_Panel_Partial")
+
+    </div>
+}

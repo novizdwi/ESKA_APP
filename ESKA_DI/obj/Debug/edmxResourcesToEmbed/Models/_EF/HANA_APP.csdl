@@ -1301,6 +1301,7 @@
     <Property Name="TotalWorkDuration" Type="Time" />
     <Property Name="TotalPauseDuration" Type="Time" />
     <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Comments" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="CreatedDate" Type="DateTime" />
     <Property Name="CreatedUser" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" />
@@ -1314,6 +1315,7 @@
     <Property Name="DetId" Type="Int64" />
     <Property Name="DetDetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="DetailType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PauseType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Comments" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="StartTime" Type="DateTime" />
     <Property Name="EndTime" Type="DateTime" />

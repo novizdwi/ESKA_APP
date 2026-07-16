@@ -13,8 +13,7 @@ body
     margin: 0px auto;
     padding: 0px 14px 0px 14px;
     word-wrap: break-word;
-}
-
+} 
 @media (min-width: 816px)
 {
     .text-content
