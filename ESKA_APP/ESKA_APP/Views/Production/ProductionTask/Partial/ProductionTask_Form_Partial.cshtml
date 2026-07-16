@@ -5,7 +5,8 @@
     ViewBag.UserId = Model.UserId;
 
 }
-
+</br>
+</br>
 @model Models.Production.ProductionTaskModel
 
 @Html.DevExpress().TextBox(
@@ -72,56 +73,63 @@
         txt.Text = Model.RunningTaskNo;
         txt.ReadOnly = true;
 
-        txt.Properties.Buttons.Add("View");   // <-- ganti dari txt.Buttons ke txt.Properties.Buttons
-        txt.Properties.ClientSideEvents.ButtonClick = "function(s,e){ ViewRunningTask(" + Model.CurrentTaskId + "); }";
-    });
+        txt.Properties.Buttons.Add("View");   
+        bool hasRunningTask = Model.CurrentTaskId.HasValue && Model.CurrentTaskId.Value != 0;
+        txt.Properties.Buttons[0].Enabled = hasRunningTask;
 
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
-        itemSettings.Caption = "";
-        itemSettings.Name = "Clock";
-
-        var lbl = (LabelSettings)itemSettings.NestedExtensionSettings;
-        lbl.Name = "rtClock";
-        lbl.Text = "--:--:--";
-        lbl.ControlStyle.Font.Size = 13;
-        lbl.ControlStyle.Font.Bold = true;
-        lbl.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
-        lbl.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
-    });
-    groupItem_Col1.Items.AddTabbedGroupItem(tabGroup =>
-    {
-        tabGroup.Name = "TabDetail";
-        tabGroup.ColSpan = 2;
-        tabGroup.Width = Unit.Percentage(100); 
-
-        tabGroup.Items.Add(tab =>
+        if (hasRunningTask)
         {
-            tab.Name = "TabReference";
-            tab.Caption = "Today Task";
+            txt.Properties.ClientSideEvents.ButtonClick = "function(s,e){ ViewRunningTask(s, e, " + Model.CurrentTaskId + "); }";
+        }
 
-            tab.SetNestedContent(() =>
-            {
-                Html.RenderPartial(
-                    "Partial/ProductionTask_Form_TabReference_List_Partial",
-                    Model.ListReferences_);
-            });
-        });
+});
 
-        tabGroup.Items.Add(tab =>
-        {
-            tab.Name = "TabOutstanding";
-            tab.Caption = "Oustanding Task";
+groupItem_Col1.Items.Add(itemSettings =>
+{
+  itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+  itemSettings.Caption = "";
+  itemSettings.Name = "Clock";
 
-            tab.SetNestedContent(() =>
-            {
-                Html.RenderPartial(
-                    "Partial/ProductionTask_Form_TabOutstanding_List_Partial",
-                    Model.ListOutstanding_);
-            });
-        });
-    });
+  var lbl = (LabelSettings)itemSettings.NestedExtensionSettings;
+  lbl.Name = "rtClock";
+  lbl.Text = "--:--:--";
+  lbl.ControlStyle.Font.Size = 13;
+  lbl.ControlStyle.Font.Bold = true;
+  lbl.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+  lbl.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+});
+groupItem_Col1.Items.AddTabbedGroupItem(tabGroup =>
+{
+  tabGroup.Name = "TabDetail";
+  tabGroup.ColSpan = 2;
+  tabGroup.Width = Unit.Percentage(100);
+
+  tabGroup.Items.Add(tab =>
+  {
+      tab.Name = "TabReference";
+      tab.Caption = "Today Task";
+
+      tab.SetNestedContent(() =>
+      {
+          Html.RenderPartial(
+              "Partial/ProductionTask_Form_TabReference_List_Partial",
+              Model.ListReferences_);
+      });
+  });
+
+  tabGroup.Items.Add(tab =>
+  {
+      tab.Name = "TabOutstanding";
+      tab.Caption = "Oustanding Task";
+
+      tab.SetNestedContent(() =>
+      {
+          Html.RenderPartial(
+              "Partial/ProductionTask_Form_TabOutstanding_List_Partial",
+              Model.ListOutstanding_);
+      });
+  });
+});
 
 }).GetHtml()
 

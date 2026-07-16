@@ -764,6 +764,9 @@
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabIssueDetail_List_Partial.cshtml" />
     <Content Include="Views\Transaction\IssueAndReceipt\Partial\IssueAndReceipt_Form_TabReceiptDetail_List_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_TabOutstanding_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\ProductionTaskActivity_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\ProductionTaskActivity.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\ProductionTaskActivity_Form_Btn_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -800,6 +803,7 @@
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
     <Compile Include="Controllers\Notification\_NotificationController.List.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Approval.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.CancelReason.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.cs" />
@@ -920,7 +924,6 @@
     <Compile Include="IduRazorViewEngine.cs" />
     <Compile Include="Rpts\Rpt.aspx.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Rpts\Rpt.aspx.designer.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>

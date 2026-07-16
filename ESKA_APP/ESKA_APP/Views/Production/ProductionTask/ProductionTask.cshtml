@@ -260,16 +260,35 @@
     }
 
     function OnStartTask(s, e, Id) {
-        console.log(Id);
-
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("StartTask", "ProductionTask")',
+        data: { Id: Id },
+        beforeSend: function () {
+            OnBegin();
+        },
+        success: function (response) {
+            ViewRunningTask(s, e, Id);
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+            OnFailure(jqXhr, textStatus, errorThrown)
+        },
+        complete: function () {
+            OnComplete()
+        }
+    });
     }
 
     function ViewRunningTask(s, e, Id)
     {
-
+        var guid = CreateGuid();
+        window.open('', guid);
+        SubmitForm(guid, '@Url.Action("Detail", "ProductionTaskActivity")', 'post', {
+            Id: Id
+        });
     }
 
-    function OnCloseTask(s, e, Id) { 
+    function OnCloseTask(s, e, Id) {
         if (confirm('Close this Task?')) {
              $.ajax({
                 type: "POST",

@@ -10,3 +10,9 @@ INSERT INTO "Ts_List" VALUES('ProductionStatus',2,'Released','Released', NULL);
 
 INSERT INTO "Ts_List" VALUES('ProcessCardDetailStatus', 1, 'O', 'Open', NULL);
 INSERT INTO "Ts_List" VALUES('ProcessCardDetailStatus', 2, 'C', 'Closed', NULL);
+
+INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 1, 'Empty', 'Empty Material', NULL);
+INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 2, 'Machine', 'Machine Problem', NULL);
+INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 3, 'QC', 'QC Process', NULL);
+INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 4, 'Breaktime', 'Breaktime', NULL);
+INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 5, 'Other', 'Other', NULL);

@@ -270,6 +270,7 @@
     <Compile Include="Models\Notification\Notification_Model.cs" />
     <Compile Include="Models\Production\ProcessCardService.cs" />
     <Compile Include="Models\Production\ProcessCard__List_Model.cs" />
+    <Compile Include="Models\Production\ProductionTaskActivityModel.cs" />
     <Compile Include="Models\Production\ProductionTaskModel.cs" />
     <Compile Include="Models\Production\ProductionScheduleModel.cs" />
     <Compile Include="Models\Report\ReportAlertDetail__List_Model.cs">
@@ -553,6 +554,12 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_ProductionTask.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_ProductionTask_Activity.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_EF\Tx_ProductionTask_Activity_Detail.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_StockOpname.cs">
