@@ -767,6 +767,12 @@
     <Content Include="Views\Production\ProductionTaskActivity\Partial\ProductionTaskActivity_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTaskActivity\ProductionTaskActivity.cshtml" />
     <Content Include="Views\Production\ProductionTaskActivity\Partial\ProductionTaskActivity_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -814,6 +820,7 @@
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.Detail.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Finish.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Oustanding.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Reference.cs" />
@@ -946,6 +953,7 @@
     <Folder Include="Views\Authentication\Login\Partial\" />
     <Folder Include="Views\GeneralSetting\" />
     <Folder Include="Views\Logout\" />
+    <Folder Include="Views\ProductionTaskActivitys\" />
     <Folder Include="Views\_Notification\" />
   </ItemGroup>
   <ItemGroup>

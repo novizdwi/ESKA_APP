@@ -42,6 +42,43 @@ namespace Controllers.Production
 
             return PartialView(VIEW_FORM_PARTIAL, ProductionTaskActivityModel);
         }
-         
+
+        [HttpPost]
+        public ActionResult PauseActivity(int Id)
+        {
+            int userId = (int)Session["userId"];
+
+            productionActivityService = new ProductionActivityService();
+            productionActivityService.PauseActivity(userId, Id);
+
+            var model = productionActivityService.GetById(userId, Id);
+            return PartialView(VIEW_FORM_PARTIAL, model);
+        }
+
+        [HttpPost]
+        public ActionResult StartActivity(int Id)
+        {
+            int userId = (int)Session["userId"];
+
+            productionActivityService = new ProductionActivityService();
+            productionActivityService.StartActivity(userId, Id);
+
+            var model = productionActivityService.GetById(userId, Id);
+            return PartialView(VIEW_FORM_PARTIAL, model);
+        }
+
+        [HttpPost]
+        public ActionResult FinishActivity(ProductionActivityFinishModel model)
+        {
+            int userId = (int)Session["userId"];
+
+            productionActivityService = new ProductionActivityService();
+            productionActivityService.FinishActivity(userId, model);
+
+            // kembalikan form utama yang sudah ter-refresh (dipakai RefreshAfterSuccess di JS)
+            var refreshed = productionActivityService.GetById(userId, model.Id??0 );
+            return PartialView(VIEW_FORM_PARTIAL, refreshed);
+        }
+
     }
 }

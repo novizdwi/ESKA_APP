@@ -18,6 +18,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<long> DetId { get; set; }
         public long DetDetId { get; set; }
         public string DetailType { get; set; }
+        public string PauseType { get; set; }
         public string Comments { get; set; }
         public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> EndTime { get; set; }

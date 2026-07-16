@@ -431,7 +431,7 @@ namespace Models.Production
             CONTEXT.Tx_ProductionTask_Activity.Add(tx_ProductionTask_Activity);
             CONTEXT.SaveChanges();
 
-            long? detId = tx_ProductionTask_Activity.Id;
+            long? detId = tx_ProductionTask_Activity.DetId;
             if (!detId.HasValue)
             {
                 throw new Exception("[VALIDATION] invalid Det Id");

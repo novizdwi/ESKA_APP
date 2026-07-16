@@ -10,14 +10,11 @@
 
 @model Models.Production.ProductionTaskActivityModel
 
-
 @{
     ViewBag.UserId = (int)Session["userId"];
     ViewBag.Title = "Process Card";
 
 }
-
-
 
 <script type="text/javascript">
 
@@ -382,97 +379,6 @@
     }
 
 
-
-
-    function OnClickBtnNavFirst(s, e) {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("NavFirst", "ProductionTaskActivity")",
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                RefreshAfterSuccess(response);
-                OnSuccess();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-            }
-        });
-    }
-
-    function OnClickBtnNavPrevious(s, e) {
-        key = Id.GetValue();
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("NavPrevious", "ProductionTaskActivity")',
-            data: { Id: key },
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                RefreshAfterSuccess(response);
-                OnSuccess();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-            }
-        });
-    }
-
-    function OnClickBtnNavNext(s, e) {
-        key = Id.GetValue();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("NavNext", "ProductionTaskActivity")',
-            data: { Id: key },
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                RefreshAfterSuccess(response);
-                OnSuccess();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-            }
-        });
-    }
-
-
-
-    function OnClickBtnNavLast(s, e) {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("NavLast", "ProductionTaskActivity")",
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                RefreshAfterSuccess(response);
-                OnSuccess();
-
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-            }
-        });
-    }
-
-
     function OnClickBtnRefresh(s, e) {
         key = Id.GetValue();
 
@@ -497,349 +403,58 @@
         });
     }
 
-
-
-    function OnClickBtnListFind(s, e) {
-        var popup = ASPxClientPopupControl.Cast("popupList");
-
-        var gv = ASPxClientGridView.Cast('gvProductionTaskActivityList');
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
+    function OnClickBtnFinish(s, e) {
+        var key = Id.GetValue();
+        var keyDet = DetId.GetValue();
+        btnShowFinishOnClick(s, e, key, keyDet);
     }
+    
+    function popupFinish_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Finish_formDetail");
 
-    function OnClickBtnMenuOther(s, e) {
-
-        switch (e.item.name) {
-            case 'btnMenuAuthorize':
-                key = Id.GetValue();
-                btnShowApprovalOnClick(s, e, key);
-                break;
-            case 'btnMenuSetStatusCancel':
-                key = Id.GetValue();
-                btnShowCancelReasonOnClick(s, e, key);
-
-                break;
-            case 'btnMenuSetStatusPost':
-                if (BeforeSave() == false) {
-                    return;
-                }
-                var formData = GetFormData();
-                if (confirm('Post transaction?')) {
-                    key = Id.GetValue();
-
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("Post", "ProductionTaskActivity")',
-                        data: formData,
-                        beforeSend: function () {
-                            OnBegin();
-                        },
-                        success: function (response) {
-                            RefreshAfterSuccess(response);
-                            OnSuccessMsgBox();
-
-                        },
-                        error: function (jqXhr, textStatus, errorThrown) {
-                            OnFailure(jqXhr, textStatus, errorThrown)
-                        },
-                        complete: function () {
-                            OnComplete()
-                        }
-                    });
-                }
-
-
-                break;
-            default:
-
-                break;
-        }
-    }
-
-
-    //pillars to project
-    function onPillarsChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            PillarsName.SetText(name);            // isi TextBox
-        } else {
-            PillarsName.SetText("");
-        }
-    }
-
-    function onClassChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            ClassName.SetText(name);            // isi TextBox
-        } else {
-            ClassName.SetText("");
-        }
-    }
-
-    function onSubClass1Changed(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            SubClass1Name.SetText(name);            // isi TextBox
-        } else {
-            SubClass1Name.SetText("");
-        }
-    }
-
-    function onSubClass2Changed(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            SubClass2Name.SetText(name);            // isi TextBox
-        } else {
-            SubClass2Name.SetText("");
-        }
-    }
-
-    function onProjectChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            ProjectName.SetText(name);            // isi TextBox
-        } else {
-            ProjectName.SetText("");
-        }
-    }
-
-    function popupCancelReason_EndCallback(s, e) {
-        $.validator.unobtrusive.parse("#CancelReason_formDetail");
-
-        var popup = ASPxClientPopupControl.Cast("popupCancelReason");
+        var popup = ASPxClientPopupControl.Cast("popupFinish");
         if (!popup.IsVisible()) {
             loadingPanel.Hide();
             popup.ShowAtPos(400, 100);
         }
     }
 
-    function btnShowCancelReasonOnClick(s, e, Id) {
-        var popup = ASPxClientPopupControl.Cast("popupCancelReason");
 
-        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "ProductionTaskActivity")' + '?Id=' + Id;
-        popup.PerformCallback();
-
-        if (!popup.IsVisible()) {
-            loadingPanel.Show();
-        }
-    }
-
-    function btnUpdateReasonOnClick(s, e) {
-        key = Id.GetValue();
-        var reason = CancelReason2.GetValue();
-        if (reason == "" || reason == null) {
-            return;
-        }
-
+    // ====== PAUSE : status "OnProgres" -> "Paused" ======
+    function OnClickBtnPause(s, e) {
+        var key = Id.GetValue();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Cancel", "ProductionTaskActivity")',
-            data: { Id: key, CancelReason: reason },
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                popupCancelReason.Hide();
-                RefreshAfterSuccess(response);
-                OnSuccessMsgBox();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-
-            }
-        });
-
-    }
-
-    function OnClickChoose(s, e, key) {
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("DetailPartial", "ProductionTaskActivity")',
+            url: '@Url.Action("PauseActivity", "ProductionTaskActivity")',
             data: { Id: key },
-            beforeSend: function () {
-                OnBegin();
-            },
+            beforeSend: function () { OnBegin(); },
             success: function (response) {
-                RefreshAfterSuccess(response);
+                RefreshAfterSuccess(response); // form re-render -> tombol jadi "Start"
                 OnSuccess();
-                popupList.Hide();
             },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-            }
+            error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
+            complete: function () { OnComplete(); }
         });
     }
 
-    function OnClickbaseId(s, e, baseId) {
-        var guid = CreateGuid();
-        window.open('', guid);
-        SubmitForm(guid, '@Url.Action("Detail", "ProductionTaskActivityScan")', 'post', {
-            Id: baseId
+    // ====== START : status "Paused" -> "OnProgres" ======
+    function OnClickBtnStart(s, e) {
+        var key = Id.GetValue();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("StartActivity", "ProductionTaskActivity")',
+            data: { Id: key },
+            beforeSend: function () { OnBegin(); },
+            success: function (response) {
+                RefreshAfterSuccess(response); // form re-render -> tombol jadi "Pause"
+                OnSuccess();
+            },
+            error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
+            complete: function () { OnComplete(); }
         });
     }
-
-    function BtnCflStatusOnClick(id) {
-        var popup = ASPxClientPopupControl.Cast("popupViewApproval");
-        popup.callbackUrl = '@Url.Action("ViewApproval_PopupListOnDemandPartial", "ProductionTaskActivity")' + '?Id=' + id;
-        popup.PerformCallback();
-
-        if (!popup.IsVisible()) {
-            popup.Show();
-        }
-
-    }
-
-	function popupViewApproval_EndCallback(s, e) {
-        $.validator.unobtrusive.parse("#ViewApproval_formDetail");
-
-        var popup = ASPxClientPopupControl.Cast("popupViewApproval");
-        if (!popup.IsVisible()) {
-            loadingPanel.Hide();
-            popup.ShowAtPos(400, 100);
-        }
-    }
-
-    function BtnCflContractNoPopupListOnClick(s, e) {
-
-    }
-
-    function BtnCflCustomerCodePopupListOnClick(s, e) {
-        cflCardCodePopupListProductionTaskActivity.Show();
-    }
-
-    function BtnCflItemCodePopupListOnClick(s, e) {
-        cflItemPopupListProductionTaskActivity.Show();
-    }
-
 </script>
 
-
-<script type="text/javascript">
-
-
-    function OnBatchEditStartEditing(s, e) {
-    }
-
-    function OnBatchEditEndEditing(s, e) {
-    }
-
-    function OnGridFocusedRowChanged(s, e) {
-    }
-
-    function setColValue(s, e, value) {
-    }
-
-    function OnLookupBeginCallback(s, e) {
-    }
-</script>
-
-<script type="text/javascript">
-
-    function gvDetailOnBeginCallback(s, e) {
-        e.customArgs['cbId'] = Id.GetValue();
-    }
-
-    function gvDetailOnEndCallback(s, e) {
-
-    }
-
-    function gvDetailOnCustomButtonClick(s, e) {
-    }
-
-    function Operator_BeginCallback(s, e) {
-        var rowIndex = gvDetail.GetFocusedRowIndex();
-        var routing = gvDetail.batchEditApi.GetCellValue(rowIndex, "RoutingCode");
-        e.customArgs["RoutingCode"] = routing;
-    }
-
-    function gvDetailOnBatchEditStartEditing(s, e) {
-        if (e.focusedColumn.fieldName !== "OperatorId") return;
-        var routingCode = s.batchEditApi.GetCellValue(e.visibleIndex, "RoutingCode");
-
-            $.ajax({
-                url: '@Url.Action("GetOperatorByRouting", "ProductionTaskActivity")',
-                type: 'POST',
-                data: { routingCode: routingCode },
-                success: function (data) {
-
-                    var editor = s.GetEditor("OperatorId");
-
-                    editor.ClearItems();
-
-                    for (var i = 0; i < data.length; i++) {
-                        editor.AddItem(data[i].Name, data[i].Code);
-                    }
-                }
-            });
-    }
-
-    function gvProductionTaskActivityContentDetail_OperatorOnChanged(s, e) {
-        var visibleIndex = gvDetail.GetFocusedRowIndex();
-        var grid = gvDetail;
-        var text = s.GetText();
-        var value = s.GetValue();
-
-        grid.batchEditApi.SetCellValue(e.visibleIndex, "OperatorId", value);
-        gvProessCardContentDetail_OperatorName.SetValue(text);
-    }
-
-    function gvDetailOnBatchEditEndEditing(s, e) {
-    }
-
-    function gvDetailOnBatchEditRowValidating(s, e) {
-    }
-
-    function gvDetailCalculateSummary(grid, rowValues, visibleIndex, isDeleting) {
-    }
-
-    function gvRefOnBeginCallback(s, e) {
-        e.customArgs['cbId'] = Id.GetValue();
-    }
-
-
-    function gvRefOnEndCallback(s, e) {
-
-    }
-
-    function gvRefOnCustomButtonClick(s, e) {
-    }
-
-
-    function gvRefOnBatchEditStartEditing(s, e) {
-    }
-
-    function gvRefOnBatchEditEndEditing(s, e) {
-    }
-
-    function gvRefOnBatchEditRowValidating(s, e) {
-    }
-
-    function QuantityOnValueChanged() {
-        var qtyVariance = gvDetail_Quantity.GetValue() - gvDetail_QuantityOnHandSAP_.GetValue();
-        gvDetail_QtyVariance_.SetValue(qtyVariance);
-
-        var lineTotal = gvDetail_UnitPriceTc.GetValue() * gvDetail_Quantity.GetValue();
-        gvDetail_LineTotal.SetValue(lineTotal);
-    }
-
-
-</script>
 
 
 @Html.Partial("Partial/ProductionTaskActivity_Form_Btn_Partial")
@@ -870,6 +485,83 @@ new
     </div>
 }
 
+@*
+    -----------------------------------------------------------------------------
+    popup pause
+    -----------------------------------------------------------------------------
+*@
+
+@*
+    -----------------------------------------------------------------------------
+    popup finish
+    -----------------------------------------------------------------------------
+*@
+<script type="text/javascript">
+
+    function popupFinish_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Finish_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupFinish");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+    function btnShowFinishOnClick(s, e, id, detId) {
+        var popup = ASPxClientPopupControl.Cast("popupFinish");
+        popup.callbackUrl = '@Url.Action("Finish_PopupListOnDemandPartial", "ProductionTaskActivity")' + '?Id=' + id + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
+
+    function btnUpdateFinishOnClick(s, e) {
+        var data = GetFormFinishData();
+
+        // Quantity wajib
+        if (data.Quantity == null || data.Quantity === "") {
+            Quantity.Focus();
+            return;
+        } 
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FinishActivity", "ProductionTaskActivity")',
+            data: data,
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                popupFinish.Hide();
+                RefreshAfterSuccess(response);
+                OnSuccessMsgBox();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown);
+            },
+            complete: function () { OnComplete(); }
+        });
+    }
+
+    function btnCancelFinishOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupFinish");
+        popup.Hide();
+    }
+
+    function GetFormFinishData() {
+        return {
+            Id: Id.GetValue(),
+            DetId: DetId.GetValue(),
+            Quantity: Quantity.GetValue(),
+            Comments: Comments.GetValue()
+        };
+    }
+
+</script>
+
+@Html.Partial("Partial/Finish/Finish_Partial")
 
 @*
     -----------------------------------------------------------------------------
