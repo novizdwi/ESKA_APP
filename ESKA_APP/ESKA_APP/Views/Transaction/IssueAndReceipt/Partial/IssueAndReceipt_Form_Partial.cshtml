@@ -7,6 +7,10 @@
     ViewBag.Id = Model.Id;
     ViewBag.ReadOnly = Model.Status == "Draft" ? false: true;
 
+    // Lookup Work Order boleh dipakai saat dokumen masih bisa di-edit (Draft / Posted).
+    // Status modul ini: Draft, Posted, Cancel, Closed (Cancel & Closed = final, tidak bisa edit).
+    bool canPickWorkOrder = (Model.Status == "Draft" || Model.Status == "Posted");
+
 }
 
 @model Models.Transaction.IssueAndReceiptModel
@@ -21,7 +25,7 @@
             settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
             settings.ClientVisible = false;
         }
-).Bind(Model.Id).GetHtml() 
+).Bind(Model.Id).GetHtml()
 
 @Html.DevExpress().FormLayout(settings =>
 {
@@ -95,10 +99,9 @@
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "";
         itemSettings.FieldName = "BaseEntry";
-        //itemSettings.ClientVisible = false;
+        itemSettings.ClientVisible = false;
 
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.ClientVisible = false;
         txt.Name = "BaseEntry";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
@@ -108,14 +111,16 @@
         txt.Width = 230;
     });
 
+    // Editor hidden: menampung nilai hasil pilih Work Order agar ikut ter-post saat Save.
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "No Work Order";
-        itemSettings.FieldName = "BaseProcessCardTransNo";
+        itemSettings.Caption = "";
+        itemSettings.FieldName = "BaseDocNum";
+        itemSettings.ClientVisible = false;
 
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "NoWorkOrder";
+        txt.Name = "BaseDocNum";
         txt.ReadOnly = true;
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editornoimage";
@@ -127,11 +132,117 @@
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "";
+        itemSettings.FieldName = "BaseProcessCardId";
+        itemSettings.ClientVisible = false;
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "BaseProcessCardId";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "";
+        itemSettings.FieldName = "BaseProcessCardSort";
+        itemSettings.ClientVisible = false;
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "BaseProcessCardSort";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "";
+        itemSettings.FieldName = "BaseProcessCardRoutingCode";
+        itemSettings.ClientVisible = false;
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "BaseProcessCardRoutingCode";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "";
+        itemSettings.FieldName = "BaseProcessCardOperatorId";
+        itemSettings.ClientVisible = false;
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "BaseProcessCardOperatorId";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "No Work Order";
+        itemSettings.FieldName = "BaseProcessCardTransNo";
+
+        var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "BaseProcessCardTransNo";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+
+        // ComboBox butuh item terdaftar agar value bound tampil saat reload dokumen tersimpan.
+        if (!string.IsNullOrEmpty(Model.BaseProcessCardTransNo))
+        {
+            txt.Properties.Items.Add(new DevExpress.Web.ListEditItem(Model.BaseProcessCardTransNo, Model.BaseProcessCardTransNo));
+        }
+
+        // Sembunyikan tombol dropdown default, ganti dengan tombol find (lookup Work Order).
+        txt.Properties.DropDownButton.Visible = false;
+        txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        if (canPickWorkOrder)
+        {
+            EditButton lookUpButton = new EditButton();
+            lookUpButton.Text = "";
+            lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+            lookUpButton.Image.Width = 15;
+
+            txt.Properties.Buttons.Add(lookUpButton);
+            txt.Properties.ClientSideEvents.ButtonClick = " function (s,e) { BtnWorkOrderPopupListOnClick(s,e); } ";
+        }
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Route Stage";
         itemSettings.FieldName = "BaseProcessCardRoutingName";
 
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "RouteStage";
+        txt.Name = "BaseProcessCardRoutingName";
         txt.ReadOnly = true;
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editornoimage";
@@ -147,7 +258,7 @@
         itemSettings.FieldName = "BaseProcessCardOperatorName";
 
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Operator";
+        txt.Name = "BaseProcessCardOperatorName";
         txt.ReadOnly = true;
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editornoimage";

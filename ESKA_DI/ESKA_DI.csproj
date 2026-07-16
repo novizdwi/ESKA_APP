@@ -301,6 +301,7 @@
     <Compile Include="Models\Setting\ReportModel.cs" />
     <Compile Include="Models\Setting\Report__List_Model.cs" />
     <Compile Include="Models\Transaction\IssueAndReceiptService.cs" />
+    <Compile Include="Models\Transaction\IssueAndReceiptWorkOrder_Model.cs" />
     <Compile Include="Models\Transaction\GoodsReceiptPoService.cs" />
     <Compile Include="Models\Transaction\GoodsReceiptPo__List_Model.cs" />
     <Compile Include="Models\Transaction\StockOpnameService.cs" />

@@ -1,4 +1,5 @@
 ﻿@using Models._Cfl;
+@using Models.Transaction;
 
 
 @if (false)
@@ -185,20 +186,15 @@
 
     function BeforeSave() {
 
-        var tab = ASPxClientTabControl.Cast("TabDetail");
-        var tabPageCount = tab.GetTabCount();
-        for (var i = 0; i < tabPageCount; i++) {
-            tab.SetActiveTabIndex(i);
-            if (!($("#formDetail").valid())) {
-                var validator = $("#formDetail").validate();
-                var errors = validator.numberOfInvalids();
-                if (errors) {
-                    // alert( validator.errorList[0].message);
-                    validator.errorList[0].element.focus();
-
-                }
-                return false;
+        // Field yang divalidasi semuanya di header (selalu terlihat); tab (Issue/Receipt) hanya berisi grid.
+        // Jadi validasi form cukup sekali, tanpa iterasi tab control.
+        if (!($("#formDetail").valid())) {
+            var validator = $("#formDetail").validate();
+            var errors = validator.numberOfInvalids();
+            if (errors) {
+                validator.errorList[0].element.focus();
             }
+            return false;
         }
 
         return true;
@@ -672,6 +668,48 @@
 
 </script>
 @Html.Partial("~/Views/_Cfl/_CflPurchaseOrder/Partial/_CflPurchaseOrder_Panel_List_Partial.cshtml", cflPurchaseOrder_ParamModel)
+
+
+@{
+    var workOrder_ParamModel = new IssueAndReceiptWorkOrder_ParamModel();
+    workOrder_ParamModel.Name = "WorkOrder";
+    workOrder_ParamModel.Type = "WorkOrder";
+    workOrder_ParamModel.SqlWhere = "   ";
+    workOrder_ParamModel.Header = "";
+}
+<script type="text/javascript">
+    function BtnWorkOrderPopupListOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("workOrderPopupList");
+
+        var gv = ASPxClientGridView.Cast('gvWorkOrderList');
+
+        if (gv == null) {
+            popup.Show();
+        } else {
+            popup.SetContentHtml("");
+            popup.PerformCallback();
+            popup.Show();
+        }
+    }
+
+    function OnClickChoose_WorkOrder(s, e, data) {
+        // No Work Order adalah ComboBox: nilai baru harus didaftarkan sbg item dulu agar tampil (SetValue saja tidak cukup).
+        BaseProcessCardTransNo.ClearItems();
+        BaseProcessCardTransNo.AddItem(data.BaseProcessCardTransNo, data.BaseProcessCardTransNo);
+        BaseProcessCardTransNo.SetValue(data.BaseProcessCardTransNo);
+        BaseProcessCardRoutingName.SetValue(data.BaseProcessCardRoutingName);
+        BaseProcessCardOperatorName.SetValue(data.BaseProcessCardOperatorName);
+        BaseEntry.SetValue(data.BaseEntry);
+        BaseDocNum.SetValue(data.BaseDocNum);
+        BaseProcessCardId.SetValue(data.BaseProcessCardId);
+        BaseProcessCardSort.SetValue(data.BaseProcessCardSort);
+        BaseProcessCardRoutingCode.SetValue(data.BaseProcessCardRoutingCode);
+        BaseProcessCardOperatorId.SetValue(data.BaseProcessCardOperatorId);
+        workOrderPopupList.Hide();
+    }
+
+</script>
+@Html.Partial("~/Views/Transaction/IssueAndReceipt/Partial/WorkOrder/WorkOrder_Panel_List_Partial.cshtml", workOrder_ParamModel)
 
 
 

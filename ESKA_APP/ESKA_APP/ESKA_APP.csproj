@@ -632,6 +632,8 @@
     <Content Include="Views\Authentication\User\Partial\User_TabRouting_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\WorkOrder\WorkOrder_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\IssueAndReceipt\Partial\WorkOrder\WorkOrder_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_Panel_List_Partial.cshtml" />
     <Content Include="Views\Setting\ApprovalStage\ApprovalStage.cshtml" />
@@ -853,6 +855,7 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewBatch.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.WorkOrder.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.ViewIssueBatch.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.ViewReceiptBatch.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.Tab.Detail.cs" />
