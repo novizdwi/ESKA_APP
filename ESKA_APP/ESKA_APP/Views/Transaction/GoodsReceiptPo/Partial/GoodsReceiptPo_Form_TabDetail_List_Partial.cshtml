@@ -8,6 +8,8 @@
         Id = ViewBag.Id;
     }
 
+    string status = (ViewBag.Status as string) ?? "";
+
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -32,7 +34,19 @@
     //settings.Settings.ShowFilterRow = true;
     //settings.Settings.ShowFilterRowMenu = true;
 
-    settings.CommandColumn.Width = 70;
+    settings.CommandColumn.Visible = (status == "Cancel" ? false : true);
+    settings.CommandColumn.ShowDeleteButton = false;
+    settings.CommandColumn.ShowNewButtonInHeader = false;
+    settings.Enabled = true;
+
+    settings.CommandColumn.Width = 90;
+
+    if (status != "Cancel" && status != "Posted" && status != "Closed")
+    {
+        var customDeleteButton = new GridViewCommandColumnCustomButton() { ID = "deleteButton", Text = "Delete" };
+        settings.CommandColumn.CustomButtons.Add(customDeleteButton);
+    }
+
     settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
     settings.Columns.Add("Id", "Id").Visible = false;
     settings.Columns.Add("DetId", "DetId").Visible = false;
@@ -256,6 +270,7 @@
 
     settings.ClientSideEvents.BeginCallback = "gvDetailOnBeginCallback";
     settings.ClientSideEvents.EndCallback = "gvDetailOnEndCallback";
+    settings.ClientSideEvents.CustomButtonClick = "gvDetailOnCustomButtonClick";
 
     settings.ClientSideEvents.BatchEditStartEditing = "gvDetailOnBatchEditStartEditing";
     settings.ClientSideEvents.BatchEditEndEditing = "gvDetailOnBatchEditEndEditing";

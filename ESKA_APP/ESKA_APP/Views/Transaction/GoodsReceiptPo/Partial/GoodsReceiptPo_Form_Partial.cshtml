@@ -325,6 +325,7 @@
                             }).GetHtml()
                     );
                 }
+                ViewBag.Status = Model.Status;
                 ViewContext.Writer.Write(
                      Html.Partial("Partial/GoodsReceiptPo_Form_TabDetail_List_Partial", Model.ListDetails_)
                 );

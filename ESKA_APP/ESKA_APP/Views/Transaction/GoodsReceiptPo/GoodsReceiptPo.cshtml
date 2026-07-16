@@ -728,6 +728,21 @@
     }
 
     function gvDetailOnCustomButtonClick(s, e) {
+        if (e.buttonID == "deleteButton") {
+            if (!confirm('Delete item?')) return;
+
+            var detId = s.GetRowKey(e.visibleIndex);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteItem", "GoodsReceiptPo")',
+                data: { Id: Id.GetValue(), DetId: detId },
+                beforeSend: function () { OnBegin(); },
+                success: function () { gvDetail.PerformCallback(); OnSuccessMsgBox(); },
+                error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
+                complete: function () { OnComplete(); }
+            });
+        }
     }
 
 
