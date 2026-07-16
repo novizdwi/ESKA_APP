@@ -169,7 +169,6 @@
 
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
     settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
-    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
 
     settings.InitNewRow = (s, e) =>
     {
