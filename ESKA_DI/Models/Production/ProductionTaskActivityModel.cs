@@ -123,7 +123,8 @@ namespace Models.Production
 
         public void SetStatus(int userId, ProductionActivityPauseModel model, string status)
         {
-            string detailType = status == "pause" ? "Paused" : "OnProgres";
+            string activityStatus = status == "pause" ? "Paused" : "OnProgress";
+            string detailType = status == "pause" ? "Paused" : "Production";
             if (model != null)
             {
                 using (var CONTEXT = new HANA_APP())
@@ -138,7 +139,7 @@ namespace Models.Production
                             Tx_ProductionTask_Activity tx_ProductionTask_Activity = CONTEXT.Tx_ProductionTask_Activity.FirstOrDefault(x => x.DetId == model.DetId);
                             if (tx_ProductionTask_Activity != null)
                             {
-                                tx_ProductionTask_Activity.Status = detailType;
+                                tx_ProductionTask_Activity.Status = activityStatus;
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
 
