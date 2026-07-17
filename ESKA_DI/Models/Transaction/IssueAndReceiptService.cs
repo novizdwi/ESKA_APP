@@ -331,6 +331,82 @@ namespace Models.Transaction
             return model;
         }
 
+        public long Add(IssueAndReceiptModel model)
+        {
+            long Id = 0;
+
+            if (model != null)
+            {
+                using (var CONTEXT = new HANA_APP())
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_IssueAndReceipt ent = new Tx_IssueAndReceipt();
+                        CopyProperty.CopyProperties(model, ent, false);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        ent.TransType = "IssueAndReceipt";
+                        ent.CreatedDate = dtModified;
+                        ent.CreatedUser = model._UserId;
+                        ent.ModifiedDate = dtModified;
+                        ent.ModifiedUser = model._UserId;
+
+                        string dateX = model.TransDate.Value.ToString("yyyy-MM-dd");
+                        ent.TransNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + model._UserId.ToString() + ",'IssueAndReceipt','" + dateX + "','') ").SingleOrDefault();
+
+                        CONTEXT.Tx_IssueAndReceipt.Add(ent);
+                        CONTEXT.SaveChanges();
+                        Id = ent.Id;
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+                        throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                    }
+                }
+            }
+
+            return Id;
+        }
+
+        public void Update(IssueAndReceiptModel model, string method = "")
+        {
+            if (model != null)
+            {
+                using (var CONTEXT = new HANA_APP())
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_IssueAndReceipt ent = CONTEXT.Tx_IssueAndReceipt.Find(model.Id);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (ent != null)
+                        {
+                            var exceptColumns = new string[] { "Id", "TransNo", "TransType", "CreatedUser", "CreatedDate" };
+                            CopyProperty.CopyProperties(model, ent, false, exceptColumns);
+
+                            ent.ModifiedDate = dtModified;
+                            ent.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+                        }
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+                        throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                    }
+                }
+            }
+        }
+
         public IssueAndReceiptModel GetById(int userId, long id = 0, string method = "")
         {
             using (var CONTEXT = new HANA_APP())

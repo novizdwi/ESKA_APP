@@ -78,57 +78,44 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
         }
 
-        //[HttpPost, ValidateInput(false)]
-        //public ActionResult Add([ModelBinder(typeof(DevExpressEditorsBinder))]  IssueAndReceiptModel IssueAndReceiptModel)
-        //{
-        //    int userId = (int)Session["userId"];
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Add([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
+        {
+            int userId = (int)Session["userId"];
 
-        //    IssueAndReceiptModel._UserId = (int)Session["userId"];
-        //    IssueAndReceiptService = new IssueAndReceiptService();
+            IssueAndReceiptModel._UserId = userId;
+            issueAndReceiptService = new IssueAndReceiptService();
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        long Id = 0;
+            if (ModelState.IsValid)
+            {
+                long Id = issueAndReceiptService.Add(IssueAndReceiptModel);
+                IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
+                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            }
+            else
+            {
+                string message = GetErrorModel();
+                throw new Exception(string.Format("[VALIDATION] {0}", message));
+            }
 
-        //        Id = IssueAndReceiptService.Add(IssueAndReceiptModel);
-        //        IssueAndReceiptModel = IssueAndReceiptService.GetById(userId, Id);
-        //        IssueAndReceiptModel._FormMode = Models.FormModeEnum.Edit;
-        //    }
-        //    else
-        //    {
-        //        string message = GetErrorModel();
-        //        throw new Exception(string.Format("[VALIDATION] {0}", message));
-        //    }
-
-        //    return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
-        //}
+            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+        }
 
 
-        //[HttpPost, ValidateInput(false)]
-        //public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
-        //{
-        //    int userId = (int)Session["userId"];
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
+        {
+            int userId = (int)Session["userId"];
 
-        //    IssueAndReceiptModel._UserId = (int)Session["userId"];
-        //    IssueAndReceiptService = new IssueAndReceiptService();
-        //    IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            IssueAndReceiptModel._UserId = userId;
+            issueAndReceiptService = new IssueAndReceiptService();
+            IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
 
+            issueAndReceiptService.Update(IssueAndReceiptModel);
+            IssueAndReceiptModel = issueAndReceiptService.GetById(userId, IssueAndReceiptModel.Id);
 
-
-        //    //if (ModelState.IsValid)
-        //    //{
-        //    IssueAndReceiptService.Update(IssueAndReceiptModel);
-        //    IssueAndReceiptModel = IssueAndReceiptService.GetById(userId, IssueAndReceiptModel.Id);
-        //    //}
-        //    //else
-        //    //{
-        //    //    string message = GetErrorModel();
-
-        //    //    throw new Exception(string.Format("[VALIDATION] {0}", message));
-        //    //}
-
-        //    return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
-        //}
+            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+        }
 
         //[HttpPost, ValidateInput(false)]
         //public ActionResult Post([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
