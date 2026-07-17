@@ -408,7 +408,7 @@
         var keyDet = DetId.GetValue();
         btnShowFinishOnClick(s, e, key, keyDet);
     }
-    
+
     function popupFinish_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Finish_formDetail");
 
@@ -423,39 +423,56 @@
     // ====== PAUSE : status "OnProgres" -> "Paused" ======
     function OnClickBtnPause(s, e) {
         var key = Id.GetValue();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("PauseActivity", "ProductionTaskActivity")',
-            data: { Id: key },
-            beforeSend: function () { OnBegin(); },
-            success: function (response) {
-                RefreshAfterSuccess(response); // form re-render -> tombol jadi "Start"
-                OnSuccess();
-            },
-            error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
-            complete: function () { OnComplete(); }
-        });
+        var keyDet = DetId.GetValue();
+        btnShowPauseOnClick(s, e, key, keyDet);
     }
+
+    function popupFinish_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Pause_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupPause");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+
 
     // ====== START : status "Paused" -> "OnProgres" ======
     function OnClickBtnStart(s, e) {
-        var key = Id.GetValue();
+        var data = GetFormStartData();
+
         $.ajax({
             type: "POST",
             url: '@Url.Action("StartActivity", "ProductionTaskActivity")',
-            data: { Id: key },
-            beforeSend: function () { OnBegin(); },
+            data: data,
+            beforeSend: function () {
+                OnBegin();
+            },
             success: function (response) {
                 RefreshAfterSuccess(response); // form re-render -> tombol jadi "Pause"
                 OnSuccess();
             },
-            error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
-            complete: function () { OnComplete(); }
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown);
+            },
+            complete: function () {
+                OnComplete();
+            }
         });
     }
+
+    function GetFormStartData() {
+        return {
+            Id: Id.GetValue(),
+            DetId: DetId.GetValue(),
+            PauseReason: null,
+            PauseComments: null
+        };
+    }
+
 </script>
-
-
 
 @Html.Partial("Partial/ProductionTaskActivity_Form_Btn_Partial")
 
@@ -490,6 +507,72 @@ new
     popup pause
     -----------------------------------------------------------------------------
 *@
+<script type="text/javascript">
+
+    function popupPause_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Pause_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupPause");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+    function btnShowPauseOnClick(s, e, id, detId) {
+        var popup = ASPxClientPopupControl.Cast("popupPause");
+        popup.callbackUrl = '@Url.Action("Pause_PopupListOnDemandPartial", "ProductionTaskActivity")' + '?Id=' + id + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
+
+    function btnUpdatePauseOnClick(s, e) {
+        var data = GetFormPauseData();
+
+        // Quantity wajib
+        if (data.PauseReason == null || data.PauseReason === "") {
+            PauseReason.Focus();
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("PauseActivity", "ProductionTaskActivity")',
+            data: data,
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                popupPause.Hide();
+                RefreshAfterSuccess(response);
+                OnSuccessMsgBox();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown);
+            },
+            complete: function () { OnComplete(); }
+        });
+    }
+
+    function btnCancelPauseOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupPause");
+        popup.Hide();
+    }
+
+    function GetFormPauseData() {
+        return {
+            Id: Id.GetValue(),
+            DetId: DetId.GetValue(),
+            PauseReason: PauseReason.GetValue(),
+            PauseComments: PauseComments.GetValue()
+        };
+    }
+
+</script>
+
+@Html.Partial("Partial/Pause/Pause_Partial")
 
 @*
     -----------------------------------------------------------------------------
@@ -525,7 +608,7 @@ new
         if (data.Quantity == null || data.Quantity === "") {
             Quantity.Focus();
             return;
-        } 
+        }
         $.ajax({
             type: "POST",
             url: '@Url.Action("FinishActivity", "ProductionTaskActivity")',
@@ -536,7 +619,7 @@ new
             success: function (response) {
                 popupFinish.Hide();
                 RefreshAfterSuccess(response);
-                OnSuccessMsgBox(); 
+                OnSuccessMsgBox();
             },
             error: function (jqXhr, textStatus, errorThrown) {
                 OnFailure(jqXhr, textStatus, errorThrown);

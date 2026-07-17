@@ -92,10 +92,16 @@
         x.HorizontalAlign = FormLayoutHorizontalAlign.Left;
     }).SetNestedContent(() =>
     {
+        string pausedBadge = isPaused
+            ? " <span style='color:#E7180B;'>PAUSED</span>"
+            : "";
+
         ViewContext.Writer.Write(
             "<h2 style='margin:0'>" +
-            "<b>TASK NO: [ " + Model.TransNo + " ]</b> " +
-            "</h2>");
+            "<b>TASK NO: [ " + Model.TransNo + " ]</b>" +
+            pausedBadge +
+            "</h2>"
+        );
     });
 
     // spacer

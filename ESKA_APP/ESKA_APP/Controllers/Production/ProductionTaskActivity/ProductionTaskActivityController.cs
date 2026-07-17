@@ -44,26 +44,26 @@ namespace Controllers.Production
         }
 
         [HttpPost]
-        public ActionResult PauseActivity(int Id)
+        public ActionResult PauseActivity(ProductionActivityPauseModel pauseModel)
         {
             int userId = (int)Session["userId"];
 
             productionActivityService = new ProductionActivityService();
-            productionActivityService.PauseActivity(userId, Id);
-
-            var model = productionActivityService.GetById(userId, Id);
+            productionActivityService.PauseActivity(userId, pauseModel);
+            
+            var model = productionActivityService.GetById(userId, pauseModel.Id??0);
             return PartialView(VIEW_FORM_PARTIAL, model);
         }
 
         [HttpPost]
-        public ActionResult StartActivity(int Id)
+        public ActionResult StartActivity(ProductionActivityPauseModel pauseModel)
         {
             int userId = (int)Session["userId"];
 
             productionActivityService = new ProductionActivityService();
-            productionActivityService.StartActivity(userId, Id);
+            productionActivityService.StartActivity(userId, pauseModel);
 
-            var model = productionActivityService.GetById(userId, Id);
+            var model = productionActivityService.GetById(userId, pauseModel.Id ?? 0);
             return PartialView(VIEW_FORM_PARTIAL, model);
         }
 

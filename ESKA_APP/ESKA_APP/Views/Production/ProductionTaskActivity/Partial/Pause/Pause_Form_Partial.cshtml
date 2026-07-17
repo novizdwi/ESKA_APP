@@ -1,6 +1,6 @@
 ﻿@using Models;
 
-@model Models.Transaction.Inventory.TransferInModel
+@model Models.Production.ProductionActivityPauseModel
 
 @Html.DevExpress().TextBox(
         settings =>
@@ -11,10 +11,18 @@
         }
 ).Bind(Model.Id).GetHtml()
 
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "DetId";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(Model.DetId).GetHtml()
 
 @Html.DevExpress().FormLayout(settings =>
 {
-    settings.Name = "CancelReason_formLayout";
+    settings.Name = "Pause_formLayout";
     settings.EncodeHtml = false;
     settings.Width = Unit.Percentage(100);
     settings.AlignItemCaptionsInAllGroups = true;
@@ -22,7 +30,7 @@
 
     var groupItem = settings.Items.AddGroupItem(itemSettings =>
     {
-        itemSettings.Caption = "Update Reason ";
+        itemSettings.Caption = "Pause Activity";
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ColCount = 1;
@@ -31,8 +39,6 @@
         itemSettings.GroupBoxStyle.Caption.ForeColor = System.Drawing.ColorTranslator.FromHtml("#F20056");
         itemSettings.ShowCaption = DefaultBoolean.False;
     });
-
-
 
     var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
     {
@@ -49,42 +55,84 @@
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
         itemSettings.ColCount = 1;
+    }); 
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Reason";
+        itemSettings.FieldName = "PauseReason";
+
+        var cbo = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        cbo.Name = "PauseReason";
+        cbo.Properties.ValueType = typeof(string);
+        cbo.Properties.TextField = "Name";
+        cbo.Properties.ValueField = "Code";
+        cbo.Width = 230;
+
+        cbo.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.Properties.NullText = "-- Select Reason --";
+
+        cbo.ShowModelErrors = true;
+        cbo.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        cbo.Properties.ValidationSettings.RequiredField.IsRequired = true;
+        cbo.Properties.ValidationSettings.RequiredField.ErrorText = "Reason is required";
+        cbo.Properties.ValidationSettings.Display = Display.Dynamic;
+
+        cbo.Properties.DataSource = Models._Utils.GeneralGetList.GetList("ActivityPauseReason");
+
     });
-    
+
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
-        itemSettings.Caption = "Reason";
-        itemSettings.FieldName = "CancelReason";
-        itemSettings.Name = "grpCancelReason";
+        itemSettings.Caption = "Comments";
+        itemSettings.FieldName = "PauseComments";
 
         var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "CancelReason";
+        txt.Name = "PauseComments";
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Width = 300;
-        txt.Height = 120;
+        txt.Width = 280;
+        txt.Height = 100;
+
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+    var groupBtn = groupItem_Col1.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 2;
+    });
+
+    groupBtn.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
         itemSettings.Caption = "";
+
         var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
-        btnSettings.Name = "btnUpdateReason";
+        btnSettings.Name = "btnPauseUpdate";
         btnSettings.Text = "Update";
-        btnSettings.Width = 30;
-        btnSettings.ClientSideEvents.Click = "btnUpdateReasonOnClick";
-
- 
+        btnSettings.Width = Unit.Percentage(100);
+        btnSettings.ClientSideEvents.Click = "btnUpdatePauseOnClick";
+        btnSettings.Styles.Style.BackColor = System.Drawing.Color.IndianRed;
         btnSettings.Styles.Style.Paddings.Padding = 0;
-
     });
 
+    groupBtn.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+        itemSettings.Caption = "";
 
-
+        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+        btnSettings.Name = "btnPauseCancel";
+        btnSettings.Text = "Cancel";
+        btnSettings.Width = Unit.Percentage(100);
+        btnSettings.ClientSideEvents.Click = "btnCancelPauseOnClick";
+        btnSettings.Styles.Style.BackColor = System.Drawing.Color.Gray;
+        btnSettings.Styles.Style.Paddings.Padding = 0;
+    });
 
 }).GetHtml()
 

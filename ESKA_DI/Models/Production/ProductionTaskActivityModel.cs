@@ -56,8 +56,12 @@ namespace Models.Production
     public class ProductionActivityPauseModel
     {
         public long? Id { get; set; }
+
         public long? DetId { get; set; }
+        
+        [Required(ErrorMessage = "required")]
         public string PauseReason { get; set; }
+        
         public string PauseComments { get; set; }
     }
 
@@ -99,34 +103,85 @@ namespace Models.Production
         AND T0.""Id"" = :p0
         ";
 
-        public void PauseActivity(int userId, int id)
-        {
-            SetStatus(userId, id, "Start");
-
-        }
-
-        public void StartActivity(int userId, int id)
-        {
-            SetStatus(userId, id, "Paused");
-        }
-
         public ProductionTaskActivityModel GetNewModel(int userId, long id)
         {
-            ProductionTaskActivityModel model = this.GetById(userId, id); 
+            ProductionTaskActivityModel model = this.GetById(userId, id);
 
-            model.UserId = userId; 
+            model.UserId = userId;
             return model;
         }
 
-        public void SetStatus(int userId, long id, string status)
+        public void PauseActivity(int userId, ProductionActivityPauseModel model)
         {
-            throw new NotImplementedException();
+            SetStatus(userId, model, "pause");
+        }
 
-            //using (var CONTEXT = new HANA_APP())
-            //{
-            //    string ssql = @"UPDATE ""Tx_ProductionTask_Activity"" SET ""Status"" = :p1 WHERE ""Id"" = :p0";
-            //    CONTEXT.Database.ExecuteSqlCommand(ssql, id, status);
-            //}
+        public void StartActivity(int userId, ProductionActivityPauseModel model)
+        {
+            SetStatus(userId, model, "start");
+        }
+
+        public void SetStatus(int userId, ProductionActivityPauseModel model, string status)
+        {
+            string detailType = status == "pause" ? "Paused" : "OnProgres";
+            if (model != null)
+            {
+                using (var CONTEXT = new HANA_APP())
+                {
+                    using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", status, "Id", model.DetId.ToString());
+
+                            DateTime dtModified = DateTime.Now;
+                            Tx_ProductionTask_Activity tx_ProductionTask_Activity = CONTEXT.Tx_ProductionTask_Activity.FirstOrDefault(x => x.DetId == model.DetId);
+                            if (tx_ProductionTask_Activity != null)
+                            {
+                                tx_ProductionTask_Activity.Status = detailType;
+                                tx_ProductionTask_Activity.ModifiedDate = dtModified;
+                                tx_ProductionTask_Activity.ModifiedUser = userId;
+
+                                var lastDetail = CONTEXT.Tx_ProductionTask_Activity_Detail
+                                    .Where(x => x.DetId == model.DetId)
+                                    .OrderByDescending(x => x.DetDetId)
+                                    .FirstOrDefault();
+                                if (lastDetail != null)
+                                {
+                                    lastDetail.EndTime = dtModified;
+                                    lastDetail.ModifiedDate = dtModified;
+                                    lastDetail.ModifiedUser = userId;
+                                }
+
+                                Tx_ProductionTask_Activity_Detail tx_ProductionTask_Activity_Detail = new Tx_ProductionTask_Activity_Detail
+                                {
+                                    Id = model.Id,
+                                    DetId = model.DetId,
+                                    DetailType = detailType,
+                                    PauseType = model.PauseReason,
+                                    Comments = model.PauseComments,
+                                    StartTime = dtModified,
+                                    CreatedDate = dtModified,
+                                    CreatedUser = userId,
+                                    ModifiedDate = dtModified,
+                                    ModifiedUser = userId
+                                };
+                                CONTEXT.Tx_ProductionTask_Activity_Detail.Add(tx_ProductionTask_Activity_Detail);
+
+                            }
+
+                            CONTEXT.SaveChanges();
+                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", status, "Id", model.DetId.ToString());
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch
+                        {
+                            CONTEXT_TRANS.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
         }
 
         public ProductionTaskActivityModel GetById(int userId, long id = 0, string method = "")
@@ -145,6 +200,16 @@ namespace Models.Production
             return model;
         }
 
+        public ProductionActivityPauseModel GetPauseModel(long id, long detId)
+        {
+            ProductionActivityPauseModel model = new ProductionActivityPauseModel()
+            {
+                Id = id,
+                DetId = detId
+            };
+
+            return model; 
+        }
         public void FinishActivity(int userId, ProductionActivityFinishModel model)
         {
             if (model != null)

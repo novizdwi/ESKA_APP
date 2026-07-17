@@ -820,6 +820,7 @@
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.Detail.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Pause.cs" />
     <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Finish.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Oustanding.cs" />

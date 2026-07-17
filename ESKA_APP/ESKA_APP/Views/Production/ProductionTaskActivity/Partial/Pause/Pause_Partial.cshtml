@@ -1,4 +1,4 @@
-﻿@using (Ajax.BeginForm("mantap", "TransferIn", null,
+﻿@using (Ajax.BeginForm("mantap", "ProductionTaskActivity", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -6,21 +6,20 @@ new AjaxOptions
     OnSuccess = "OnSuccessMsgBox",
     OnFailure = "OnFailure",
     OnComplete = "OnComplete",
-    UpdateTargetId = "CancelReason_contentForm",
+    UpdateTargetId = "Pause_contentForm",
     InsertionMode = InsertionMode.Replace,
 
 },
 new
 {
-    id = "CancelReason_formDetail",
+    id = "Pause_formDetail",
     @class = "edit_form",
     style = "height: 200px; width: 100%;",
     autocomplete = "off"
 }))
 {
-    <div id="CancelReason_contentForm">
-        @Html.Partial("Partial/CancelReason/CancelReason_Panel_Partial")
+    <div id="Pause_contentForm">
+        @Html.Partial("Partial/Pause/Pause_Panel_Partial")
 
     </div>
 }
-

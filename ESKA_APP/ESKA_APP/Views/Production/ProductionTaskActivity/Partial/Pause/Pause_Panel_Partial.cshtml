@@ -1,7 +1,7 @@
 ﻿@Html.DevExpress().PopupControl(settings =>
 {
-    settings.Name = "popupCancelReason";
-    settings.CallbackRouteValues = new { Controller = "TransferIn", Action = "CancelReason_PopupListOnDemandPartial" };
+    settings.Name = "popupPause";
+    settings.CallbackRouteValues = new { Controller = "ProductionTaskActivity", Action = "Pause_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -23,24 +23,22 @@
     settings.PopupAnimationType = AnimationType.Fade;
 
     settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
-    settings.ClientSideEvents.EndCallback = "popupCancelReason_EndCallback";
+    settings.ClientSideEvents.EndCallback = "popupPause_EndCallback";
     settings.PopupElementID = "ShowButton";
-    settings.HeaderText = "Cancel Reasons";
+    settings.HeaderText = "Pause Activity";
 
     settings.SetContent(() =>
     {
-        Html.RenderPartial("Partial/CancelReason/CancelReason_Form_Partial");
+        Html.RenderPartial("Partial/Pause/Pause_Form_Partial");
 
     });
 
     settings.PreRender = (sender, e) =>
     {
         ASPxPopupControl popup = (ASPxPopupControl)sender;
-        //popup.Width = 1000;
-        //popup.Height =690;
 
-        popup.Width = 300;
-        popup.Height = 200;
+        popup.Width = 320;
+        popup.Height = 220;
     };
 
 
