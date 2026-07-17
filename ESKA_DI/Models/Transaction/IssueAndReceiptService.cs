@@ -360,6 +360,9 @@ namespace Models.Transaction
                         CONTEXT.SaveChanges();
                         Id = ent.Id;
 
+                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_AddItemDetail\"(:p0,:p1,:p2, :p3,'Add')", model._UserId, Id, model.BaseProcessCardId, model.BaseProcessCardSort);
+
+
                         CONTEXT_TRANS.Commit();
                     }
                     catch (Exception ex)

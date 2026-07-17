@@ -8,6 +8,9 @@
         Id = ViewBag.Id;
     }
 
+    // Kolom Mesin Production & Department hanya bisa di-edit saat dokumen masih Draft.
+    bool isDraft = ViewBag.ReadOnly != null && !(bool)ViewBag.ReadOnly;
+
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -178,8 +181,11 @@
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 120;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = true;
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.ReadOnly = !isDraft;
+        if (!isDraft)
+        {
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
@@ -195,8 +201,11 @@
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 120;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = true;
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.ReadOnly = !isDraft;
+        if (!isDraft)
+        {
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;

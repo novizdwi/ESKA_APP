@@ -23,6 +23,9 @@ namespace Controllers.Transaction
             var Id = Convert.ToInt64(Request["cbId"]);
             List<IssueReceipt_IssueItemModel> modelList = issueAndReceiptService.IssueAndReceipt_IssueItemDetails(Id);
 
+            var header = issueAndReceiptService.GetById(userId, Id);
+            ViewBag.ReadOnly = header == null || header.Status != "Draft";
+
             return PartialView(VIEW_TAB_CONTENT_Issue, modelList);
         }
 
@@ -34,6 +37,9 @@ namespace Controllers.Transaction
 
             var Id = Convert.ToInt64(Request["cbId"]);
             List<IssueReceipt_ReceiptItemModel> modelList = issueAndReceiptService.IssueAndReceipt_ReceiptItemDetails(Id);
+
+            var header = issueAndReceiptService.GetById(userId, Id);
+            ViewBag.ReadOnly = header == null || header.Status != "Draft";
 
             return PartialView(VIEW_TAB_CONTENT_Receipt, modelList);
         }
