@@ -7,7 +7,7 @@
 @Html.DevExpress().TextBox(
         settings =>
         {
-            settings.Name = "Id";
+            settings.Name = "Receipt_Id";
             settings.ControlStyle.CssClass = "editor";
             settings.ClientVisible = false;
         }
@@ -16,7 +16,7 @@
 @Html.DevExpress().TextBox(
         settings =>
         {
-            settings.Name = "DetId";
+            settings.Name = "Receipt_DetId";
             settings.ControlStyle.CssClass = "editor";
             settings.ClientVisible = false;
         }
@@ -24,7 +24,7 @@
 
 @Html.DevExpress().HyperLink(settingsHL =>
 {
-    settingsHL.Name = "ViewBatchComponent_btnCancel";
+    settingsHL.Name = "ViewReceiptBatchComponent_btnCancel";
     settingsHL.NavigateUrl = "javascript:void(0)";
     settingsHL.Properties.Text = "Cancel";
     settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewReceiptBatch_OnClickBtnCancel(s, e) }";
@@ -34,7 +34,7 @@
 
 @Html.DevExpress().FormLayout(settings =>
 {
-    settings.Name = "ViewBatch_formLayout";
+    settings.Name = "ViewReceiptBatch_formLayout";
     settings.EncodeHtml = false;
     settings.Width = Unit.Percentage(100);
     settings.AlignItemCaptionsInAllGroups = true;
@@ -87,12 +87,12 @@
 
     groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "BaseDocNum";
+        itemSettings.Name = "Receipt_BaseDocNum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "No";
         itemSettings.FieldName = "BaseDocNum";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "BaseDocNum";
+        txt.Name = "Receipt_BaseDocNum";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
@@ -102,12 +102,12 @@
 
     groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "ItemCode";
+        itemSettings.Name = "Receipt_ItemCode";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Item Code";
         itemSettings.FieldName = "ItemCode";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "ItemCode";
+        txt.Name = "Receipt_ItemCode";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
@@ -117,12 +117,12 @@
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "WhsCode";
+        itemSettings.Name = "Receipt_WhsCode";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Whs Code";
         itemSettings.FieldName = "WhsCode";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "WhsCode";
+        txt.Name = "Receipt_WhsCode";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
@@ -133,12 +133,12 @@
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "ItemName";
+        itemSettings.Name = "Receipt_ItemName";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Item Name";
         itemSettings.FieldName = "ItemName";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "ItemName";
+        txt.Name = "Receipt_ItemName";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
@@ -158,7 +158,7 @@
 
         group.Items.Add(item =>
         {
-            item.Name = "ViewApproval_TabViewBatchContent";
+            item.Name = "ViewReceiptApproval_TabViewBatchContent";
             item.Caption = "       Receipt Batch List      ";
 
             item.SetNestedContent(() =>
@@ -206,7 +206,7 @@
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
         var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
 
-        btnSettings.Name = "btnCancelViewBatch";
+        btnSettings.Name = "btnCancelReceiptViewBatch";
         btnSettings.Text = "Close";
         btnSettings.Width = 120;
 
