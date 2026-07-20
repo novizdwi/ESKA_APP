@@ -70,6 +70,27 @@
         }, 1000);
 
     }
+
+    function AdjustGridViewHeight() {
+        var gridEl = document.getElementById('gvProductionScheduleReferenceDetail');
+        if (!gridEl) return;
+
+        var top = gridEl.getBoundingClientRect().top;
+        var bottomMargin = 50;
+        var target = window.innerHeight - top - bottomMargin;
+        if (target < 150) target = 150;
+
+        setGridHeight(target);
+
+        setTimeout(function () {
+            var overflow = document.documentElement.scrollHeight - window.innerHeight;
+            if (overflow > 0) {
+                var corrected = Math.max(target - overflow - 2, 150);
+                setGridHeight(corrected);
+                console.log('corrected height:', corrected, 'overflow was:', overflow);
+            }
+        }, 50);
+    }
 </script>
 
 
@@ -162,12 +183,47 @@
     }
 
     function getFormData() {
-        //var formData = $('#formDetail').serializeObject();
+        if (typeof gvProductionScheduleReferenceDetail !== 'undefined') {
+            gvProductionScheduleReferenceDetail.batchEditApi.EndEdit();
+        }
+        return GetGvDetails('gvProductionScheduleReferenceDetail') || {};
+    }
 
-        var Details_ = GetGvDetails('gvProductionScheduleReferenceDetail');
-        //$.extend(formData, { Details_ : Details_ });
+    // DETAIL (operator) saja -> array
+    function getFormDataDetail() {
+        // pastikan editor grid detail commit dulu
+        (window.detailGrids || []).forEach(function (name) {
+            var g = ASPxClientGridView.Cast(name);
+            if (g) g.batchEditApi.EndEdit();
+        });
 
-        return Details_;
+        var operators = [];
+        for (var k in window.operatorChanges) {
+            if (window.operatorChanges.hasOwnProperty(k)) operators.push(window.operatorChanges[k]);
+        }
+        return operators;
+    }
+
+    function OnClickBtnSave(s, e) {
+        var formData = getFormData();                              // master (root)
+        formData.OperatorsJson = JSON.stringify(getFormDataDetail()); // detail (1 field string)
+
+        console.log("master:", formData, "operators:", getFormDataDetail());
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Update", "ProductionSchedule")',
+            data: formData,
+            beforeSend: function () { OnBegin(); },
+            success: function (response) {
+                RefreshAfterSuccess(response);
+                OnSuccessMsgBox();
+                window.operatorChanges = {};        // reset setelah sukses
+                OnClickBtnRefresh(s, e);
+            },
+            error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
+            complete: function () { OnComplete(); }
+        });
     }
 
     function RefreshAfterSuccess(response) {
@@ -181,32 +237,6 @@
         $.validator.unobtrusive.parse("#formDetail");
 
         MVCxClientUtils.FinalizeCallback();
-
-    }
-
-    function OnClickBtnSave(s, e) {
-        var formData = getFormData(); 
-
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Update", "ProductionSchedule")',
-            data: formData,
-            beforeSend: function () {
-                OnBegin();
-            },
-            success: function (response) {
-                RefreshAfterSuccess(response);
-                OnSuccessMsgBox();
-                OnClickBtnRefresh(s, e);
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
-            },
-            complete: function () {
-                OnComplete()
-
-            }
-        });
 
     }
 
@@ -253,26 +283,7 @@
     function gvProductionScheduleReferenceDetailEndCallback(s, e) {
         AdjustGridViewHeight();
     }
-    function AdjustGridViewHeight() {
-        var gridEl = document.getElementById('gvProductionScheduleReferenceDetail');
-        if (!gridEl) return;
 
-        var top = gridEl.getBoundingClientRect().top;
-        var bottomMargin = 50;
-        var target = window.innerHeight - top - bottomMargin;
-        if (target < 150) target = 150;
-
-        setGridHeight(target);
-
-        setTimeout(function () {
-            var overflow = document.documentElement.scrollHeight - window.innerHeight;
-            if (overflow > 0) {
-                var corrected = Math.max(target - overflow - 2, 150);
-                setGridHeight(corrected);
-                console.log('corrected height:', corrected, 'overflow was:', overflow);
-            }
-        }, 50);
-    }
 
     function setGridHeight(height) {
         if (typeof gvProductionScheduleReferenceDetail !== 'undefined') {
@@ -315,7 +326,7 @@
     }
     function UpdateSelectAllItemState() {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
-    }
+    }   
     function IsAllSelected() {
         for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
@@ -350,6 +361,56 @@
                 actualValues.push(item.value);
         }
         return actualValues;
+    }
+
+    window.detailGrids = window.detailGrids || [];
+    window.operatorChanges = window.operatorChanges || {};
+    window.curEditIndex = -1;
+     
+    function gvDetailOnInit(s, e) {
+        if (window.detailGrids.indexOf(s.name) === -1) window.detailGrids.push(s.name);
+    }
+
+    function gvDetailBatchStartEditing(s, e) {
+        if (e.focusedColumn && e.focusedColumn.fieldName === "OperatorId") {
+            var taskId = s.batchEditApi.GetCellValue(e.visibleIndex, "ProductionTaskId");
+            var status = s.batchEditApi.GetCellValue(e.visibleIndex, "ProductionStatus");
+            var hasTask = (taskId !== null && taskId !== "" && typeof taskId !== "undefined");
+            if (hasTask && status !== "Closed") { e.cancel = true; return; }
+        }
+        window.curEditIndex = e.visibleIndex;
+    }
+
+    // TANGKAP operator ke map saat combo berubah
+    function gvOperatorOnChanged(s, e, gridName) {
+        var grid = ASPxClientGridView.Cast(gridName);
+        if (!grid) return;
+        var idx = window.curEditIndex;
+        if (idx === null || typeof idx === "undefined" || idx < 0) return;
+
+        grid.batchEditApi.SetCellValue(idx, "OperatorId", s.GetValue());
+        grid.batchEditApi.SetCellValue(idx, "OperatorName", s.GetText());
+
+        var id = grid.batchEditApi.GetCellValue(idx, "Id");
+        var detId = grid.batchEditApi.GetCellValue(idx, "DetId");
+        var taskId = grid.batchEditApi.GetCellValue(idx, "ProductionTaskId");
+        var taskStat = grid.batchEditApi.GetCellValue(idx, "ProductionStatus");
+
+        window.operatorChanges[id + "_" + detId] = {
+            Id: id,
+            DetId: detId,
+            ProductionTaskId: taskId,
+            ProductionTaskStatus: taskStat,
+            OperatorId: s.GetValue(),
+            OperatorName: s.GetText()
+        };
+    }
+
+
+    // reset map operator setelah sukses simpan (panggil di dalam success OnClickBtnSave,
+    // atau tambahkan baris ini di RefreshAfterSuccess)
+    function ResetOperatorChanges() {
+        window.operatorChanges = {};
     }
 
 </script>

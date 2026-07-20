@@ -58,17 +58,21 @@ namespace Controllers.Production
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] ProductionSchedule_Detail productionScheduleModel)
+        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] ProductionSchedule_Detail model, string OperatorsJson = "")
         {
             int userId = (int)Session["userId"];
+            model.UserId = userId;
 
-            productionScheduleModel.UserId = (int)Session["userId"];
+            var operators = string.IsNullOrWhiteSpace(OperatorsJson)
+                ? new List<ProductionScheduleOperatorModel>()
+                : new System.Web.Script.Serialization.JavaScriptSerializer()
+                      .Deserialize<List<ProductionScheduleOperatorModel>>(OperatorsJson);
+
             productionScheduleService = new ProductionScheduleService();
+            productionScheduleService.Update(model, operators, userId);
 
-            productionScheduleService.Update(productionScheduleModel);
-            ProductionScheduleModel model = productionScheduleService.GetNewModel(userId);
-
-            return PartialView(VIEW_FORM_PARTIAL, model);
+            var refreshed = productionScheduleService.GetNewModel(userId);
+            return PartialView(VIEW_FORM_PARTIAL, refreshed);
         }
     }
 }

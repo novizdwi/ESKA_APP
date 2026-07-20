@@ -2,12 +2,13 @@
 @using Models._Utils;
 
 @{ 
-    ViewBag.ReadOnly = true; 
+    ViewBag.ReadOnly = true;
+    string gridName = "gvProductionScheduleReferenceDetail_" + ViewData["Id"];
 }
 
 @Html.DevExpress().GridView(settings =>
 {
-    settings.Name = "gvProductionScheduleReferenceDetail_" + ViewData["Id"];
+    settings.Name = gridName;
     settings.KeyFieldName = "DetId";
     settings.SettingsDetail.MasterGridName = "grid";
     settings.CallbackRouteValues = new { Controller = "ProductionSchedule", Action = "TabReferenceDetailListPartial" , Id = ViewData["Id"] };
@@ -41,8 +42,26 @@
 
 
     settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
-    settings.Columns.Add("Id", "Id").Visible = false;
-    settings.Columns.Add("DetId", "DetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Id";
+        column.Name = "Id";
+        column.Caption = "Id";
+        column.Width = 0;
+
+    });    
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetId";
+        column.Name = "DetId";
+        column.Caption = "DetId";
+        column.Width = 0;
+
+    });
+
+    settings.Columns.Add("ProductionTaskId", "ProductionTaskId").Visible = false;
 
     settings.Columns.Add(column =>
     {
@@ -118,7 +137,7 @@
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-    }); 
+    });
 
     settings.Columns.Add(column =>
     {
@@ -160,19 +179,30 @@
 
     settings.Columns.Add(column =>
     {
+        column.FieldName = "OperatorId";
+        column.Name = "OperatorId";
+        column.Caption = "Operator";
+        column.Width = 150;
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.TextField = "Name";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);   // ikuti Code dari GetAllOperators
+        cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators();
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        // kirim nama grid supaya handler tahu grid mana (nama grid dinamis per master row)
+        cbo.ClientSideEvents.SelectedIndexChanged = "function(s, e){ gvOperatorOnChanged(s, e, '" + gridName + "'); }";
+    });
+
+    settings.Columns.Add(column =>
+    {
         column.FieldName = "OperatorName";
         column.Name = "OperatorName";
         column.Caption = "Operator Name";
-        column.Width = 120;
-
+        column.Width = 0;
         column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.ReadOnly = true;
-        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        column.CellStyle.ForeColor = System.Drawing.Color.Black;
-        //column.EditFormSettings.Visible = DefaultBoolean.False;
-
+        column.ReadOnly = false;
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
     });
@@ -220,5 +250,20 @@
 
     settings.Settings.ShowFooter = true;
 
+    settings.HtmlDataCellPrepared = (sender, e) =>
+    {
+        var gv = sender as MVCxGridView;
+        if (gv == null) return;
+
+        var status = gv.GetRowValues(e.VisibleIndex, "ProductionStatus") as string;
+
+        if (string.Equals(status, "Closed", StringComparison.OrdinalIgnoreCase))
+        {
+            e.Cell.BackColor = System.Drawing.Color.LightGray;
+        }
+    };
+
+    settings.ClientSideEvents.Init = "gvDetailOnInit";
+    settings.ClientSideEvents.BatchEditStartEditing = "gvDetailBatchStartEditing";
 }).Bind(Model).GetHtml()
 

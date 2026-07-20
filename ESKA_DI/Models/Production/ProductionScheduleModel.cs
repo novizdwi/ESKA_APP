@@ -73,6 +73,8 @@ namespace Models.Production
         public int? Id {get; set;}
         
         public int? DetId { get; set; }
+
+        public long? ProductionTaskId { get; set; }
         
         public int? DocEntry { get; set; }
         
@@ -84,14 +86,14 @@ namespace Models.Production
 
         public string Uom { get; set; }
 
-        public int? ProductionTaskId { get; set; }
-
         public string ProductionTaskTransNo { get; set; }
 
         public int? Sort { get; set; }
         
         public string RoutingName { get; set; }
-        
+
+        public int? OperatorId { get; set; }
+
         public string OperatorName { get; set; }
         
         public DateTime? ProcessingDate { get; set; }
@@ -124,7 +126,15 @@ namespace Models.Production
         public decimal? QuantityPlanned { get; set; } 
         public string Uom { get; set; } 
     }
-
+    public class ProductionScheduleOperatorModel
+    {
+        public long? Id { get; set; }          // ProcessCard_Detail.Id  (= Tx_ProductionTask.BaseId)
+        public long? DetId { get; set; }       // ProcessCard_Detail.DetId (= Tx_ProductionTask.BaseDetId)
+        public long? ProductionTaskId { get; set; }
+        public string ProductionTaskStatus { get; set; }
+        public int? OperatorId { get; set; }
+        public string OperatorName { get; set; }
+    }
     #endregion
 
     #region Services
@@ -196,10 +206,16 @@ namespace Models.Production
         {
             string ssql = @"
                 SELECT T0.*,
+                    T0.""Id"" AS ""Id"",
+                    T0.""DetId"" AS ""DetId"",
+                    T0.""OperatorId"" AS ""OperatorId"",
+                    T0.""OperatorName"" AS ""OperatorName"",
+
                     T1.""ItemCode"",
                     T1.""ProdName"" AS ""ItemName"",
                     T1.""PlannedQty"" AS ""PlannedQty"",
                     T1.""Uom"" AS ""Uom"",
+
                     T2.""Id"" AS ""ProductionTaskId"",
                     T2.""TransNo"" AS ""ProductionTaskTransNo"",
                     T2.""Status"" AS ""ProductionStatus""
@@ -214,54 +230,87 @@ namespace Models.Production
         }
 
 
-        public void Update(ProductionSchedule_Detail model)
+        public void Update(ProductionSchedule_Detail model, List<ProductionScheduleOperatorModel> operators, int userId)
         {            
-            if (model != null)
+            using (var CONTEXT = new HANA_APP())
             {
-                using (var CONTEXT = new HANA_APP())
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
                 {
-                    using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                    try
                     {
-                        try
-                        {  
-                            if(model.modifiedRowValues != null )
-                            {
-                                SpNotif.SpSysControllerTransNotif((int)model.UserId, "ProductionSchedule", CONTEXT, "before", "ProductionSchedule", "update", "Id", "0");
-                                if (model.modifiedRowValues.Count > 0)
-                                {
-                                    foreach (var detail in model.modifiedRowValues)
-                                    {
-                                        UpdateDetail(CONTEXT, (int)model.UserId, detail);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-                                    }
-                                    CONTEXT.SaveChanges();
-                                }
-                                SpNotif.SpSysControllerTransNotif((int)model.UserId, "ProductionSchedule", CONTEXT, "after", "ProductionSchedule", "update", "Id", "0");
-                                CONTEXT_TRANS.Commit();
-                            } 
-                        }
-
-                        catch (Exception ex)
+                        SpNotif.SpSysControllerTransNotif(userId, "ProductionSchedule", CONTEXT, "before", "ProductionSchedule", "update", "Id", "0");
+                        if (model != null && model.modifiedRowValues != null)
                         {
-                            CONTEXT_TRANS.Rollback();
-
-                            string errorMassage;
-                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            foreach (var detail in model.modifiedRowValues)
                             {
-                                errorMassage = ex.Message;
+                                UpdateDetail(CONTEXT, userId, detail);
                             }
-                            else
-                            {
-                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
-                            }
-
-                            throw new Exception(errorMassage);
                         }
+
+                        if (operators != null)
+                        {
+                            foreach (var op in operators)
+                            {
+                                if (op.Id == null || op.DetId == null) continue;
+
+                                long id = op.Id.Value;
+                                long detId = op.DetId.Value;
+
+                                var detail = CONTEXT.Tx_ProcessCard_Detail.FirstOrDefault(x => x.Id == id && x.DetId == detId);
+                                if (detail == null) continue;
+
+                                // ambil task dari DB -> sekaligus dapat ProductionTaskId & status terkini
+                                var task = CONTEXT.Tx_ProductionTask.FirstOrDefault(x => x.BaseId == id && x.BaseDetId == detId);
+                                op.ProductionTaskId = task != null ? (long?)task.Id : null;   // isi ProductionTaskId di model
+
+                                // RULE 1: task ada & belum Closed -> skip
+                                if (task != null && string.Equals(task.Status, "Closed", StringComparison.OrdinalIgnoreCase))
+                                    continue;
+
+                                // RULE 2 & 3: update Tx_ProcessCard_Detail
+                                detail.OperatorId = op.OperatorId;
+                                detail.OperatorName = op.OperatorName;
+                                detail.ModifiedDate = dtModified;
+                                detail.ModifiedUser = userId;
+
+                                // RULE 3: task ada (Closed) -> update Tx_ProductionTask juga
+                                if (task != null)
+                                {
+                                    task.OperatorId = op.OperatorId;
+                                    task.OperatorName = op.OperatorName;
+                                    task.ModifiedDate = dtModified;
+                                    task.ModifiedUser = userId;
+                                }
+                            }
+                        }
+
+
+                        CONTEXT.SaveChanges();
+
+                        SpNotif.SpSysControllerTransNotif(userId, "ProductionSchedule", CONTEXT, "after", "ProductionSchedule", "update", "Id", "0");
+                        CONTEXT_TRANS.Commit();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
                     }
                 }
             }
-
-
         }
 
         private void UpdateDetail(HANA_APP CONTEXT, int userId, ProductionSchedule_ReferenceModel model)
