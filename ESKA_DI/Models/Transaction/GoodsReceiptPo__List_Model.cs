@@ -25,6 +25,10 @@ namespace Models.Transaction
         public DateTime? TransDate_To { get; set; }
     }
 
+    // Properti di bawah harus cocok dengan kolom nyata pada "Tx_GoodsReceiptPO".
+    // Sebelumnya kelas ini memuat kolom gudang (WhsCode/WhsName/TransitWhs*/ToWhs*/
+    // ApprovalStatus/StartDate/EndDate) sisa salinan dari modul lain -- kolom itu
+    // tidak ada di tabel GRPO sehingga selalu null dan kolom grid tampil kosong.
     public class GoodsReceiptPoView___
     {
         public long Id { get; set; }
@@ -33,29 +37,13 @@ namespace Models.Transaction
 
         public DateTime? TransDate { get; set; }
 
-        public string WhsCode { get; set; }
+        public string VendorCode { get; set; }
 
-        public string WhsName { get; set; }
+        public string VendorName { get; set; }
 
-        public string TransitWhsCode { get; set; }
-
-        public string TransitWhsName { get; set; }
-
-        public string ToWhsCode { get; set; }
-
-        public string ToWhsName { get; set; }
-
-        public DateTime? DocDate { get; set; }
-
-        public string DocNum { get; set; }
+        public string RefNo { get; set; }
 
         public string Status { get; set; }
-
-        public string ApprovalStatus { get; set; }
-
-        public DateTime? StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
 
     }
 
@@ -256,9 +244,9 @@ namespace Models.Transaction
             settings.Columns.Add("Id").Visible = false;
             settings.Columns.Add("TransNo", "No. Dokumen");
             settings.Columns.Add("TransDate", "Trans Date");
-            settings.Columns.Add("WhsCode", "Vendor Code");
-            settings.Columns.Add("WhsName", "Vendor Name");
-            settings.Columns.Add("DocNum", "Doc Num");
+            settings.Columns.Add("VendorCode", "Vendor Code");
+            settings.Columns.Add("VendorName", "Vendor Name");
+            settings.Columns.Add("RefNo", "Vendor Ref No");
             settings.Columns.Add("Status", "Status");
             return settings;
         }
