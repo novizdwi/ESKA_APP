@@ -1,7 +1,7 @@
 ﻿@Html.DevExpress().PopupControl(settings =>
 {
     settings.Name = "popupCancelReason";
-    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "CancelReason_PopupListOnDemandPartial" };
+    settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "CancelReason_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;

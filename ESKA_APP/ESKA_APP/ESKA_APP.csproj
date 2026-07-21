@@ -860,6 +860,8 @@
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.ViewReceiptBatch.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.List.cs" />
+    <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
     <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
