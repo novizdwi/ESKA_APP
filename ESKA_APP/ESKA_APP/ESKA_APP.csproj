@@ -498,6 +498,7 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
     <Content Include="Scripts\SQLs\Create Schema.sql" />
     <Content Include="Scripts\SQLs\Insert Into.sql" />
     <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
@@ -732,6 +733,10 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Scale\Scale_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Scale\Scale_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Scale\Scale_Partial.cshtml" />
+    <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Scale\Scale_TabScaleList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
@@ -854,6 +859,7 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Nav.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewScale.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.WorkOrder.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.ViewIssueBatch.cs" />

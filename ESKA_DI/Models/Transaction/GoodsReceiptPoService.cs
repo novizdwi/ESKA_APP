@@ -273,6 +273,55 @@ namespace Models.Transaction
 
     }
 
+    public class GoodsReceiptPoScaleView___
+    {
+        public long Id { get; set; }
+
+        public long DetId { get; set; }
+
+        public long DetDetId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string Uom { get; set; }
+
+        public int? LineNum { get; set; }
+
+        public List<GoodsReceiptPoScaleModel> GoodsReceiptPoScaleModel___ { get; set; }
+    }
+
+    public class GoodsReceiptPoScaleModel
+    {
+        public int? RowNo { get; set; }
+
+        public int _UserId { get; set; }
+
+        public long? DetDetId { get; set; }
+
+        public long? DetDetDetId { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public string Uom { get; set; }
+
+        public decimal? Netto { get; set; }
+
+        public int? LineNum { get; set; }
+
+        public string LineStatus { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
+        public int? CreatedUser { get; set; }
+
+        public int? ModifiedUser { get; set; }
+
+    }
+
     public class GRPOAddResultModel
     {
         public long? DocEntry { get; set; }
@@ -1663,6 +1712,17 @@ namespace Models.Transaction
 
                         DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
+                        // Nomor urut per item: lanjut dari LineNum terakhir pada DetId ini (mulai 1).
+                        // Di-set ke entity (bukan model) karena model.LineNum bertipe long? sedangkan
+                        // entity int? -- CopyProperties memakai reflection tanpa konversi tipe.
+                        int? maxLineNum = CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_GoodsReceiptPO_Item_Batch\" WHERE \"DetId\"=:p0", model.DetId).FirstOrDefault();
+                        tx_GoodsReceiptPO_Item_Batch.LineNum = (maxLineNum ?? 0) + 1;
+
+                        if (string.IsNullOrEmpty(tx_GoodsReceiptPO_Item_Batch.LineStatus))
+                        {
+                            tx_GoodsReceiptPO_Item_Batch.LineStatus = "O";
+                        }
+
                         tx_GoodsReceiptPO_Item_Batch.CreatedDate = dtModified;
                         tx_GoodsReceiptPO_Item_Batch.CreatedUser = model._UserId;
                         tx_GoodsReceiptPO_Item_Batch.ModifiedDate = dtModified;
@@ -1722,7 +1782,9 @@ namespace Models.Transaction
 
                         if (tx_GoodsReceiptPO_Item_Batch != null)
                         {
-                            var exceptColumns = new string[] { "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            // LineNum & LineStatus di-generate server-side dan tidak dikirim grid.
+                            // Tanpa dikecualikan, CopyProperties akan menimpanya dengan null tiap kali edit.
+                            var exceptColumns = new string[] { "DetId", "DetDetId", "LineNum", "LineStatus", "CreatedUser", "CreatedDate" };
                             CopyProperty.CopyProperties(model, tx_GoodsReceiptPO_Item_Batch, false, exceptColumns);
 
                             tx_GoodsReceiptPO_Item_Batch.ModifiedDate = dtModified;
@@ -1798,6 +1860,208 @@ namespace Models.Transaction
                 }
             }
         }
+
+        #region Scale (Timbangan)
+
+        public GoodsReceiptPoScaleView___ GetScale(long id, long detId, long detDetId)
+        {
+            string sql = null;
+            GoodsReceiptPoScaleView___ model = new GoodsReceiptPoScaleView___();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT T0.""Id"",
+                                T1.""DetId"",
+                                T2.""DetDetId"",
+                                T1.""ItemCode"",
+                                T1.""ItemName"",
+                                T1.""Uom"",
+                                T2.""LineNum""
+                                FROM ""Tx_GoodsReceiptPO"" T0
+                                LEFT JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""Id"" = T1.""Id""
+                                LEFT JOIN ""Tx_GoodsReceiptPO_Item_Batch"" T2 ON T1.""DetId"" = T2.""DetId""
+                                WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 AND T2.""DetDetId"" = :p2 ";
+
+                model = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleView___>(sql, id, detId, detDetId).FirstOrDefault();
+
+                if (model == null)
+                {
+                    model = new GoodsReceiptPoScaleView___();
+                    model.Id = id;
+                    model.DetId = detId;
+                    model.DetDetId = detDetId;
+                }
+
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                            FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" T0
+                            WHERE ""DetDetId"" = :p0 ";
+
+                model.GoodsReceiptPoScaleModel___ = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleModel>(sql, detDetId).ToList();
+            }
+
+            return model;
+        }
+
+        public List<GoodsReceiptPoScaleModel> GoodsReceiptPo__ItemBatchScaleList(long detDetId)
+        {
+            string sql = null;
+            List<GoodsReceiptPoScaleModel> model = new List<GoodsReceiptPoScaleModel>();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                            FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" T0
+                            WHERE ""DetDetId"" = :p0 ";
+
+                model = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleModel>(sql, detDetId).ToList();
+            }
+            return model;
+        }
+
+        public long GoodsReceiptPo_AddNewItemBatchScale(GoodsReceiptPoScaleModel model)
+        {
+            long detDetDetId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_GoodsReceiptPO_Item_Batch_Scale tx_Scale = new Tx_GoodsReceiptPO_Item_Batch_Scale();
+
+                        // DetDetDetId = PK identity, jangan disalin dari model.
+                        var exceptColumns = new string[] { "DetDetDetId" };
+                        CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        // Sequence otomatis: lanjut dari LineNum terakhir pada batch ini (mulai dari 1).
+                        int? maxLineNum = CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\" WHERE \"DetDetId\"=:p0", model.DetDetId).FirstOrDefault();
+                        tx_Scale.LineNum = (maxLineNum ?? 0) + 1;
+
+                        // Uom default mengikuti item induk bila tidak diisi.
+                        if (string.IsNullOrEmpty(tx_Scale.Uom))
+                        {
+                            tx_Scale.Uom = CONTEXT.Database.SqlQuery<string>(@"SELECT T1.""Uom"" AS IDU
+                                        FROM ""Tx_GoodsReceiptPO_Item_Batch"" T0
+                                        INNER JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""DetId"" = T1.""DetId""
+                                        WHERE T0.""DetDetId""=:p0 ", model.DetDetId).FirstOrDefault();
+                        }
+
+                        if (string.IsNullOrEmpty(tx_Scale.LineStatus))
+                        {
+                            tx_Scale.LineStatus = "O";
+                        }
+
+                        tx_Scale.CreatedDate = dtModified;
+                        tx_Scale.CreatedUser = model._UserId;
+                        tx_Scale.ModifiedDate = dtModified;
+                        tx_Scale.ModifiedUser = model._UserId;
+
+                        CONTEXT.Tx_GoodsReceiptPO_Item_Batch_Scale.Add(tx_Scale);
+                        CONTEXT.SaveChanges();
+                        detDetDetId = tx_Scale.DetDetDetId;
+
+                        UpdateBatchNettoFromScale(CONTEXT, model._UserId, model.DetDetId ?? 0);
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+                        throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                    }
+                }
+            }
+
+            return detDetDetId;
+        }
+
+        public void GoodsReceiptPo_UpdateItemBatchScale(GoodsReceiptPoScaleModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_GoodsReceiptPO_Item_Batch_Scale tx_Scale = CONTEXT.Tx_GoodsReceiptPO_Item_Batch_Scale.Find(model.DetDetDetId ?? 0);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (tx_Scale != null)
+                        {
+                            // LineNum (Sequence) di-generate server-side, jangan ditimpa dari grid.
+                            var exceptColumns = new string[] { "DetDetId", "DetDetDetId", "LineNum", "CreatedUser", "CreatedDate" };
+                            CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
+
+                            tx_Scale.ModifiedDate = dtModified;
+                            tx_Scale.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+
+                            UpdateBatchNettoFromScale(CONTEXT, model._UserId, tx_Scale.DetDetId ?? 0);
+                        }
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+                        throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                    }
+                }
+            }
+        }
+
+        public void GoodsReceiptPo_DeleteItemBatchScale(int _userId, long DetDetId, long DetDetDetId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetDetId != 0)
+                    {
+                        try
+                        {
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetDetId\"=:p0", DetDetDetId);
+                            CONTEXT.SaveChanges();
+
+                            UpdateBatchNettoFromScale(CONTEXT, _userId, DetDetId);
+
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+                            throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Netto pada baris Batch = jumlah Netto seluruh baris Scale miliknya.
+        private void UpdateBatchNettoFromScale(HANA_APP CONTEXT, int _userId, long detDetId)
+        {
+            if (detDetId == 0)
+            {
+                return;
+            }
+
+            CONTEXT.Database.ExecuteSqlCommand(
+                @"UPDATE ""Tx_GoodsReceiptPO_Item_Batch""
+                    SET ""Netto"" = COALESCE((SELECT SUM(""Netto"") FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" WHERE ""DetDetId""=:p0), 0)
+                    WHERE ""DetDetId""=:p1 ", detDetId, detDetId);
+
+            // Segarkan total di level item, pola sama dengan CRUD batch.
+            long? detId = CONTEXT.Database.SqlQuery<long?>("SELECT \"DetId\" AS IDU FROM \"Tx_GoodsReceiptPO_Item_Batch\" WHERE \"DetDetId\"=:p0", detDetId).FirstOrDefault();
+            if (detId.HasValue)
+            {
+                CONTEXT.Database.ExecuteSqlCommand("CALL \"SpGoodsReceiptPo_UpdateItemQuantity\"(:p0, 'Tx_GoodsReceiptPO_Item_Batch',:p1, :p2)", _userId, detId.Value, 0);
+            }
+        }
+
+        #endregion
 
     }
 

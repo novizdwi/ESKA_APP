@@ -3,3 +3,5 @@
 /ESKA_DI/bin/Debug
 /ESKA_DI/obj/Release
 /ESKA_APP/.claude
+/ESKA_APP/SAP HANA CLIENT 2.0 FOR B1
+/ESKA_APP/Scripts/SQLs/Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql
