@@ -117,55 +117,55 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
         }
 
-        //[HttpPost, ValidateInput(false)]
-        //public ActionResult Post([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
-        //{
-        //    int userId = (int)Session["userId"];
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Post([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
+        {
+            int userId = (int)Session["userId"];
 
-        //    IssueAndReceiptModel._UserId = (int)Session["userId"];
-        //    IssueAndReceiptService = new IssueAndReceiptService();
-        //    IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            IssueAndReceiptModel._UserId = userId;
+            issueAndReceiptService = new IssueAndReceiptService();
+            IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
 
-        //    IssueAndReceiptService.Post(userId, IssueAndReceiptModel);
-        //    IssueAndReceiptModel = IssueAndReceiptService.GetById(userId, IssueAndReceiptModel.Id);
+            issueAndReceiptService.Post(userId, IssueAndReceiptModel);
+            IssueAndReceiptModel = issueAndReceiptService.GetById(userId, IssueAndReceiptModel.Id);
 
-        //    if (IssueAndReceiptModel != null)
-        //    {
-        //        IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
-        //    }
-        //    else
-        //    {
-        //        IssueAndReceiptModel = IssueAndReceiptService.GetNewModel(userId);
-        //        IssueAndReceiptModel._FormMode = FormModeEnum.New;
-        //    }
+            if (IssueAndReceiptModel != null)
+            {
+                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            }
+            else
+            {
+                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
+                IssueAndReceiptModel._FormMode = FormModeEnum.New;
+            }
 
-        //    return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
-        //}
+            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+        }
 
 
-        //[HttpPost, ValidateInput(false)]
-        //public ActionResult Cancel(long Id, string CancelReason = "")
-        //{
-        //    int userId = (int)Session["userId"];
+        [HttpPost, ValidateInput(false)]
+        public ActionResult Cancel(long Id, string CancelReason = "")
+        {
+            int userId = (int)Session["userId"];
 
-        //    IssueAndReceiptModel IssueAndReceiptModel;
+            IssueAndReceiptModel IssueAndReceiptModel;
 
-        //    IssueAndReceiptService = new IssueAndReceiptService();
-        //    IssueAndReceiptService.Cancel(userId, Id, CancelReason);
+            issueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService.Cancel(userId, Id, CancelReason);
 
-        //    IssueAndReceiptModel = IssueAndReceiptService.GetById(userId, Id);
-        //    if (IssueAndReceiptModel != null)
-        //    {
-        //        IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
-        //    }
-        //    else
-        //    {
-        //        IssueAndReceiptModel = IssueAndReceiptService.GetNewModel(userId);
-        //        IssueAndReceiptModel._FormMode = FormModeEnum.New;
-        //    }
+            IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
+            if (IssueAndReceiptModel != null)
+            {
+                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            }
+            else
+            {
+                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
+                IssueAndReceiptModel._FormMode = FormModeEnum.New;
+            }
 
-        //    return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
-        //}
+            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+        }
 
     }
 }

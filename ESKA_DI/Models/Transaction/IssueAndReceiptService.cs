@@ -823,7 +823,10 @@ namespace Models.Transaction
                         String keyValue;
                         keyValue = tx_IssueAndReceipt_issue_Item_Batch.DetId.ToString();
 
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        // Hitung ulang Netto item ISSUE dari batch-nya.
+                        // (SP SpIssueAndReceipt_UpdateReceiptItemQuantity hanya melayani sisi Receipt --
+                        //  bila dipakai utk Issue, ia malah menimpa Netto item Receipt ber-DetId sama.)
+                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", model.DetId, model.DetId);
                         // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
@@ -932,7 +935,10 @@ namespace Models.Transaction
                             tx_IssueAndReceipt_Issue_Item_Batch.ModifiedUser = model._UserId;
 
                             CONTEXT.SaveChanges();
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                            // Hitung ulang Netto item ISSUE dari batch-nya.
+                        // (SP SpIssueAndReceipt_UpdateReceiptItemQuantity hanya melayani sisi Receipt --
+                        //  bila dipakai utk Issue, ia malah menimpa Netto item Receipt ber-DetId sama.)
+                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", model.DetId, model.DetId);
 
                             //SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
 
@@ -978,7 +984,9 @@ namespace Models.Transaction
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.SaveChanges();
 
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            // Hitung ulang Netto item RECEIPT dari batch tersisa.
+                            // (Sebelumnya memanggil SP dgn nama tabel yang tidak ada: 'Tx_IssueAndReceipt_Item_Batch'.)
+                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", DetId, DetId);
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)
@@ -1019,7 +1027,10 @@ namespace Models.Transaction
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.SaveChanges();
 
-                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            // Hitung ulang Netto item ISSUE dari batch tersisa.
+                            // (SP "SpIssueAndReceipt_UpdateIssueItemQuantity" TIDAK ADA di database --
+                            //  inilah penyebab error saat delete. SP yang ada hanya versi Receipt.)
+                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", DetId, DetId);
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)
@@ -1043,6 +1054,400 @@ namespace Models.Transaction
                 }
             }
         }
+
+        #region Post / Cancel ke SAP
+
+        // Hasil Add satu dokumen SAP.
+        public class IssueReceipt_PostResult
+        {
+            public long? DocEntry { get; set; }
+            public string DocNum { get; set; }
+        }
+
+        public void Post(int userId, IssueAndReceiptModel model)
+        {
+            PostSAP(userId, model.Id);
+        }
+
+        public void PostSAP(int userId, long id)
+        {
+            SAPbobsCOM.Company oCompany = null;
+            IssueAndReceiptModel sync = GetById(userId, id);
+
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    oCompany = SAPCachedCompany.GetCompany();
+                    oCompany.StartTransaction();
+
+                    Tx_IssueAndReceipt tx = CONTEXT.Tx_IssueAndReceipt.Find(id);
+                    if (tx == null)
+                    {
+                        throw new Exception("[VALIDATION] - IssueAndReceipt tidak ditemukan");
+                    }
+                    if (tx.Status != "Draft")
+                    {
+                        throw new Exception("[VALIDATION] - Hanya dokumen Draft yang bisa di-Post");
+                    }
+                    if ((sync.BaseEntry ?? 0) == 0)
+                    {
+                        throw new Exception("[VALIDATION] - Work Order (Production Order) belum dipilih");
+                    }
+
+                    bool anyIssue = sync.ListIssueItem_ != null && sync.ListIssueItem_.Any(x => (x.Quantity ?? 0) > 0);
+                    bool anyReceipt = sync.ListReceiptItem_ != null && sync.ListReceiptItem_.Any(x => (x.Quantity ?? 0) > 0);
+                    if (!anyIssue && !anyReceipt)
+                    {
+                        throw new Exception("[VALIDATION] - Tidak ada item Issue maupun Receipt untuk di-Post");
+                    }
+
+                    // Validasi kelengkapan batch: untuk item yang dikelola batch (OITM.ManBtchNum='Y'),
+                    // SAP menuntut total qty batch per baris = qty baris (error -4014 bila tidak).
+                    // Divalidasi di sini agar pesannya menunjuk item & angkanya, bukan -4014 mentah.
+                    var allItemCodes = new List<string>();
+                    if (sync.ListIssueItem_ != null)
+                    {
+                        allItemCodes.AddRange(sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0 && !string.IsNullOrEmpty(x.ItemCode)).Select(x => x.ItemCode));
+                    }
+                    if (sync.ListReceiptItem_ != null)
+                    {
+                        allItemCodes.AddRange(sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0 && !string.IsNullOrEmpty(x.ItemCode)).Select(x => x.ItemCode));
+                    }
+                    allItemCodes = allItemCodes.Distinct().ToList();
+
+                    var batchManagedItems = new List<string>();
+                    if (allItemCodes.Any())
+                    {
+                        string inList = string.Join(",", allItemCodes.Select(c => "'" + c.Replace("'", "''") + "'"));
+                        batchManagedItems = CONTEXT.Database.SqlQuery<string>(
+                            "SELECT \"ItemCode\" FROM \"" + DbProvider.dbSap_Name + "\".\"OITM\" WHERE \"ManBtchNum\"='Y' AND \"ItemCode\" IN (" + inList + ")").ToList();
+                    }
+
+                    var batchErrors = new List<string>();
+                    if (sync.ListIssueItem_ != null)
+                    {
+                        foreach (var it in sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0))
+                        {
+                            if (!batchManagedItems.Contains(it.ItemCode)) continue;
+                            decimal sumBatch = it.ListBatch_ == null ? 0 : it.ListBatch_.Sum(b => b.Quantity ?? 0);
+                            if (sumBatch != (it.Quantity ?? 0))
+                            {
+                                batchErrors.Add(string.Format("Issue {0}: total batch {1} <> qty item {2}", it.ItemCode, sumBatch, it.Quantity ?? 0));
+                            }
+                        }
+                    }
+                    if (sync.ListReceiptItem_ != null)
+                    {
+                        foreach (var it in sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0))
+                        {
+                            if (!batchManagedItems.Contains(it.ItemCode)) continue;
+                            decimal sumBatch = it.ListBatch_ == null ? 0 : it.ListBatch_.Sum(b => b.Quantity ?? 0);
+                            if (sumBatch != (it.Quantity ?? 0))
+                            {
+                                batchErrors.Add(string.Format("Receipt {0}: total batch {1} <> qty item {2}", it.ItemCode, sumBatch, it.Quantity ?? 0));
+                            }
+                        }
+                    }
+                    if (batchErrors.Any())
+                    {
+                        throw new Exception("[VALIDATION] - Batch belum lengkap (total batch harus = qty item):\n" + string.Join("\n", batchErrors));
+                    }
+
+                    // 2 dokumen dalam SATU transaksi SAP: bila salah satu gagal, keduanya rollback.
+                    IssueReceipt_PostResult issRes = AddIssueForProduction(CONTEXT, oCompany, sync);
+                    IssueReceipt_PostResult recRes = AddReceiptFromProduction(CONTEXT, oCompany, sync);
+
+                    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                    if (issRes != null)
+                    {
+                        tx.IssueDocEntry = issRes.DocEntry;
+                        tx.IssueDocNum = issRes.DocNum;
+                        tx.IssueDocDate = dtModified;
+                    }
+                    if (recRes != null)
+                    {
+                        tx.ReceiptDocEntry = recRes.DocEntry;
+                        tx.ReceiptDocNum = recRes.DocNum;
+                        tx.ReceiptDocDate = dtModified;
+                    }
+
+                    tx.PostingDate = dtModified;
+                    tx.Status = "Posted";
+                    tx.IsAfterPosted = "Y";
+                    tx.ModifiedDate = dtModified;
+                    tx.ModifiedUser = userId;
+
+                    CONTEXT.SaveChanges();
+
+                    if (oCompany.InTransaction)
+                    {
+                        oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                    }
+
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    if (oCompany != null && oCompany.InTransaction)
+                    {
+                        oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                    }
+                    CONTEXT_TRANS.Rollback();
+
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+                finally
+                {
+                    SAPCachedCompany.Release(oCompany);
+                }
+            }
+        }
+
+        // BaseLine komponen di Production Order (WOR1) berdasarkan ItemCode. -1 bila tidak ketemu.
+        private int GetWor1BaseLine(HANA_APP CONTEXT, long baseEntry, string itemCode)
+        {
+            int? line = CONTEXT.Database.SqlQuery<int?>(
+                "SELECT \"LineNum\" AS IDU FROM \"" + DbProvider.dbSap_Name + "\".\"WOR1\" WHERE \"DocEntry\"=:p0 AND \"ItemCode\"=:p1",
+                baseEntry, itemCode ?? "").FirstOrDefault();
+            return line ?? -1;
+        }
+
+        // Issue for Production = Goods Issue (oInventoryGenExit / ObjType 60), baris tertaut Production Order (BaseType 202).
+        private IssueReceipt_PostResult AddIssueForProduction(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, IssueAndReceiptModel model)
+        {
+            if (model.ListIssueItem_ == null || !model.ListIssueItem_.Any(x => (x.Quantity ?? 0) > 0))
+            {
+                return null;
+            }
+
+            SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenExit);
+            oDoc.DocDate = DateTime.Now;
+            // TaxDate TIDAK boleh diisi utk dokumen bertaut Production Order (SAP -5002 [OIGE.TaxDate]).
+
+            foreach (var item in model.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0))
+            {
+                oDoc.Lines.BaseType = 202; // Production Order
+                oDoc.Lines.BaseEntry = Convert.ToInt32(model.BaseEntry);
+                int baseLine = GetWor1BaseLine(CONTEXT, model.BaseEntry ?? 0, item.ItemCode);
+                if (baseLine >= 0)
+                {
+                    oDoc.Lines.BaseLine = baseLine;
+                }
+
+                //oDoc.Lines.ItemCode = item.ItemCode;
+                if (!string.IsNullOrEmpty(item.WhsCode))
+                {
+                    oDoc.Lines.WarehouseCode = item.WhsCode;
+                }
+                oDoc.Lines.Quantity = (double)(item.Quantity ?? 0);
+
+                if (item.ListBatch_ != null && item.ListBatch_.Any())
+                {
+                    int batchIndex = 0;
+                    foreach (var batch in item.ListBatch_)
+                    {
+                        if (batchIndex > 0)
+                        {
+                            oDoc.Lines.BatchNumbers.Add();
+                        }
+                        oDoc.Lines.BatchNumbers.BatchNumber = batch.Batch;
+                        oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0);
+                        batchIndex++;
+                    }
+                }
+
+                oDoc.Lines.Add();
+            }
+
+            int ret = oDoc.Add();
+            if (ret != 0)
+            {
+                int nErr = oCompany.GetLastErrorCode();
+                string errMsg = oCompany.GetLastErrorDescription();
+                SapCompany.CleanUp(oDoc);
+                throw new Exception("[VALIDATION] - Issue for Production : " + nErr + "|" + errMsg);
+            }
+
+            var result = new IssueReceipt_PostResult();
+            int docEntry = Convert.ToInt32(oCompany.GetNewObjectKey());
+            SAPbobsCOM.Documents oNew = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenExit);
+            if (oNew.GetByKey(docEntry))
+            {
+                result.DocEntry = docEntry;
+                result.DocNum = oNew.DocNum.ToString();
+            }
+            SapCompany.CleanUp(oNew);
+            SapCompany.CleanUp(oDoc);
+            return result;
+        }
+
+        // Receipt from Production = Goods Receipt (oInventoryGenEntry / ObjType 59), baris tertaut Production Order (BaseType 202).
+        private IssueReceipt_PostResult AddReceiptFromProduction(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, IssueAndReceiptModel model)
+        {
+            if (model.ListReceiptItem_ == null || !model.ListReceiptItem_.Any(x => (x.Quantity ?? 0) > 0))
+            {
+                return null;
+            }
+
+            SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
+            oDoc.DocDate = DateTime.Now;
+            // TaxDate TIDAK boleh diisi utk dokumen bertaut Production Order (SAP -5002 [OIGN.TaxDate]).
+
+            foreach (var item in model.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0))
+            {
+                oDoc.Lines.BaseType = 202; // Production Order
+                oDoc.Lines.BaseEntry = Convert.ToInt32(model.BaseEntry);
+                int baseLine = GetWor1BaseLine(CONTEXT, model.BaseEntry ?? 0, item.ItemCode);
+                if (baseLine >= 0)
+                {
+                    oDoc.Lines.BaseLine = baseLine;
+                }
+
+                //oDoc.Lines.ItemCode = item.ItemCode;
+                if (!string.IsNullOrEmpty(item.WhsCode))
+                {
+                    oDoc.Lines.WarehouseCode = item.WhsCode;
+                }
+                oDoc.Lines.Quantity = (double)(item.Quantity ?? 0);
+
+                if (item.ListBatch_ != null && item.ListBatch_.Any())
+                {
+                    int batchIndex = 0;
+                    foreach (var batch in item.ListBatch_)
+                    {
+                        if (batchIndex > 0)
+                        {
+                            oDoc.Lines.BatchNumbers.Add();
+                        }
+                        oDoc.Lines.BatchNumbers.BatchNumber = batch.Batch;
+                        oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0);
+                        batchIndex++;
+                    }
+                }
+
+                oDoc.Lines.Add();
+            }
+
+            int ret = oDoc.Add();
+            if (ret != 0)
+            {
+                int nErr = oCompany.GetLastErrorCode();
+                string errMsg = oCompany.GetLastErrorDescription();
+                SapCompany.CleanUp(oDoc);
+                throw new Exception("[VALIDATION] - Receipt from Production : " + nErr + "|" + errMsg);
+            }
+
+            var result = new IssueReceipt_PostResult();
+            int docEntry = Convert.ToInt32(oCompany.GetNewObjectKey());
+            SAPbobsCOM.Documents oNew = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
+            if (oNew.GetByKey(docEntry))
+            {
+                result.DocEntry = docEntry;
+                result.DocNum = oNew.DocNum.ToString();
+            }
+            SapCompany.CleanUp(oNew);
+            SapCompany.CleanUp(oDoc);
+            return result;
+        }
+
+        public void Cancel(int userId, long Id, string cancelReason)
+        {
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    Tx_IssueAndReceipt tx = CONTEXT.Tx_IssueAndReceipt.Find(Id);
+                    if (tx != null)
+                    {
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                        tx.Status = "Cancel";
+                        tx.CancelReason = cancelReason;
+                        tx.ModifiedDate = dtModified;
+                        tx.ModifiedUser = userId;
+                        CONTEXT.SaveChanges();
+
+                        // Batalkan di SAP: urutan kebalikan (Receipt dulu, lalu Issue).
+                        var oCompany = SAPCachedCompany.GetCompany();
+                        try
+                        {
+                            if ((tx.ReceiptDocEntry ?? 0) != 0)
+                            {
+                                CancelSAP(oCompany, SAPbobsCOM.BoObjectTypes.oInventoryGenEntry, Convert.ToInt32(tx.ReceiptDocEntry));
+                            }
+                            if ((tx.IssueDocEntry ?? 0) != 0)
+                            {
+                                CancelSAP(oCompany, SAPbobsCOM.BoObjectTypes.oInventoryGenExit, Convert.ToInt32(tx.IssueDocEntry));
+                            }
+                        }
+                        finally
+                        {
+                            SAPCachedCompany.Release(oCompany);
+                        }
+                    }
+
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+        }
+
+        // Batalkan satu dokumen SAP via CreateCancellationDocument.
+        private static void CancelSAP(SAPbobsCOM.Company oCompany, SAPbobsCOM.BoObjectTypes objType, int docEntry)
+        {
+            SAPbobsCOM.Documents oDoc = null;
+            try
+            {
+                if (!oCompany.InTransaction)
+                    oCompany.StartTransaction();
+
+                oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(objType);
+                if (!oDoc.GetByKey(docEntry))
+                    throw new Exception("[VALIDATION] - Dokumen SAP tidak ditemukan (DocEntry " + docEntry + ")");
+
+                SAPbobsCOM.Documents oCancellation = (SAPbobsCOM.Documents)oDoc.CreateCancellationDocument();
+                if (oCancellation == null)
+                {
+                    oCompany.GetLastError(out int e1, out string m1);
+                    throw new Exception("[VALIDATION] - CreateCancellationDocument : " + e1 + "|" + m1);
+                }
+
+                int ret = oCancellation.Add();
+                if (ret != 0)
+                {
+                    oCompany.GetLastError(out int e2, out string m2);
+                    throw new Exception("[VALIDATION] - Cancel gagal : " + e2 + "|" + m2);
+                }
+
+                if (oCompany.InTransaction)
+                    oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+            }
+            catch (Exception)
+            {
+                if (oCompany.InTransaction)
+                    oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                throw;
+            }
+            finally
+            {
+                if (oDoc != null)
+                {
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(oDoc);
+                    oDoc = null;
+                }
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+
+        #endregion
 
     }
 

@@ -277,6 +277,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Report\ReportCustomModel.cs" />
+    <Compile Include="Models\Report\ReportGrpoSummaryService.cs" />
     <Compile Include="Models\Report\ReportQueryDetail__List_Model.cs" />
     <Compile Include="Models\Report\ReportQueryModel.cs" />
     <Compile Include="Models\Setting\ApprovalTemplate__List_Model.cs" />

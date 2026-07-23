@@ -119,6 +119,31 @@
 
 
         var arr = e.node.name.split('_')
+
+        // GRPO Summary (chart) — node statis, muat filter + chart ke area konten
+        if (arr[0] == 'TvGrpoSummary') {
+            Report_Id.SetValue(0);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("EmbedPartial", "ReportGrpoSummary")',
+                beforeSend: function () {
+                    OnBegin();
+                },
+                success: function (response) {
+                    $("#contentDetail").html(response);
+                    MVCxClientUtils.FinalizeCallback();
+                    OnSuccess();
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    OnFailure(jqXhr, textStatus, errorThrown)
+                },
+                complete: function () {
+                    OnComplete()
+                }
+            });
+            return;
+        }
+
         if (arr[0] != 'TvReport') {
             $("#contentDetail").html('');
             Report_Id.SetValue(0);

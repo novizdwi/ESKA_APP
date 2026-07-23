@@ -564,6 +564,9 @@
     <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_Form_TabDetail_List_Partial.cshtml" />
     <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_ListDetail_Partial.cshtml" />
     <Content Include="Views\Report\ReportQuery\Partial\ReportQuery_ParamDetail_Partial.cshtml" />
+    <Content Include="Views\Report\ReportGrpoSummary\ReportGrpoSummary.cshtml" />
+    <Content Include="Views\Report\ReportGrpoSummary\Partial\ReportGrpoSummary_Chart_Partial.cshtml" />
+    <Content Include="Views\Report\ReportGrpoSummary\Partial\ReportGrpoSummary_Embed_Partial.cshtml" />
     <Content Include="Views\Report\ReportQuery\ReportQuery.cshtml" />
     <Content Include="Views\Setting\AlertGroup\AlertGroup.cshtml" />
     <Content Include="Views\Setting\AlertGroup\Partial\AlertGroup_Form_Btn_Partial.cshtml" />
@@ -807,6 +810,7 @@
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
     <Compile Include="Controllers\Report\ReportCustom\ReportCustomController.cs" />
     <Compile Include="Controllers\Report\ReportCustom\ReportCustomController.Print.cs" />
+    <Compile Include="Controllers\Report\ReportGrpoSummary\ReportGrpoSummaryController.cs" />
     <Compile Include="Controllers\Report\ReportQuery\ReportQueryController.cs" />
     <Compile Include="Controllers\Report\ReportQuery\ReportQueryController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportQuery\ReportQueryController.ListDetail.Export.cs" />

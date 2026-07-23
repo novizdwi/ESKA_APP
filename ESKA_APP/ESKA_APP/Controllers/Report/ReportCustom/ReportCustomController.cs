@@ -91,11 +91,21 @@ namespace Controllers.Report
                         {
                             MVCxTreeViewNode node = node1.Nodes.Add(report.ReportName, "TvReport_" + report.Id.ToString());
                             node.Image.Url = "~/Content/Images/button/menu_default.png";
-                            node.Image.Height = 15; 
+                            node.Image.Height = 15;
                             node.Image.UrlSelected = "~/Content/Images/button/menu_selected.png";
                             //node.NodeStyle.Font.Underline = true;
                             node.NavigateUrl = "javascript:void(0)";
                         }
+                    }
+
+                    // GRPO Summary (chart) — node statis di bawah grup Purchasing, bukan dari Tm_Report
+                    if (item.GroupName != null && item.GroupName.Trim().ToLower() == "purchasing")
+                    {
+                        MVCxTreeViewNode nodeGrpoSummary = node1.Nodes.Add("GRPO Summary", "TvGrpoSummary_0");
+                        nodeGrpoSummary.Image.Url = "~/Content/Images/button/menu_default.png";
+                        nodeGrpoSummary.Image.Height = 15;
+                        nodeGrpoSummary.Image.UrlSelected = "~/Content/Images/button/menu_selected.png";
+                        nodeGrpoSummary.NavigateUrl = "javascript:void(0)";
                     }
                 }
             }

@@ -1,0 +1,29 @@
+@model List<Models.Report.GrpoStatusSummaryModel>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div style="padding: 30px; color: #888; font-size: 14px;">
+        Tidak ada data pada rentang tanggal ini.
+    </div>
+}
+else
+{
+    @Html.DevExpress().Chart(settings =>
+    {
+        settings.Name = "chartGrpoStatus";
+        settings.Width = 600;
+        settings.Height = 420;
+
+        DevExpress.XtraCharts.Series series = new DevExpress.XtraCharts.Series("Status Dokumen", DevExpress.XtraCharts.ViewType.Pie);
+        series.ArgumentDataMember = "Status";
+        series.ValueDataMembers.AddRange(new string[] { "Jumlah" });
+        series.Label.TextPattern = "{A}: {V} ({VP:p0})";
+        series.LegendTextPattern = "{A}: {V}";
+        settings.Series.Add(series);
+
+        settings.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+        settings.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
+        settings.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Top;
+
+    }).Bind(Model).GetHtml()
+}

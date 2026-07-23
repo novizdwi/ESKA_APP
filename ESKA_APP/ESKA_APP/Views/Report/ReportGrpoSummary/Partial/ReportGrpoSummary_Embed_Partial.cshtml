@@ -1,0 +1,117 @@
+@* Ditanam di halaman Custom Report (contentDetail) — nama kontrol & fungsi dibuat unik agar tidak bentrok dengan halaman induk *@
+
+@{
+    DateTime grpoSummaryDateFrom = (DateTime)ViewBag.TransDate_From;
+    DateTime grpoSummaryDateTo = (DateTime)ViewBag.TransDate_To;
+}
+
+<script type="text/javascript">
+
+    function OnClickBtnGrpoSummaryShow(s, e) {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChartPartial", "ReportGrpoSummary")',
+            data: {
+                TransDate_From: GrpoSummary_TransDate_From.GetValueString(),
+                TransDate_To: GrpoSummary_TransDate_To.GetValueString()
+            },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                $("#contentChartGrpoSummary").html(response);
+                MVCxClientUtils.FinalizeCallback();
+                OnSuccess();
+
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete()
+            }
+        });
+
+    }
+
+</script>
+
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayoutGrpoSummaryFilter";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Pixel(620);
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    var group = settings.Items.AddGroupItem(groupSettings =>
+    {
+        groupSettings.Caption = "GRPO Summary";
+        groupSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        groupSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        groupSettings.ColCount = 3;
+        groupSettings.SettingsItems.ShowCaption = DefaultBoolean.True;
+
+        groupSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+            itemSettings.Caption = "Trans Date From";
+
+            var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+            txt.Name = "GrpoSummary_TransDate_From";
+
+            txt.ControlStyle.CssClass = "editornoimage";
+            txt.Properties.NullText = "dd/MM/yyyy";
+            txt.Properties.EditFormat = EditFormat.Custom;
+            txt.Properties.EditFormatString = "dd/MM/yyyy";
+            txt.Properties.DisplayFormatInEditMode = true;
+            txt.Width = 100;
+
+            txt.Date = grpoSummaryDateFrom;
+        });
+
+        groupSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+            itemSettings.Caption = "Trans Date To";
+
+            var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+            txt.Name = "GrpoSummary_TransDate_To";
+
+            txt.ControlStyle.CssClass = "editornoimage";
+            txt.Properties.NullText = "dd/MM/yyyy";
+            txt.Properties.EditFormat = EditFormat.Custom;
+            txt.Properties.EditFormatString = "dd/MM/yyyy";
+            txt.Properties.DisplayFormatInEditMode = true;
+            txt.Width = 100;
+
+            txt.Date = grpoSummaryDateTo;
+        });
+
+        groupSettings.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+            itemSettings.Caption = " ";
+
+            var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+            btnSettings.Name = "btnGrpoSummaryShow";
+            btnSettings.Text = "Tampilkan";
+            btnSettings.Width = Unit.Pixel(110);
+            btnSettings.ClientSideEvents.Click = "OnClickBtnGrpoSummaryShow";
+
+            btnSettings.ImagePosition = ImagePosition.Left;
+            btnSettings.Images.Image.Url = "~/Content/Images/buttonnew/refresh.png";
+            btnSettings.Images.Image.Width = Unit.Pixel(16);
+            btnSettings.Images.Image.Height = Unit.Pixel(16);
+            btnSettings.Styles.Style.Paddings.Padding = 0;
+        });
+    });
+
+}).GetHtml()
+
+<div id="contentChartGrpoSummary" style="padding: 10px;">
+    <div style="padding: 30px; color: #888; font-size: 14px;">
+        Pilih rentang tanggal lalu klik Tampilkan.
+    </div>
+</div>

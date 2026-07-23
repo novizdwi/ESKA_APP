@@ -812,13 +812,25 @@
 
     function gvContentReceiptBatchListOnEndCallback(s, e) {
 
-        if (isUpdate || isDelete) {
-
+        // Refresh grid lain DITUNDA keluar dari siklus callback grid ini (setTimeout 0) --
+        // lihat catatan pada handler Issue.
+        if (isUpdate) {
             isUpdate = false;
-            isDelete = false;
+            window.setTimeout(function () {
+                popupBatchReceipt.PerformCallback();
+                if (typeof (gvReceiptDetail) != 'undefined' && gvReceiptDetail != null && !gvReceiptDetail.InCallback()) {
+                    gvReceiptDetail.PerformCallback();
+                }
+            }, 0);
+        }
 
-            popupBatchReceipt.PerformCallback();
-            gvReceiptDetail.PerformCallback();
+        if (isDelete) {
+            isDelete = false;
+            window.setTimeout(function () {
+                if (typeof (gvReceiptDetail) != 'undefined' && gvReceiptDetail != null && !gvReceiptDetail.InCallback()) {
+                    gvReceiptDetail.PerformCallback();
+                }
+            }, 0);
         }
     }
 
@@ -944,13 +956,26 @@
 
     function gvContentIssueBatchListOnEndCallback(s, e) {
 
-        if (isUpdate || isDelete) {
-
+        // Refresh grid lain DITUNDA keluar dari siklus callback grid ini (setTimeout 0),
+        // supaya loading panel callback berjalan tertutup dulu -- memanggil PerformCallback
+        // grid lain di tengah finalisasi callback membuat loading tidak pernah hilang.
+        if (isUpdate) {
             isUpdate = false;
-            isDelete = false;
+            window.setTimeout(function () {
+                popupBatchIssue.PerformCallback();
+                if (typeof (gvIssueDetail) != 'undefined' && gvIssueDetail != null && !gvIssueDetail.InCallback()) {
+                    gvIssueDetail.PerformCallback();
+                }
+            }, 0);
+        }
 
-            popupBatchIssue.PerformCallback();
-            gvIssueDetail.PerformCallback();
+        if (isDelete) {
+            isDelete = false;
+            window.setTimeout(function () {
+                if (typeof (gvIssueDetail) != 'undefined' && gvIssueDetail != null && !gvIssueDetail.InCallback()) {
+                    gvIssueDetail.PerformCallback();
+                }
+            }, 0);
         }
     }
 
