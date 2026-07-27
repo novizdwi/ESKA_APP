@@ -143,7 +143,7 @@ namespace Models.Production
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
 
-                                var lastDetail = CONTEXT.Tx_ProductionTask_Activity_Detail
+                                var lastDetail = CONTEXT.Tx_ProductionTask_Activity_Log
                                     .Where(x => x.DetId == model.DetId)
                                     .OrderByDescending(x => x.DetDetId)
                                     .FirstOrDefault();
@@ -154,7 +154,7 @@ namespace Models.Production
                                     lastDetail.ModifiedUser = userId;
                                 }
 
-                                Tx_ProductionTask_Activity_Detail tx_ProductionTask_Activity_Detail = new Tx_ProductionTask_Activity_Detail
+                                Tx_ProductionTask_Activity_Log tx_ProductionTask_Activity_log = new Tx_ProductionTask_Activity_Log
                                 {
                                     Id = model.Id,
                                     DetId = model.DetId,
@@ -167,7 +167,7 @@ namespace Models.Production
                                     ModifiedDate = dtModified,
                                     ModifiedUser = userId
                                 };
-                                CONTEXT.Tx_ProductionTask_Activity_Detail.Add(tx_ProductionTask_Activity_Detail);
+                                CONTEXT.Tx_ProductionTask_Activity_Log.Add(tx_ProductionTask_Activity_log);
 
                             }
 
@@ -232,7 +232,7 @@ namespace Models.Production
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
 
-                                var lastDetail = CONTEXT.Tx_ProductionTask_Activity_Detail
+                                var lastDetail = CONTEXT.Tx_ProductionTask_Activity_Log
                                     .Where(x => x.DetId == model.DetId)
                                     .OrderByDescending(x => x.DetDetId)
                                     .FirstOrDefault();
@@ -243,7 +243,7 @@ namespace Models.Production
                                     lastDetail.ModifiedUser = userId;
                                 }
 
-                                Tx_ProductionTask_Activity_Detail tx_ProductionTask_Activity_Detail = new Tx_ProductionTask_Activity_Detail
+                                Tx_ProductionTask_Activity_Log tx_ProductionTask_Activity_log = new Tx_ProductionTask_Activity_Log
                                 {
                                     Id = model.Id,
                                     DetId = model.DetId,  
@@ -255,7 +255,7 @@ namespace Models.Production
                                     ModifiedDate = dtModified,
                                     ModifiedUser = userId
                                 };
-                                CONTEXT.Tx_ProductionTask_Activity_Detail.Add(tx_ProductionTask_Activity_Detail);
+                                CONTEXT.Tx_ProductionTask_Activity_Log.Add(tx_ProductionTask_Activity_log);
                             
                             }
 

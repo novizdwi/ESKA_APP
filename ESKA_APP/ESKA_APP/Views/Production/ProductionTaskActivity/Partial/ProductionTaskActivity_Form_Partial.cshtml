@@ -97,10 +97,10 @@
             : "";
 
         ViewContext.Writer.Write(
-            "<h2 style='margin:0'>" +
+            "<span style='margin:0; font-size:250%; font-weight:bolder;'>" +
             "<b>TASK NO: [ " + Model.TransNo + " ]</b>" +
             pausedBadge +
-            "</h2>"
+            "</span>"
         );
     });
 
@@ -109,18 +109,18 @@
 
     groupHeader.Items.Add(x =>
     {
-        x.Caption = "Work Order No";
+        x.Caption = "<span style='font-size:150%;'>Work Order No</span>";
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'>" + Html.Encode(Model.DocNum) + " - " + Html.Encode(Model.RoutingName) + "</div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.DocNum) + " - " + Html.Encode(Model.RoutingName) + "</div>"));
     });
 
     groupHeader.Items.Add(x =>
     {
-        x.Caption = "Item";
+        x.Caption = "<span style='font-size:150%;'>Item</span>";
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'>" + Html.Encode(Model.ItemName) + "</div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.ItemName) + "</div>"));
     });
 
     settings.Items.AddEmptyItem().Height = 12;
@@ -136,26 +136,26 @@
 
     groupQty.Items.Add(x =>
     {
-        x.Caption = "TARGET";
+        x.Caption = "<span style='font-size:150%;'>TARGET</span>";
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'> <b>" + (Model.QuantityPlanned.HasValue ? Model.QuantityPlanned.Value.ToString("0.####") : "0") + "</b> </div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + (Model.QuantityPlanned.HasValue ? Model.QuantityPlanned.Value.ToString("0.####") : "0") + "</b> </div>"));
     });
 
     groupQty.Items.Add(x =>
     {
-        x.Caption = "SELESAI";
+        x.Caption = "<span style='font-size:150%;'>FINISHED</span>";
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'><b>" + (Model.QuantityActual.HasValue ? Model.QuantityActual.Value.ToString("0.####") : "0") + "</b></div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityActual.HasValue ? Model.QuantityActual.Value.ToString("0.####") : "0") + "</b></div>"));
     });
 
     groupQty.Items.Add(x =>
     {
-        x.Caption = "SISA";
+        x.Caption = "<span style='font-size:150%;'>REMAINING</span>";
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'><b>" + (Model.QuantityRemain.HasValue ? Model.QuantityRemain.Value.ToString("0.####") : "0") + "</b></div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityRemain.HasValue ? Model.QuantityRemain.Value.ToString("0.####") : "0") + "</b></div>"));
     });
 
     settings.Items.AddEmptyItem().Height = 12;
@@ -171,23 +171,23 @@
 
     groupTime.Items.Add(x =>
     {
-        x.Caption = "WAKTU MULAI";
+        x.Caption = "<span style='font-size:150%;'>START TIME</span>";
     }).SetNestedContent(() =>
     {
 
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'> <b>" + waktuMulai + "</b> </div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + waktuMulai + "</b> </div>"));
     });
 
     groupTime.Items.Add(x =>
     {
-        x.Caption = "DURASI";
+        x.Caption = "<span style='font-size:150%;'>DURATION</span>";
     }).SetNestedContent(() =>
     {
         var activityIso = Model.ActivityDate.HasValue
             ? Model.ActivityDate.Value.ToString("yyyy/MM/dd HH:mm:ss")
             : "";
 
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top'>" + "<b id='lblDurasi' data-start='" + activityIso + "'>" + durasi + "</b>" + "</div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + "<b id='lblDurasi' data-start='" + activityIso + "'>" + durasi + "</b>" + "</div>"));
     });
 
     settings.Items.AddEmptyItem().Height = 16;
@@ -207,13 +207,16 @@
         item.ShowCaption = DefaultBoolean.False;
         item.HorizontalAlign = FormLayoutHorizontalAlign.Center;
         item.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+
         var btn = (ButtonSettings)item.NestedExtensionSettings;
         btn.Name = "btnPause";
         btn.Text = pauseText;
-
+        btn.ControlStyle.Font.Size = new FontUnit(18);
         btn.Enabled = ViewBag.Id == 0 ? false : true;
         btn.ClientSideEvents.Click = pauseClientHandler;
-        btn.Width = new Unit(40, UnitType.Em);
+        btn.Width = new Unit(28, UnitType.Em);
+        btn.Height = new Unit(3, UnitType.Em);
+        btn.ControlStyle.BackColor = isPaused == false ? System.Drawing.Color.IndianRed : System.Drawing.Color.FromName("#2D9966");
     });
 
     // Tombol Finish -> munculkan popup
@@ -222,13 +225,15 @@
         item.ShowCaption = DefaultBoolean.False;
         item.HorizontalAlign = FormLayoutHorizontalAlign.Center;
         item.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+
         var btn = (ButtonSettings)item.NestedExtensionSettings;
         btn.Name = "btnFinish";
         btn.Text = "Finish";
-
+        btn.ControlStyle.Font.Size = new FontUnit(18);
         btn.Enabled = ViewBag.Id == 0 ? false : true;
         btn.ClientSideEvents.Click = "OnClickBtnFinish";
-        btn.Width = new Unit(40, UnitType.Em);
+        btn.Width = new Unit(28, UnitType.Em);
+        btn.Height = new Unit(3, UnitType.Em);
     });
 
 }).GetHtml()

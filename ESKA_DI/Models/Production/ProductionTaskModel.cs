@@ -100,7 +100,7 @@ namespace Models.Production
         
         public TimeSpan? Clock { get; set; }
         
-        public TimeSpan? PracticeHours { get; set; }
+        public int? DurationPerItem { get; set; }
         
         public int MachineNo { get; set; }
         
@@ -345,7 +345,7 @@ namespace Models.Production
                             throw new Exception("[VALIDATION] This task is already running");
                         }
 
-                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "before", "starttask", "close", "Id", id.ToString() );
+                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "before", "ProductionTask", "starttask", "Id", id.ToString() );
 
                         InsertProductionTaskActivity(CONTEXT, id, userId);
                         
@@ -362,7 +362,7 @@ namespace Models.Production
                         tx_ProductionTask.ModifiedUser = userId;
                         CONTEXT.SaveChanges();
 
-                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "after", "starttask", "close", "Id", id.ToString() );
+                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "after", "ProductionTask", "starttask", "Id", id.ToString() );
                         CONTEXT_TRANS.Commit();
                     }
                     catch (Exception ex)
@@ -437,7 +437,7 @@ namespace Models.Production
                 throw new Exception("[VALIDATION] invalid Det Id");
             }
 
-            Tx_ProductionTask_Activity_Detail tx_ProductionTask_Activity_Detail = new Tx_ProductionTask_Activity_Detail
+            Tx_ProductionTask_Activity_Log tx_ProductionTask_Activity_log = new Tx_ProductionTask_Activity_Log
             {
                 Id = id,
                 DetId = detId,
@@ -449,7 +449,7 @@ namespace Models.Production
                 ModifiedUser = userId
             };
 
-            CONTEXT.Tx_ProductionTask_Activity_Detail.Add(tx_ProductionTask_Activity_Detail);
+            CONTEXT.Tx_ProductionTask_Activity_Log.Add(tx_ProductionTask_Activity_log);
             CONTEXT.SaveChanges();
         }
 

@@ -79,6 +79,8 @@ namespace Models.Production
         public int? DocEntry { get; set; }
         
         public string DocNum { get; set; }
+
+        public string RoutingCode { get; set; }
         
         public string ItemCode { get; set; }
         
@@ -110,6 +112,10 @@ namespace Models.Production
 
         public decimal? Quantity { get; set; }
 
+        public string ActualHours_ { get; set; }
+
+        public string DurationTotal_ { get; set; }
+
     }
     public class ProductionTaskGenerateModel
     {
@@ -117,6 +123,7 @@ namespace Models.Production
 		public long? BaseId { get; set; }
         public long BaseDetId { get; set; }
         public int? DocEntry { get; set; }
+        public int? DurationTotal { get; set; }
         public string DocNum { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
@@ -210,6 +217,7 @@ namespace Models.Production
                     T0.""DetId"" AS ""DetId"",
                     T0.""OperatorId"" AS ""OperatorId"",
                     T0.""OperatorName"" AS ""OperatorName"",
+                    T0.""RoutingCode"" AS ""RoutingCode"",
 
                     T1.""ItemCode"",
                     T1.""ProdName"" AS ""ItemName"",
@@ -218,7 +226,16 @@ namespace Models.Production
 
                     T2.""Id"" AS ""ProductionTaskId"",
                     T2.""TransNo"" AS ""ProductionTaskTransNo"",
-                    T2.""Status"" AS ""ProductionStatus""
+                    T2.""Status"" AS ""ProductionStatus"",
+                    T2.""QuantityActual"" AS ""Quantity"",
+                    T2.""ActualHours"" AS ""ActualHours"",
+                    LPAD(CAST(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 60) AS NVARCHAR), 2, '0') || ':' || 
+                    LPAD(CAST(MOD(COALESCE(T0.""DurationTotal"", 0), 60) AS NVARCHAR), 2, '0') AS ""DurationTotal_"",
+                    LPAD(TO_VARCHAR(FLOOR(COALESCE(T2.""ActualHours"", 0) / 60)), 2, '0') 
+                        || ':' || 
+                    LPAD(TO_VARCHAR(MOD(COALESCE(T2.""ActualHours"", 0), 60)), 2, '0') 
+                        AS ""ActualHours_"",
+                    T2.""Comments"" AS ""TaskComments""
                     FROM ""Tx_ProcessCard_Detail"" T0
                 INNER JOIN """ + DbProvider.dbSap_Name + @""".""OWOR"" T1 ON T0.""Id"" = T1.""U_IDU_WebId"" AND T0.""Sort"" = T1.""U_IDU_RoutingLevel""
                 LEFT JOIN ""Tx_ProductionTask"" T2 ON T0.""Id"" = T2.""BaseId"" AND T0.""DetId"" = T2.""BaseDetId"" 
@@ -344,10 +361,12 @@ namespace Models.Production
 
                                     string dateX = DateTime.Now.ToString("yyyy-MM-dd");
                                     string transNo = CONTEXT.Database.SqlQuery<string>("CALL \"SpSysGetNumbering\" (" + userId + ",'ProductionTask','" + dateX + "','') ").SingleOrDefault();
+                                    
                                     tx_ProductionTask.TransNo = transNo;
                                     tx_ProductionTask.Status = "Open";
                                     tx_ProductionTask.IsRunningTask = "N";
                                     tx_ProductionTask.Uom = activites.Uom;
+                                    tx_ProductionTask.EstimatedHours = activites.DurationTotal;
 
                                     tx_ProductionTask.CreatedDate = dtModified;
                                     tx_ProductionTask.CreatedUser = userId;

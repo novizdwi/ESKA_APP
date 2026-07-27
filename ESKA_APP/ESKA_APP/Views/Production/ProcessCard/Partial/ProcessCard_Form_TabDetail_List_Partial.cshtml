@@ -125,23 +125,22 @@
         column.Width = 100;
         column.ReadOnly = false;
         column.Settings.AllowSort = DefaultBoolean.False;
-    }); 
+    });
+
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "OperatorId";
         column.Name = "OperatorId";
         column.Caption = "Operator";
-
         column.Width = 150;
-
         column.ColumnType = MVCxGridViewColumnType.ComboBox;
 
         ComboBoxProperties cbo = column.PropertiesEdit as ComboBoxProperties;
-
         cbo.TextField = "Name";
         cbo.ValueField = "Code";
-        cbo.ValueType = typeof(string);
-        cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators();
+        cbo.ValueType = typeof(int);
+        cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators(null); // full list, buat display
         cbo.ClientSideEvents.SelectedIndexChanged = "gvProcessCardContentDetail_OperatorOnChanged";
     });
 
@@ -248,12 +247,28 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "PracticeHours";
-        column.Name = "PracticeHours";
-        column.Caption = "Practice Hours";
+        column.FieldName = "DurationTotal";
+        column.Name = "DurationTotal";
+        column.Caption = "Est Task Duration";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 100;
+        column.Width = 0 ;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DurationTotal_";
+        column.Name = "DurationTotal_";
+        column.Caption = "Est Task Duration";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = status == "Posted" ? 100 : 0 ;
         column.ReadOnly = true;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
@@ -284,7 +299,7 @@
         summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
         summary.DisplayFormat = "{0:#,###}";
         settings.TotalSummary.Add(summary);
-    }); 
+    });
 
     settings.Columns.Add(column =>
     {
@@ -302,6 +317,27 @@
         txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
     });
+
+    settings.CellEditorInitialize = (sender, e) =>
+    {
+        if (e.Column.FieldName == "OperatorId")
+        {
+            MVCxGridView grid = sender as MVCxGridView;
+            string routingCode = grid.GetRowValues(e.VisibleIndex, "RoutingCode") as string;
+            object currentValue = grid.GetRowValues(e.VisibleIndex, "OperatorId");
+
+            ASPxComboBox cbo = e.Editor as ASPxComboBox;
+            if (cbo != null)
+            {
+                cbo.ValueType = typeof(int);
+                cbo.TextField = "Name";
+                cbo.ValueField = "Code";
+                cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators(routingCode); // filtered, buat editing
+                cbo.DataBind();
+                cbo.Value = currentValue;
+            }
+        }
+    };
 
     settings.Settings.ShowFooter = true;
 

@@ -50,7 +50,7 @@
         column.Caption = "Id";
         column.Width = 0;
 
-    });    
+    });
 
     settings.Columns.Add(column =>
     {
@@ -80,6 +80,24 @@
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RoutingCode";
+        column.Name = "RoutingCode";
+        column.Caption = "Routing Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.Settings.AllowSort = DefaultBoolean.True;
+        column.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
     });
 
     settings.Columns.Add(column =>
@@ -176,7 +194,7 @@
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
     });
-
+     
     settings.Columns.Add(column =>
     {
         column.FieldName = "OperatorId";
@@ -185,13 +203,11 @@
         column.Width = 150;
         column.ColumnType = MVCxGridViewColumnType.ComboBox;
 
-        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        ComboBoxProperties cbo = column.PropertiesEdit as ComboBoxProperties;
         cbo.TextField = "Name";
         cbo.ValueField = "Code";
-        cbo.ValueType = typeof(string);   // ikuti Code dari GetAllOperators
-        cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators();
-        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        // kirim nama grid supaya handler tahu grid mana (nama grid dinamis per master row)
+        cbo.ValueType = typeof(int);
+        cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators(null); // full list, buat display
         cbo.ClientSideEvents.SelectedIndexChanged = "function(s, e){ gvOperatorOnChanged(s, e, '" + gridName + "'); }";
     });
 
@@ -217,6 +233,7 @@
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.Settings.AllowSort = DefaultBoolean.False;
         column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.NumberType = SpinEditNumberType.Float;
@@ -226,6 +243,57 @@
         txt.Width = 120;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
+
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Finished Qty";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###.00";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+        txt.Width = 120;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DurationTotal_";
+        column.Name = "DurationTotal_";
+        column.Caption = "Est Task Duration";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ActualHours_";
+        column.Name = "ActualHours_";
+        column.Caption = "Actual Hours";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
     });
 
@@ -260,6 +328,27 @@
         if (string.Equals(status, "Closed", StringComparison.OrdinalIgnoreCase))
         {
             e.Cell.BackColor = System.Drawing.Color.LightGray;
+        }
+    };
+
+    settings.CellEditorInitialize = (sender, e) =>
+    {
+        if (e.Column.FieldName == "OperatorId")
+        {
+            MVCxGridView grid = sender as MVCxGridView;
+            string routingCode = grid.GetRowValues(e.VisibleIndex, "RoutingCode") as string;
+            object currentValue = grid.GetRowValues(e.VisibleIndex, "OperatorId");
+
+            ASPxComboBox cbo = e.Editor as ASPxComboBox;
+            if (cbo != null)
+            {
+                cbo.ValueType = typeof(int);
+                cbo.TextField = "Name";
+                cbo.ValueField = "Code";
+                cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators(routingCode); // filtered, buat editing
+                cbo.DataBind();
+                cbo.Value = currentValue;
+            }
         }
     };
 

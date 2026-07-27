@@ -560,7 +560,7 @@
     <Compile Include="Models\_EF\Tx_ProductionTask_Activity.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tx_ProductionTask_Activity_Detail.cs">
+    <Compile Include="Models\_EF\Tx_ProductionTask_Activity_Log.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_StockOpname.cs">

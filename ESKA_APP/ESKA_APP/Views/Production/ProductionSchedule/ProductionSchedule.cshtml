@@ -64,8 +64,7 @@
             if (sec == -1) {
                 clearInterval(timer);
                 OnClickBtnRefresh();
-                MyTimer();
-                console.log("masuk pak eko");
+                MyTimer(); 
             }
         }, 1000);
 
@@ -86,8 +85,7 @@
             var overflow = document.documentElement.scrollHeight - window.innerHeight;
             if (overflow > 0) {
                 var corrected = Math.max(target - overflow - 2, 150);
-                setGridHeight(corrected);
-                console.log('corrected height:', corrected, 'overflow was:', overflow);
+                setGridHeight(corrected); 
             }
         }, 50);
     }
@@ -206,10 +204,7 @@
 
     function OnClickBtnSave(s, e) {
         var formData = getFormData();                              // master (root)
-        formData.OperatorsJson = JSON.stringify(getFormDataDetail()); // detail (1 field string)
-
-        console.log("master:", formData, "operators:", getFormDataDetail());
-
+        formData.OperatorsJson = JSON.stringify(getFormDataDetail()); // detail (1 field string) 
         $.ajax({
             type: "POST",
             url: '@Url.Action("Update", "ProductionSchedule")',

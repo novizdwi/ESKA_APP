@@ -12,7 +12,7 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProductionTask_Activity_Detail
+    public partial class Tx_ProductionTask_Activity_Log
     {
         public Nullable<long> Id { get; set; }
         public Nullable<long> DetId { get; set; }
