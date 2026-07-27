@@ -1,4 +1,4 @@
-﻿@using (Ajax.BeginForm("Cancel", "IssueAndReceipt", null,
+@using (Ajax.BeginForm("mantap", "GoodsReceiptPO", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -6,21 +6,20 @@ new AjaxOptions
     OnSuccess = "OnSuccessMsgBox",
     OnFailure = "OnFailure",
     OnComplete = "OnComplete",
-    UpdateTargetId = "CancelReason_contentForm",
+    UpdateTargetId = "Scale_contentForm",
     InsertionMode = InsertionMode.Replace,
 
 },
 new
 {
-    id = "CancelReason_formDetail",
+    id = "Scale_formDetail",
     @class = "edit_form",
     style = "height: 200px; width: 100%;",
     autocomplete = "off"
 }))
 {
-    <div id="CancelReason_contentForm">
-        @Html.Partial("Partial/CancelReason/CancelReason_Panel_Partial")
+    <div id="Scale_contentForm">
+        @Html.Partial("Partial/Scale/Scale_Panel_Partial")
 
     </div>
 }
-

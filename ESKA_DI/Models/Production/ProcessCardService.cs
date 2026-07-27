@@ -1077,7 +1077,9 @@ namespace Models.Production
                         if (!firstLine) oPO.Lines.Add();
 
                         oPO.Lines.ItemNo = det.Component;
-                        oPO.Lines.ProductionOrderIssueType = BoIssueMethod.im_Backflush;
+                        // Manual issue: komponen dikeluarkan lewat dokumen Issue for Production
+                        // (modul IssueAndReceipt), bukan backflush otomatis saat Receipt.
+                        oPO.Lines.ProductionOrderIssueType = BoIssueMethod.im_Manual;
                         oPO.Lines.PlannedQuantity = (double)det.TotalQty;
 
                         firstLine = false;

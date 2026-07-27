@@ -14,9 +14,9 @@
 
 @Html.DevExpress().GridView(settings=>
 {
-    settings.Name = "gvGoodsReceiptPoList";
+    settings.Name = "gvIssueAndReceiptList";
     settings.KeyFieldName = "Id";
-    settings.CallbackRouteValues =  new { Controller = "GoodsReceiptPo", Action = "ListPartial" };
+    settings.CallbackRouteValues =  new { Controller = "IssueAndReceipt", Action = "ListPartial" };
 
     settings.Columns.Add(column =>
     {
@@ -28,7 +28,7 @@
             ViewContext.Writer.Write(
 
              Html.DevExpress().HyperLink(settingsHL => {
-                 settingsHL.Name = "gvGoodsReceiptPoListChoose_" + Guid.NewGuid();
+                 settingsHL.Name = "gvIssueAndReceiptListChoose_" + Guid.NewGuid();
                  settingsHL.NavigateUrl = "javascript:void(0)";
                  settingsHL.Properties.Text = "Choose";
                  settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChoose(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "Id"));
@@ -57,7 +57,7 @@
     settings.Columns.Add(column =>
     {
         column.FieldName = "TransNo";
-        column.Caption = "Trans No";
+        column.Caption = "Trans No.";
         column.Name = "TransNo";
         column.Width = Unit.Percentage(30);
     });
@@ -78,33 +78,25 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "WhsCode";
-        column.Caption = "Whs Code";
-        column.Name = "WhsCode";
+        column.FieldName = "BaseProcessCardTransNo";
+        column.Caption = "No Work Order";
+        column.Name = "BaseProcessCardTransNo";
         column.Width = Unit.Percentage(30);
     });
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "WhsName";
-        column.Caption = "Whs Name";
-        column.Name = "WhsName";
-        column.Width = Unit.Percentage(100);
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "RequestNo";
-        column.Caption = "Request No";
-        column.Name = "RequestNo";
+        column.FieldName = "BaseProcessCardRoutingName";
+        column.Caption = "Route Stage";
+        column.Name = "BaseProcessCardRoutingName";
         column.Width = Unit.Percentage(45);
     });
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "DocNum_";
-        column.Caption = "Doc Num";
-        column.Name = "DocNum_";
+        column.FieldName = "BaseProcessCardOperatorName";
+        column.Caption = "Operator";
+        column.Name = "BaseProcessCardOperatorName";
         column.Width = Unit.Percentage(45);
     });
 
@@ -114,14 +106,6 @@
         column.Caption = "Status";
         column.Name = "Status";
         column.Width = Unit.Percentage(25);
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "ApprovalStatus";
-        column.Caption = "Approval Status";
-        column.Name = "ApprovalStatus";
-        column.Width = Unit.Percentage(30);
     });
 
     settings.SettingsPager.Position = PagerPosition.Bottom;
@@ -147,17 +131,17 @@
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Paging,
-        new { Controller = "GoodsReceiptPo", Action = "ListPaging" }
+        new { Controller = "IssueAndReceipt", Action = "ListPaging" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Filtering,
-        new { Controller = "GoodsReceiptPo", Action = "ListFiltering" }
+        new { Controller = "IssueAndReceipt", Action = "ListFiltering" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Sorting,
-        new { Controller = "GoodsReceiptPo", Action = "ListSorting" }
+        new { Controller = "IssueAndReceipt", Action = "ListSorting" }
     );
 
 

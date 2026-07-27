@@ -1,12 +1,15 @@
-﻿@Html.DevExpress().PopupControl(settings =>
+@Html.DevExpress().PopupControl(settings =>
 {
-    settings.Name = "popupCancelReason";
-    settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "CancelReason_PopupListOnDemandPartial" };
+    settings.Name = "popupScale";
+    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "ViewScale_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
-    settings.Modal = true;
+
+    // Popup ini dibuka DI ATAS popupBatch (yang modal).
+    // Modal dimatikan agar tidak tertutup overlay milik popupBatch.
+    settings.Modal = false;
 
     settings.ShowFooter = true;
     settings.AllowDragging = true;
@@ -23,24 +26,23 @@
     settings.PopupAnimationType = AnimationType.Fade;
 
     settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
-    settings.ClientSideEvents.EndCallback = "popupCancelReason_EndCallback";
+    settings.ClientSideEvents.EndCallback = "popupScale_EndCallback";
     settings.PopupElementID = "ShowButton";
-    settings.HeaderText = "Cancel Reasons";
+    settings.HeaderText = "Timbangan";
 
     settings.SetContent(() =>
     {
-        Html.RenderPartial("Partial/CancelReason/CancelReason_Form_Partial");
+        Html.RenderPartial("Partial/Scale/Scale_Form_Partial");
 
     });
 
     settings.PreRender = (sender, e) =>
     {
         ASPxPopupControl popup = (ASPxPopupControl)sender;
-        //popup.Width = 1000;
-        //popup.Height =690;
-
-        popup.Width = 300;
-        popup.Height = 200;
+        // Lebar dipaskan dengan total kolom grid (210+50+100+90+110+90 = 650)
+        // + scrollbar vertikal & border, agar tepi popup rata dengan kolom terakhir.
+        popup.Width = 700;
+        popup.Height = 420;
     };
 
 

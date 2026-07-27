@@ -1,0 +1,174 @@
+@using Models;
+@using Models.Transaction;
+@model List<Models.Transaction.GoodsReceiptPoScaleModel>
+
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+    var DetId = Convert.ToInt64(Request["cbDetId"]);
+    var DetDetId = Convert.ToInt64(Request["cbDetDetId"]);
+    int userId = (int)Session["userId"];
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+    if (ViewBag.DetId != null)
+    {
+        DetId = ViewBag.DetId;
+    }
+    if (ViewBag.DetDetId != null)
+    {
+        DetDetId = ViewBag.DetDetId;
+    }
+
+    ViewBag.ReadOnly = false;
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_GoodsReceiptPO\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    if (status != "Draft")
+    {
+        ViewBag.ReadOnly = true;
+    }
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvContentScaleList";
+    settings.KeyFieldName = "DetDetDetId";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListPartial", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListAddNewRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListUpdateRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListDeleteRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
+
+    settings.SettingsBehavior.ConfirmDelete = true;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 200;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowEditButton = true;
+
+    settings.CommandColumn.Width = 210;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+
+    // Tombol Timbang: label saja, fungsinya menyusul.
+    if (!ViewBag.ReadOnly)
+    {
+        var timbangButton = new GridViewCommandColumnCustomButton() { ID = "timbangButton", Text = "Timbang" };
+        settings.CommandColumn.CustomButtons.Add(timbangButton);
+    }
+
+    settings.Columns.Add("DetDetDetId", "DetDetDetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetDetId";
+        column.Caption = "Det Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RowNo";
+        column.Caption = "#";
+        column.Width = 50;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Uom";
+        column.Name = "Uom";
+        column.Caption = "UoM";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 90;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Netto";
+        column.Name = "Netto";
+        column.Caption = "Netto Kg";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 110;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N2";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "LineNum";
+        column.Name = "LineNum";
+        column.Caption = "Sequence";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 90;
+        column.Settings.AllowSort = DefaultBoolean.False;
+
+        // Sequence di-generate otomatis oleh server (max + 1).
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        column.PropertiesEdit.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentScaleListOnBeginCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentScaleListOnEndCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
+
+    settings.InitNewRow = (s, e) =>
+    {
+        e.NewValues["DetDetId"] = DetDetId;
+    };
+
+}).Bind(Model).GetHtml()

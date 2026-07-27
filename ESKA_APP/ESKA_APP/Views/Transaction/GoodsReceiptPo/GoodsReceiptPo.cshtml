@@ -634,16 +634,10 @@
     function BtnCflPurcahaseOrderPopupListGrpoOnClick(s, e) {
         var popup = ASPxClientPopupControl.Cast("cflPurchaseOrderPopupListPurchaseOrder");
 
-        var gv = ASPxClientGridView.Cast('cflPurchaseOrderPopupListPurchaseOrder');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
+        // Selalu muat ulang isi popup tiap kali dibuka, supaya daftar PO selalu segar.
+        popup.SetContentHtml("");
+        popup.PerformCallback();
+        popup.Show();
     }
 
     function OnClickChoose_CflPurchaseOrderPurchaseOrder(s, e, data) {
@@ -677,16 +671,11 @@
     function BtnCflItemPopupListGoodsReceiptPoOnClick(s, e) {
         var popup = ASPxClientPopupControl.Cast("cflItemPopupListPurchaseOrder");
 
-        var gv = ASPxClientGridView.Cast('gvCflItemListPurchaseOrder ');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
+        // Selalu muat ulang isi popup tiap kali dibuka, supaya daftar item
+        // (sisa qty PO) selalu segar tanpa perlu tekan tombol refresh manual.
+        popup.SetContentHtml("");
+        popup.PerformCallback();
+        popup.Show();
     }
 
     function OnClickChoose_CflItemPurchaseOrder(s, e, data) {
@@ -845,7 +834,7 @@ new
 @Html.Partial("Partial/GoodsReceiptPo_Panel_List_Partial")
 
 
-@*@Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")*@
+@Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")
 
 @*-------------------------------------------------
     ViewBatch
@@ -928,3 +917,64 @@ new
 </script>
 
 @Html.Partial("Partial/Batch/Batch_Partial")
+
+@*-------------------------------------------------
+    ViewScale (Timbangan)
+    -------------------------------------------------*@
+<script>
+    var isUpdateScale = false;
+
+    // Dibuka dari kolom Netto pada grid batch (di dalam popupBatch).
+    // popupScale dideklarasikan di root view, bukan di dalam form popupBatch,
+    // supaya tidak ikut hancur saat popupBatch melakukan callback.
+    function BtnScalePopupListOnClick(s, e, detId, detDetId) {
+        var popup = ASPxClientPopupControl.Cast("popupScale");
+
+        popup.callbackUrl = '@Url.Action("ViewScale_PopupListOnDemandPartial", "GoodsReceiptPo")'
+            + '?Id=' + Id.GetValue() + '&DetId=' + detId + '&DetDetId=' + detDetId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
+
+    function popupScale_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Scale_formDetail");
+        var popup = ASPxClientPopupControl.Cast("popupScale");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(430, 130);
+        }
+    }
+
+    function ViewScale_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupScale");
+        popup.Hide();
+    }
+
+    function gvContentScaleListOnBeginCallback(s, e, Id, DetId, DetDetId) {
+        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW") {
+            isUpdateScale = true;
+        }
+    }
+
+    function gvContentScaleListOnEndCallback(s, e, Id, DetId, DetDetId) {
+        if (isUpdateScale) {
+
+            isUpdateScale = false;
+
+            // Netto batch = jumlah baris scale -> segarkan grid batch & grid detail.
+            var gvBatch = ASPxClientGridView.Cast('gvContentBatchList');
+            if (gvBatch != null) {
+                gvBatch.PerformCallback();
+            }
+            if (typeof (gvDetail) != 'undefined' && gvDetail != null) {
+                gvDetail.PerformCallback();
+            }
+        }
+    }
+
+</script>
+
+@Html.Partial("Partial/Scale/Scale_Partial")
