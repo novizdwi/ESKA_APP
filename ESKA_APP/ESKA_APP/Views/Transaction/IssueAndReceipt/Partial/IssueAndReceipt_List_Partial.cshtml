@@ -76,29 +76,7 @@
         txt.EditFormatString = "dd/MM/yyyy";
     });
 
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "BaseProcessCardTransNo";
-        column.Caption = "No Work Order";
-        column.Name = "BaseProcessCardTransNo";
-        column.Width = Unit.Percentage(30);
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "BaseProcessCardRoutingName";
-        column.Caption = "Route Stage";
-        column.Name = "BaseProcessCardRoutingName";
-        column.Width = Unit.Percentage(45);
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "BaseProcessCardOperatorName";
-        column.Caption = "Operator";
-        column.Name = "BaseProcessCardOperatorName";
-        column.Width = Unit.Percentage(45);
-    });
+    // Standalone: kolom No Work Order / Route Stage / Operator dihapus (tak lagi memakai Production Order).
 
     settings.Columns.Add(column =>
     {

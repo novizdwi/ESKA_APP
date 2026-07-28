@@ -50,33 +50,127 @@
     }
 
 
-    function OnClickBtnShow(s, e) {
+    // ====== Auto-refresh (realtime) ======
+    // Ubah nilai ini untuk mengatur interval refresh (dalam milidetik). 30000 = 30 detik.
+    var AUTO_REFRESH_MS = 30000;
+    var autoRefreshTimer = null;
+
+    // Cache nilai tanggal. Auto-refresh TIDAK membaca ulang editor DevExpress tiap tick
+    // (setelah FinalizeCallback, GetValueString() sempat throw pada tick berikutnya -> cadence
+    // terasa ~60 detik). Editor hanya dibaca saat load manual/awal.
+    window.grpoFrom = window.grpoFrom || null;
+    window.grpoTo = window.grpoTo || null;
+
+    function readDates() {
+        try {
+            if (typeof TransDate_From !== "undefined" && typeof TransDate_From.GetValueString === "function" &&
+                typeof TransDate_To !== "undefined" && typeof TransDate_To.GetValueString === "function") {
+                window.grpoFrom = TransDate_From.GetValueString();
+                window.grpoTo = TransDate_To.GetValueString();
+                return true;
+            }
+        } catch (e) { /* editor belum siap; pakai cache lama */ }
+        return false;
+    }
+
+    // silent = true  -> refresh diam2 (tanpa loading panel), dipakai auto-refresh
+    // silent = false -> tampilkan loading panel, dipakai saat klik tombol / load pertama
+    function loadChart(silent) {
+
+        // Manual/awal: segarkan cache dari editor. Silent: pakai cache; baca sekali kalau kosong.
+        if (!silent) {
+            readDates();
+        } else if (window.grpoFrom === null || window.grpoTo === null) {
+            readDates();
+        }
+
+        // Belum ada nilai tanggal sama sekali -> lewati tick ini tanpa error.
+        if (window.grpoFrom === null || window.grpoTo === null) {
+            return;
+        }
 
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChartPartial", "ReportGrpoSummary")',
             data: {
-                TransDate_From: TransDate_From.GetValueString(),
-                TransDate_To: TransDate_To.GetValueString()
+                TransDate_From: window.grpoFrom,
+                TransDate_To: window.grpoTo
             },
             beforeSend: function () {
-                OnBegin();
+                if (!silent) OnBegin();
             },
             success: function (response) {
                 $("#contentChart").html(response);
                 MVCxClientUtils.FinalizeCallback();
-                OnSuccess();
-
+                updateLastRefreshed();
+                if (!silent) OnSuccess();
             },
             error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
+                if (silent) {
+                    if (window.console) console.warn('[GRPO] auto-refresh gagal:', textStatus, errorThrown);
+                } else {
+                    OnFailure(jqXhr, textStatus, errorThrown);
+                }
             },
             complete: function () {
-                OnComplete()
+                if (!silent) OnComplete();
             }
         });
 
     }
+
+    function updateLastRefreshed() {
+        var now = new Date();
+        var t = ('0' + now.getHours()).slice(-2) + ':' +
+                ('0' + now.getMinutes()).slice(-2) + ':' +
+                ('0' + now.getSeconds()).slice(-2);
+        $("#lastRefreshed").text('Terakhir diperbarui: ' + t);
+    }
+
+    function startAutoRefresh() {
+        if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+        autoRefreshTimer = setInterval(function () { loadChart(true); }, AUTO_REFRESH_MS);
+    }
+
+    function stopAutoRefresh() {
+        if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
+    }
+
+    function onToggleAutoRefresh() {
+        if ($("#chkAutoRefresh").is(":checked")) {
+            loadChart(true);
+            startAutoRefresh();
+        } else {
+            stopAutoRefresh();
+        }
+    }
+
+    // Tombol "Tampilkan" tetap berfungsi (refresh manual dengan loading panel)
+    function OnClickBtnShow(s, e) {
+        loadChart(false);
+    }
+
+    // Load pertama + mulai auto-refresh setelah kontrol DevExpress siap.
+    // Pakai retry: objek editor (TransDate_From) & loadingPanel belum tentu siap saat script
+    // ini jalan (script ada di atas halaman, sebelum kontrol dirender). Jangan sentuh
+    // ASPxClientControl di sini karena bisa belum terdefinisi -> auto-refresh gagal mulai.
+    function initRealtime() {
+        // Cek method (bukan cuma variabel): objek editor DevExpress dideklarasikan lebih awal,
+        // tapi .GetValueString()/.Show() baru siap setelah kontrol ter-init. Tunggu sampai siap.
+        if (typeof TransDate_From === "undefined" || typeof TransDate_From.GetValueString !== "function" ||
+            typeof TransDate_To === "undefined" || typeof TransDate_To.GetValueString !== "function" ||
+            typeof loadingPanel === "undefined" || typeof loadingPanel.Show !== "function") {
+            setTimeout(initRealtime, 200);
+            return;
+        }
+        loadChart(false);
+        if ($("#chkAutoRefresh").is(":checked")) startAutoRefresh();
+    }
+
+    $(function () { initRealtime(); });
+
+    // Hentikan timer saat halaman ditinggalkan
+    $(window).on('unload', stopAutoRefresh);
 
 </script>
 
@@ -198,9 +292,17 @@
 
     }).GetHtml()
 
+    <div id="autoRefreshBar" style="padding: 6px 10px; font-size: 12px; color: #666;">
+        <label style="cursor: pointer;">
+            <input type="checkbox" id="chkAutoRefresh" checked onchange="onToggleAutoRefresh()" />
+            Auto refresh (realtime) tiap 30 detik
+        </label>
+        <span id="lastRefreshed" style="margin-left: 12px;"></span>
+    </div>
+
     <div id="contentChart" style="padding: 10px;">
         <div style="padding: 30px; color: #888; font-size: 14px;">
-            Pilih rentang tanggal lalu klik Tampilkan.
+            Memuat data...
         </div>
     </div>
 

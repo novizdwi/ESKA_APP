@@ -31,12 +31,19 @@
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
     settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
-    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+    // Standalone: baris ditambah via tombol "Add Item" (CFL), bukan new-item-row.
+    //settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.None;
 
     //settings.Settings.ShowFilterRow = true;
     //settings.Settings.ShowFilterRowMenu = true;
 
+    settings.CommandColumn.Visible = true;
     settings.CommandColumn.Width = 70;
+    if (isDraft)
+    {
+        settings.CommandColumn.CustomButtons.Add(new GridViewCommandColumnCustomButton { ID = "btnDeleteItem", Text = "Delete" });
+        settings.ClientSideEvents.CustomButtonClick = "gvIssueDetailOnCustomButtonClick";
+    }
     settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
     settings.Columns.Add("Id", "Id").Visible = false;
     settings.Columns.Add("DetId", "DetId").Visible = false;
@@ -86,11 +93,15 @@
         column.Name = "Quantity";
         column.Caption = "Quantity";
 
+        // Standalone: Quantity diisi user (editable saat Draft).
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 120;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = true;
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.ReadOnly = !isDraft;
+        if (!isDraft)
+        {
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
@@ -221,8 +232,11 @@
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 120;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = true;
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.ReadOnly = !isDraft;
+        if (!isDraft)
+        {
+            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;

@@ -39,18 +39,8 @@ namespace Models.Transaction
         public DateTime? TransDate { get; set; }
         public DateTime? PostingDate { get; set; }
 
-        // Production Order
-        public long? BaseEntry { get; set; }
-        public string BaseDocNum { get; set; }
-
-        // Process Card
-        public long? BaseProcessCardId { get; set; }
-        public string BaseProcessCardTransNo { get; set; }
-        public int? BaseProcessCardSort { get; set; }
-        public string BaseProcessCardRoutingCode { get; set; }
-        public string BaseProcessCardRoutingName { get; set; }
-        public int? BaseProcessCardOperatorId { get; set; }
-        public string BaseProcessCardOperatorName { get; set; }
+        // Standalone: field Production Order / Process Card (BaseEntry, BaseDocNum, BaseProcessCard*)
+        // dihapus — modul tidak lagi memakai Production Order. Kolom DB & entity EF tetap ada.
 
         // SAP
         public long? IssueDocEntry { get; set; }
@@ -360,8 +350,8 @@ namespace Models.Transaction
                         CONTEXT.SaveChanges();
                         Id = ent.Id;
 
-                        CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_AddItemDetail\"(:p0,:p1,:p2, :p3,'Add')", model._UserId, Id, model.BaseProcessCardId, model.BaseProcessCardSort);
-
+                        // Standalone: dokumen baru mulai KOSONG. Item ditambahkan user via CFL (ChooseItem),
+                        // bukan di-seed dari Production Order / Process Card.
 
                         CONTEXT_TRANS.Commit();
                     }
@@ -599,7 +589,6 @@ namespace Models.Transaction
                 model = this.NavFirst(userId);
             }
 
-
             return model;
         }
 
@@ -657,15 +646,16 @@ namespace Models.Transaction
 
             using (var CONTEXT = new HANA_APP())
             {
-                sql = @"SELECT T0.""Id"", 
-                                T0.""BaseDocNum"",
-                                T1.""DetId"", 
-                                T1.""ItemCode"", 
+                // Standalone: "No" pada popup batch memakai TransNo dokumen (BaseDocNum lama = No Production Order, kini kosong).
+                sql = @"SELECT T0.""Id"",
+                                T0.""TransNo"" AS ""BaseDocNum"",
+                                T1.""DetId"",
+                                T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""WhsCode"",
                                 T1.""Quantity""
-                                FROM ""Tx_IssueAndReceipt"" T0   
-                                LEFT JOIN ""Tx_IssueAndReceipt_Receipt_Item"" T1 ON T0.""Id"" = T1.""Id"" 
+                                FROM ""Tx_IssueAndReceipt"" T0
+                                LEFT JOIN ""Tx_IssueAndReceipt_Receipt_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
 
                 model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptView___>(sql, id, detId).FirstOrDefault();
@@ -687,15 +677,16 @@ namespace Models.Transaction
 
             using (var CONTEXT = new HANA_APP())
             {
-                sql = @"SELECT T0.""Id"", 
-                                T0.""BaseDocNum"",
-                                T1.""DetId"", 
-                                T1.""ItemCode"", 
+                // Standalone: "No" pada popup batch memakai TransNo dokumen (BaseDocNum lama = No Production Order, kini kosong).
+                sql = @"SELECT T0.""Id"",
+                                T0.""TransNo"" AS ""BaseDocNum"",
+                                T1.""DetId"",
+                                T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""WhsCode"",
                                 T1.""Quantity""
-                                FROM ""Tx_IssueAndReceipt"" T0   
-                                LEFT JOIN ""Tx_IssueAndReceipt_Issue_Item"" T1 ON T0.""Id"" = T1.""Id"" 
+                                FROM ""Tx_IssueAndReceipt"" T0
+                                LEFT JOIN ""Tx_IssueAndReceipt_Issue_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
 
                 model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueView___>(sql, id, detId).FirstOrDefault();
@@ -1055,6 +1046,195 @@ namespace Models.Transaction
             }
         }
 
+        #region CRUD baris ITEM (standalone: item ditambah user via CFL)
+
+        // Tambah baris item ISSUE dari CFL (item master + stok). Netto=0, batch diisi menyusul.
+        public long IssueItem_Add(IssueReceipt_IssueItemModel model)
+        {
+            long detId = 0;
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                    int nextLine = (CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_IssueAndReceipt_Issue_Item\" WHERE \"Id\"=:p0", model.Id).FirstOrDefault() ?? -1) + 1;
+
+                    var ent = new Tx_IssueAndReceipt_Issue_Item();
+                    ent.Id = model.Id;
+                    ent.ItemCode = model.ItemCode;
+                    ent.ItemName = model.ItemName;
+                    ent.Quantity = (int)(model.Quantity ?? 0);
+                    ent.Uom = model.Uom;
+                    ent.WhsCode = model.WhsCode;
+                    ent.Netto = 0;
+                    ent.LineNum = nextLine;
+                    ent.LineStatus = "O";
+                    ent.CreatedDate = dtModified;
+                    ent.CreatedUser = model._UserId;
+                    ent.ModifiedDate = dtModified;
+                    ent.ModifiedUser = model._UserId;
+
+                    CONTEXT.Tx_IssueAndReceipt_Issue_Item.Add(ent);
+                    CONTEXT.SaveChanges();
+                    detId = ent.DetId;
+
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+            return detId;
+        }
+
+        // Tambah baris item RECEIPT dari CFL (barang jadi + gudang tujuan).
+        public long ReceiptItem_Add(IssueReceipt_ReceiptItemModel model)
+        {
+            long detId = 0;
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                    int nextLine = (CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_IssueAndReceipt_Receipt_Item\" WHERE \"Id\"=:p0", model.Id).FirstOrDefault() ?? -1) + 1;
+
+                    var ent = new Tx_IssueAndReceipt_Receipt_Item();
+                    ent.Id = model.Id;
+                    ent.ItemCode = model.ItemCode;
+                    ent.ItemName = model.ItemName;
+                    ent.Quantity = (int)(model.Quantity ?? 0);
+                    ent.Uom = model.Uom;
+                    ent.WhsCode = model.WhsCode;
+                    ent.Netto = 0;
+                    ent.LineNum = nextLine;
+                    ent.LineStatus = "O";
+                    ent.CreatedDate = dtModified;
+                    ent.CreatedUser = model._UserId;
+                    ent.ModifiedDate = dtModified;
+                    ent.ModifiedUser = model._UserId;
+
+                    CONTEXT.Tx_IssueAndReceipt_Receipt_Item.Add(ent);
+                    CONTEXT.SaveChanges();
+                    detId = ent.DetId;
+
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+            return detId;
+        }
+
+        // Update Quantity (dan Uom/WhsCode) baris item — dipanggil saat user edit grid.
+        public void IssueItem_UpdateQuantity(IssueReceipt_IssueItemModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    var ent = CONTEXT.Tx_IssueAndReceipt_Issue_Item.Find(model.DetId ?? 0);
+                    if (ent != null)
+                    {
+                        ent.Quantity = (int)(model.Quantity ?? 0);
+                        if (!string.IsNullOrEmpty(model.WhsCode)) ent.WhsCode = model.WhsCode;
+                        ent.MsnPrd = model.MsnPrd;
+                        ent.Department = model.Department;
+                        ent.Cost = model.Cost;
+                        ent.ModifiedDate = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                        ent.ModifiedUser = model._UserId;
+                        CONTEXT.SaveChanges();
+                    }
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+        }
+
+        public void ReceiptItem_UpdateQuantity(IssueReceipt_ReceiptItemModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    var ent = CONTEXT.Tx_IssueAndReceipt_Receipt_Item.Find(model.DetId ?? 0);
+                    if (ent != null)
+                    {
+                        ent.Quantity = (int)(model.Quantity ?? 0);
+                        if (!string.IsNullOrEmpty(model.WhsCode)) ent.WhsCode = model.WhsCode;
+                        ent.MsnPrd = model.MsnPrd;
+                        ent.Department = model.Department;
+                        ent.Price = model.Price;
+                        ent.ModifiedDate = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                        ent.ModifiedUser = model._UserId;
+                        CONTEXT.SaveChanges();
+                    }
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+        }
+
+        // Hapus baris item ISSUE beserta batch & scale-nya (cascade).
+        public void IssueItem_Delete(int userId, long detId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Issue_Item_Batch_Scale\" WHERE \"DetDetId\" IN (SELECT \"DetDetId\" FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0)", detId);
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0", detId);
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Issue_Item\" WHERE \"DetId\"=:p0", detId);
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+        }
+
+        // Hapus baris item RECEIPT beserta batch & scale-nya (cascade).
+        public void ReceiptItem_Delete(int userId, long detId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch_Scale\" WHERE \"DetDetId\" IN (SELECT \"DetDetId\" FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0)", detId);
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0", detId);
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_IssueAndReceipt_Receipt_Item\" WHERE \"DetId\"=:p0", detId);
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+        }
+
+        #endregion
+
         #region Post / Cancel ke SAP
 
         // Hasil Add satu dokumen SAP.
@@ -1091,11 +1271,6 @@ namespace Models.Transaction
                     {
                         throw new Exception("[VALIDATION] - Hanya dokumen Draft yang bisa di-Post");
                     }
-                    if ((sync.BaseEntry ?? 0) == 0)
-                    {
-                        throw new Exception("[VALIDATION] - Work Order (Production Order) belum dipilih");
-                    }
-
                     bool anyIssue = sync.ListIssueItem_ != null && sync.ListIssueItem_.Any(x => (x.Quantity ?? 0) > 0);
                     bool anyReceipt = sync.ListReceiptItem_ != null && sync.ListReceiptItem_.Any(x => (x.Quantity ?? 0) > 0);
                     if (!anyIssue && !anyReceipt)
@@ -1206,16 +1381,7 @@ namespace Models.Transaction
             }
         }
 
-        // BaseLine komponen di Production Order (WOR1) berdasarkan ItemCode. -1 bila tidak ketemu.
-        private int GetWor1BaseLine(HANA_APP CONTEXT, long baseEntry, string itemCode)
-        {
-            int? line = CONTEXT.Database.SqlQuery<int?>(
-                "SELECT \"LineNum\" AS IDU FROM \"" + DbProvider.dbSap_Name + "\".\"WOR1\" WHERE \"DocEntry\"=:p0 AND \"ItemCode\"=:p1",
-                baseEntry, itemCode ?? "").FirstOrDefault();
-            return line ?? -1;
-        }
-
-        // Issue for Production = Goods Issue (oInventoryGenExit / ObjType 60), baris tertaut Production Order (BaseType 202).
+        // Issue = Goods Issue standalone (oInventoryGenExit / ObjType 60), tanpa tautan Production Order.
         private IssueReceipt_PostResult AddIssueForProduction(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, IssueAndReceiptModel model)
         {
             if (model.ListIssueItem_ == null || !model.ListIssueItem_.Any(x => (x.Quantity ?? 0) > 0))
@@ -1225,19 +1391,12 @@ namespace Models.Transaction
 
             SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenExit);
             oDoc.DocDate = DateTime.Now;
-            // TaxDate TIDAK boleh diisi utk dokumen bertaut Production Order (SAP -5002 [OIGE.TaxDate]).
+            oDoc.TaxDate = DateTime.Now;
 
             foreach (var item in model.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0))
             {
-                oDoc.Lines.BaseType = 202; // Production Order
-                oDoc.Lines.BaseEntry = Convert.ToInt32(model.BaseEntry);
-                int baseLine = GetWor1BaseLine(CONTEXT, model.BaseEntry ?? 0, item.ItemCode);
-                if (baseLine >= 0)
-                {
-                    oDoc.Lines.BaseLine = baseLine;
-                }
-
-                //oDoc.Lines.ItemCode = item.ItemCode;
+                // Standalone: baris TIDAK tertaut Production Order — item ditentukan langsung dari ItemCode.
+                oDoc.Lines.ItemCode = item.ItemCode;
                 if (!string.IsNullOrEmpty(item.WhsCode))
                 {
                     oDoc.Lines.WarehouseCode = item.WhsCode;
@@ -1294,19 +1453,12 @@ namespace Models.Transaction
 
             SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
             oDoc.DocDate = DateTime.Now;
-            // TaxDate TIDAK boleh diisi utk dokumen bertaut Production Order (SAP -5002 [OIGN.TaxDate]).
+            oDoc.TaxDate = DateTime.Now;
 
             foreach (var item in model.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0))
             {
-                oDoc.Lines.BaseType = 202; // Production Order
-                oDoc.Lines.BaseEntry = Convert.ToInt32(model.BaseEntry);
-                int baseLine = GetWor1BaseLine(CONTEXT, model.BaseEntry ?? 0, item.ItemCode);
-                if (baseLine >= 0)
-                {
-                    oDoc.Lines.BaseLine = baseLine;
-                }
-
-                //oDoc.Lines.ItemCode = item.ItemCode;
+                // Standalone: baris TIDAK tertaut Production Order — item ditentukan langsung dari ItemCode.
+                oDoc.Lines.ItemCode = item.ItemCode;
                 if (!string.IsNullOrEmpty(item.WhsCode))
                 {
                     oDoc.Lines.WarehouseCode = item.WhsCode;

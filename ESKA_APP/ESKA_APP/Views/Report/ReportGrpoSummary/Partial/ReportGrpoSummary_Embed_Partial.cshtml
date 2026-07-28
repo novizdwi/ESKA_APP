@@ -7,33 +7,140 @@
 
 <script type="text/javascript">
 
-    function OnClickBtnGrpoSummaryShow(s, e) {
+    // ====== Auto-refresh (realtime) versi embed di tree Report Purchasing ======
+    // Ubah nilai ini untuk mengatur interval refresh (dalam milidetik). 30000 = 30 detik.
+    var GRPO_SUMMARY_REFRESH_MS = 30000;
+
+    // Cache nilai tanggal. Auto-refresh TIDAK membaca ulang editor DevExpress tiap tick
+    // karena setelah FinalizeCallback pembacaan GetValueString() sempat throw pada tick
+    // berikutnya (bikin cadence terasa ~60 detik). Editor hanya dibaca saat load manual/awal.
+    window.grpoSummaryFrom = window.grpoSummaryFrom || null;
+    window.grpoSummaryTo = window.grpoSummaryTo || null;
+
+    // Coba baca editor -> update cache. return true kalau berhasil.
+    function readGrpoSummaryDates() {
+        try {
+            if (typeof GrpoSummary_TransDate_From !== "undefined" &&
+                typeof GrpoSummary_TransDate_From.GetValueString === "function" &&
+                typeof GrpoSummary_TransDate_To !== "undefined" &&
+                typeof GrpoSummary_TransDate_To.GetValueString === "function") {
+                window.grpoSummaryFrom = GrpoSummary_TransDate_From.GetValueString();
+                window.grpoSummaryTo = GrpoSummary_TransDate_To.GetValueString();
+                return true;
+            }
+        } catch (e) { /* editor belum siap; pakai cache lama */ }
+        return false;
+    }
+
+    // silent = true  -> refresh diam2 (tanpa loading panel), dipakai auto-refresh
+    // silent = false -> tampilkan loading panel, dipakai saat klik tombol / load pertama
+    function loadGrpoSummary(silent) {
+
+        // Jika area chart sudah tidak ada (user pindah ke report lain), hentikan timer.
+        if (!document.getElementById("contentChartGrpoSummary")) {
+            stopGrpoSummaryAutoRefresh();
+            return;
+        }
+
+        // Manual/awal: segarkan cache dari editor. Silent: pakai cache; baca sekali kalau kosong.
+        if (!silent) {
+            readGrpoSummaryDates();
+        } else if (window.grpoSummaryFrom === null || window.grpoSummaryTo === null) {
+            readGrpoSummaryDates();
+        }
+
+        // Belum ada nilai tanggal sama sekali -> lewati tick ini tanpa error.
+        if (window.grpoSummaryFrom === null || window.grpoSummaryTo === null) {
+            return;
+        }
 
         $.ajax({
             type: "POST",
             url: '@Url.Action("ChartPartial", "ReportGrpoSummary")',
             data: {
-                TransDate_From: GrpoSummary_TransDate_From.GetValueString(),
-                TransDate_To: GrpoSummary_TransDate_To.GetValueString()
+                TransDate_From: window.grpoSummaryFrom,
+                TransDate_To: window.grpoSummaryTo
             },
             beforeSend: function () {
-                OnBegin();
+                if (!silent) OnBegin();
             },
             success: function (response) {
+                var el = document.getElementById("contentChartGrpoSummary");
+                if (!el) { stopGrpoSummaryAutoRefresh(); return; }
+
                 $("#contentChartGrpoSummary").html(response);
                 MVCxClientUtils.FinalizeCallback();
-                OnSuccess();
-
+                updateGrpoSummaryLastRefreshed();
+                if (!silent) OnSuccess();
             },
             error: function (jqXhr, textStatus, errorThrown) {
-                OnFailure(jqXhr, textStatus, errorThrown)
+                if (silent) {
+                    if (window.console) console.warn('[GRPO] auto-refresh gagal:', textStatus, errorThrown);
+                } else {
+                    OnFailure(jqXhr, textStatus, errorThrown);
+                }
             },
             complete: function () {
-                OnComplete()
+                if (!silent) OnComplete();
             }
         });
 
     }
+
+    function updateGrpoSummaryLastRefreshed() {
+        var now = new Date();
+        var t = ('0' + now.getHours()).slice(-2) + ':' +
+                ('0' + now.getMinutes()).slice(-2) + ':' +
+                ('0' + now.getSeconds()).slice(-2);
+        $("#grpoSummaryLastRefreshed").text('Terakhir diperbarui: ' + t);
+    }
+
+    function startGrpoSummaryAutoRefresh() {
+        stopGrpoSummaryAutoRefresh();
+        window.grpoSummaryAutoTimer = setInterval(function () { loadGrpoSummary(true); }, GRPO_SUMMARY_REFRESH_MS);
+    }
+
+    function stopGrpoSummaryAutoRefresh() {
+        if (window.grpoSummaryAutoTimer) {
+            clearInterval(window.grpoSummaryAutoTimer);
+            window.grpoSummaryAutoTimer = null;
+        }
+    }
+
+    function onToggleGrpoSummaryAutoRefresh() {
+        if ($("#chkGrpoSummaryAutoRefresh").is(":checked")) {
+            loadGrpoSummary(true);
+            startGrpoSummaryAutoRefresh();
+        } else {
+            stopGrpoSummaryAutoRefresh();
+        }
+    }
+
+    // Tombol "Tampilkan" tetap berfungsi (refresh manual dengan loading panel)
+    function OnClickBtnGrpoSummaryShow(s, e) {
+        loadGrpoSummary(false);
+    }
+
+    // Partial ini di-inject via AJAX lalu di-init oleh FinalizeCallback, jadi editor DevExpress
+    // belum siap saat inline-script ini jalan. Tunggu sampai siap, baru load pertama + auto-refresh.
+    function initGrpoSummaryRealtime() {
+        // Cek method (bukan cuma variabel): DevExpress mendeklarasikan objek editor lebih awal,
+        // tapi .GetValueString() baru siap setelah FinalizeCallback. Tunggu sampai method ada.
+        if (typeof GrpoSummary_TransDate_From === "undefined" ||
+            typeof GrpoSummary_TransDate_From.GetValueString !== "function" ||
+            typeof GrpoSummary_TransDate_To === "undefined" ||
+            typeof GrpoSummary_TransDate_To.GetValueString !== "function" ||
+            !document.getElementById("contentChartGrpoSummary")) {
+            setTimeout(initGrpoSummaryRealtime, 200);
+            return;
+        }
+        loadGrpoSummary(false);
+        if ($("#chkGrpoSummaryAutoRefresh").is(":checked")) startGrpoSummaryAutoRefresh();
+    }
+
+    // Hentikan timer lama (mis. node diklik ulang) lalu mulai proses init.
+    stopGrpoSummaryAutoRefresh();
+    initGrpoSummaryRealtime();
 
 </script>
 
@@ -110,8 +217,16 @@
 
 }).GetHtml()
 
+<div id="autoRefreshBarGrpoSummary" style="padding: 6px 10px; font-size: 12px; color: #666;">
+    <label style="cursor: pointer;">
+        <input type="checkbox" id="chkGrpoSummaryAutoRefresh" checked onchange="onToggleGrpoSummaryAutoRefresh()" />
+        Auto refresh (realtime) tiap 30 detik
+    </label>
+    <span id="grpoSummaryLastRefreshed" style="margin-left: 12px;"></span>
+</div>
+
 <div id="contentChartGrpoSummary" style="padding: 10px;">
     <div style="padding: 30px; color: #888; font-size: 14px;">
-        Pilih rentang tanggal lalu klik Tampilkan.
+        Memuat data...
     </div>
 </div>

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6293d835dee9458aaa7ac63c8a695517" Name="Diagram1" ZoomLevel="56">
+      <Diagram DiagramId="6293d835dee9458aaa7ac63c8a695517" Name="Diagram1" ZoomLevel="50">
         <EntityTypeShape EntityType="Model1.sap_hana_xs_formLogin_profile_db__USER_PREFERENCES" Width="1.5" PointX="20.75" PointY="21.75" />
         <EntityTypeShape EntityType="Model1.sap_hana_xs_selfService_admin_db__ACCESS_LISTS" Width="1.5" PointX="22.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model1.sap_hana_xs_selfService_admin_db__USS_EMAIL_TEMPLATES" Width="1.5" PointX="22.75" PointY="3.75" />

@@ -631,118 +631,89 @@
 </script>
 
 
-@{
-    var cflPurchaseOrder_ParamModel = new CflPurchaseOrder_ParamModel();
-    cflPurchaseOrder_ParamModel.Name = "PurchaseOrder";
-    cflPurchaseOrder_ParamModel.Type = "PurchaseOrder";
-    cflPurchaseOrder_ParamModel.SqlWhere = "   ";
-    cflPurchaseOrder_ParamModel.Header = "";
-
-    cflPurchaseOrder_ParamModel.IsMulti = "N";
-}
-<script type="text/javascript">
-    function BtnCflPurcahaseOrderPopupListGrpoOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("cflPurchaseOrderPopupListPurchaseOrder");
-
-        var gv = ASPxClientGridView.Cast('cflPurchaseOrderPopupListPurchaseOrder');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-
-    }
-
-    function OnClickChoose_CflPurchaseOrderPurchaseOrder(s, e, data) {
-        VendorCode.SetValue(data.VendorCode);
-        VendorName.SetValue(data.VendorName);
-        RefNo.SetValue(data.RefNo);
-        BaseEntry.SetValue(data.DocEntry);
-        BaseDocNum.SetValue(data.DocNum);
-        cflPurchaseOrderPopupListPurchaseOrder.Hide();
-
-    }
-
-</script>
-@Html.Partial("~/Views/_Cfl/_CflPurchaseOrder/Partial/_CflPurchaseOrder_Panel_List_Partial.cshtml", cflPurchaseOrder_ParamModel)
+@* Standalone: Purchase Order / Vendor CFL sudah tidak dipakai di modul ini (dihapus). *@
 
 
-@{
-    var workOrder_ParamModel = new IssueAndReceiptWorkOrder_ParamModel();
-    workOrder_ParamModel.Name = "WorkOrder";
-    workOrder_ParamModel.Type = "WorkOrder";
-    workOrder_ParamModel.SqlWhere = "   ";
-    workOrder_ParamModel.Header = "";
-}
-<script type="text/javascript">
-    function BtnWorkOrderPopupListOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("workOrderPopupList");
-
-        var gv = ASPxClientGridView.Cast('gvWorkOrderList');
-
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
-    }
-
-    function OnClickChoose_WorkOrder(s, e, data) {
-        // No Work Order adalah ComboBox: nilai baru harus didaftarkan sbg item dulu agar tampil (SetValue saja tidak cukup).
-        BaseProcessCardTransNo.ClearItems();
-        BaseProcessCardTransNo.AddItem(data.BaseProcessCardTransNo, data.BaseProcessCardTransNo);
-        BaseProcessCardTransNo.SetValue(data.BaseProcessCardTransNo);
-        BaseProcessCardRoutingName.SetValue(data.BaseProcessCardRoutingName);
-        BaseProcessCardOperatorName.SetValue(data.BaseProcessCardOperatorName);
-        BaseEntry.SetValue(data.BaseEntry);
-        BaseDocNum.SetValue(data.BaseDocNum);
-        BaseProcessCardId.SetValue(data.BaseProcessCardId);
-        BaseProcessCardSort.SetValue(data.BaseProcessCardSort);
-        BaseProcessCardRoutingCode.SetValue(data.BaseProcessCardRoutingCode);
-        BaseProcessCardOperatorId.SetValue(data.BaseProcessCardOperatorId);
-        workOrderPopupList.Hide();
-    }
-
-</script>
-@Html.Partial("~/Views/Transaction/IssueAndReceipt/Partial/WorkOrder/WorkOrder_Panel_List_Partial.cshtml", workOrder_ParamModel)
+@* Standalone: Work Order (Production Order) sudah dihapus dari modul ini. *@
 
 
 
 
 
 @{
-    var cflItem_ParamModel = new CflItem_ParamModel();
-    cflItem_ParamModel.Name = "PurchaseOrder";
-    cflItem_ParamModel.Type = "PurchaseOrder";
-    cflItem_ParamModel.SqlWhere = "   ";
-    cflItem_ParamModel.Header = "";
+    // Standalone: CFL item per tab. Sumber = ssqlStock (master item + stok/gudang).
+    // Issue: hanya stok>0. Receipt: semua item (pilih gudang tujuan).
+    var cflItemIssue_ParamModel = new CflItem_ParamModel();
+    cflItemIssue_ParamModel.Name = "IssueItem";
+    cflItemIssue_ParamModel.Type = "IssueItem";
+    cflItemIssue_ParamModel.SourceType = "IssueStock";
+    cflItemIssue_ParamModel.SqlWhere = " AND T0.\"OpenQty\" > 0 ";
+    cflItemIssue_ParamModel.Header = "Issue";
+    cflItemIssue_ParamModel.IsMulti = "N";
 
-    cflItem_ParamModel.IsMulti = "N";
+    var cflItemReceipt_ParamModel = new CflItem_ParamModel();
+    cflItemReceipt_ParamModel.Name = "ReceiptItem";
+    cflItemReceipt_ParamModel.Type = "ReceiptItem";
+    cflItemReceipt_ParamModel.SourceType = "ReceiptItem";
+    cflItemReceipt_ParamModel.SqlWhere = "   ";
+    cflItemReceipt_ParamModel.Header = "Receipt";
+    cflItemReceipt_ParamModel.IsMulti = "N";
 }
 
 <script type="text/javascript">
-    function BtnCflItemPopupListIssueAndReceiptOnClick(s, e) {
-        var popup = ASPxClientPopupControl.Cast("cflItemPopupListPurchaseOrder");
+    function BtnAddItemIssueOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("cflItemPopupListIssueItem");
+        popup.SetContentHtml("");
+        popup.PerformCallback();
+        popup.Show();
+    }
 
-        var gv = ASPxClientGridView.Cast('gvCflItemListPurchaseOrder ');
+    function OnClickChoose_CflItemIssueItem(s, e, data) {
+        cflItemPopupListIssueItem.Hide();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChooseItemIssue", "IssueAndReceipt")',
+            data: {
+                Id: Id.GetValue(),
+                ItemCode: data.ItemCode,
+                ItemName: data.ItemName,
+                Uom: data.UomCode,
+                WhsCode: data.WhsCode,
+                Quantity: 0
+            },
+            success: function () { gvIssueDetail.PerformCallback(); },
+            error: function (jqXhr) { alert(jqXhr.responseText); }
+        });
+    }
 
-        if (gv == null) {
-            popup.Show();
-        } else {
-            popup.SetContentHtml("");
-            popup.PerformCallback();
-            popup.Show();
-        }
+    function BtnAddItemReceiptOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("cflItemPopupListReceiptItem");
+        popup.SetContentHtml("");
+        popup.PerformCallback();
+        popup.Show();
+    }
 
+    function OnClickChoose_CflItemReceiptItem(s, e, data) {
+        cflItemPopupListReceiptItem.Hide();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChooseItemReceipt", "IssueAndReceipt")',
+            data: {
+                Id: Id.GetValue(),
+                ItemCode: data.ItemCode,
+                ItemName: data.ItemName,
+                Uom: data.UomCode,
+                WhsCode: data.WhsCode,
+                Quantity: 0
+            },
+            success: function () { gvReceiptDetail.PerformCallback(); },
+            error: function (jqXhr) { alert(jqXhr.responseText); }
+        });
     }
 
 </script>
-@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItem_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItemIssue_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItemReceipt_ParamModel)
 
 
 <!------------------------------------------------BATCH RECEIPT--------------------------------------------------->
@@ -757,6 +728,17 @@
     }
 
     function gvReceiptDetailOnCustomButtonClick(s, e) {
+        if (e.buttonID == 'btnDeleteItem') {
+            if (!confirm('Hapus item Receipt ini?')) return;
+            var detId = s.GetRowKey(e.visibleIndex);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteItemReceipt", "IssueAndReceipt")',
+                data: { Id: Id.GetValue(), DetId: detId },
+                success: function () { gvReceiptDetail.PerformCallback(); },
+                error: function (jqXhr) { alert(jqXhr.responseText); }
+            });
+        }
     }
 
 
@@ -764,6 +746,23 @@
     }
 
     function gvReceiptDetailOnBatchEditEndEditing(s, e) {
+        // Standalone: persist field editable baris Receipt segera ke server.
+        var vi = e.visibleIndex;
+        var detId = s.GetRowKey(vi);
+        if (detId == null) return;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateQtyReceipt", "IssueAndReceipt")',
+            data: {
+                DetId: detId,
+                Quantity: s.batchEditApi.GetCellValue(vi, 'Quantity'),
+                WhsCode: s.batchEditApi.GetCellValue(vi, 'WhsCode'),
+                MsnPrd: s.batchEditApi.GetCellValue(vi, 'MsnPrd'),
+                Department: s.batchEditApi.GetCellValue(vi, 'Department'),
+                Price: s.batchEditApi.GetCellValue(vi, 'Price')
+            },
+            error: function (jqXhr) { alert(jqXhr.responseText); }
+        });
     }
 
     function gvReceiptDetailOnBatchEditRowValidating(s, e) {
@@ -903,11 +902,42 @@
     function gvDetailOnCustomButtonClick(s, e) {
     }
 
+    function gvIssueDetailOnCustomButtonClick(s, e) {
+        if (e.buttonID == 'btnDeleteItem') {
+            if (!confirm('Hapus item Issue ini?')) return;
+            var detId = s.GetRowKey(e.visibleIndex);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteItemIssue", "IssueAndReceipt")',
+                data: { Id: Id.GetValue(), DetId: detId },
+                success: function () { gvIssueDetail.PerformCallback(); },
+                error: function (jqXhr) { alert(jqXhr.responseText); }
+            });
+        }
+    }
+
 
     function gvDetailOnBatchEditStartEditing(s, e) {
     }
 
     function gvDetailOnBatchEditEndEditing(s, e) {
+        // Standalone: persist field editable baris Issue segera ke server.
+        var vi = e.visibleIndex;
+        var detId = s.GetRowKey(vi);
+        if (detId == null) return;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateQtyIssue", "IssueAndReceipt")',
+            data: {
+                DetId: detId,
+                Quantity: s.batchEditApi.GetCellValue(vi, 'Quantity'),
+                WhsCode: s.batchEditApi.GetCellValue(vi, 'WhsCode'),
+                MsnPrd: s.batchEditApi.GetCellValue(vi, 'MsnPrd'),
+                Department: s.batchEditApi.GetCellValue(vi, 'Department'),
+                Cost: s.batchEditApi.GetCellValue(vi, 'Cost')
+            },
+            error: function (jqXhr) { alert(jqXhr.responseText); }
+        });
     }
 
     function gvDetailOnBatchEditRowValidating(s, e) {

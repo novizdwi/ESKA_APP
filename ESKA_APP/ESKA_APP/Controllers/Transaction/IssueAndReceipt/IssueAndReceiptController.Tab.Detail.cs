@@ -45,5 +45,84 @@ namespace Controllers.Transaction
         }
 
 
+        // ===== Standalone: tambah/hapus/ubah baris item via CFL =====
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult ChooseItemIssue(long Id, string ItemCode, string ItemName, string Uom, string WhsCode, decimal? Quantity)
+        {
+            int userId = (int)Session["userId"];
+            issueAndReceiptService = new IssueAndReceiptService();
+
+            var model = new IssueReceipt_IssueItemModel
+            {
+                _UserId = userId,
+                Id = Id,
+                ItemCode = ItemCode,
+                ItemName = ItemName,
+                Uom = Uom,
+                WhsCode = WhsCode,
+                Quantity = Quantity ?? 0
+            };
+            long detId = issueAndReceiptService.IssueItem_Add(model);
+            return Content(detId.ToString());
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult ChooseItemReceipt(long Id, string ItemCode, string ItemName, string Uom, string WhsCode, decimal? Quantity)
+        {
+            int userId = (int)Session["userId"];
+            issueAndReceiptService = new IssueAndReceiptService();
+
+            var model = new IssueReceipt_ReceiptItemModel
+            {
+                _UserId = userId,
+                Id = Id,
+                ItemCode = ItemCode,
+                ItemName = ItemName,
+                Uom = Uom,
+                WhsCode = WhsCode,
+                Quantity = Quantity ?? 0
+            };
+            long detId = issueAndReceiptService.ReceiptItem_Add(model);
+            return Content(detId.ToString());
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult UpdateQtyIssue(long DetId, decimal? Quantity, string WhsCode, string MsnPrd, string Department, string Cost)
+        {
+            int userId = (int)Session["userId"];
+            issueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService.IssueItem_UpdateQuantity(new IssueReceipt_IssueItemModel { _UserId = userId, DetId = DetId, Quantity = Quantity ?? 0, WhsCode = WhsCode, MsnPrd = MsnPrd, Department = Department, Cost = Cost });
+            return Content("OK");
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult UpdateQtyReceipt(long DetId, decimal? Quantity, string WhsCode, string MsnPrd, string Department, decimal? Price)
+        {
+            int userId = (int)Session["userId"];
+            issueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService.ReceiptItem_UpdateQuantity(new IssueReceipt_ReceiptItemModel { _UserId = userId, DetId = DetId, Quantity = Quantity ?? 0, WhsCode = WhsCode, MsnPrd = MsnPrd, Department = Department, Price = Price });
+            return Content("OK");
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult DeleteItemIssue(long Id, long DetId)
+        {
+            int userId = (int)Session["userId"];
+            issueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService.IssueItem_Delete(userId, DetId);
+            return Content("OK");
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ContentResult DeleteItemReceipt(long Id, long DetId)
+        {
+            int userId = (int)Session["userId"];
+            issueAndReceiptService = new IssueAndReceiptService();
+            issueAndReceiptService.ReceiptItem_Delete(userId, DetId);
+            return Content("OK");
+        }
+
+
     }
 }

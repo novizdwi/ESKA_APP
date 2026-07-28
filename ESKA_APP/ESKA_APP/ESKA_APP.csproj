@@ -498,10 +498,6 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
-    <Content Include="Scripts\SQLs\Create Schema.sql" />
-    <Content Include="Scripts\SQLs\Insert Into.sql" />
-    <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
     <Content Include="Scripts\Test\DXR.js" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -636,8 +632,6 @@
     <Content Include="Views\Authentication\User\Partial\User_TabRouting_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflPurchaseOrder\Partial\_CflPurchaseOrder_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\WorkOrder\WorkOrder_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\IssueAndReceipt\Partial\WorkOrder\WorkOrder_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflToWarehouse\Partial\_CflToWarehouse_Panel_List_Partial.cshtml" />
     <Content Include="Views\Setting\ApprovalStage\ApprovalStage.cshtml" />
@@ -865,7 +859,6 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewBatch.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewScale.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
-    <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.WorkOrder.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.ViewIssueBatch.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.ViewReceiptBatch.cs" />
     <Compile Include="Controllers\Transaction\IssueAndReceipt\IssueAndReceiptController.Tab.Detail.cs" />
