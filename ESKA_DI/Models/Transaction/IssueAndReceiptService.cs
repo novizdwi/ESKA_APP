@@ -397,7 +397,36 @@ namespace Models.Transaction
                         throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
                     }
                 }
+
+                // Simpan perubahan grid detail (edit/tambah/hapus) yang dikirim bersama form Update.
+                ApplyIssueDetailChanges(model);
+                ApplyReceiptDetailChanges(model);
             }
+        }
+
+        // Terapkan perubahan batch grid Issue: modified -> update, inserted -> add, deleted -> delete.
+        private void ApplyIssueDetailChanges(IssueAndReceiptModel model)
+        {
+            var d = model.IssueDetails_;
+            if (d == null) return;
+            if (d.modifiedRowValues != null)
+                foreach (var it in d.modifiedRowValues) { it._UserId = model._UserId; IssueItem_UpdateQuantity(it); }
+            if (d.insertedRowValues != null)
+                foreach (var it in d.insertedRowValues) { it._UserId = model._UserId; it.Id = model.Id; IssueItem_Add(it); }
+            if (d.deletedRowKeys != null)
+                foreach (var detId in d.deletedRowKeys) IssueItem_Delete(model._UserId, detId);
+        }
+
+        private void ApplyReceiptDetailChanges(IssueAndReceiptModel model)
+        {
+            var d = model.ReceiptDetails_;
+            if (d == null) return;
+            if (d.modifiedRowValues != null)
+                foreach (var it in d.modifiedRowValues) { it._UserId = model._UserId; ReceiptItem_UpdateQuantity(it); }
+            if (d.insertedRowValues != null)
+                foreach (var it in d.insertedRowValues) { it._UserId = model._UserId; it.Id = model.Id; ReceiptItem_Add(it); }
+            if (d.deletedRowKeys != null)
+                foreach (var detId in d.deletedRowKeys) ReceiptItem_Delete(model._UserId, detId);
         }
 
         public IssueAndReceiptModel GetById(int userId, long id = 0, string method = "")

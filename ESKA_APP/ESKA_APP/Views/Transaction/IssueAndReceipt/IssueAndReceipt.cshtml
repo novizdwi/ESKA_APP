@@ -308,8 +308,12 @@
     function GetFormData() {
         var formData = $('#formDetail').serializeObject();
 
-        //var Details_ = GetGvDetails('gvIssueAndReceiptDetail');
-        //$.extend(formData, { Details_: Details_ });
+        // Kirim perubahan batch kedua grid detail agar edit (Quantity/MsnPrd/Department/Cost/Price)
+        // tersimpan saat Update. Diproses di IssueAndReceiptService.Update().
+        $.extend(formData, {
+            IssueDetails_: GetGvDetails('gvIssueDetail'),
+            ReceiptDetails_: GetGvDetails('gvReceiptDetail')
+        });
         return formData;
     }
 
@@ -348,7 +352,7 @@
             return;
         }
 
-        var formData = GetFormData();
+       var formData = GetFormData();
 
         $.ajax({
             type: "POST",
@@ -746,23 +750,7 @@
     }
 
     function gvReceiptDetailOnBatchEditEndEditing(s, e) {
-        // Standalone: persist field editable baris Receipt segera ke server.
-        var vi = e.visibleIndex;
-        var detId = s.GetRowKey(vi);
-        if (detId == null) return;
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("UpdateQtyReceipt", "IssueAndReceipt")',
-            data: {
-                DetId: detId,
-                Quantity: s.batchEditApi.GetCellValue(vi, 'Quantity'),
-                WhsCode: s.batchEditApi.GetCellValue(vi, 'WhsCode'),
-                MsnPrd: s.batchEditApi.GetCellValue(vi, 'MsnPrd'),
-                Department: s.batchEditApi.GetCellValue(vi, 'Department'),
-                Price: s.batchEditApi.GetCellValue(vi, 'Price')
-            },
-            error: function (jqXhr) { alert(jqXhr.responseText); }
-        });
+        // Edit disimpan saat klik Update (via GetGvDetails -> ReceiptDetails_). Tidak perlu AJAX per-cell.
     }
 
     function gvReceiptDetailOnBatchEditRowValidating(s, e) {
@@ -921,23 +909,7 @@
     }
 
     function gvDetailOnBatchEditEndEditing(s, e) {
-        // Standalone: persist field editable baris Issue segera ke server.
-        var vi = e.visibleIndex;
-        var detId = s.GetRowKey(vi);
-        if (detId == null) return;
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("UpdateQtyIssue", "IssueAndReceipt")',
-            data: {
-                DetId: detId,
-                Quantity: s.batchEditApi.GetCellValue(vi, 'Quantity'),
-                WhsCode: s.batchEditApi.GetCellValue(vi, 'WhsCode'),
-                MsnPrd: s.batchEditApi.GetCellValue(vi, 'MsnPrd'),
-                Department: s.batchEditApi.GetCellValue(vi, 'Department'),
-                Cost: s.batchEditApi.GetCellValue(vi, 'Cost')
-            },
-            error: function (jqXhr) { alert(jqXhr.responseText); }
-        });
+        // Edit disimpan saat klik Update (via GetGvDetails -> IssueDetails_). Tidak perlu AJAX per-cell.
     }
 
     function gvDetailOnBatchEditRowValidating(s, e) {
