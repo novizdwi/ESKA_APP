@@ -1,7 +1,7 @@
 ﻿@using Models;
 
 
-@model  Models.Transaction.IssueAndReceiptBatchIssueView___
+@model  Models.Transaction.ReProcessBatchIssueView___
 
 
 
@@ -173,7 +173,7 @@
                 //}).Render();
 
                 ViewContext.Writer.Write(
-                    Html.Partial("Partial/BatchIssue/BatchIssue_TabBatchList_List_Partial", Model.IssueAndReceiptBatchIssueModel___)
+                    Html.Partial("Partial/BatchIssue/BatchIssue_TabBatchList_List_Partial", Model.ReProcessBatchIssueModel___)
                 );
             });
         });

@@ -1,4 +1,4 @@
-using DevExpress.Data;
+﻿using DevExpress.Data;
 using DevExpress.Data.Filtering;
 using DevExpress.Data.Linq;
 using DevExpress.Data.Linq.Helpers;
@@ -18,14 +18,14 @@ using System.Threading.Tasks;
 
 namespace Models.Transaction
 {
-    public class ListFindParamIssueAndReceipt
+    public class ListFindParamReProcess
     {
         public bool IsFindTransDate { get; set; }
         public DateTime? TransDate_From { get; set; }
         public DateTime? TransDate_To { get; set; }
     }
 
-    public class IssueAndReceiptView___
+    public class ReProcessView___
     {
         public long Id { get; set; }
 
@@ -43,13 +43,13 @@ namespace Models.Transaction
 
     }
 
-    public class IssueAndReceipt__List_Model
+    public class ReProcess__List_Model
     {
         static string ViewSql = "SELECT *" +
                                 "FROM \"Tx_IssueAndReceipt\" T0 " +
                                 "ORDER BY T0.\"CreatedDate\" DESC";
 
-        public static void SetBindingData(GridViewModel state, int userId, ListFindParamIssueAndReceipt cflParam)
+        public static void SetBindingData(GridViewModel state, int userId, ListFindParamReProcess cflParam)
         {
             string sqlCriteria = GetSqlFromGridViewModelState.getHanaCriteria(state);
             string sqlSort = GetSqlFromGridViewModelState.getHanaSort(state);
@@ -91,12 +91,12 @@ namespace Models.Transaction
             e.DataRowCount = dataRowCount;
         }
 
-        public static void GetData(GridViewCustomBindingGetDataArgs e, List<IssueAndReceiptView___> dataList)
+        public static void GetData(GridViewCustomBindingGetDataArgs e, List<ReProcessView___> dataList)
         {
             e.Data = dataList;
         }
 
-        public static int GetRowCount(HANA_APP CONTEXT, int userId, ListFindParamIssueAndReceipt param, string sqlCriteria)
+        public static int GetRowCount(HANA_APP CONTEXT, int userId, ListFindParamReProcess param, string sqlCriteria)
         {
 
             if (sqlCriteria == null)
@@ -148,7 +148,7 @@ namespace Models.Transaction
             return dataRowCount;
         }
 
-        public static List<IssueAndReceiptView___> GetDataList(HANA_APP CONTEXT, int userId, ListFindParamIssueAndReceipt param, string sqlCriteria, string sqlSort, int PageIndex, int PageSize)
+        public static List<ReProcessView___> GetDataList(HANA_APP CONTEXT, int userId, ListFindParamReProcess param, string sqlCriteria, string sqlSort, int PageIndex, int PageSize)
         {
 
 
@@ -172,7 +172,7 @@ namespace Models.Transaction
                 sqlSort = " ORDER BY \"TransDate\" DESC ";
             }
 
-            var views = new List<IssueAndReceiptView___>();
+            var views = new List<ReProcessView___>();
 
             string ssql = "";
             ssql = "SELECT T0.* FROM (" + ViewSql + ") T0  WHERE 1=1 " + sqlCriteria;
@@ -187,32 +187,32 @@ namespace Models.Transaction
                     if ((param.TransDate_From != null) && (param.TransDate_To != null))
                     {
                         //ssql = ssql + " AND \"TransDate\">=:p0 AND \"TransDate\"<=:p1 ";
-                        views = CONTEXT.Database.SqlQuery<IssueAndReceiptView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date, param.TransDate_To.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ReProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date, param.TransDate_To.Value.Date).ToList();
                     }
                     else if (param.TransDate_From != null)
                     {
                         //ssql = ssql + " AND \"TransDate\">=:p0 ";
-                        views = CONTEXT.Database.SqlQuery<IssueAndReceiptView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ReProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_From.Value.Date).ToList();
                     }
                     else if (param.TransDate_To != null)
                     {
                         //ssql = ssql + " AND \"TransDate\"<=:p0 ";
-                        views = CONTEXT.Database.SqlQuery<IssueAndReceiptView___>(ssql + sqlSort + ssqlLimit, param.TransDate_To.Value.Date).ToList();
+                        views = CONTEXT.Database.SqlQuery<ReProcessView___>(ssql + sqlSort + ssqlLimit, param.TransDate_To.Value.Date).ToList();
                     }
                 }
                 else
                 {
-                    views = CONTEXT.Database.SqlQuery<IssueAndReceiptView___>(ssql + sqlSort + ssqlLimit).ToList();
+                    views = CONTEXT.Database.SqlQuery<ReProcessView___>(ssql + sqlSort + ssqlLimit).ToList();
                 }
             }
             else
             {
-                views = CONTEXT.Database.SqlQuery<IssueAndReceiptView___>(ssql + sqlSort + ssqlLimit).ToList();
+                views = CONTEXT.Database.SqlQuery<ReProcessView___>(ssql + sqlSort + ssqlLimit).ToList();
             }
 
             if (views.Count == 0)
             {
-                IssueAndReceiptView___ view = new IssueAndReceiptView___();
+                ReProcessView___ view = new ReProcessView___();
                 views.Add(view);
             }
 

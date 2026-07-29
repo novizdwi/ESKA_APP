@@ -16,7 +16,7 @@ using Models.Transaction;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
 
         [HttpPost, ValidateInput(false)]
@@ -24,22 +24,22 @@ namespace Controllers.Transaction
         {
             int userId = (int)Session["userId"];
 
-            IssueAndReceiptModel IssueAndReceiptModel;
-            issueAndReceiptService = new IssueAndReceiptService();
+            ReProcessModel ReProcessModel;
+            reProcessService = new ReProcessService();
 
-            IssueAndReceiptModel = issueAndReceiptService.NavFirst(userId);
-            if (IssueAndReceiptModel != null)
+            ReProcessModel = reProcessService.NavFirst(userId);
+            if (ReProcessModel != null)
             {
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
 
-            if (IssueAndReceiptModel == null)
+            if (ReProcessModel == null)
             {
                 //DocContentModel = DocContentService.GetNewModel(); 
                 throw new Exception("[VALIDATION]-Data not exists");
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
 
@@ -49,22 +49,22 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
 
 
-            IssueAndReceiptModel IssueAndReceiptModel;
-            issueAndReceiptService = new IssueAndReceiptService();
+            ReProcessModel ReProcessModel;
+            reProcessService = new ReProcessService();
 
-            IssueAndReceiptModel = issueAndReceiptService.NavPrevious(userId, Id);
-            if (IssueAndReceiptModel != null)
+            ReProcessModel = reProcessService.NavPrevious(userId, Id);
+            if (ReProcessModel != null)
             {
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
 
-            if (IssueAndReceiptModel == null)
+            if (ReProcessModel == null)
             {
                 //DocContentModel = DocContentService.GetNewModel(); 
                 throw new Exception("[VALIDATION]-Data not exists");
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
 
@@ -74,23 +74,23 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
 
 
-            IssueAndReceiptModel IssueAndReceiptModel;
-            issueAndReceiptService = new IssueAndReceiptService();
+            ReProcessModel ReProcessModel;
+            reProcessService = new ReProcessService();
 
-            IssueAndReceiptModel = issueAndReceiptService.NavNext(userId, Id);
-            if (IssueAndReceiptModel != null)
+            ReProcessModel = reProcessService.NavNext(userId, Id);
+            if (ReProcessModel != null)
             {
 
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                ReProcessModel._FormMode = FormModeEnum.Edit;
 
             }
 
-            if (IssueAndReceiptModel == null)
+            if (ReProcessModel == null)
             {
                 throw new Exception("[VALIDATION]-Data not exists");
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
         [HttpPost, ValidateInput(false)]
@@ -98,21 +98,21 @@ namespace Controllers.Transaction
         {
             int userId = (int)Session["userId"];
 
-            IssueAndReceiptModel IssueAndReceiptModel;
-            issueAndReceiptService = new IssueAndReceiptService();
+            ReProcessModel ReProcessModel;
+            reProcessService = new ReProcessService();
 
-            IssueAndReceiptModel = issueAndReceiptService.NavLast(userId);
-            if (IssueAndReceiptModel != null)
+            ReProcessModel = reProcessService.NavLast(userId);
+            if (ReProcessModel != null)
             {
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
 
-            if (IssueAndReceiptModel == null)
+            if (ReProcessModel == null)
             {
                 throw new Exception("[VALIDATION]-Data not exists");
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
     }

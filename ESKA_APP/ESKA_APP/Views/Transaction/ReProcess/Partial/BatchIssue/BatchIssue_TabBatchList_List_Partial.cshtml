@@ -1,6 +1,6 @@
 ﻿@using Models;
 @using Models.Transaction;
-@model List<Models.Transaction.IssueAndReceiptBatchIssueModel>
+@model List<Models.Transaction.ReProcessBatchIssueModel>
 
 @{
     var Id = Convert.ToInt64(Request["cbId"]);
@@ -29,10 +29,10 @@
     settings.Name = "gvContentIssueBatchList";
     settings.KeyFieldName = "DetDetId";
     settings.Width = Unit.Percentage(100);
-    settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "TabIssueBatchListPartial", Id = Id, DetId = DetId };
-    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "IssueAndReceipt", Action = "TabIssueBatchListAddNewRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "IssueAndReceipt", Action = "TabIssueBatchListUpdateRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "IssueAndReceipt", Action = "TabIssueBatchListDeleteRow", Id = Id, DetId = DetId };
+    settings.CallbackRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListPartial", Id = Id, DetId = DetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListAddNewRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListUpdateRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListDeleteRow", Id = Id, DetId = DetId };
 
     settings.SettingsBehavior.ConfirmDelete = true;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;

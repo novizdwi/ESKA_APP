@@ -8,22 +8,22 @@ using Models.Transaction;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
 
-        string VIEW_TAB_CONTENT_Issue = "Partial/IssueAndReceipt_Form_TabIssueDetail_List_Partial";
-        string VIEW_TAB_CONTENT_Receipt = "Partial/IssueAndReceipt_Form_TabReceiptDetail_List_Partial";
+        string VIEW_TAB_CONTENT_Issue = "Partial/ReProcess_Form_TabIssueDetail_List_Partial";
+        string VIEW_TAB_CONTENT_Receipt = "Partial/ReProcess_Form_TabReceiptDetail_List_Partial";
 
         public ActionResult TabIssueDetailListPartial()
         {
             int userId = (int)Session["userId"];
 
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             var Id = Convert.ToInt64(Request["cbId"]);
-            List<IssueReceipt_IssueItemModel> modelList = issueAndReceiptService.IssueAndReceipt_IssueItemDetails(Id);
+            List<IssueReceipt_IssueItemModel> modelList = reProcessService.ReProcess_IssueItemDetails(Id);
 
-            var header = issueAndReceiptService.GetById(userId, Id);
+            var header = reProcessService.GetById(userId, Id);
             ViewBag.ReadOnly = header == null || header.Status != "Draft";
 
             return PartialView(VIEW_TAB_CONTENT_Issue, modelList);
@@ -33,12 +33,12 @@ namespace Controllers.Transaction
         {
             int userId = (int)Session["userId"];
 
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             var Id = Convert.ToInt64(Request["cbId"]);
-            List<IssueReceipt_ReceiptItemModel> modelList = issueAndReceiptService.IssueAndReceipt_ReceiptItemDetails(Id);
+            List<IssueReceipt_ReceiptItemModel> modelList = reProcessService.ReProcess_ReceiptItemDetails(Id);
 
-            var header = issueAndReceiptService.GetById(userId, Id);
+            var header = reProcessService.GetById(userId, Id);
             ViewBag.ReadOnly = header == null || header.Status != "Draft";
 
             return PartialView(VIEW_TAB_CONTENT_Receipt, modelList);
@@ -51,7 +51,7 @@ namespace Controllers.Transaction
         public ContentResult ChooseItemIssue(long Id, string ItemCode, string ItemName, string Uom, string WhsCode, decimal? Quantity)
         {
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             var model = new IssueReceipt_IssueItemModel
             {
@@ -63,7 +63,7 @@ namespace Controllers.Transaction
                 WhsCode = WhsCode,
                 Quantity = Quantity ?? 0
             };
-            long detId = issueAndReceiptService.IssueItem_Add(model);
+            long detId = reProcessService.IssueItem_Add(model);
             return Content(detId.ToString());
         }
 
@@ -71,7 +71,7 @@ namespace Controllers.Transaction
         public ContentResult ChooseItemReceipt(long Id, string ItemCode, string ItemName, string Uom, string WhsCode, decimal? Quantity)
         {
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             var model = new IssueReceipt_ReceiptItemModel
             {
@@ -83,7 +83,7 @@ namespace Controllers.Transaction
                 WhsCode = WhsCode,
                 Quantity = Quantity ?? 0
             };
-            long detId = issueAndReceiptService.ReceiptItem_Add(model);
+            long detId = reProcessService.ReceiptItem_Add(model);
             return Content(detId.ToString());
         }
 
@@ -91,8 +91,8 @@ namespace Controllers.Transaction
         public ContentResult UpdateQtyIssue(long DetId, decimal? Quantity, string WhsCode, string MsnPrd, string Department, string Cost)
         {
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
-            issueAndReceiptService.IssueItem_UpdateQuantity(new IssueReceipt_IssueItemModel { _UserId = userId, DetId = DetId, Quantity = Quantity ?? 0, WhsCode = WhsCode, MsnPrd = MsnPrd, Department = Department, Cost = Cost });
+            reProcessService = new ReProcessService();
+            reProcessService.IssueItem_UpdateQuantity(new IssueReceipt_IssueItemModel { _UserId = userId, DetId = DetId, Quantity = Quantity ?? 0, WhsCode = WhsCode, MsnPrd = MsnPrd, Department = Department, Cost = Cost });
             return Content("OK");
         }
 
@@ -100,8 +100,8 @@ namespace Controllers.Transaction
         public ContentResult UpdateQtyReceipt(long DetId, decimal? Quantity, string WhsCode, string MsnPrd, string Department, decimal? Price)
         {
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
-            issueAndReceiptService.ReceiptItem_UpdateQuantity(new IssueReceipt_ReceiptItemModel { _UserId = userId, DetId = DetId, Quantity = Quantity ?? 0, WhsCode = WhsCode, MsnPrd = MsnPrd, Department = Department, Price = Price });
+            reProcessService = new ReProcessService();
+            reProcessService.ReceiptItem_UpdateQuantity(new IssueReceipt_ReceiptItemModel { _UserId = userId, DetId = DetId, Quantity = Quantity ?? 0, WhsCode = WhsCode, MsnPrd = MsnPrd, Department = Department, Price = Price });
             return Content("OK");
         }
 
@@ -109,8 +109,8 @@ namespace Controllers.Transaction
         public ContentResult DeleteItemIssue(long Id, long DetId)
         {
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
-            issueAndReceiptService.IssueItem_Delete(userId, DetId);
+            reProcessService = new ReProcessService();
+            reProcessService.IssueItem_Delete(userId, DetId);
             return Content("OK");
         }
 
@@ -118,8 +118,8 @@ namespace Controllers.Transaction
         public ContentResult DeleteItemReceipt(long Id, long DetId)
         {
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
-            issueAndReceiptService.ReceiptItem_Delete(userId, DetId);
+            reProcessService = new ReProcessService();
+            reProcessService.ReceiptItem_Delete(userId, DetId);
             return Content("OK");
         }
 

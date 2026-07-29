@@ -9,14 +9,14 @@
     <script src="~/Scripts/Test/DXR.js"></script>
 }
 
-@model Models.Transaction.IssueAndReceiptModel
+@model Models.Transaction.ReProcessModel
 
 
 @{
     ViewBag.UserId = (int)Session["userId"];
-    ViewBag.Title = "Issue And Receipt";
+    ViewBag.Title = "Re-Process";
 
-    string MenuCodePost = "IssueAndReceipt/Post";
+    string MenuCodePost = "ReProcess/Post";
     string IsCanPost_ = "Y";
     if (ViewBag.UserId != 1)
     {
@@ -224,7 +224,7 @@
 
         $.ajax({
             type: "POST",
-            url: "@Url.Action("DetailPartial", "IssueAndReceipt")",
+            url: "@Url.Action("DetailPartial", "ReProcess")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -256,7 +256,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Post", "IssueAndReceipt")',
+                url: '@Url.Action("Post", "ReProcess")',
                 data: formData,
                 beforeSend: function () {
                     OnBegin();
@@ -296,7 +296,7 @@
     function btnShowCancelReasonOnClick(s, e, Id) {
         var popup = ASPxClientPopupControl.Cast("popupCancelReason");
 
-        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + Id;
+        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "ReProcess")' + '?Id=' + Id;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -309,7 +309,7 @@
         var formData = $('#formDetail').serializeObject();
 
         // Kirim perubahan batch kedua grid detail agar edit (Quantity/MsnPrd/Department/Cost/Price)
-        // tersimpan saat Update. Diproses di IssueAndReceiptService.Update().
+        // tersimpan saat Update. Diproses di ReProcessService.Update().
         $.extend(formData, {
             IssueDetails_: GetGvDetails('gvIssueDetail'),
             ReceiptDetails_: GetGvDetails('gvReceiptDetail')
@@ -327,7 +327,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Add", "IssueAndReceipt")',
+            url: '@Url.Action("Add", "ReProcess")',
             data: formData,
             beforeSend: function () {
                 OnBegin();
@@ -356,7 +356,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Update", "IssueAndReceipt")',
+            url: '@Url.Action("Update", "ReProcess")',
             data: formData,
             beforeSend: function () {
                 OnBegin();
@@ -385,7 +385,7 @@
     function OnClickBtnNavFirst(s, e) {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("NavFirst", "IssueAndReceipt")",
+            url: "@Url.Action("NavFirst", "ReProcess")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -407,7 +407,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("NavPrevious", "IssueAndReceipt")',
+            url: '@Url.Action("NavPrevious", "ReProcess")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -429,7 +429,7 @@
         key = Id.GetValue();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("NavNext", "IssueAndReceipt")',
+            url: '@Url.Action("NavNext", "ReProcess")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -451,7 +451,7 @@
     function OnClickBtnNavLast(s, e) {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("NavLast", "IssueAndReceipt")",
+            url: "@Url.Action("NavLast", "ReProcess")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -475,7 +475,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("DetailPartial", "IssueAndReceipt")',
+            url: '@Url.Action("DetailPartial", "ReProcess")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -526,7 +526,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("Post", "IssueAndReceipt")',
+                        url: '@Url.Action("Post", "ReProcess")',
                         data: formData,
                         beforeSend: function () {
                             OnBegin();
@@ -558,7 +558,7 @@
         key = Id.GetValue();
         var popup = ASPxClientPopupControl.Cast("popupBatchReceipt");
 
-        popup.callbackUrl = '@Url.Action("ViewReceiptBatch_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + key + '&DetId=' + detId;
+        popup.callbackUrl = '@Url.Action("ViewReceiptBatch_PopupListOnDemandPartial", "ReProcess")' + '?Id=' + key + '&DetId=' + detId;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -570,7 +570,7 @@
         key = Id.GetValue();
         var popup = ASPxClientPopupControl.Cast("popupBatchIssue");
 
-        popup.callbackUrl = '@Url.Action("ViewIssueBatch_PopupListOnDemandPartial", "IssueAndReceipt")' + '?Id=' + key + '&DetId=' + detId;
+        popup.callbackUrl = '@Url.Action("ViewIssueBatch_PopupListOnDemandPartial", "ReProcess")' + '?Id=' + key + '&DetId=' + detId;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -588,7 +588,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Cancel", "IssueAndReceipt")',
+            url: '@Url.Action("Cancel", "ReProcess")',
             data: { Id: key, CancelReason: reason },
             beforeSend: function () {
                 OnBegin();
@@ -612,7 +612,7 @@
     function OnClickChoose(s, e, key) {
         $.ajax({
             type: "POST",
-            url: '@Url.Action("DetailPartial", "IssueAndReceipt")',
+            url: '@Url.Action("DetailPartial", "ReProcess")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -645,13 +645,13 @@
 
 
 @{
-    // Standalone: CFL item per tab. Sumber = ssqlStock (master item + stok/gudang).
-    // Issue: hanya stok>0. Receipt: semua item (pilih gudang tujuan).
+    // Standalone: CFL item per tab. Sumber = ssqlStock — SEMUA item ber-ItemType='I' (Item),
+    // satu baris per item; Whse dipilih user lewat ComboBox di grid. Filter ItemType ada di query.
     var cflItemIssue_ParamModel = new CflItem_ParamModel();
     cflItemIssue_ParamModel.Name = "IssueItem";
     cflItemIssue_ParamModel.Type = "IssueItem";
     cflItemIssue_ParamModel.SourceType = "IssueStock";
-    cflItemIssue_ParamModel.SqlWhere = " AND T0.\"OpenQty\" > 0 ";
+    cflItemIssue_ParamModel.SqlWhere = "   ";
     cflItemIssue_ParamModel.Header = "Issue";
     cflItemIssue_ParamModel.IsMulti = "N";
 
@@ -676,7 +676,7 @@
         cflItemPopupListIssueItem.Hide();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("ChooseItemIssue", "IssueAndReceipt")',
+            url: '@Url.Action("ChooseItemIssue", "ReProcess")',
             data: {
                 Id: Id.GetValue(),
                 ItemCode: data.ItemCode,
@@ -701,7 +701,7 @@
         cflItemPopupListReceiptItem.Hide();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("ChooseItemReceipt", "IssueAndReceipt")',
+            url: '@Url.Action("ChooseItemReceipt", "ReProcess")',
             data: {
                 Id: Id.GetValue(),
                 ItemCode: data.ItemCode,
@@ -737,7 +737,7 @@
             var detId = s.GetRowKey(e.visibleIndex);
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("DeleteItemReceipt", "IssueAndReceipt")',
+                url: '@Url.Action("DeleteItemReceipt", "ReProcess")',
                 data: { Id: Id.GetValue(), DetId: detId },
                 success: function () { gvReceiptDetail.PerformCallback(); },
                 error: function (jqXhr) { alert(jqXhr.responseText); }
@@ -896,7 +896,7 @@
             var detId = s.GetRowKey(e.visibleIndex);
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("DeleteItemIssue", "IssueAndReceipt")',
+                url: '@Url.Action("DeleteItemIssue", "ReProcess")',
                 data: { Id: Id.GetValue(), DetId: detId },
                 success: function () { gvIssueDetail.PerformCallback(); },
                 error: function (jqXhr) { alert(jqXhr.responseText); }
@@ -1036,9 +1036,9 @@
 
 <!------------------------------------------------BATCH ISSUE--------------------------------------------------->
 
-@Html.Partial("Partial/IssueAndReceipt_Form_Btn_Partial")
+@Html.Partial("Partial/ReProcess_Form_Btn_Partial")
 
-@using (Ajax.BeginForm("mantap", "IssueAndReceipt", null,
+@using (Ajax.BeginForm("mantap", "ReProcess", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -1059,7 +1059,7 @@ new
 }))
 {
     <div id="contentForm" style="padding-top:79px">
-        @Html.Partial("Partial/IssueAndReceipt_Form_Partial")
+        @Html.Partial("Partial/ReProcess_Form_Partial")
 
     </div>
 }
@@ -1093,10 +1093,10 @@ new
     -----------------------------------------------------------------------------*@
 
 
-@Html.Partial("Partial/IssueAndReceipt_Form_BtnBottom_Partial")
+@Html.Partial("Partial/ReProcess_Form_BtnBottom_Partial")
 
 
-@Html.Partial("Partial/IssueAndReceipt_Panel_List_Partial")
+@Html.Partial("Partial/ReProcess_Panel_List_Partial")
 
 
 @*@Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")*@

@@ -10,15 +10,15 @@ using Newtonsoft.Json;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
-        string VIEW_DETAIL = "IssueAndReceipt";
-        string VIEW_FORM_PARTIAL = "Partial/IssueAndReceipt_Form_Partial";
-        string VIEW_LIST_PARTIAL = "Partial/IssueAndReceipt_List_Partial";
-        string VIEW_PANEL_LIST_PARTIAL = "Partial/IssueAndReceipt_Panel_List_Partial";
+        string VIEW_DETAIL = "ReProcess";
+        string VIEW_FORM_PARTIAL = "Partial/ReProcess_Form_Partial";
+        string VIEW_LIST_PARTIAL = "Partial/ReProcess_List_Partial";
+        string VIEW_PANEL_LIST_PARTIAL = "Partial/ReProcess_Panel_List_Partial";
 
 
-        IssueAndReceiptService issueAndReceiptService;
+        ReProcessService reProcessService;
 
         public ActionResult Index()
         {
@@ -30,22 +30,22 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
 
 
-            issueAndReceiptService = new IssueAndReceiptService();
-            IssueAndReceiptModel IssueAndReceiptModel;
+            reProcessService = new ReProcessService();
+            ReProcessModel ReProcessModel;
             if (Id == 0)
             {
                 ViewBag.initNew = true;
-                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
-                IssueAndReceiptModel._FormMode = FormModeEnum.New;
+                ReProcessModel = reProcessService.GetNewModel(userId);
+                ReProcessModel._FormMode = FormModeEnum.New;
             }
             else
             {
-                issueAndReceiptService = new IssueAndReceiptService();
-                IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                reProcessService = new ReProcessService();
+                ReProcessModel = reProcessService.GetById(userId, Id);
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
 
-            return View(VIEW_DETAIL, IssueAndReceiptModel);
+            return View(VIEW_DETAIL, ReProcessModel);
         }
 
         public ActionResult DetailPartial(long Id = 0, string copyFromForm = "", long copyFromId = 0)
@@ -53,44 +53,44 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
 
 
-            IssueAndReceiptModel IssueAndReceiptModel;
+            ReProcessModel ReProcessModel;
 
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
             if (Id == 0)
             {
-                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
-                IssueAndReceiptModel._FormMode = FormModeEnum.New;
+                ReProcessModel = reProcessService.GetNewModel(userId);
+                ReProcessModel._FormMode = FormModeEnum.New;
             }
             else
             {
-                IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
-                if (IssueAndReceiptModel != null)
+                ReProcessModel = reProcessService.GetById(userId, Id);
+                if (ReProcessModel != null)
                 {
-                    IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                    ReProcessModel._FormMode = FormModeEnum.Edit;
                 }
                 else
                 {
-                    IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
-                    IssueAndReceiptModel._FormMode = FormModeEnum.New;
+                    ReProcessModel = reProcessService.GetNewModel(userId);
+                    ReProcessModel._FormMode = FormModeEnum.New;
                 }
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult Add([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
+        public ActionResult Add([ModelBinder(typeof(DevExpressEditorsBinder))] ReProcessModel ReProcessModel)
         {
             int userId = (int)Session["userId"];
 
-            IssueAndReceiptModel._UserId = userId;
-            issueAndReceiptService = new IssueAndReceiptService();
+            ReProcessModel._UserId = userId;
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
-                long Id = issueAndReceiptService.Add(IssueAndReceiptModel);
-                IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                long Id = reProcessService.Add(ReProcessModel);
+                ReProcessModel = reProcessService.GetById(userId, Id);
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
             else
             {
@@ -98,48 +98,48 @@ namespace Controllers.Transaction
                 throw new Exception(string.Format("[VALIDATION] {0}", message));
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
+        public ActionResult Update([ModelBinder(typeof(DevExpressEditorsBinder))] ReProcessModel ReProcessModel)
         {
             int userId = (int)Session["userId"];
 
-            IssueAndReceiptModel._UserId = userId;
-            issueAndReceiptService = new IssueAndReceiptService();
-            IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            ReProcessModel._UserId = userId;
+            reProcessService = new ReProcessService();
+            ReProcessModel._FormMode = FormModeEnum.Edit;
 
-            issueAndReceiptService.Update(IssueAndReceiptModel);
-            IssueAndReceiptModel = issueAndReceiptService.GetById(userId, IssueAndReceiptModel.Id);
+            reProcessService.Update(ReProcessModel);
+            ReProcessModel = reProcessService.GetById(userId, ReProcessModel.Id);
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult Post([ModelBinder(typeof(DevExpressEditorsBinder))] IssueAndReceiptModel IssueAndReceiptModel)
+        public ActionResult Post([ModelBinder(typeof(DevExpressEditorsBinder))] ReProcessModel ReProcessModel)
         {
             int userId = (int)Session["userId"];
 
-            IssueAndReceiptModel._UserId = userId;
-            issueAndReceiptService = new IssueAndReceiptService();
-            IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+            ReProcessModel._UserId = userId;
+            reProcessService = new ReProcessService();
+            ReProcessModel._FormMode = FormModeEnum.Edit;
 
-            issueAndReceiptService.Post(userId, IssueAndReceiptModel);
-            IssueAndReceiptModel = issueAndReceiptService.GetById(userId, IssueAndReceiptModel.Id);
+            reProcessService.Post(userId, ReProcessModel);
+            ReProcessModel = reProcessService.GetById(userId, ReProcessModel.Id);
 
-            if (IssueAndReceiptModel != null)
+            if (ReProcessModel != null)
             {
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
             else
             {
-                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
-                IssueAndReceiptModel._FormMode = FormModeEnum.New;
+                ReProcessModel = reProcessService.GetNewModel(userId);
+                ReProcessModel._FormMode = FormModeEnum.New;
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
 
@@ -148,23 +148,23 @@ namespace Controllers.Transaction
         {
             int userId = (int)Session["userId"];
 
-            IssueAndReceiptModel IssueAndReceiptModel;
+            ReProcessModel ReProcessModel;
 
-            issueAndReceiptService = new IssueAndReceiptService();
-            issueAndReceiptService.Cancel(userId, Id, CancelReason);
+            reProcessService = new ReProcessService();
+            reProcessService.Cancel(userId, Id, CancelReason);
 
-            IssueAndReceiptModel = issueAndReceiptService.GetById(userId, Id);
-            if (IssueAndReceiptModel != null)
+            ReProcessModel = reProcessService.GetById(userId, Id);
+            if (ReProcessModel != null)
             {
-                IssueAndReceiptModel._FormMode = FormModeEnum.Edit;
+                ReProcessModel._FormMode = FormModeEnum.Edit;
             }
             else
             {
-                IssueAndReceiptModel = issueAndReceiptService.GetNewModel(userId);
-                IssueAndReceiptModel._FormMode = FormModeEnum.New;
+                ReProcessModel = reProcessService.GetNewModel(userId);
+                ReProcessModel._FormMode = FormModeEnum.New;
             }
 
-            return PartialView(VIEW_FORM_PARTIAL, IssueAndReceiptModel);
+            return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
     }

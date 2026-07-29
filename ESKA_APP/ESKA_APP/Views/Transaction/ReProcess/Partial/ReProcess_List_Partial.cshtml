@@ -16,7 +16,7 @@
 {
     settings.Name = "gvIssueAndReceiptList";
     settings.KeyFieldName = "Id";
-    settings.CallbackRouteValues =  new { Controller = "IssueAndReceipt", Action = "ListPartial" };
+    settings.CallbackRouteValues =  new { Controller = "ReProcess", Action = "ListPartial" };
 
     settings.Columns.Add(column =>
     {
@@ -109,17 +109,17 @@
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Paging,
-        new { Controller = "IssueAndReceipt", Action = "ListPaging" }
+        new { Controller = "ReProcess", Action = "ListPaging" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Filtering,
-        new { Controller = "IssueAndReceipt", Action = "ListFiltering" }
+        new { Controller = "ReProcess", Action = "ListFiltering" }
     );
 
     settings.CustomBindingRouteValuesCollection.Add(
         GridViewOperationType.Sorting,
-        new { Controller = "IssueAndReceipt", Action = "ListSorting" }
+        new { Controller = "ReProcess", Action = "ListSorting" }
     );
 
 

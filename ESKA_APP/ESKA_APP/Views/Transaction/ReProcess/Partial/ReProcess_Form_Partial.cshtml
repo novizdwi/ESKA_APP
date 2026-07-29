@@ -9,7 +9,7 @@
 
 }
 
-@model Models.Transaction.IssueAndReceiptModel
+@model Models.Transaction.ReProcessModel
 
 @Html.DevExpress().TextBox(
         settings =>
@@ -329,7 +329,7 @@
                     );
                 }
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/IssueAndReceipt_Form_TabIssueDetail_List_Partial", Model.ListIssueItem_)
+                     Html.Partial("Partial/ReProcess_Form_TabIssueDetail_List_Partial", Model.ListIssueItem_)
                 );
 
             });
@@ -368,7 +368,7 @@
                     );
                 }
                 ViewContext.Writer.Write(
-                     Html.Partial("Partial/IssueAndReceipt_Form_TabReceiptDetail_List_Partial", Model.ListReceiptItem_)
+                     Html.Partial("Partial/ReProcess_Form_TabReceiptDetail_List_Partial", Model.ListReceiptItem_)
                 );
 
             });

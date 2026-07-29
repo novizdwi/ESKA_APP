@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -14,12 +14,12 @@ using Models.Transaction;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
-        public ListFindParamIssueAndReceipt GetParam(HttpRequestBase Request)
+        public ListFindParamReProcess GetParam(HttpRequestBase Request)
         {
 
-            var param = new ListFindParamIssueAndReceipt();
+            var param = new ListFindParamReProcess();
 
             if (string.IsNullOrEmpty(Request["hidden_IsFindTransDate"]))
             {
@@ -112,16 +112,16 @@ namespace Controllers.Transaction
             var viewModel = GridViewExtension.GetViewModel("gvIssueAndReceiptList");
             if (viewModel == null)
             {
-                viewModel = IssueAndReceipt__List_Model.CreateGridViewModel();
+                viewModel = ReProcess__List_Model.CreateGridViewModel();
             }
 
             return viewModel;
         }
 
-        static void ProcessCustomBinding(int userId, GridViewModel viewModel, ListFindParamIssueAndReceipt param)
+        static void ProcessCustomBinding(int userId, GridViewModel viewModel, ListFindParamReProcess param)
         {
 
-            IssueAndReceipt__List_Model.SetBindingData(viewModel, userId, param);
+            ReProcess__List_Model.SetBindingData(viewModel, userId, param);
 
         }
 

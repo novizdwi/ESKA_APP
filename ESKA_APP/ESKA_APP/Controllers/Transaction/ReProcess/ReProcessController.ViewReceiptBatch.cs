@@ -8,7 +8,7 @@ using DevExpress.Web.Mvc;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
 
         string VIEW_ITEMTAG_PANEL_PARTIAL = "Partial/BatchReceipt/BatchReceipt_Panel_Partial";
@@ -21,11 +21,11 @@ namespace Controllers.Transaction
             ViewBag.Id = id;
             ViewBag.DetId = detId;
 
-            issueAndReceiptService = new IssueAndReceiptService();
-            var model = new IssueAndReceiptBatchReceiptView___();
+            reProcessService = new ReProcessService();
+            var model = new ReProcessBatchReceiptView___();
             if (id != 0 && detId != 0)
             {
-                model = issueAndReceiptService.GetReceiptBatch(id, detId);
+                model = reProcessService.GetReceiptBatch(id, detId);
             }
             return PartialView(VIEW_ITEMTAG_PANEL_PARTIAL, model);
         }
@@ -35,9 +35,9 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
             ViewBag.Id = Id;
             ViewBag.DetId = DetId;
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
-            var modelList = issueAndReceiptService.IssueAndReceipt__ReceiptItemBatchList(DetId);
+            var modelList = reProcessService.ReProcess__ReceiptItemBatchList(DetId);
 
             return PartialView(VIEW_TAB_BATCH, modelList);
         }
@@ -46,40 +46,40 @@ namespace Controllers.Transaction
         {
 
             int userId = (int)Session["userId"];
-            var model = new IssueAndReceiptModel();
+            var model = new ReProcessModel();
 
             return PartialView(VIEW_ITEMTAG_FORM_PARTIAL, model);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabReceiptBatchListAddNewRow([Bind] IssueAndReceiptBatchReceiptModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabReceiptBatchListAddNewRow([Bind] ReProcessBatchReceiptModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
                 //model.Id = Id;
                 model.DetDetId = DetId;
                 model._UserId = (int)Session["userId"];
-                issueAndReceiptService.IssueAndReceipt__ReceiptAddNewItemBatch(model);
+                reProcessService.ReProcess__ReceiptAddNewItemBatch(model);
             }
 
             return TabReceiptBatchListPartial(id, detId);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabReceiptBatchListUpdateRow([Bind] IssueAndReceiptBatchReceiptModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabReceiptBatchListUpdateRow([Bind] ReProcessBatchReceiptModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
                 model._UserId = (int)Session["userId"];
-                issueAndReceiptService.IssueAndReceipt_ReceiptUpdateItemBatch(model);
+                reProcessService.ReProcess_ReceiptUpdateItemBatch(model);
             }
 
             return TabReceiptBatchListPartial(id, detId);
@@ -91,11 +91,11 @@ namespace Controllers.Transaction
             long id = Id;
             long detId = DetId;
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
-                issueAndReceiptService.IssueAndReceipt_ReceiptDeleteItemBatch(userId, Id, DetId, DetDetId);
+                reProcessService.ReProcess_ReceiptDeleteItemBatch(userId, Id, DetId, DetDetId);
             }
 
             return TabReceiptBatchListPartial(id, detId);

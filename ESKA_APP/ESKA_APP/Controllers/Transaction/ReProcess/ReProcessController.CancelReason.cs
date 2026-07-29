@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -15,7 +15,7 @@ using Models.Transaction;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
 
         string VIEW_PROGRESS_PANEL_PARTIAL = "Partial/CancelReason/CancelReason_Panel_Partial";
@@ -26,17 +26,17 @@ namespace Controllers.Transaction
         {
             int userId = (int)Session["userId"];
 
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
-            IssueAndReceiptModel model;
+            ReProcessModel model;
 
             if (Id != 0)
             {
-                model = issueAndReceiptService.GetById(userId, Id);
+                model = reProcessService.GetById(userId, Id);
             }
             else
             {
-                model = issueAndReceiptService.GetNewModel(userId);
+                model = reProcessService.GetNewModel(userId);
             }
 
             return PartialView(VIEW_PROGRESS_PANEL_PARTIAL, model);

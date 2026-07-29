@@ -1,7 +1,7 @@
 ﻿@Html.DevExpress().PopupControl(settings =>
 {
     settings.Name = "popupBatchReceipt";
-    settings.CallbackRouteValues = new { Controller = "IssueAndReceipt", Action = "ViewReceiptBatch_PopupListOnDemandPartial" };
+    settings.CallbackRouteValues = new { Controller = "ReProcess", Action = "ViewReceiptBatch_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;

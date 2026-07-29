@@ -8,7 +8,7 @@ using DevExpress.Web.Mvc;
 
 namespace Controllers.Transaction
 {
-    public partial class IssueAndReceiptController : BaseController
+    public partial class ReProcessController : BaseController
     {
 
         string VIEW_ISSUE_ITEMTAG_PANEL_PARTIAL = "Partial/BatchIssue/BatchIssue_Panel_Partial";
@@ -21,11 +21,11 @@ namespace Controllers.Transaction
             ViewBag.Id = id;
             ViewBag.DetId = detId;
 
-            issueAndReceiptService = new IssueAndReceiptService();
-            var model = new IssueAndReceiptBatchIssueView___();
+            reProcessService = new ReProcessService();
+            var model = new ReProcessBatchIssueView___();
             if (id != 0 && detId != 0)
             {
-                model = issueAndReceiptService.GetIssueBatch(id, detId);
+                model = reProcessService.GetIssueBatch(id, detId);
             }
             return PartialView(VIEW_ISSUE_ITEMTAG_PANEL_PARTIAL, model);
         }
@@ -35,9 +35,9 @@ namespace Controllers.Transaction
             int userId = (int)Session["userId"];
             ViewBag.Id = Id;
             ViewBag.DetId = DetId;
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
-            var modelList = issueAndReceiptService.IssueAndReceipt__IssueItemBatchList(DetId);
+            var modelList = reProcessService.ReProcess__IssueItemBatchList(DetId);
 
             return PartialView(VIEW_ISSUE_TAB_BATCH, modelList);
         }
@@ -46,42 +46,42 @@ namespace Controllers.Transaction
         {
 
             int userId = (int)Session["userId"];
-            var model = new IssueAndReceiptModel();
+            var model = new ReProcessModel();
 
             return PartialView(VIEW_ISSUE_ITEMTAG_FORM_PARTIAL, model);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabIssueBatchListAddNewRow([Bind] IssueAndReceiptBatchIssueModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabIssueBatchListAddNewRow([Bind] ReProcessBatchIssueModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
 
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
                 //model.Id = Id;
                 model.DetDetId = DetId;
                 model._UserId = (int)Session["userId"];
-                issueAndReceiptService.IssueAndReceipt__IssueAddNewItemBatch(model);
+                reProcessService.ReProcess__IssueAddNewItemBatch(model);
             }
 
             return TabIssueBatchListPartial(id, detId);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabIssueBatchListUpdateRow([Bind] IssueAndReceiptBatchIssueModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabIssueBatchListUpdateRow([Bind] ReProcessBatchIssueModel model, long Id = 0, long DetId = 0)
         {
             long id = Id;
             long detId = DetId;
 
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
                 model._UserId = (int)Session["userId"];
-                issueAndReceiptService.IssueAndReceipt_IssueUpdateItemBatch(model);
+                reProcessService.ReProcess_IssueUpdateItemBatch(model);
             }
 
             return TabIssueBatchListPartial(id, detId);
@@ -93,11 +93,11 @@ namespace Controllers.Transaction
             long id = Id;
             long detId = DetId;
             int userId = (int)Session["userId"];
-            issueAndReceiptService = new IssueAndReceiptService();
+            reProcessService = new ReProcessService();
 
             if (ModelState.IsValid)
             {
-                issueAndReceiptService.IssueAndReceipt_IssueDeleteItemBatch(userId, Id, DetId, DetDetId);
+                reProcessService.ReProcess_IssueDeleteItemBatch(userId, Id, DetId, DetDetId);
             }
 
             return TabIssueBatchListPartial(id, detId);

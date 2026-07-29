@@ -18,7 +18,7 @@ namespace Models.Transaction
 {
     #region Models
 
-    public class IssueAndReceiptModel
+    public class ReProcessModel
     {
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
 
@@ -202,7 +202,7 @@ namespace Models.Transaction
         public Dictionary<long, int> LineMapping { get; set; } 
     }
 
-    public class IssueAndReceiptBatchReceiptView___
+    public class ReProcessBatchReceiptView___
     {
         public long Id { get; set; }
 
@@ -218,10 +218,10 @@ namespace Models.Transaction
 
         public int? Quantity { get; set; }
 
-        public List<IssueAndReceiptBatchReceiptModel> IssueAndReceiptBatchReceiptModel___ { get; set; }
+        public List<ReProcessBatchReceiptModel> ReProcessBatchReceiptModel___ { get; set; }
     }
 
-    public class IssueAndReceiptBatchReceiptModel
+    public class ReProcessBatchReceiptModel
     {
         public int? RowNo { get; set; }
 
@@ -253,7 +253,7 @@ namespace Models.Transaction
 
     }
 
-    public class IssueAndReceiptBatchIssueView___
+    public class ReProcessBatchIssueView___
     {
         public long Id { get; set; }
 
@@ -269,10 +269,10 @@ namespace Models.Transaction
 
         public int? Quantity { get; set; }
 
-        public List<IssueAndReceiptBatchIssueModel> IssueAndReceiptBatchIssueModel___ { get; set; }
+        public List<ReProcessBatchIssueModel> ReProcessBatchIssueModel___ { get; set; }
     }
 
-    public class IssueAndReceiptBatchIssueModel
+    public class ReProcessBatchIssueModel
     {
         public int? RowNo { get; set; }
 
@@ -310,18 +310,18 @@ namespace Models.Transaction
 
     #region Services
 
-    public class IssueAndReceiptService
+    public class ReProcessService
     {
 
-        public IssueAndReceiptModel GetNewModel(int userId)
+        public ReProcessModel GetNewModel(int userId)
         {
-            IssueAndReceiptModel model = new IssueAndReceiptModel();
+            ReProcessModel model = new ReProcessModel();
             model.Status = "Draft";
             model.TransDate = DateTime.Now;
             return model;
         }
 
-        public long Add(IssueAndReceiptModel model)
+        public long Add(ReProcessModel model)
         {
             long Id = 0;
 
@@ -366,7 +366,7 @@ namespace Models.Transaction
             return Id;
         }
 
-        public void Update(IssueAndReceiptModel model, string method = "")
+        public void Update(ReProcessModel model, string method = "")
         {
             if (model != null)
             {
@@ -405,7 +405,7 @@ namespace Models.Transaction
         }
 
         // Terapkan perubahan batch grid Issue: modified -> update, inserted -> add, deleted -> delete.
-        private void ApplyIssueDetailChanges(IssueAndReceiptModel model)
+        private void ApplyIssueDetailChanges(ReProcessModel model)
         {
             var d = model.IssueDetails_;
             if (d == null) return;
@@ -417,7 +417,7 @@ namespace Models.Transaction
                 foreach (var detId in d.deletedRowKeys) IssueItem_Delete(model._UserId, detId);
         }
 
-        private void ApplyReceiptDetailChanges(IssueAndReceiptModel model)
+        private void ApplyReceiptDetailChanges(ReProcessModel model)
         {
             var d = model.ReceiptDetails_;
             if (d == null) return;
@@ -429,7 +429,7 @@ namespace Models.Transaction
                 foreach (var detId in d.deletedRowKeys) ReceiptItem_Delete(model._UserId, detId);
         }
 
-        public IssueAndReceiptModel GetById(int userId, long id = 0, string method = "")
+        public ReProcessModel GetById(int userId, long id = 0, string method = "")
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -437,9 +437,9 @@ namespace Models.Transaction
             }
         }
 
-        public IssueAndReceiptModel GetById(HANA_APP CONTEXT, int userId, long id = 0, string method = "")
+        public ReProcessModel GetById(HANA_APP CONTEXT, int userId, long id = 0, string method = "")
         {
-            IssueAndReceiptModel model = null;
+            ReProcessModel model = null;
             if (id != 0)
             {
                 string ssql = @"SELECT *,
@@ -450,15 +450,15 @@ namespace Models.Transaction
                             ORDER BY T0.""Id"" ASC
                 ";
 
-                model = CONTEXT.Database.SqlQuery<IssueAndReceiptModel>(ssql, id).Single();
+                model = CONTEXT.Database.SqlQuery<ReProcessModel>(ssql, id).Single();
 
-                model.ListIssueItem_ = this.IssueAndReceipt_IssueItemDetails(CONTEXT, id);
+                model.ListIssueItem_ = this.ReProcess_IssueItemDetails(CONTEXT, id);
 
-                model.ListIssueItem_ = this.IssueAndReceipt_IssueBatchDetails(CONTEXT, model.ListIssueItem_);
+                model.ListIssueItem_ = this.ReProcess_IssueBatchDetails(CONTEXT, model.ListIssueItem_);
 
-                model.ListReceiptItem_ = this.IssueAndReceipt_ReceiptItemDetails(CONTEXT, id);
+                model.ListReceiptItem_ = this.ReProcess_ReceiptItemDetails(CONTEXT, id);
 
-                model.ListReceiptItem_ = this.IssueAndReceipt_ReceiptBatchDetails(CONTEXT, model.ListReceiptItem_);
+                model.ListReceiptItem_ = this.ReProcess_ReceiptBatchDetails(CONTEXT, model.ListReceiptItem_);
 
 
 
@@ -472,27 +472,27 @@ namespace Models.Transaction
             return model;
         }
 
-        public List<IssueReceipt_IssueItemModel> IssueAndReceipt_IssueItemDetails(long id = 0)
+        public List<IssueReceipt_IssueItemModel> ReProcess_IssueItemDetails(long id = 0)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return IssueAndReceipt_IssueItemDetails(CONTEXT, id);
+                return ReProcess_IssueItemDetails(CONTEXT, id);
             }
 
         }
 
-        public List<IssueReceipt_IssueItemModel> IssueAndReceipt_IssueItemDetails(HANA_APP CONTEXT, long id = 0)
+        public List<IssueReceipt_IssueItemModel> ReProcess_IssueItemDetails(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"SELECT T0.*
                 FROM ""Tx_IssueAndReceipt_Issue_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
-            var IssueAndReceipt_IssueItemDetails = CONTEXT.Database.SqlQuery<IssueReceipt_IssueItemModel>(ssql, id).ToList();
-            return IssueAndReceipt_IssueItemDetails;
+            var ReProcess_IssueItemDetails = CONTEXT.Database.SqlQuery<IssueReceipt_IssueItemModel>(ssql, id).ToList();
+            return ReProcess_IssueItemDetails;
         }
 
-        public List<IssueReceipt_IssueItemModel> IssueAndReceipt_IssueBatchDetails(HANA_APP CONTEXT,List<IssueReceipt_IssueItemModel> items)
+        public List<IssueReceipt_IssueItemModel> ReProcess_IssueBatchDetails(HANA_APP CONTEXT,List<IssueReceipt_IssueItemModel> items)
         {
             if (items == null || !items.Any())
                 return items;
@@ -524,27 +524,27 @@ namespace Models.Transaction
         }
 
 
-        public List<IssueReceipt_ReceiptItemModel> IssueAndReceipt_ReceiptItemDetails(long id = 0)
+        public List<IssueReceipt_ReceiptItemModel> ReProcess_ReceiptItemDetails(long id = 0)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return IssueAndReceipt_ReceiptItemDetails(CONTEXT, id);
+                return ReProcess_ReceiptItemDetails(CONTEXT, id);
             }
 
         }
 
-        public List<IssueReceipt_ReceiptItemModel> IssueAndReceipt_ReceiptItemDetails(HANA_APP CONTEXT, long id = 0)
+        public List<IssueReceipt_ReceiptItemModel> ReProcess_ReceiptItemDetails(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"SELECT T0.*
                 FROM ""Tx_IssueAndReceipt_Receipt_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
-            var IssueAndReceipt_ReceiptItemDetails = CONTEXT.Database.SqlQuery<IssueReceipt_ReceiptItemModel>(ssql, id).ToList();
-            return IssueAndReceipt_ReceiptItemDetails;
+            var ReProcess_ReceiptItemDetails = CONTEXT.Database.SqlQuery<IssueReceipt_ReceiptItemModel>(ssql, id).ToList();
+            return ReProcess_ReceiptItemDetails;
         }
 
-        public List<IssueReceipt_ReceiptItemModel> IssueAndReceipt_ReceiptBatchDetails(HANA_APP CONTEXT, List<IssueReceipt_ReceiptItemModel> items)
+        public List<IssueReceipt_ReceiptItemModel> ReProcess_ReceiptBatchDetails(HANA_APP CONTEXT, List<IssueReceipt_ReceiptItemModel> items)
         {
             if (items == null || !items.Any())
                 return items;
@@ -574,9 +574,9 @@ namespace Models.Transaction
 
             return items;
         }
-        public IssueAndReceiptModel NavFirst(int userId)
+        public ReProcessModel NavFirst(int userId)
         {
-            IssueAndReceiptModel model = null;
+            ReProcessModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
@@ -594,9 +594,9 @@ namespace Models.Transaction
             return model;
 
         }
-        public IssueAndReceiptModel NavPrevious(int userId, long id = 0)
+        public ReProcessModel NavPrevious(int userId, long id = 0)
         {
-            IssueAndReceiptModel model = null;
+            ReProcessModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
@@ -621,9 +621,9 @@ namespace Models.Transaction
             return model;
         }
 
-        public IssueAndReceiptModel NavNext(int userId, long id = 0)
+        public ReProcessModel NavNext(int userId, long id = 0)
         {
-            IssueAndReceiptModel model = null;
+            ReProcessModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
@@ -648,9 +648,9 @@ namespace Models.Transaction
             return model;
         }
 
-        public IssueAndReceiptModel NavLast(int userId)
+        public ReProcessModel NavLast(int userId)
         {
-            IssueAndReceiptModel model = null;
+            ReProcessModel model = null;
             using (var CONTEXT = new HANA_APP())
             {
                 string sqlCriteria = "";
@@ -668,10 +668,10 @@ namespace Models.Transaction
             return model;
         }
 
-        public IssueAndReceiptBatchReceiptView___ GetReceiptBatch(long id, long detId)
+        public ReProcessBatchReceiptView___ GetReceiptBatch(long id, long detId)
         {
             string sql = null;
-            IssueAndReceiptBatchReceiptView___ model = new IssueAndReceiptBatchReceiptView___();
+            ReProcessBatchReceiptView___ model = new ReProcessBatchReceiptView___();
 
             using (var CONTEXT = new HANA_APP())
             {
@@ -687,22 +687,22 @@ namespace Models.Transaction
                                 LEFT JOIN ""Tx_IssueAndReceipt_Receipt_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
 
-                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptView___>(sql, id, detId).FirstOrDefault();
+                model = CONTEXT.Database.SqlQuery<ReProcessBatchReceiptView___>(sql, id, detId).FirstOrDefault();
 
                 sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
                             FROM ""Tx_IssueAndReceipt_Receipt_Item_Batch"" T0   
                             WHERE ""DetId"" = :p0 ";
 
-                model.IssueAndReceiptBatchReceiptModel___ = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptModel>(sql, detId).ToList();
+                model.ReProcessBatchReceiptModel___ = CONTEXT.Database.SqlQuery<ReProcessBatchReceiptModel>(sql, detId).ToList();
             }
 
             return model;
         }
 
-        public IssueAndReceiptBatchIssueView___ GetIssueBatch(long id, long detId)
+        public ReProcessBatchIssueView___ GetIssueBatch(long id, long detId)
         {
             string sql = null;
-            IssueAndReceiptBatchIssueView___ model = new IssueAndReceiptBatchIssueView___();
+            ReProcessBatchIssueView___ model = new ReProcessBatchIssueView___();
 
             using (var CONTEXT = new HANA_APP())
             {
@@ -718,22 +718,22 @@ namespace Models.Transaction
                                 LEFT JOIN ""Tx_IssueAndReceipt_Issue_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
 
-                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueView___>(sql, id, detId).FirstOrDefault();
+                model = CONTEXT.Database.SqlQuery<ReProcessBatchIssueView___>(sql, id, detId).FirstOrDefault();
 
                 sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
                             FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0   
                             WHERE ""DetId"" = :p0 ";
 
-                model.IssueAndReceiptBatchIssueModel___ = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueModel>(sql, detId).ToList();
+                model.ReProcessBatchIssueModel___ = CONTEXT.Database.SqlQuery<ReProcessBatchIssueModel>(sql, detId).ToList();
             }
 
             return model;
         }
 
-        public List<IssueAndReceiptBatchReceiptModel> IssueAndReceipt__ReceiptItemBatchList(long detId)
+        public List<ReProcessBatchReceiptModel> ReProcess__ReceiptItemBatchList(long detId)
         {
             string sql = null;
-            List<IssueAndReceiptBatchReceiptModel> model = new List<IssueAndReceiptBatchReceiptModel>();
+            List<ReProcessBatchReceiptModel> model = new List<ReProcessBatchReceiptModel>();
 
             using (var CONTEXT = new HANA_APP())
             {
@@ -741,15 +741,15 @@ namespace Models.Transaction
                             FROM ""Tx_IssueAndReceipt_Receipt_Item_Batch"" T0   
                             WHERE ""DetId"" = :p1 ";
 
-                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchReceiptModel>(sql, detId).ToList();
+                model = CONTEXT.Database.SqlQuery<ReProcessBatchReceiptModel>(sql, detId).ToList();
             }
             return model;
         }
 
-        public List<IssueAndReceiptBatchIssueModel> IssueAndReceipt__IssueItemBatchList(long detId)
+        public List<ReProcessBatchIssueModel> ReProcess__IssueItemBatchList(long detId)
         {
             string sql = null;
-            List<IssueAndReceiptBatchIssueModel> model = new List<IssueAndReceiptBatchIssueModel>();
+            List<ReProcessBatchIssueModel> model = new List<ReProcessBatchIssueModel>();
 
             using (var CONTEXT = new HANA_APP())
             {
@@ -757,12 +757,12 @@ namespace Models.Transaction
                             FROM ""Tx_IssueAndReceipt_Issue_Item_Batch"" T0
                             WHERE ""DetId"" = :p0 ";
 
-                model = CONTEXT.Database.SqlQuery<IssueAndReceiptBatchIssueModel>(sql, detId).ToList();
+                model = CONTEXT.Database.SqlQuery<ReProcessBatchIssueModel>(sql, detId).ToList();
             }
             return model;
         }
 
-        public long IssueAndReceipt__ReceiptAddNewItemBatch(IssueAndReceiptBatchReceiptModel model)
+        public long ReProcess__ReceiptAddNewItemBatch(ReProcessBatchReceiptModel model)
         {
             long detDetId = 0;
             using (var CONTEXT = new HANA_APP())
@@ -817,7 +817,7 @@ namespace Models.Transaction
             return detDetId;
         }
 
-        public long IssueAndReceipt__IssueAddNewItemBatch(IssueAndReceiptBatchIssueModel model)
+        public long ReProcess__IssueAddNewItemBatch(ReProcessBatchIssueModel model)
         {
             long detDetId = 0;
             using (var CONTEXT = new HANA_APP())
@@ -876,7 +876,7 @@ namespace Models.Transaction
         }
 
 
-        public void IssueAndReceipt_ReceiptUpdateItemBatch(IssueAndReceiptBatchReceiptModel model)
+        public void ReProcess_ReceiptUpdateItemBatch(ReProcessBatchReceiptModel model)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -930,7 +930,7 @@ namespace Models.Transaction
             }
         }
 
-        public void IssueAndReceipt_IssueUpdateItemBatch(IssueAndReceiptBatchIssueModel model)
+        public void ReProcess_IssueUpdateItemBatch(ReProcessBatchIssueModel model)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -988,7 +988,7 @@ namespace Models.Transaction
         }
 
 
-        public void IssueAndReceipt_ReceiptDeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
+        public void ReProcess_ReceiptDeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -1031,7 +1031,7 @@ namespace Models.Transaction
             }
         }
 
-        public void IssueAndReceipt_IssueDeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
+        public void ReProcess_IssueDeleteItemBatch(int _userId, long Id, long DetId, long DetDetId)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -1273,7 +1273,7 @@ namespace Models.Transaction
             public string DocNum { get; set; }
         }
 
-        public void Post(int userId, IssueAndReceiptModel model)
+        public void Post(int userId, ReProcessModel model)
         {
             PostSAP(userId, model.Id);
         }
@@ -1281,7 +1281,7 @@ namespace Models.Transaction
         public void PostSAP(int userId, long id)
         {
             SAPbobsCOM.Company oCompany = null;
-            IssueAndReceiptModel sync = GetById(userId, id);
+            ReProcessModel sync = GetById(userId, id);
 
             using (var CONTEXT = new HANA_APP())
             using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
@@ -1294,7 +1294,7 @@ namespace Models.Transaction
                     Tx_IssueAndReceipt tx = CONTEXT.Tx_IssueAndReceipt.Find(id);
                     if (tx == null)
                     {
-                        throw new Exception("[VALIDATION] - IssueAndReceipt tidak ditemukan");
+                        throw new Exception("[VALIDATION] - ReProcess tidak ditemukan");
                     }
                     if (tx.Status != "Draft")
                     {
@@ -1360,8 +1360,8 @@ namespace Models.Transaction
                     }
 
                     // 2 dokumen dalam SATU transaksi SAP: bila salah satu gagal, keduanya rollback.
-                    IssueReceipt_PostResult issRes = AddIssueForProduction(CONTEXT, oCompany, sync);
-                    IssueReceipt_PostResult recRes = AddReceiptFromProduction(CONTEXT, oCompany, sync);
+                    IssueReceipt_PostResult issRes = AddGoodsIssue(CONTEXT, oCompany, sync);
+                    IssueReceipt_PostResult recRes = AddGoodsReceipt(CONTEXT, oCompany, sync);
 
                     DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
@@ -1411,7 +1411,7 @@ namespace Models.Transaction
         }
 
         // Issue = Goods Issue standalone (oInventoryGenExit / ObjType 60), tanpa tautan Production Order.
-        private IssueReceipt_PostResult AddIssueForProduction(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, IssueAndReceiptModel model)
+        private IssueReceipt_PostResult AddGoodsIssue(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, ReProcessModel model)
         {
             if (model.ListIssueItem_ == null || !model.ListIssueItem_.Any(x => (x.Quantity ?? 0) > 0))
             {
@@ -1456,7 +1456,7 @@ namespace Models.Transaction
                 int nErr = oCompany.GetLastErrorCode();
                 string errMsg = oCompany.GetLastErrorDescription();
                 SapCompany.CleanUp(oDoc);
-                throw new Exception("[VALIDATION] - Issue for Production : " + nErr + "|" + errMsg);
+                throw new Exception("[VALIDATION] - Goods Issue : " + nErr + "|" + errMsg);
             }
 
             var result = new IssueReceipt_PostResult();
@@ -1472,8 +1472,8 @@ namespace Models.Transaction
             return result;
         }
 
-        // Receipt from Production = Goods Receipt (oInventoryGenEntry / ObjType 59), baris tertaut Production Order (BaseType 202).
-        private IssueReceipt_PostResult AddReceiptFromProduction(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, IssueAndReceiptModel model)
+        // Receipt = Goods Receipt standalone (oInventoryGenEntry / ObjType 59), tanpa tautan Production Order.
+        private IssueReceipt_PostResult AddGoodsReceipt(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, ReProcessModel model)
         {
             if (model.ListReceiptItem_ == null || !model.ListReceiptItem_.Any(x => (x.Quantity ?? 0) > 0))
             {
@@ -1518,7 +1518,7 @@ namespace Models.Transaction
                 int nErr = oCompany.GetLastErrorCode();
                 string errMsg = oCompany.GetLastErrorDescription();
                 SapCompany.CleanUp(oDoc);
-                throw new Exception("[VALIDATION] - Receipt from Production : " + nErr + "|" + errMsg);
+                throw new Exception("[VALIDATION] - Goods Receipt : " + nErr + "|" + errMsg);
             }
 
             var result = new IssueReceipt_PostResult();

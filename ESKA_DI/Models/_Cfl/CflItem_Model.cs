@@ -114,25 +114,24 @@ namespace Models._Cfl
                                             T2.""ItemCode"" ASC
                                         ";
 
-        // Master item + stok & gudang per baris (untuk Issue&Receipt standalone). Kolom output SAMA PERSIS
-        // dengan ssql. OpenQty = OITW.OnHand (stok gudang), WhsCode = OITW.WhsCode. LEFT JOIN OITW: item
-        // dengan >1 gudang muncul >1 baris; item tanpa baris OITW tetap muncul (WhsCode/OpenQty null).
-        // Filter stok (mis. Issue = stok>0) dilakukan lewat SqlWhere caller: AND T0."OpenQty" > 0
+        // Item master untuk Issue&Receipt (Re-Process): SEMUA item ber-ItemType='I' (Item),
+        // tampil SATU baris per item (tanpa join OITW/per-gudang). WhsCode dikosongkan —
+        // gudang dipilih user lewat ComboBox Whse di grid. OpenQty/UnitPrice/LineNum null.
+        // Kolom output SAMA PERSIS dengan ssql agar wrapper SELECT & mapping view tetap jalan.
         public static string ssqlStock = @"
                                         SELECT
                                             T0.""ItemCode"", T0.""ItemName"", T0.""ItemType"", T0.""IUoMEntry"", T3.""UomCode"",
                                             T2.""ItmsGrpNam"", T0.""ManBtchNum"", T0.""ItmsGrpCod"",
                                             T0.""U_IDU_ProcessCard"", T0.""U_IDU_RoutingGroup"",
                                             CAST(NULL AS INTEGER) AS ""LineNum"",
-                                            T1.""OnHand"" AS ""OpenQty"",
-                                            T1.""WhsCode"" AS ""WhsCode"",
+                                            CAST(NULL AS DECIMAL) AS ""OpenQty"",
+                                            CAST(NULL AS NVARCHAR(8)) AS ""WhsCode"",
                                             CAST(NULL AS DECIMAL) AS ""UnitPrice""
                                         FROM ""{DbSap}"".""OITM"" T0
-                                        LEFT OUTER JOIN ""{DbSap}"".""OITW"" T1 ON T1.""ItemCode"" = T0.""ItemCode""
                                         LEFT OUTER JOIN ""{DbSap}"".""OITB"" T2 ON T0.""ItmsGrpCod"" = T2.""ItmsGrpCod""
                                         LEFT JOIN ""{DbSap}"".""OUOM"" T3 ON T0.""IUoMEntry"" = T3.""UomEntry""
-                                        WHERE LEFT(T0.""ItemCode"",1) !='J' AND T0.""frozenFor"" = 'N'
-                                        ORDER BY T0.""ItemCode"", T1.""WhsCode""
+                                        WHERE LEFT(T0.""ItemCode"",1) !='J' AND T0.""frozenFor"" = 'N' AND T0.""ItemType"" = 'I'
+                                        ORDER BY T0.""ItemCode""
                                         ";
 
         // Pilih query dasar berdasarkan SourceType:
