@@ -131,6 +131,7 @@ namespace Models.Production
         public string OperatorName { get; set; }
         public DateTime? PlannedDate { get; set; }
         public decimal? QuantityPlanned { get; set; } 
+        public int? UomEntry { get; set; } 
         public string Uom { get; set; } 
     }
     public class ProductionScheduleOperatorModel

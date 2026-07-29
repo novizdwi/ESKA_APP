@@ -23,6 +23,7 @@ namespace ESKA_DI.Models._EF
         public string DocNum { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
+        public Nullable<int> UomEntry { get; set; }
         public string Uom { get; set; }
         public Nullable<int> OperatorId { get; set; }
         public string OperatorName { get; set; }

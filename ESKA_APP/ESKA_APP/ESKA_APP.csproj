@@ -498,13 +498,13 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-	  <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
-	  <Content Include="Scripts\SQLs\Create Schema.sql" />
-	  <Content Include="Scripts\SQLs\Insert Into.sql" />
-	  <Content Include="Scripts\SQLs\AlterTable.sql" />
-	  <Content Include="Scripts\SQLs\CreateStoredProcedure.sql" />
-	  <Content Include="Scripts\SQLs\CreateTable.sql" />
-    <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" /> 
+    <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
+    <Content Include="Scripts\SQLs\Create Schema.sql" />
+    <Content Include="Scripts\SQLs\Insert Into.sql" />
+    <Content Include="Scripts\SQLs\AlterTable.sql" />
+    <Content Include="Scripts\SQLs\CreateStoredProcedure.sql" />
+    <Content Include="Scripts\SQLs\CreateTable.sql" />
+    <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
     <Content Include="Scripts\Test\DXR.js" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -784,6 +784,7 @@
     <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Panel_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_TabItem_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -948,7 +949,6 @@
     <Compile Include="IduRazorViewEngine.cs" />
     <Compile Include="Rpts\Rpt.aspx.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Rpts\Rpt.aspx.designer.cs">
       <DependentUpon>Rpt.aspx</DependentUpon>

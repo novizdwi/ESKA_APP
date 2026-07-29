@@ -562,6 +562,9 @@
     <Compile Include="Models\_EF\Tx_ProductionTask_Activity.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\_EF\Tx_ProductionTask_Activity_Item.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\_EF\Tx_ProductionTask_Activity_Item_Batch.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>

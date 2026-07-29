@@ -116,6 +116,24 @@ namespace Models.Production
         public long? CurrentTaskId{ get; set; }
         public string CurrentTaskNo { get; set; }
     }
+    
+    public class ProductionTaskItemDetailModel
+    {
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string WhsCode { get; set; }
+
+        public string WhsName { get; set; }
+
+        public decimal? PlannedQty { get; set; }
+
+        public int? UomEntry { get; set; }
+
+        public string UomCode { get; set; }
+
+    }
 
     #endregion
 
@@ -187,11 +205,12 @@ namespace Models.Production
             CurrentTaskModel ret = new CurrentTaskModel();
             using (var CONTEXT = new HANA_APP())
             {
-                string ssql = @" SELECT ""Id"" AS ""CurrentTaskId"", ""TransNo"" AS ""CurrentTaskNo""
-                    FROM ""Tx_ProductionTask"" 
-                    WHERE ""Status"" = 'Open'
-                    AND ""IsRunningTask"" = 'Y' 
-                    AND  ""OperatorId"" = :p0 
+                string ssql = @" SELECT T0.""Id"" AS ""CurrentTaskId"", T0.""TransNo"" AS ""CurrentTaskNo""
+                    FROM ""Tx_ProductionTask"" T0
+                    INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                    WHERE T0.""Status"" = 'Open'
+                    AND T0.""IsRunningTask"" = 'Y' 
+                    AND  T1.""OperatorId"" = :p0  
                 ";
                 ret = CONTEXT.Database.SqlQuery<CurrentTaskModel>(ssql, userId).FirstOrDefault();
             }
@@ -450,6 +469,47 @@ namespace Models.Production
             };
 
             CONTEXT.Tx_ProductionTask_Activity_Log.Add(tx_ProductionTask_Activity_log);
+            CONTEXT.SaveChanges();
+
+            string ssql = @"
+                SELECT 	T1.""ItemCode"",
+                T1.""ItemName"",
+                T1.""wareHouse"" AS ""WhsCode"",
+                T2.""WhsName"",  
+                T1.""PlannedQty"" ,
+                T1.""UomEntry"",
+                T1.""UomCode""
+                FROM ""Tx_ProductionTask"" T0
+                INNER JOIN """ + DbProvider.dbSap_Name + @""".""WOR1"" T1 ON T0.""DocEntry"" =  T1.""DocEntry""
+                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWHS"" T2 ON T1.""wareHouse"" =  T2.""WhsCode""
+                WHERE ""Id"" = :p0 
+            ";
+
+            var workOrderDetail = CONTEXT.Database.SqlQuery<ProductionTaskItemDetailModel>(ssql, id).FirstOrDefault();
+
+            Tx_ProductionTask_Activity_Item tx_ProductionTask_Activity_Item = new Tx_ProductionTask_Activity_Item
+            {
+                Id = id,
+                DetId = detId,
+                Direction = "Out",
+
+                ItemCode = workOrderDetail?.ItemCode,
+                ItemName = workOrderDetail?.ItemName,
+                WhsCode = workOrderDetail?.WhsCode,
+                WhsName = workOrderDetail?.WhsName,
+
+                QuantityPlanned = workOrderDetail?.PlannedQty,
+                UomEntry = workOrderDetail?.UomEntry,
+                Uom = workOrderDetail?.UomCode,
+                IsLocked = "Y",
+
+                CreatedDate = dtModified,
+                CreatedUser = userId,
+                ModifiedDate = dtModified,
+                ModifiedUser = userId
+            };
+
+            CONTEXT.Tx_ProductionTask_Activity_Item.Add(tx_ProductionTask_Activity_Item);
             CONTEXT.SaveChanges();
         }
 

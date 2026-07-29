@@ -19,6 +19,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> OperatorId { get; set; }
         public string OperatorName { get; set; }
         public Nullable<decimal> Quantity { get; set; }
+        public string Batch { get; set; }
         public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> EndTime { get; set; }
         public Nullable<long> TotalWorkDuration { get; set; }

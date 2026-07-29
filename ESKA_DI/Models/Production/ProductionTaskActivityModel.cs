@@ -68,12 +68,49 @@ namespace Models.Production
     public class ProductionActivityFinishModel
     {
         public long? Id { get; set; }
+
         public long? DetId { get; set; }
+
+        public string FinishTransNo { get; set; }
+    
+        public string FinishDocNum { get; set; }
+
+        public string FinsihItemCode { get; set; }
+
+        public string FinishItemName { get; set; }
+
+        [Required(ErrorMessage = "required")]
+        public string Batch { get; set; }
 
         [Required(ErrorMessage = "required")]
         public Decimal? Quantity { get; set; }
+        public Decimal? QuantityPlanned { get; set; }
+        public Decimal? QuantityActual { get; set; }
+        public Decimal? QuantityRemain { get; set; }
         public string Comments { get; set; }
+
+        public List<ProductionTask_Detail_Item> ListItem_ = new List<ProductionTask_Detail_Item>();
+        public ProductionTask_Detail_Item Items_ { get; set; }
     }
+
+    public class ProductionTask_Detail_Item
+    { 
+        public long? Id { get; set; }
+        public long? DetId { get; set; }
+        public long? DetDetId { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemName { get; set; }
+        public string WhsCode { get; set; }
+        public string WhsName { get; set; }
+        public string Direction { get; set; }
+        public string Uom { get; set; }
+        public string Batch { get; set; }
+        public Decimal? QuantityPlanned { get; set; }
+        public string QuantityActual { get; set; }
+        public string Comments { get; set; }
+    
+    }
+
     #endregion
 
     #region Services
@@ -194,11 +231,47 @@ namespace Models.Production
         }
         public ProductionActivityFinishModel GetFinishModel(long id = 0 , long detId = 0)
         {
-            ProductionActivityFinishModel model = new ProductionActivityFinishModel() { 
-                Id = id,
-                DetId = detId
-            };
-            return model;
+            using (var CONTEXT = new HANA_APP())
+            {
+                string SqlSelect = @"
+                    SELECT
+	                    T0.""Id"",
+                        T1.""DetId"",
+
+	                    T0.""TransNo"" AS ""FinishTransNo"",
+	                    T0.""DocEntry"",
+	                    T0.""DocNum"" AS ""FinishDocNum"",
+	                    T0.""ItemCode"" AS ""FinsihItemCode"",
+	                    T0.""ItemName"" AS ""FinishItemName"",
+	                    T0.""QuantityPlanned"",
+	                    T0.""QuantityActual"",
+	                    COALESCE(T0.""QuantityPlanned"", 0) - COALESCE(T0.""QuantityActual"", 0) AS ""QuantityRemain""
+                    FROM ""Tx_ProductionTask"" T0
+                    INNER JOIN  ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                    WHERE T1.""DetId"" = :p0
+                ";
+                ProductionActivityFinishModel model = CONTEXT.Database.SqlQuery<ProductionActivityFinishModel>(SqlSelect, detId).SingleOrDefault();
+                model.ListItem_ = this.GetProductionTaskDetailItems(detId);
+
+                return model;
+            }
+        }
+
+        public List<ProductionTask_Detail_Item> GetProductionTaskDetailItems(long? detId)
+        {
+            List<ProductionTask_Detail_Item> ret = new List<ProductionTask_Detail_Item>();
+            using (var CONTEXT = new HANA_APP())
+            {
+                string SqlSelect = @"
+                    SELECT *
+                    FROM ""Tx_ProductionTask_Activity_Item"" T0
+                    WHERE T0.""DetId"" = :p0
+                ";
+
+                ret = CONTEXT.Database.SqlQuery<ProductionTask_Detail_Item>(SqlSelect, detId).ToList();
+            }
+
+            return ret;
         }
 
         public ProductionActivityPauseModel GetPauseModel(long id, long detId)

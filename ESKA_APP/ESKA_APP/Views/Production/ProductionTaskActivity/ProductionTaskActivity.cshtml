@@ -580,6 +580,26 @@ new
     -----------------------------------------------------------------------------
 *@
 <script type="text/javascript">
+    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+
+    }
+
+    function gvContentItemListOnEndCallback(s, e, Id, DetId) {
+        if (s.IsNewRowEditing && s.IsNewRowEditing()) {
+            s.FocusEditor("Batch");
+        }
+    }
+
+    function gvContentItemListOnBatchEditStartEditing(s, e, Id, DetId) {
+    }
+
+    function gvContentItemListOnBatchEditEndEditing(s, e, Id, DetId) {
+
+    }
+
+    function gvContentItemListOnBatchEditRowValidating(s, e, Id, DetId) {
+
+    }
 
     function popupFinish_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Finish_formDetail");

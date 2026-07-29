@@ -45,7 +45,7 @@
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 1;
+        itemSettings.ColCount = 2;
     });
 
 
@@ -57,7 +57,150 @@
         itemSettings.ColCount = 1;
     });
 
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+    });
+
     groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Name = "FinishTransNo";
+        itemSettings.Caption = "Task No";
+        itemSettings.FieldName = "FinishTransNo";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "FinishTransNo";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Name = "FinishDocNum";
+        itemSettings.Caption = "Work Order No";
+        itemSettings.FieldName = "FinishDocNum";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "FinishDocNum";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Name = "FinishItemCode";
+        itemSettings.Caption = "Item Code";
+        itemSettings.FieldName = "FinsihItemCode";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "FinishItemCode";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Name = "FinishItemName";
+        itemSettings.Caption = "Item Name";
+        itemSettings.FieldName = "FinishItemName";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "FinishItemName";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Batch";
+        itemSettings.FieldName = "GrpBatch";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Batch";
+
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 230;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+
+        txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+        txt.Properties.ValidationSettings.RequiredField.ErrorText = "Batch is required";
+        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Quantity Planned";
+        itemSettings.FieldName = "QuantityPlanned";
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.NumberType = SpinEditNumberType.Float;
+        txt.Properties.DisplayFormatString = "#,###";
+        txt.Properties.DisplayFormatInEditMode = true;
+        txt.Name = "QuantityPlanned";
+        txt.Properties.AllowMouseWheel = false;
+
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Width = 230;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Quantity Remain";
+        itemSettings.FieldName = "QuantityRemain";
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.NumberType = SpinEditNumberType.Float;
+        txt.Properties.DisplayFormatString = "#,###";
+        txt.Properties.DisplayFormatInEditMode = true;
+        txt.Name = "QuantityRemain";
+        txt.Properties.AllowMouseWheel = false;
+
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Width = 230;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
         itemSettings.Caption = "Quantity";
@@ -84,7 +227,8 @@
 
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+
+    groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
         itemSettings.Caption = "Comments";
@@ -100,41 +244,69 @@
         txt.Height = 120;
     });
 
-    var groupBtn = groupItem_Col1.Items.AddGroupItem(itemSettings =>
+    groupItem_2.Items.AddTabbedGroupItem(group =>
+    {
+        group.Name = "Finish_TabViewItem";
+        group.ColSpan = 2;
+        group.Width = Unit.Percentage(100);
+        group.Height = Unit.Percentage(100);
+
+        group.PageControl.ContentStyle.Paddings.Padding = 3;
+        group.PageControl.ContentStyle.Paddings.PaddingTop = 0;
+        group.Items.Add(item =>
+        {
+            item.Name = "Finish_TabViewItemContent";
+            item.Caption = "           Item           ";
+            item.SetNestedContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    Html.Partial("Partial/Finish/Finish_TabItem_List_Partial", Model.ListItem_)
+                );
+            });
+        });
+
+    });
+
+    var groupBtn = groupItem_2.Items.AddGroupItem(itemSettings =>
     {
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 2;
+        itemSettings.ColCount = 3;
+        itemSettings.ColSpan = 2;
+        itemSettings.Width = Unit.Percentage(100);
+        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
     });
 
     groupBtn.Items.Add(itemSettings =>
     {
+        itemSettings.ShowCaption = DefaultBoolean.False;
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
         itemSettings.Caption = "";
 
         var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
         btnSettings.Name = "btnFinishUpdate";
         btnSettings.Text = "Finish";
-        btnSettings.Width = Unit.Percentage(100);
+        btnSettings.Width = new Unit(140, UnitType.Pixel);
         btnSettings.ClientSideEvents.Click = "btnUpdateFinishOnClick";
         btnSettings.Styles.Style.Paddings.Padding = 0;
     });
 
+    groupBtn.Items.AddEmptyItem();   
+    
     groupBtn.Items.Add(itemSettings =>
     {
+        itemSettings.ShowCaption = DefaultBoolean.False;
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
         itemSettings.Caption = "";
+        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
 
         var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
         btnSettings.Name = "btnFinishCancel";
         btnSettings.Text = "Cancel";
-        btnSettings.Width = Unit.Percentage(100);
+        btnSettings.Width = new Unit(140, UnitType.Pixel);
         btnSettings.ClientSideEvents.Click = "btnCancelFinishOnClick";
         btnSettings.Styles.Style.BackColor = System.Drawing.Color.Gray;
         btnSettings.Styles.Style.Paddings.Padding = 0;
     });
 
 }).GetHtml()
-
-
-
