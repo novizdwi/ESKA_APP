@@ -260,7 +260,40 @@
     //});
 
 
-    // Author (Created By / Modified By) — seperti GRPO. Hanya tampil saat mode edit.
+    // No dokumen SAP hasil Post (kolom kanan) — tampil hanya setelah dokumen di-post (punya No SAP).
+    groupItem_Col3.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "grpIssueDocNum";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Goods Issue No";
+        itemSettings.FieldName = "IssueDocNum";
+        itemSettings.ClientVisible = !string.IsNullOrEmpty(Model.IssueDocNum);
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "IssueDocNum";
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    groupItem_Col3.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "grpReceiptDocNum";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Goods Receipt No";
+        itemSettings.FieldName = "ReceiptDocNum";
+        itemSettings.ClientVisible = !string.IsNullOrEmpty(Model.ReceiptDocNum);
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "ReceiptDocNum";
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 230;
+    });
+
+    // Author (Created By / Modified By) — seperti GRPO. Hanya tampil saat mode edit. (paling bawah, kolom kanan)
     if (Model._FormMode != Models.FormModeEnum.New)
     {
         groupItem_Col3.Items.Add(itemSettings =>

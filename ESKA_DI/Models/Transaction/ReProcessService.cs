@@ -1307,6 +1307,28 @@ namespace Models.Transaction
                         throw new Exception("[VALIDATION] - Tidak ada item Issue maupun Receipt untuk di-Post");
                     }
 
+                    // Validasi Whse: baris tanpa gudang bikin SAP gagal (-5002 Inventory account not defined).
+                    // Divalidasi di sini agar pesannya jelas (item mana), bukan error SAP mentah.
+                    var whsErrors = new List<string>();
+                    if (sync.ListIssueItem_ != null)
+                    {
+                        foreach (var it in sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0 && string.IsNullOrWhiteSpace(x.WhsCode)))
+                        {
+                            whsErrors.Add("Issue " + it.ItemCode);
+                        }
+                    }
+                    if (sync.ListReceiptItem_ != null)
+                    {
+                        foreach (var it in sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0 && string.IsNullOrWhiteSpace(x.WhsCode)))
+                        {
+                            whsErrors.Add("Receipt " + it.ItemCode);
+                        }
+                    }
+                    if (whsErrors.Any())
+                    {
+                        throw new Exception("[VALIDATION] - Whse belum dipilih:\n" + string.Join("\n", whsErrors));
+                    }
+
                     // Validasi kelengkapan batch: untuk item yang dikelola batch (OITM.ManBtchNum='Y'),
                     // SAP menuntut total qty batch per baris = qty baris (error -4014 bila tidak).
                     // Divalidasi di sini agar pesannya menunjuk item & angkanya, bukan -4014 mentah.
@@ -1370,12 +1392,28 @@ namespace Models.Transaction
                         tx.IssueDocEntry = issRes.DocEntry;
                         tx.IssueDocNum = issRes.DocNum;
                         tx.IssueDocDate = dtModified;
+
+                        // Simpan DocEntry SAP ke tiap baris item Issue.
+                        if (issRes.DocEntry.HasValue)
+                        {
+                            CONTEXT.Database.ExecuteSqlCommand(
+                                "UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"DocEntry\"=:p0 WHERE \"Id\"=:p1",
+                                issRes.DocEntry.Value, id);
+                        }
                     }
                     if (recRes != null)
                     {
                         tx.ReceiptDocEntry = recRes.DocEntry;
                         tx.ReceiptDocNum = recRes.DocNum;
                         tx.ReceiptDocDate = dtModified;
+
+                        // Simpan DocEntry SAP ke tiap baris item Receipt.
+                        if (recRes.DocEntry.HasValue)
+                        {
+                            CONTEXT.Database.ExecuteSqlCommand(
+                                "UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"DocEntry\"=:p0 WHERE \"Id\"=:p1",
+                                recRes.DocEntry.Value, id);
+                        }
                     }
 
                     tx.PostingDate = dtModified;

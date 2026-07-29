@@ -125,7 +125,7 @@ namespace Models._Cfl
                                             T0.""U_IDU_ProcessCard"", T0.""U_IDU_RoutingGroup"",
                                             CAST(NULL AS INTEGER) AS ""LineNum"",
                                             CAST(NULL AS DECIMAL) AS ""OpenQty"",
-                                            CAST(NULL AS NVARCHAR(8)) AS ""WhsCode"",
+                                            T0.""DfltWH"" AS ""WhsCode"",
                                             CAST(NULL AS DECIMAL) AS ""UnitPrice""
                                         FROM ""{DbSap}"".""OITM"" T0
                                         LEFT OUTER JOIN ""{DbSap}"".""OITB"" T2 ON T0.""ItmsGrpCod"" = T2.""ItmsGrpCod""
