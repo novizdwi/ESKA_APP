@@ -80,7 +80,7 @@ namespace Models.Production
         public string FinishItemName { get; set; }
 
         [Required(ErrorMessage = "required")]
-        public string Batch { get; set; }
+        public string FinishBatch { get; set; }
 
         [Required(ErrorMessage = "required")]
         public Decimal? Quantity { get; set; }
@@ -89,12 +89,13 @@ namespace Models.Production
         public Decimal? QuantityRemain { get; set; }
         public string Comments { get; set; }
 
-        public List<ProductionTask_Detail_Item> ListItem_ = new List<ProductionTask_Detail_Item>();
-        public ProductionTask_Detail_Item Items_ { get; set; }
+        public List<ProductionTaskDetailItemModel> ListItem_ = new List<ProductionTaskDetailItemModel>();
+        public ProductionTaskDetailItemModel Items_ { get; set; }
     }
 
-    public class ProductionTask_Detail_Item
-    { 
+    public class ProductionTaskDetailItemModel
+    {
+        public int _UserId { get; set; }
         public long? Id { get; set; }
         public long? DetId { get; set; }
         public long? DetDetId { get; set; }
@@ -139,6 +140,11 @@ namespace Models.Production
         WHERE T1.""Status"" NOT IN ('Finished')
         AND T0.""Id"" = :p0
         ";
+
+        public void ProductionTaskActivity_DeleteItemBatch(int userId, long id, long detId, long detDetId)
+        {
+            throw new NotImplementedException();
+        }
 
         public ProductionTaskActivityModel GetNewModel(int userId, long id)
         {
@@ -237,7 +243,7 @@ namespace Models.Production
                     SELECT
 	                    T0.""Id"",
                         T1.""DetId"",
-
+                        T2.""SerialNumber"" AS ""FinishBatch"",
 	                    T0.""TransNo"" AS ""FinishTransNo"",
 	                    T0.""DocEntry"",
 	                    T0.""DocNum"" AS ""FinishDocNum"",
@@ -248,6 +254,7 @@ namespace Models.Production
 	                    COALESCE(T0.""QuantityPlanned"", 0) - COALESCE(T0.""QuantityActual"", 0) AS ""QuantityRemain""
                     FROM ""Tx_ProductionTask"" T0
                     INNER JOIN  ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                    INNER JOIN ""Tx_ProcessCard"" T2 ON  T0.""BaseId"" = T2.""Id""
                     WHERE T1.""DetId"" = :p0
                 ";
                 ProductionActivityFinishModel model = CONTEXT.Database.SqlQuery<ProductionActivityFinishModel>(SqlSelect, detId).SingleOrDefault();
@@ -257,18 +264,18 @@ namespace Models.Production
             }
         }
 
-        public List<ProductionTask_Detail_Item> GetProductionTaskDetailItems(long? detId)
+        public List<ProductionTaskDetailItemModel> GetProductionTaskDetailItems(long? detId)
         {
-            List<ProductionTask_Detail_Item> ret = new List<ProductionTask_Detail_Item>();
+            List<ProductionTaskDetailItemModel> ret = new List<ProductionTaskDetailItemModel>();
             using (var CONTEXT = new HANA_APP())
             {
-                string SqlSelect = @"
+                string sqls = @"
                     SELECT *
                     FROM ""Tx_ProductionTask_Activity_Item"" T0
                     WHERE T0.""DetId"" = :p0
                 ";
 
-                ret = CONTEXT.Database.SqlQuery<ProductionTask_Detail_Item>(SqlSelect, detId).ToList();
+                ret = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(sqls, detId).ToList();
             }
 
             return ret;
@@ -374,6 +381,155 @@ namespace Models.Production
             }
 
             return model;
+        }
+
+        public long ProductionTaskActivity_AddNewItem(ProductionTaskDetailItemModel model)
+        {
+            long detDetId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_ProductionTask_Activity_Item tx_ProductionTask_Activity_Item = new Tx_ProductionTask_Activity_Item();
+                        CopyProperty.CopyProperties(model, tx_ProductionTask_Activity_Item, false);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        tx_ProductionTask_Activity_Item.CreatedDate = dtModified;
+                        tx_ProductionTask_Activity_Item.CreatedUser = model._UserId;
+                        tx_ProductionTask_Activity_Item.ModifiedDate = dtModified;
+                        tx_ProductionTask_Activity_Item.ModifiedUser = model._UserId;
+
+                        CONTEXT.Tx_ProductionTask_Activity_Item.Add(tx_ProductionTask_Activity_Item);
+                        CONTEXT.SaveChanges();
+                        detDetId = tx_ProductionTask_Activity_Item.DetDetId;
+
+                        String keyValue;
+                        keyValue = tx_ProductionTask_Activity_Item.Id.ToString();
+
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItem", "Id", keyValue);
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+
+                }
+            }
+
+            return detDetId;
+        }
+
+        public void ProductionTaskActivity_UpdateItem(ProductionTaskDetailItemModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        String keyValue;
+                        keyValue = model.Id.ToString();
+
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "updateItem", "Id", keyValue);
+
+                        Tx_ProductionTask_Activity_Item tx_ProductionTask_Activity_Item = CONTEXT.Tx_ProductionTask_Activity_Item.Find(model.DetDetId);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (tx_ProductionTask_Activity_Item != null)
+                        {
+                            var exceptColumns = new string[] { "Id", "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            CopyProperty.CopyProperties(model, tx_ProductionTask_Activity_Item, false, exceptColumns);
+
+                            tx_ProductionTask_Activity_Item.ModifiedDate = dtModified;
+                            tx_ProductionTask_Activity_Item.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+                            //CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateItemQuantity\"(:p0, 'Tx_ProductionTaskActivity_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                            SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "updateItem", "Id", keyValue);
+
+                        }
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
+        }
+
+        public void ProductionTaskActivity_DeleteItem(int _userId, long Id, long DetId, long DetDetId) 
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetId != 0)
+                    {
+                        try
+                        {
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItem", "Id", Id.ToString());
+
+                            //CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTaskActivity_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Activity_Item\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.SaveChanges();
+
+                            //CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateItemQuantity\"(:p0, 'Tx_ProductionTaskActivity_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+
+                }
+            }
+
         }
 
     }

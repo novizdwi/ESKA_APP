@@ -24,7 +24,6 @@ namespace ESKA_DI.Models._EF
         public string Direction { get; set; }
         public Nullable<int> UomEntry { get; set; }
         public string Uom { get; set; }
-        public string Batch { get; set; }
         public string IsLocked { get; set; }
         public Nullable<decimal> QuantityPlanned { get; set; }
         public Nullable<decimal> QuantityActual { get; set; }

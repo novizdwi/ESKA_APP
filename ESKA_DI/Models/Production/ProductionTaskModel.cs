@@ -476,7 +476,7 @@ namespace Models.Production
                 T1.""ItemName"",
                 T1.""wareHouse"" AS ""WhsCode"",
                 T2.""WhsName"",  
-                T1.""PlannedQty"" ,
+                T1.""PlannedQty"",
                 T1.""UomEntry"",
                 T1.""UomCode""
                 FROM ""Tx_ProductionTask"" T0
@@ -485,31 +485,31 @@ namespace Models.Production
                 WHERE ""Id"" = :p0 
             ";
 
-            var workOrderDetail = CONTEXT.Database.SqlQuery<ProductionTaskItemDetailModel>(ssql, id).FirstOrDefault();
-
-            Tx_ProductionTask_Activity_Item tx_ProductionTask_Activity_Item = new Tx_ProductionTask_Activity_Item
+            var workOrderDetails = CONTEXT.Database.SqlQuery<ProductionTaskItemDetailModel>(ssql, id).ToList();
+            List<Tx_ProductionTask_Activity_Item> listActivityItem = new List<Tx_ProductionTask_Activity_Item>();
+            foreach (var workOrderDetail in workOrderDetails)
             {
-                Id = id,
-                DetId = detId,
-                Direction = "Out",
+                listActivityItem.Add(new Tx_ProductionTask_Activity_Item
+                {
+                    Id = id,
+                    DetId = detId,
+                    Direction = workOrderDetail.PlannedQty >= 0? "Out" : "In",
+                    ItemCode = workOrderDetail.ItemCode,
+                    ItemName = workOrderDetail.ItemName,
+                    WhsCode = workOrderDetail.WhsCode,
+                    WhsName = workOrderDetail.WhsName,
+                    QuantityPlanned = workOrderDetail.PlannedQty,
+                    UomEntry = workOrderDetail.UomEntry,
+                    Uom = workOrderDetail.UomCode, 
 
-                ItemCode = workOrderDetail?.ItemCode,
-                ItemName = workOrderDetail?.ItemName,
-                WhsCode = workOrderDetail?.WhsCode,
-                WhsName = workOrderDetail?.WhsName,
+                    CreatedDate = dtModified,
+                    CreatedUser = userId,
+                    ModifiedDate = dtModified,
+                    ModifiedUser = userId
+                });
+            }
 
-                QuantityPlanned = workOrderDetail?.PlannedQty,
-                UomEntry = workOrderDetail?.UomEntry,
-                Uom = workOrderDetail?.UomCode,
-                IsLocked = "Y",
-
-                CreatedDate = dtModified,
-                CreatedUser = userId,
-                ModifiedDate = dtModified,
-                ModifiedUser = userId
-            };
-
-            CONTEXT.Tx_ProductionTask_Activity_Item.Add(tx_ProductionTask_Activity_Item);
+            CONTEXT.Tx_ProductionTask_Activity_Item.AddRange(listActivityItem);
             CONTEXT.SaveChanges();
         }
 

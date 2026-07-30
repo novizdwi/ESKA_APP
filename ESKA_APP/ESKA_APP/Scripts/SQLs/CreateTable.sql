@@ -554,8 +554,7 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity_Item" (
 
     "Direction" NVARCHAR(100),
 	"UomEntry" INT,
-    "Uom" NVARCHAR(100),
-    "Batch" NVARCHAR(50),
+    "Uom" NVARCHAR(100), 
     "IsLocked" CHAR(1),
 	
     "QuantityPlanned" DECIMAL(16,4),

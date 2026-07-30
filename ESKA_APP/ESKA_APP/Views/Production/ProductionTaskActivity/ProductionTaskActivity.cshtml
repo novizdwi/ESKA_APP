@@ -580,7 +580,7 @@ new
     -----------------------------------------------------------------------------
 *@
 <script type="text/javascript">
-    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+    function gvContentItemListOnBeginCallback(s, e, Id, DetId) {
 
     }
 
@@ -597,10 +597,10 @@ new
 
     }
 
-    function gvContentItemListOnBatchEditRowValidating(s, e, Id, DetId) {
+    function gvContentItemListOnRowInserting(s, e, Id, DetId) {
 
     }
-
+     
     function popupFinish_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Finish_formDetail");
 
@@ -660,6 +660,11 @@ new
             Quantity: Quantity.GetValue(),
             Comments: Comments.GetValue()
         };
+    }
+
+    function gvDetail_WhsCodeOnChange(s, e, name) {
+        var WhsName = ASPxClientTextBox.Cast("gvContentItemList_WhsName");
+        WhsName.SetValue(name);
     }
 
 </script>
