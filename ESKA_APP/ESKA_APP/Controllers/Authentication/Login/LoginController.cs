@@ -110,7 +110,9 @@ namespace Controllers.Authentication
 
                 Session["branchName"] = model.WhsName;
 
-
+                // Menu kiri di-cache di Session["MenuNodes"]; buang agar dibangun ulang dari source
+                // tiap login (label menu terbaru langsung tampil tanpa harus logout manual).
+                Session.Remove("MenuNodes");
 
 
                 if (!string.IsNullOrEmpty(model.LastController))

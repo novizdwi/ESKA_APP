@@ -29,7 +29,7 @@ namespace Controllers.Report
             ViewBag.TransDate_From = dateFrom;
             ViewBag.TransDate_To = dateTo;
 
-            // Chart tidak dirender saat awal — muncul setelah user klik Tampilkan (AJAX ChartPartial).
+            // Chart di-load otomatis oleh JS saat halaman siap, lalu auto-refresh berkala (lihat view).
             return View(VIEW_DETAIL);
         }
 

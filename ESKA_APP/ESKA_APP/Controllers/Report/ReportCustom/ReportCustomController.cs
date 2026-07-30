@@ -80,6 +80,8 @@ namespace Controllers.Report
 
             if (reportCustomModels != null)
             {
+                bool grpoSummaryAdded = false;
+
                 foreach (var item in reportCustomModels)
                 {
                     MVCxTreeViewNode node1 = nodesCollection.Add(item.GroupName, "TvGroupReport_" + item.GroupId.ToString());
@@ -98,18 +100,34 @@ namespace Controllers.Report
                         }
                     }
 
-                    // GRPO Summary (chart) — node statis di bawah grup Purchasing, bukan dari Tm_Report
-                    if (item.GroupName != null && item.GroupName.Trim().ToLower() == "purchasing")
+                    // GRPO Summary (chart) — node statis di bawah grup Purchasing, bukan dari Tm_Report.
+                    // Cocokkan grup yg NAMANYA mengandung "purchas" (mis. "Purchase"/"Purchasing").
+                    if (!grpoSummaryAdded && item.GroupName != null && item.GroupName.Trim().ToLower().Contains("purchas"))
                     {
-                        MVCxTreeViewNode nodeGrpoSummary = node1.Nodes.Add("GRPO Summary", "TvGrpoSummary_0");
-                        nodeGrpoSummary.Image.Url = "~/Content/Images/button/menu_default.png";
-                        nodeGrpoSummary.Image.Height = 15;
-                        nodeGrpoSummary.Image.UrlSelected = "~/Content/Images/button/menu_selected.png";
-                        nodeGrpoSummary.NavigateUrl = "javascript:void(0)";
+                        AddGrpoSummaryNode(node1.Nodes);
+                        grpoSummaryAdded = true;
                     }
+                }
+
+                // Fallback: kalau grup Purchasing tidak ter-load (mis. belum punya report lain sehingga
+                // terbuang oleh INNER JOIN di GetModels), tetap tampilkan node GRPO Summary di bawah
+                // grup "Purchasing" buatan agar report ini selalu muncul.
+                if (!grpoSummaryAdded && parentCode == "")
+                {
+                    MVCxTreeViewNode grpNode = nodesCollection.Add("Purchasing", "TvGroupReport_Purchasing");
+                    AddGrpoSummaryNode(grpNode.Nodes);
                 }
             }
 
+        }
+
+        private static void AddGrpoSummaryNode(MVCxTreeViewNodeCollection nodes)
+        {
+            MVCxTreeViewNode nodeGrpoSummary = nodes.Add("GRPO Summary", "TvGrpoSummary_0");
+            nodeGrpoSummary.Image.Url = "~/Content/Images/button/menu_default.png";
+            nodeGrpoSummary.Image.Height = 15;
+            nodeGrpoSummary.Image.UrlSelected = "~/Content/Images/button/menu_selected.png";
+            nodeGrpoSummary.NavigateUrl = "javascript:void(0)";
         }
 
 

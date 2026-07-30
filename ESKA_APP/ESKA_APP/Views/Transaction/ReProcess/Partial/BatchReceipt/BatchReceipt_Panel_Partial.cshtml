@@ -1,0 +1,44 @@
+﻿@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "popupBatchReceipt";
+    settings.CallbackRouteValues = new { Controller = "ReProcess", Action = "ViewReceiptBatch_PopupListOnDemandPartial" };
+    settings.CloseAction = CloseAction.CloseButton;
+
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.Modal = true;
+
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.AllowResize = false;
+    settings.ShowRefreshButton = true;
+    settings.FooterText = "";
+    settings.Styles.Footer.Paddings.Padding = 0;
+
+    settings.ShowPageScrollbarWhenModal = true;
+    
+    settings.EnableHotTrack = true;
+
+    settings.CloseAnimationType = AnimationType.Fade;
+    settings.PopupAnimationType = AnimationType.Fade;
+
+    settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
+    settings.ClientSideEvents.EndCallback = "popupReceiptBatch_EndCallback"; //popupItemTag_EndCallback
+    settings.PopupElementID = "ShowButton";
+    settings.HeaderText = "Receipt Item Batch List";
+
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("Partial/BatchReceipt/BatchReceipt_Form_Partial");
+
+    });
+
+    settings.PreRender = (sender, e) =>
+    {
+        ASPxPopupControl popup = (ASPxPopupControl)sender; 
+        popup.Width = 620;
+        popup.Height = 200;
+    };
+
+
+}).GetHtml()

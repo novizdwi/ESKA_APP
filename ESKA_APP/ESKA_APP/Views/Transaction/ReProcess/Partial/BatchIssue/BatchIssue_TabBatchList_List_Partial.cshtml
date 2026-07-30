@@ -1,0 +1,183 @@
+﻿@using Models;
+@using Models.Transaction;
+@model List<Models.Transaction.ReProcessBatchIssueModel>
+
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+    var DetId = Convert.ToInt64(Request["cbDetId"]);
+    int userId = (int)Session["userId"];
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+    if (ViewBag.DetId != null)
+    {
+        DetId = ViewBag.DetId;
+    }
+
+    ViewBag.ReadOnly = false;
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_IssueAndReceipt\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    if (status != "Draft")
+    {
+        ViewBag.ReadOnly = true;
+    }
+}
+
+@Html.DevExpress().GridView(settings =>
+{ 
+    settings.Name = "gvContentIssueBatchList";
+    settings.KeyFieldName = "DetDetId";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListPartial", Id = Id, DetId = DetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListAddNewRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListUpdateRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ReProcess", Action = "TabIssueBatchListDeleteRow", Id = Id, DetId = DetId };
+
+    settings.SettingsBehavior.ConfirmDelete = true;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 200;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowEditButton = true;
+
+    settings.CommandColumn.Width = 100;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+
+    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Id";
+    //    column.Caption = "Id";
+    //    column.Width = 0;
+    //    column.ReadOnly = true;
+
+    //    column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetId";
+        column.Caption = "Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RowNo";
+        column.Caption = "Row No";
+        column.Width = 60;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Batch";
+        column.Name = "Batch";
+        column.Caption = "Batch";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 200;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "AdmissionDate";
+        column.Name = "AdmissionDate";
+        column.Caption = "Admission Date";
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = 100;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Netto";
+        column.Name = "Netto";
+        column.Caption = "Netto";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentIssueBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentIssueBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentIssueBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
+
+    settings.InitNewRow = (s, e) =>
+    {
+        e.NewValues["Id"] = Id;
+        e.NewValues["DetId"] = DetId;
+
+        e.NewValues["AdmissionDate"] = DateTime.Today;
+    };
+
+}).Bind(Model).GetHtml()
+
+

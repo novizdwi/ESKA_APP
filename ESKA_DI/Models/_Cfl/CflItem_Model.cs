@@ -114,9 +114,31 @@ namespace Models._Cfl
                                             T2.""ItemCode"" ASC
                                         ";
 
+        // Item master untuk Issue&Receipt (Re-Process): SEMUA item ber-ItemType='I' (Item),
+        // tampil SATU baris per item (tanpa join OITW/per-gudang). WhsCode dikosongkan —
+        // gudang dipilih user lewat ComboBox Whse di grid. OpenQty/UnitPrice/LineNum null.
+        // Kolom output SAMA PERSIS dengan ssql agar wrapper SELECT & mapping view tetap jalan.
+        public static string ssqlStock = @"
+                                        SELECT
+                                            T0.""ItemCode"", T0.""ItemName"", T0.""ItemType"", T0.""IUoMEntry"", T3.""UomCode"",
+                                            T2.""ItmsGrpNam"", T0.""ManBtchNum"", T0.""ItmsGrpCod"",
+                                            T0.""U_IDU_ProcessCard"", T0.""U_IDU_RoutingGroup"",
+                                            CAST(NULL AS INTEGER) AS ""LineNum"",
+                                            CAST(NULL AS DECIMAL) AS ""OpenQty"",
+                                            T0.""DfltWH"" AS ""WhsCode"",
+                                            CAST(NULL AS DECIMAL) AS ""UnitPrice""
+                                        FROM ""{DbSap}"".""OITM"" T0
+                                        LEFT OUTER JOIN ""{DbSap}"".""OITB"" T2 ON T0.""ItmsGrpCod"" = T2.""ItmsGrpCod""
+                                        LEFT JOIN ""{DbSap}"".""OUOM"" T3 ON T0.""IUoMEntry"" = T3.""UomEntry""
+                                        WHERE LEFT(T0.""ItemCode"",1) !='J' AND T0.""frozenFor"" = 'N' AND T0.""ItemType"" = 'I'
+                                        ORDER BY T0.""ItemCode""
+                                        ";
+
         // Pilih query dasar berdasarkan SourceType:
-        //   "" (kosong)  -> master item (ssql)
-        //   "PO"         -> item dari baris PO Open (ssqlPo), difilter SourceDocEntry (DocEntry PO dari form)
+        //   "" (kosong)   -> master item (ssql)
+        //   "PO"          -> item dari baris PO Open (ssqlPo), difilter SourceDocEntry (DocEntry PO dari form)
+        //   "IssueStock"  -> master item + stok/gudang (ssqlStock); caller kirim SqlWhere stok>0 (tab Issue)
+        //   "ReceiptItem" -> master item + stok/gudang (ssqlStock) tanpa filter stok (tab Receipt, pilih gudang tujuan)
         // Bisa dikembangkan ke sumber lain (ARInvoice, Delivery) dengan menambah cabang di sini.
         private static string GetBaseSql(CflItem_ParamModel cflItemParam)
         {
@@ -130,6 +152,10 @@ namespace Models._Cfl
                 if (cflItemParam.SourceType == "PO" && hasDocEntry)
                 {
                     baseSql = CflItem_Model.ssqlPo.Replace("{DocEntry}", docEntry.ToString());
+                }
+                else if (cflItemParam.SourceType == "IssueStock" || cflItemParam.SourceType == "ReceiptItem")
+                {
+                    baseSql = CflItem_Model.ssqlStock;
                 }
             }
 
