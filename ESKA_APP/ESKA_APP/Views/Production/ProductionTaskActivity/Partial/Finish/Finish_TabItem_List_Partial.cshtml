@@ -42,7 +42,7 @@
 
     settings.Settings.ShowFilterRow = false;
     settings.Settings.ShowFilterRowMenu = false;
-     
+
 
     settings.Columns.Add(column =>
     {
@@ -118,7 +118,7 @@
         cbo.Columns.Add("WhsName", "Whs Name", 200);
         cbo.Width = 92;
         cbo.TextFormatString = "{0}";
-        cbo.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED"); 
+        cbo.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
     });
 
     settings.Columns.Add(column =>
@@ -161,16 +161,20 @@
         column.FieldName = "QuantityPlanned";
         column.Name = "QuantityPlanned";
         column.Caption = "Quantity Planned";
-        column.ReadOnly = true;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
-        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 120;
 
-        var txt = column.PropertiesEdit as TextBoxProperties;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.AllowMouseWheel = false;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
         txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        txt.DisplayFormatString = "#,###";
+        txt.SpinButtons.ShowIncrementButtons = false;
     });
 
     settings.Columns.Add(column =>
@@ -208,6 +212,15 @@
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentItemListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
     settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentItemListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
     settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentItemListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BatchEditStartEditing =
+    "function(s, e) { " +
+        "if (e.focusedColumn.fieldName == 'QuantityActual') { " +
+            "var direction = s.batchEditApi.GetCellValue(e.visibleIndex, 'Direction'); " +
+            "if (direction == 'Out') { " +
+                "e.cancel = true; " +
+            "} " +
+        "} " +
+    "}";
 
     settings.InitNewRow = (s, e) =>
     {
@@ -217,4 +230,15 @@
         e.NewValues["AdmissionDate"] = DateTime.Today;
     };
 
+    settings.HtmlDataCellPrepared = (sender, e) =>
+    {
+        if (e.DataColumn.FieldName == "QuantityActual")
+        {
+            var direction = e.GetValue("Direction");
+            if (direction != null && direction.ToString() == "Out")
+            {
+                e.Cell.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            }
+        }
+    };
 }).Bind(Model).GetHtml()
