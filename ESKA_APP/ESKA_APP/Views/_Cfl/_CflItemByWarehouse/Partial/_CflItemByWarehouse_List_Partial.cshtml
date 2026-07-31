@@ -51,6 +51,10 @@
     settings.KeyFieldName = "ItemCode";
     settings.CallbackRouteValues = new { Controller = "_CflItemByWarehouse", Action = "ListPartial" };
 
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 200;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
     if (cpGvFind_CflIsMulti == "N")
     {
         settings.Columns.Add(column =>
@@ -101,8 +105,41 @@
     settings.Settings.ShowFilterRowMenu = true;
 
 
-    settings.Columns.Add("ItemCode", "Item Code");
-    settings.Columns.Add("ItemName", "Item Name");
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 150;
+        column.ReadOnly = true;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 250;
+        column.ReadOnly = true;
+    });
+
+    settings.Columns.Add("WhsCode", "Whs Code");
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsName";
+        column.Name = "WhsName";
+        column.Caption = "Whs Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 150;
+        column.ReadOnly = true;
+    }); 
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "Quantity";
@@ -122,6 +159,27 @@
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
 
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "UomEntry";
+        column.Name = "UomEntry";
+        column.Caption = "Uom Entry";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 0;
+        column.ReadOnly = true;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "UomCode";
+        column.Name = "UomCode";
+        column.Caption = "Uom Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 80;
+        column.ReadOnly = true;
     });
 
     settings.SettingsPager.Position = PagerPosition.Bottom;

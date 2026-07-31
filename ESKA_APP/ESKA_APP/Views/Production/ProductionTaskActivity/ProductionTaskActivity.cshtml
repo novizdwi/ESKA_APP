@@ -472,6 +472,16 @@
         };
     }
 
+    function BtnCflItemCodePopupListOnClick(s, e) {
+        //cflWarehousePopupListSalesOrder.Show();
+
+        var popup = ASPxClientPopupControl.Cast("cflItemByWarehousePopupListProductionTaskActivity");
+        popup.callbackUrl = '@Url.Action("PopupListLoadOnDemandPartial", "_CflItemByWarehouse")';
+        popup.PerformCallback();
+        popup.Show();
+
+    }
+
 </script>
 
 @Html.Partial("Partial/ProductionTaskActivity_Form_Btn_Partial")
@@ -584,10 +594,7 @@ new
 
     }
 
-    function gvContentItemListOnEndCallback(s, e, Id, DetId) {
-        if (s.IsNewRowEditing && s.IsNewRowEditing()) {
-            s.FocusEditor("Batch");
-        }
+    function gvContentItemListOnEndCallback(s, e, Id, DetId) { 
     }
 
     function gvContentItemListOnBatchEditStartEditing(s, e, Id, DetId) {
@@ -600,7 +607,7 @@ new
     function gvContentItemListOnRowInserting(s, e, Id, DetId) {
 
     }
-     
+
     function popupFinish_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#Finish_formDetail");
 
@@ -667,9 +674,68 @@ new
         WhsName.SetValue(name);
     }
 
+    function BtnCflQuantityPopupListOnClick(s, e, detDetId) {
+        key = DetId.GetValue();
+        @*var popup = ASPxClientPopupControl.Cast("popupBatch");
+
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }*@
+    }
+
 </script>
 
 @Html.Partial("Partial/Finish/Finish_Partial")
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflItemCode
+    -----------------------------------------------------------------------------
+*@
+
+@{
+    var cflItemByWarehouse_ParamModel = new CflItemByWarehouse_ParamModel();
+    cflItemByWarehouse_ParamModel.Name = "ProductionTaskActivity";
+    cflItemByWarehouse_ParamModel.Type = "ProductionTaskActivity";
+    cflItemByWarehouse_ParamModel.Header = "";
+    cflItemByWarehouse_ParamModel.SqlWhere = "";
+    cflItemByWarehouse_ParamModel.IsMulti = "N";
+}
+
+<script type="text/javascript">
+
+    function OnClickChoose_CflItemByWarehouseProductionTaskActivity(s, e, data) {
+
+        var ItemCode = ASPxClientTextBox.Cast("gvContentItemList_ItemCode");
+        ItemCode.SetValue(data.ItemCode);
+
+        var ItemName = ASPxClientTextBox.Cast("gvContentItemList_ItemName");
+        ItemName.SetValue(data.ItemName);
+
+        var WhsCode = ASPxClientTextBox.Cast("gvContentItemList_WhsCode");
+        WhsCode.SetValue(data.WhsCode);
+
+        var WhsName = ASPxClientTextBox.Cast("gvContentItemList_WhsName");
+        WhsName.SetValue(data.WhsName);
+
+        var UomEntry = ASPxClientTextBox.Cast("gvContentItemList_UomEntry");
+        UomEntry.SetValue(data.WhsName); 
+
+        var Uom = ASPxClientTextBox.Cast("gvContentItemList_Uom");
+        Uom.SetValue(data.UomCode);
+
+        cflItemByWarehousePopupListProductionTaskActivity.Hide();
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_Panel_List_Partial.cshtml", cflItemByWarehouse_ParamModel)
+
+
 
 @*
     -----------------------------------------------------------------------------

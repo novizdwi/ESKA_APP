@@ -99,17 +99,68 @@ namespace Models.Production
         public long? Id { get; set; }
         public long? DetId { get; set; }
         public long? DetDetId { get; set; }
+        public int? LineNum { get; set; }
+
+        [Required(ErrorMessage = "required")]
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
+
+        [Required(ErrorMessage = "required")]
         public string WhsCode { get; set; }
         public string WhsName { get; set; }
+
+        [Required(ErrorMessage = "required")]
         public string Direction { get; set; }
+        public int? UomEntry { get; set; }
         public string Uom { get; set; }
         public string Batch { get; set; }
         public Decimal? QuantityPlanned { get; set; }
         public string QuantityActual { get; set; }
         public string Comments { get; set; }
     
+    }
+
+    public class ProductionTaskActivityBatchView___
+    {
+        public int? RowNo { get; set; }
+
+        public long Id { get; set; }
+
+        public long DetId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string WhsCode { get; set; }
+
+        public string WhsName { get; set; }
+
+        public List<ProductionTaskActivityBatchModel> ProductionTaskActivityBatchModel___ { get; set; }
+         
+    }
+     
+    public class ProductionTaskActivityBatchModel
+    {
+        public int _UserId { get; set; }
+
+        public int? RowNo { get; set; }
+
+        public long? Id { get; set; }
+
+        public long? DetId { get; set; }
+
+        public long? DetDetId { get; set; }
+
+        [Required(ErrorMessage = "required")]
+        public string Batch { get; set; }
+
+        [Required(ErrorMessage = "required")]
+        public DateTime? AdmissionDate { get; set; }
+
+        public decimal? Quantity { get; set; }
+
+        public decimal? Netto { get; set; }
     }
 
     #endregion
@@ -235,6 +286,7 @@ namespace Models.Production
                 return GetById(CONTEXT, userId, id, method);
             }
         }
+
         public ProductionActivityFinishModel GetFinishModel(long id = 0 , long detId = 0)
         {
             using (var CONTEXT = new HANA_APP())
@@ -532,6 +584,197 @@ namespace Models.Production
 
         }
 
+        #region item batch
+        public ProductionTaskActivityBatchView___ GetProductionTaskActivity_Batch(long id, long detId, long detDetId)
+        {
+            string sql = null;
+            ProductionTaskActivityBatchView___ model = new ProductionTaskActivityBatchView___();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT T0.""Id"", T0.""DetId"", T0.""ItemCode"", T0.""ItemName"", T1.""WhsCode"", T1.""WhsName""
+                        FROM ""Tx_ProductionTask_Activity_Item"" T0   
+                        INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""   
+                        WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
+
+                model = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchView___>(sql, id, detId).FirstOrDefault();
+
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_ProductionTaskActivity_Item_Batch"" T0   
+                            WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 ";
+
+                model.ProductionTaskActivityBatchModel___ = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(sql, id, detId).ToList();
+            }
+
+            return model;
+        }
+
+        public List<ProductionTaskActivityBatchModel> GetProductionTaskActivity_ItemBatchList(long id, long detId, long detDetId)
+        {
+            string sql = null;
+            List<ProductionTaskActivityBatchModel> model = new List<ProductionTaskActivityBatchModel>();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""DetDetId"") AS ""RowNo"", T0.* 
+                            FROM ""Tx_ProductionTaskActivity_Item_Batch"" T0   
+                            WHERE T0.""Id""=:p0 AND ""DetId"" = :p1 AND ""DetDetId"" = :p2 ";
+
+                model = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(sql, id, detId, detDetId).ToList();
+            }
+            return model;
+        }
+
+        public long ProductionTaskActivity_AddNewItemBatch(ProductionTaskActivityBatchModel model)
+        {
+            long batchId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Tx_ProductionTask_Activity_Item_Batch tx_ProductionTask_Activity_Item_Batch = new Tx_ProductionTask_Activity_Item_Batch();
+                        CopyProperty.CopyProperties(model, tx_ProductionTask_Activity_Item_Batch, false);
+
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        tx_ProductionTask_Activity_Item_Batch.CreatedDate = dtModified;
+                        tx_ProductionTask_Activity_Item_Batch.CreatedUser = model._UserId;
+                        tx_ProductionTask_Activity_Item_Batch.ModifiedDate = dtModified;
+                        tx_ProductionTask_Activity_Item_Batch.ModifiedUser = model._UserId;
+
+                        CONTEXT.Tx_ProductionTask_Activity_Item_Batch.Add(tx_ProductionTask_Activity_Item_Batch);
+                        CONTEXT.SaveChanges();
+                        batchId = tx_ProductionTask_Activity_Item_Batch.BatchId;
+
+                        String keyValue;
+                        keyValue = tx_ProductionTask_Activity_Item_Batch.Id.ToString();
+
+                        //CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateItemQuantity\"(:p0, 'Tx_ProductionTaskActivity_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItemBatch", "Id", keyValue);
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+
+                }
+            }
+
+            return batchId;
+        }
+
+        public void ProductionTaskActivity_UpdateItemBatch(ProductionTaskActivityBatchModel model)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        String keyValue;
+                        keyValue = model.Id.ToString();
+
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "updateItemBatch", "Id", keyValue);
+
+                        Tx_ProductionTask_Activity_Item_Batch tx_ProductionTask_Activity_Item_Batch = CONTEXT.Tx_ProductionTask_Activity_Item_Batch.Find(model.DetDetId);
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        if (tx_ProductionTask_Activity_Item_Batch != null)
+                        {
+                            var exceptColumns = new string[] { "Id", "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            CopyProperty.CopyProperties(model, tx_ProductionTask_Activity_Item_Batch, false, exceptColumns);
+
+                            tx_ProductionTask_Activity_Item_Batch.ModifiedDate = dtModified;
+                            tx_ProductionTask_Activity_Item_Batch.ModifiedUser = model._UserId;
+
+                            CONTEXT.SaveChanges();
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateItemQuantity\"(:p0, 'Tx_ProductionTaskActivity_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                            SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "updateItemBatch", "Id", keyValue);
+
+                        }
+
+                        CONTEXT_TRANS.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.Substring(12) == "[VALIDATION]")
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
+        }
+
+        public void ProductionTaskActivity_DeleteItemBatch(int _userId, long Id, long DetId, long DetDetId, long BatchId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetId != 0)
+                    {
+                        try
+                        {
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItemBatch", "Id", Id.ToString());
+
+                            //CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTaskActivity_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTaskActivity_Item_Batch\"  WHERE \"BatchId\"=:p0", BatchId);
+                            CONTEXT.SaveChanges();
+
+                            CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateItemQuantity\"(:p0, 'Tx_ProductionTaskActivity_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+
+                            string errorMassage;
+                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            {
+                                errorMassage = ex.Message;
+                            }
+                            else
+                            {
+                                errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                            }
+
+                            throw new Exception(errorMassage);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        #endregion
     }
 
     #endregion

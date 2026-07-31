@@ -43,7 +43,6 @@
     settings.Settings.ShowFilterRow = false;
     settings.Settings.ShowFilterRowMenu = false;
 
-
     settings.Columns.Add(column =>
     {
         column.FieldName = "Id";
@@ -63,10 +62,21 @@
 
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
     });
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "DetDetId";
         column.Caption = "Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "LineNum";
+        column.Caption = "LineNum";
         column.Width = 0;
         column.ReadOnly = true;
 
@@ -86,11 +96,71 @@
 
         cbo.TextField = "Name";
         cbo.ValueField = "Code";
-        cbo.ValueType = typeof(string);
+        cbo.ValueType = typeof(string); 
 
         column.Width = 90;
         column.ReadOnly = false;
         column.Settings.AllowSort = DefaultBoolean.False;
+
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 150;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.SetEditItemTemplateContent(c =>
+        {
+            var itemCode = DataBinder.Eval(c.DataItem, "ItemCode");
+
+            Html.DevExpress().ButtonEdit(s =>
+            {
+                s.Name = settings.Name + "_" + column.FieldName;
+                s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName;
+
+                s.Text = itemCode != null ? itemCode.ToString() : "";   // <-- ButtonEditSettings.Text sudah terbukti valid
+
+                s.ReadOnly = true;
+                s.Width = 125;
+
+                s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+                s.ControlStyle.CssClass = "editor";
+
+                s.Properties.Buttons.Clear();
+
+                EditButton lookUpButton = new EditButton();
+                lookUpButton.Text = "";
+                lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                lookUpButton.Image.Width = 15;
+                s.Properties.Buttons.Add(lookUpButton);
+
+                s.Properties.ClientSideEvents.ButtonClick = "BtnCflItemCodePopupListOnClick";
+
+            }).Render();
+        });
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 250;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
 
     });
 
@@ -100,25 +170,35 @@
         column.Name = "WhsCode";
         column.Caption = "Whs Code";
 
-        column.ColumnType = MVCxGridViewColumnType.ComboBox;
-        var cbo = column.PropertiesEdit as ComboBoxProperties;
-        cbo.DataSource = Models._Utils.GeneralGetList.GetWarehouses();
-        cbo.ClientSideEvents.ValueChanged =
-            "function(s, e) { " +
-                "var item = s.GetSelectedItem(); " +
-                "var name = item ? item.GetColumnText('WhsName') : null;" +
-                "gvDetail_WhsCodeOnChange(s, e, name);" +
-            "}";
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 92;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
-        cbo.TextField = "WhsCode";
-        cbo.ValueField = "WhsName";
-        cbo.ValueType = typeof(string);
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
 
-        cbo.Columns.Add("WhsCode", "Whs Code", 80);
-        cbo.Columns.Add("WhsName", "Whs Name", 200);
-        cbo.Width = 92;
-        cbo.TextFormatString = "{0}";
-        cbo.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        //column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        //var cbo = column.PropertiesEdit as ComboBoxProperties;
+        //cbo.DataSource = Models._Utils.GeneralGetList.GetWarehouses();
+        //cbo.ClientSideEvents.ValueChanged =
+        //    "function(s, e) { " +
+        //        "var item = s.GetSelectedItem(); " +
+        //        "var name = item ? item.GetColumnText('WhsName') : null;" +
+        //        "gvDetail_WhsCodeOnChange(s, e, name);" +
+        //    "}";
+
+        //cbo.TextField = "WhsCode";
+        //cbo.ValueField = "WhsName";
+        //cbo.ValueType = typeof(string);
+
+        //cbo.Columns.Add("WhsCode", "Whs Code", 80);
+        //cbo.Columns.Add("WhsName", "Whs Name", 200);
+        //cbo.Width = 92;
+        //cbo.TextFormatString = "{0}";
+        //cbo.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        //cbo.ValidationSettings.RequiredField.IsRequired = true;
     });
 
     settings.Columns.Add(column =>
@@ -131,6 +211,23 @@
         column.Width = 200;
         column.ReadOnly = true;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "UomEntry";
+        column.Name = "UomEntry";
+        column.Caption = "UomEntry";
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 0;
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
@@ -166,6 +263,7 @@
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 120;
+        column.ReadOnly = true;
 
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.AllowMouseWheel = false;
@@ -182,7 +280,6 @@
         column.FieldName = "QuantityActual";
         column.Name = "QuantityActual";
         column.Caption = "Netto";
-        column.ReadOnly = true;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
@@ -192,8 +289,60 @@
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
         txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-    });
 
+        column.SetDataItemTemplateContent(c =>
+        {
+            var visibleIndex = c.VisibleIndex;
+            var detDetId = DataBinder.Eval(c.DataItem, "DetDetId");
+            var quantity = DataBinder.Eval(c.DataItem, "QuantityActual");
+            var direction = DataBinder.Eval(c.DataItem, "Direction");
+
+            bool isOut = direction != null && direction.ToString() == "Out";
+
+            if (isOut)
+            {
+                // Direction = Out -> pakai ButtonEdit (CFL popup), readonly, pilih via popup
+                Html.DevExpress().ButtonEdit(s =>
+                {
+                    s.Name = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
+                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
+
+                    s.Text = quantity != null ? Convert.ToDecimal(quantity).ToString("N0") : "";
+
+                    s.ReadOnly = true;
+                    s.Width = 100;
+
+                    s.Properties.Buttons.Clear();
+
+                    EditButton btn = new EditButton();
+                    btn.Text = "";
+                    btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                    btn.Image.Width = 15;
+
+                    s.Properties.Buttons.Add(btn);
+
+                    s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", detDetId);
+
+                }).Render();
+            }
+            else
+            {
+                // Direction = In -> input manual biasa (TextBox editable)
+                Html.DevExpress().TextBox(s =>
+                {
+                    s.Name = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
+                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
+
+                    s.Text = quantity != null ? Convert.ToDecimal(quantity).ToString("N0") : "";
+
+                    s.ReadOnly = false;
+                    s.Width = 100;
+
+                }).Render();
+            }
+        });
+
+    });
 
     settings.Columns.Add(column =>
     {
@@ -226,6 +375,7 @@
     {
         e.NewValues["Id"] = Id;
         e.NewValues["DetId"] = DetId;
+        e.NewValues["Direction"] = "In";
 
         e.NewValues["AdmissionDate"] = DateTime.Today;
     };

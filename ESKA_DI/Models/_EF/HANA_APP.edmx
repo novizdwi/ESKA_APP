@@ -1139,6 +1139,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
           <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
           <Property Name="WhsName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LineNum" Type="int" />
           <Property Name="Direction" Type="nvarchar" MaxLength="100" />
           <Property Name="UomEntry" Type="int" />
           <Property Name="Uom" Type="nvarchar" MaxLength="100" />
@@ -2788,6 +2789,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="WhsName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LineNum" Type="Int32" />
           <Property Name="Direction" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UomEntry" Type="Int32" />
           <Property Name="Uom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -4178,6 +4180,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="Uom" ColumnName="Uom" />
                 <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
                 <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="LineNum" ColumnName="LineNum" />
                 <ScalarProperty Name="WhsName" ColumnName="WhsName" />
                 <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />

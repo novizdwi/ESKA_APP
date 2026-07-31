@@ -552,6 +552,7 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity_Item" (
     "WhsCode" NVARCHAR(50),
     "WhsName" NVARCHAR(100),
 
+    "LineNum" INT,
     "Direction" NVARCHAR(100),
 	"UomEntry" INT,
     "Uom" NVARCHAR(100), 

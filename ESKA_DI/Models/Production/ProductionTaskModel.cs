@@ -119,6 +119,8 @@ namespace Models.Production
     
     public class ProductionTaskItemDetailModel
     {
+        public int? LineNum { get; set; }
+
         public string ItemCode { get; set; }
 
         public string ItemName { get; set; }
@@ -472,7 +474,8 @@ namespace Models.Production
             CONTEXT.SaveChanges();
 
             string ssql = @"
-                SELECT 	T1.""ItemCode"",
+                SELECT 	T1.""LineNum"",
+                T1.""ItemCode"",
                 T1.""ItemName"",
                 T1.""wareHouse"" AS ""WhsCode"",
                 T2.""WhsName"",  
@@ -493,6 +496,7 @@ namespace Models.Production
                 {
                     Id = id,
                     DetId = detId,
+                    LineNum = workOrderDetail.LineNum,
                     Direction = workOrderDetail.PlannedQty >= 0? "Out" : "In",
                     ItemCode = workOrderDetail.ItemCode,
                     ItemName = workOrderDetail.ItemName,
