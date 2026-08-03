@@ -1,6 +1,6 @@
 @using Models;
 @using Models.Transaction;
-@model List<Models.Transaction.GoodsReceiptPoScaleModel>
+@model List<Models.Transaction.ReProcessScaleModel>
 
 @{
     var Id = Convert.ToInt64(Request["cbId"]);
@@ -21,8 +21,14 @@
         DetDetId = ViewBag.DetDetId;
     }
 
+    string side = (ViewBag.Side as string) ?? Request["side"] ?? "Issue";
+    if (side != "Receipt")
+    {
+        side = "Issue";
+    }
+
     ViewBag.ReadOnly = false;
-    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_GoodsReceiptPO\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_IssueAndReceipt\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
     if (status != "Draft")
     {
         ViewBag.ReadOnly = true;
@@ -35,10 +41,10 @@
     settings.Name = "gvContentScaleList";
     settings.KeyFieldName = "DetDetDetId";
     settings.Width = Unit.Percentage(100);
-    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListPartial", Id = Id, DetId = DetId, DetDetId = DetDetId };
-    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListAddNewRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
-    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListUpdateRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
-    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "GoodsReceiptPo", Action = "TabScaleListDeleteRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.CallbackRouteValues = new { Controller = "ReProcess", Action = "TabScaleListPartial", Id = Id, DetId = DetId, DetDetId = DetDetId, side = side };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ReProcess", Action = "TabScaleListAddNewRow", Id = Id, DetId = DetId, DetDetId = DetDetId, side = side };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ReProcess", Action = "TabScaleListUpdateRow", Id = Id, DetId = DetId, DetDetId = DetDetId, side = side };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ReProcess", Action = "TabScaleListDeleteRow", Id = Id, DetId = DetId, DetDetId = DetDetId, side = side };
 
     settings.SettingsBehavior.ConfirmDelete = true;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
@@ -150,8 +156,8 @@
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
     });
 
-    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentScaleListOnBeginCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
-    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentScaleListOnEndCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentScaleListOnBeginCallback(s, e, {0}, {1}, {2}, '{3}'); }}", Id, DetId, DetDetId, side);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentScaleListOnEndCallback(s, e, {0}, {1}, {2}, '{3}'); }}", Id, DetId, DetDetId, side);
 
     settings.InitNewRow = (s, e) =>
     {

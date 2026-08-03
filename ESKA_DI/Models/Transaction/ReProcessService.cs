@@ -333,6 +333,56 @@ namespace Models.Transaction
         public decimal? Netto { get; set; }
     }
 
+    // Header popup Timbangan (Scale) — dipakai bersama Issue & Receipt (dibedakan `side`).
+    public class ReProcessScaleView___
+    {
+        public long Id { get; set; }
+
+        public long DetId { get; set; }
+
+        public long DetDetId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemName { get; set; }
+
+        public string Uom { get; set; }
+
+        public int? LineNum { get; set; }
+
+        public List<ReProcessScaleModel> ReProcessScaleModel___ { get; set; }
+    }
+
+    public class ReProcessScaleModel
+    {
+        public int? RowNo { get; set; }
+
+        public int _UserId { get; set; }
+
+        public long? DetDetId { get; set; }
+
+        public long? DetDetDetId { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public string Uom { get; set; }
+
+        public decimal? Netto { get; set; }
+
+        public int? LineNum { get; set; }
+
+        public string LineStatus { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
+        public int? CreatedUser { get; set; }
+
+        public int? ModifiedUser { get; set; }
+
+    }
+
     #endregion
 
     #region Services
@@ -1109,6 +1159,274 @@ namespace Models.Transaction
                 }
             }
         }
+
+        #region Scale (Timbangan) — dipakai bersama Issue & Receipt via parameter `side`
+
+        // Sanitasi `side` ke {"Issue","Receipt"} — dipakai untuk membangun nama tabel (aman dari injeksi).
+        private static string ScaleSide(string side)
+        {
+            return (side == "Receipt") ? "Receipt" : "Issue";
+        }
+
+        public ReProcessScaleView___ GetScale(long id, long detId, long detDetId, string side)
+        {
+            string s = ScaleSide(side);
+            string tblItem = "Tx_IssueAndReceipt_" + s + "_Item";
+            string tblBatch = "Tx_IssueAndReceipt_" + s + "_Item_Batch";
+            string tblScale = "Tx_IssueAndReceipt_" + s + "_Item_Batch_Scale";
+
+            string sql = null;
+            ReProcessScaleView___ model = new ReProcessScaleView___();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = string.Format(@"SELECT T0.""Id"",
+                                T1.""DetId"",
+                                T2.""DetDetId"",
+                                T1.""ItemCode"",
+                                T1.""ItemName"",
+                                T1.""Uom"",
+                                T2.""LineNum""
+                                FROM ""Tx_IssueAndReceipt"" T0
+                                LEFT JOIN ""{0}"" T1 ON T0.""Id"" = T1.""Id""
+                                LEFT JOIN ""{1}"" T2 ON T1.""DetId"" = T2.""DetId""
+                                WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 AND T2.""DetDetId"" = :p2 ", tblItem, tblBatch);
+
+                model = CONTEXT.Database.SqlQuery<ReProcessScaleView___>(sql, id, detId, detDetId).FirstOrDefault();
+
+                if (model == null)
+                {
+                    model = new ReProcessScaleView___();
+                    model.Id = id;
+                    model.DetId = detId;
+                    model.DetDetId = detDetId;
+                }
+
+                sql = string.Format(@"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                            FROM ""{0}"" T0
+                            WHERE ""DetDetId"" = :p0 ", tblScale);
+
+                model.ReProcessScaleModel___ = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, detDetId).ToList();
+            }
+
+            return model;
+        }
+
+        public List<ReProcessScaleModel> ReProcess__ItemBatchScaleList(long detDetId, string side)
+        {
+            string tblScale = "Tx_IssueAndReceipt_" + ScaleSide(side) + "_Item_Batch_Scale";
+
+            string sql = null;
+            List<ReProcessScaleModel> model = new List<ReProcessScaleModel>();
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                sql = string.Format(@"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                            FROM ""{0}"" T0
+                            WHERE ""DetDetId"" = :p0 ", tblScale);
+
+                model = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, detDetId).ToList();
+            }
+            return model;
+        }
+
+        public long ReProcess_AddNewItemBatchScale(ReProcessScaleModel model, string side)
+        {
+            string s = ScaleSide(side);
+            string tblBatch = "Tx_IssueAndReceipt_" + s + "_Item_Batch";
+            string tblItem = "Tx_IssueAndReceipt_" + s + "_Item";
+            string tblScale = "Tx_IssueAndReceipt_" + s + "_Item_Batch_Scale";
+
+            long detDetDetId = 0;
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        // Sequence otomatis: lanjut dari LineNum terakhir pada batch ini (mulai dari 1).
+                        int? maxLineNum = CONTEXT.Database.SqlQuery<int?>(string.Format("SELECT MAX(\"LineNum\") AS IDU FROM \"{0}\" WHERE \"DetDetId\"=:p0", tblScale), model.DetDetId).FirstOrDefault();
+                        int nextLineNum = (maxLineNum ?? 0) + 1;
+
+                        // Uom default mengikuti item induk bila tidak diisi.
+                        string uom = model.Uom;
+                        if (string.IsNullOrEmpty(uom))
+                        {
+                            uom = CONTEXT.Database.SqlQuery<string>(string.Format(@"SELECT T1.""Uom"" AS IDU
+                                        FROM ""{0}"" T0
+                                        INNER JOIN ""{1}"" T1 ON T0.""DetId"" = T1.""DetId""
+                                        WHERE T0.""DetDetId""=:p0 ", tblBatch, tblItem), model.DetDetId).FirstOrDefault();
+                        }
+
+                        string lineStatus = string.IsNullOrEmpty(model.LineStatus) ? "O" : model.LineStatus;
+
+                        // Branch side untuk entity yang tepat (PK DetDetDetId identity — tidak disalin).
+                        var exceptColumns = new string[] { "DetDetDetId" };
+                        if (s == "Receipt")
+                        {
+                            Tx_IssueAndReceipt_Receipt_Item_Batch_Scale tx_Scale = new Tx_IssueAndReceipt_Receipt_Item_Batch_Scale();
+                            CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
+                            tx_Scale.LineNum = nextLineNum;
+                            tx_Scale.Uom = uom;
+                            tx_Scale.LineStatus = lineStatus;
+                            tx_Scale.CreatedDate = dtModified;
+                            tx_Scale.CreatedUser = model._UserId;
+                            tx_Scale.ModifiedDate = dtModified;
+                            tx_Scale.ModifiedUser = model._UserId;
+                            CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale.Add(tx_Scale);
+                            CONTEXT.SaveChanges();
+                            detDetDetId = tx_Scale.DetDetDetId;
+                        }
+                        else
+                        {
+                            Tx_IssueAndReceipt_Issue_Item_Batch_Scale tx_Scale = new Tx_IssueAndReceipt_Issue_Item_Batch_Scale();
+                            CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
+                            tx_Scale.LineNum = nextLineNum;
+                            tx_Scale.Uom = uom;
+                            tx_Scale.LineStatus = lineStatus;
+                            tx_Scale.CreatedDate = dtModified;
+                            tx_Scale.CreatedUser = model._UserId;
+                            tx_Scale.ModifiedDate = dtModified;
+                            tx_Scale.ModifiedUser = model._UserId;
+                            CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch_Scale.Add(tx_Scale);
+                            CONTEXT.SaveChanges();
+                            detDetDetId = tx_Scale.DetDetDetId;
+                        }
+
+                        UpdateBatchNettoFromScale(CONTEXT, model._UserId, model.DetDetId ?? 0, s);
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+                        throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                    }
+                }
+            }
+
+            return detDetDetId;
+        }
+
+        public void ReProcess_UpdateItemBatchScale(ReProcessScaleModel model, string side)
+        {
+            string s = ScaleSide(side);
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                        // LineNum (Sequence) di-generate server-side, jangan ditimpa dari grid.
+                        var exceptColumns = new string[] { "DetDetId", "DetDetDetId", "LineNum", "CreatedUser", "CreatedDate" };
+                        long? detDetId = null;
+
+                        if (s == "Receipt")
+                        {
+                            Tx_IssueAndReceipt_Receipt_Item_Batch_Scale tx_Scale = CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale.Find(model.DetDetDetId ?? 0);
+                            if (tx_Scale != null)
+                            {
+                                CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
+                                tx_Scale.ModifiedDate = dtModified;
+                                tx_Scale.ModifiedUser = model._UserId;
+                                CONTEXT.SaveChanges();
+                                detDetId = tx_Scale.DetDetId;
+                            }
+                        }
+                        else
+                        {
+                            Tx_IssueAndReceipt_Issue_Item_Batch_Scale tx_Scale = CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch_Scale.Find(model.DetDetDetId ?? 0);
+                            if (tx_Scale != null)
+                            {
+                                CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
+                                tx_Scale.ModifiedDate = dtModified;
+                                tx_Scale.ModifiedUser = model._UserId;
+                                CONTEXT.SaveChanges();
+                                detDetId = tx_Scale.DetDetId;
+                            }
+                        }
+
+                        if (detDetId.HasValue)
+                        {
+                            UpdateBatchNettoFromScale(CONTEXT, model._UserId, detDetId.Value, s);
+                        }
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+                        throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                    }
+                }
+            }
+        }
+
+        public void ReProcess_DeleteItemBatchScale(int _userId, long DetDetId, long DetDetDetId, string side)
+        {
+            string s = ScaleSide(side);
+            string tblScale = "Tx_IssueAndReceipt_" + s + "_Item_Batch_Scale";
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    if (DetDetDetId != 0)
+                    {
+                        try
+                        {
+                            CONTEXT.Database.ExecuteSqlCommand(string.Format("DELETE FROM \"{0}\"  WHERE \"DetDetDetId\"=:p0", tblScale), DetDetDetId);
+                            CONTEXT.SaveChanges();
+
+                            UpdateBatchNettoFromScale(CONTEXT, _userId, DetDetId, s);
+
+                            CONTEXT_TRANS.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            CONTEXT_TRANS.Rollback();
+                            throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Netto batch = SUM(Netto scale) miliknya; lalu Netto item = SUM(Netto batch).
+        // QuantityCreated TIDAK diubah oleh scale (hanya dipengaruhi Quantity batch).
+        private void UpdateBatchNettoFromScale(HANA_APP CONTEXT, int _userId, long detDetId, string side)
+        {
+            if (detDetId == 0)
+            {
+                return;
+            }
+
+            string s = ScaleSide(side);
+            string tblBatch = "Tx_IssueAndReceipt_" + s + "_Item_Batch";
+            string tblItem = "Tx_IssueAndReceipt_" + s + "_Item";
+            string tblScale = "Tx_IssueAndReceipt_" + s + "_Item_Batch_Scale";
+
+            CONTEXT.Database.ExecuteSqlCommand(
+                string.Format(@"UPDATE ""{0}""
+                    SET ""Netto"" = COALESCE((SELECT SUM(""Netto"") FROM ""{1}"" WHERE ""DetDetId""=:p0), 0)
+                    WHERE ""DetDetId""=:p1 ", tblBatch, tblScale), detDetId, detDetId);
+
+            // Segarkan Netto di level item (QuantityCreated dibiarkan apa adanya).
+            long? detId = CONTEXT.Database.SqlQuery<long?>(string.Format("SELECT \"DetId\" AS IDU FROM \"{0}\" WHERE \"DetDetId\"=:p0", tblBatch), detDetId).FirstOrDefault();
+            if (detId.HasValue)
+            {
+                CONTEXT.Database.ExecuteSqlCommand(
+                    string.Format(@"UPDATE ""{0}"" SET ""Netto"" = COALESCE((SELECT SUM(""Netto"") FROM ""{1}"" WHERE ""DetId""=:p0), 0) WHERE ""DetId""=:p1", tblItem, tblBatch),
+                    detId.Value, detId.Value);
+            }
+        }
+
+        #endregion
 
         #region CRUD baris ITEM (standalone: item ditambah user via CFL)
 

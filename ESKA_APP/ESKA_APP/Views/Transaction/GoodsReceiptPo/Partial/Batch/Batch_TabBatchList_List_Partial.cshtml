@@ -82,10 +82,13 @@
     settings.Columns.Add(column =>
     {
         column.FieldName = "RowNo";
-        column.Caption = "Row No";
+        column.Caption = "No";
         column.Width = 60;
         column.ReadOnly = true;
 
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.PropertiesEdit.Style.HorizontalAlign = HorizontalAlign.Center;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
     });
 

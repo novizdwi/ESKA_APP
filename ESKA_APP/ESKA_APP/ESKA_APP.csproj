@@ -752,6 +752,10 @@
     <Content Include="Views\Transaction\ReProcess\Partial\ReProcess_List_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\ReProcess_Panel_List_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\ReProcess_Form_TabReceiptDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\ReProcess\Partial\Scale\Scale_Partial.cshtml" />
+    <Content Include="Views\Transaction\ReProcess\Partial\Scale\Scale_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\ReProcess\Partial\Scale\Scale_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\ReProcess\Partial\Scale\Scale_TabScaleList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_Partial.cshtml" />
@@ -860,6 +864,7 @@
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.ViewScale.cs" />
     <Compile Include="Controllers\Transaction\GoodsReceiptPo\GoodsReceiptPoController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.ViewIssueBatch.cs" />
+    <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.ViewScale.cs" />
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.ViewReceiptBatch.cs" />
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.Tab.Detail.cs" />
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.Nav.cs" />

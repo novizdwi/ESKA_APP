@@ -1,7 +1,7 @@
 @Html.DevExpress().PopupControl(settings =>
 {
     settings.Name = "popupScale";
-    settings.CallbackRouteValues = new { Controller = "GoodsReceiptPo", Action = "ViewScale_PopupListOnDemandPartial" };
+    settings.CallbackRouteValues = new { Controller = "ReProcess", Action = "ViewScale_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -39,8 +39,6 @@
     settings.PreRender = (sender, e) =>
     {
         ASPxPopupControl popup = (ASPxPopupControl)sender;
-        // Lebar dipaskan dengan total kolom grid (210+50+100+90+110+90 = 650)
-        // + scrollbar vertikal & border, agar tepi popup rata dengan kolom terakhir.
         popup.Width = 700;
         popup.Height = 420;
     };

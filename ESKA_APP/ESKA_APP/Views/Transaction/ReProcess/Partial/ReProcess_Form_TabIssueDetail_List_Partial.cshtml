@@ -53,15 +53,18 @@
     {
         column.FieldName = "RowNo";
         column.Name = "RowNo";
-        column.Caption = "No.";
+        column.Caption = "No";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 45;
         column.ReadOnly = true;
         column.Settings.AllowSort = DefaultBoolean.False;
         column.Settings.AllowAutoFilter = DefaultBoolean.False;
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
         var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.Style.HorizontalAlign = HorizontalAlign.Center;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
     });
 

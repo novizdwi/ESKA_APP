@@ -1109,3 +1109,82 @@ new
 
 
 @Html.Partial("Partial/BatchReceipt/BatchReceipt_Partial")
+
+
+@*-------------------------------------------------
+    ViewScale (Timbangan) — dipakai bersama Issue & Receipt via parameter `side`
+    -------------------------------------------------*@
+<script>
+    var isUpdateScale = false;
+    var currentScaleSide = 'Issue';
+
+    // Dibuka dari kolom Netto pada grid batch (di dalam popupBatchIssue / popupBatchReceipt).
+    // popupScale dideklarasikan di root view supaya tidak ikut hancur saat popup batch callback.
+    function BtnScalePopupListOnClick(s, e, side, detId, detDetId) {
+        currentScaleSide = (side == 'Receipt') ? 'Receipt' : 'Issue';
+        var popup = ASPxClientPopupControl.Cast("popupScale");
+
+        popup.callbackUrl = '@Url.Action("ViewScale_PopupListOnDemandPartial", "ReProcess")'
+            + '?Id=' + Id.GetValue() + '&DetId=' + detId + '&DetDetId=' + detDetId + '&side=' + currentScaleSide;
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
+    }
+
+    function popupScale_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Scale_formDetail");
+        var popup = ASPxClientPopupControl.Cast("popupScale");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(430, 130);
+        }
+    }
+
+    function ViewScale_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupScale");
+        popup.Hide();
+    }
+
+    function gvContentScaleListOnBeginCallback(s, e, Id, DetId, DetDetId, side) {
+        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW") {
+            isUpdateScale = true;
+        }
+        if (side) {
+            currentScaleSide = side;
+        }
+    }
+
+    function gvContentScaleListOnEndCallback(s, e, Id, DetId, DetDetId, side) {
+        if (isUpdateScale) {
+
+            isUpdateScale = false;
+
+            var theSide = side || currentScaleSide;
+
+            // Netto batch = jumlah baris scale -> segarkan grid batch & grid detail sesuai side.
+            if (theSide == 'Receipt') {
+                var gvBatchR = ASPxClientGridView.Cast('gvContentReceiptBatchList');
+                if (gvBatchR != null) {
+                    gvBatchR.PerformCallback();
+                }
+                if (typeof (gvReceiptDetail) != 'undefined' && gvReceiptDetail != null) {
+                    gvReceiptDetail.PerformCallback();
+                }
+            }
+            else {
+                var gvBatchI = ASPxClientGridView.Cast('gvContentIssueBatchList');
+                if (gvBatchI != null) {
+                    gvBatchI.PerformCallback();
+                }
+                if (typeof (gvIssueDetail) != 'undefined' && gvIssueDetail != null) {
+                    gvIssueDetail.PerformCallback();
+                }
+            }
+        }
+    }
+
+</script>
+
+@Html.Partial("Partial/Scale/Scale_Partial")
