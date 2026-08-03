@@ -133,8 +133,8 @@
         itemSettings.Name = "LineNum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Line Num";
-        // "Line Num" menampilkan id batch (DetDetId), bukan urutan LineNum.
-        itemSettings.FieldName = "DetDetId";
+        // "Line Num" menampilkan id batch (DetDetId) sbg string; nested TextBox tak me-render numerik.
+        itemSettings.FieldName = "DetDetIdText";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "Scale_LineNum";
         txt.ShowModelErrors = true;

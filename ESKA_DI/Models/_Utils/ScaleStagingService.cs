@@ -141,42 +141,38 @@ namespace Models._Utils
                             row.Uom
                         });
 
-                        // 4. INSERT (StagingId identity -> tidak diisi). Semua placeholder distinct.
-                        CONTEXT.Database.ExecuteSqlCommand(
-                            @"INSERT INTO ""Tp_ScaleStaging""
-                                (""TransType"",""Id"",""DetId"",""DetDetId"",""DetDetDetId"",
-                                 ""TransNo"",""DocNum"",""ItemCode"",""ItemName"",""WhsCode"",
-                                 ""Batch"",""BatchLineNum"",""ScaleLineNum"",""Quantity"",""Uom"",
-                                 ""Status"",""RequestId"",""RetryCount"",""RequestPayload"",
-                                 ""CreatedDate"",""CreatedUser"",""ModifiedDate"",""ModifiedUser"")
-                              VALUES
-                                (:p0,:p1,:p2,:p3,:p4,
-                                 :p5,:p6,:p7,:p8,:p9,
-                                 :p10,:p11,:p12,:p13,:p14,
-                                 'Waiting',:p15,0,:p16,
-                                 CURRENT_TIMESTAMP,:p17,CURRENT_TIMESTAMP,:p18) ",
-                            transType,
-                            row.Id,
-                            (object)row.DetId ?? DBNull.Value,
-                            (object)row.DetDetId ?? DBNull.Value,
-                            (object)row.DetDetDetId ?? DBNull.Value,
-                            (object)row.TransNo ?? DBNull.Value,
-                            (object)row.DocNum ?? DBNull.Value,
-                            (object)row.ItemCode ?? DBNull.Value,
-                            (object)row.ItemName ?? DBNull.Value,
-                            (object)row.WhsCode ?? DBNull.Value,
-                            (object)row.Batch ?? DBNull.Value,
-                            (object)row.BatchLineNum ?? DBNull.Value,
-                            (object)row.ScaleLineNum ?? DBNull.Value,
-                            (object)row.Quantity ?? DBNull.Value,
-                            (object)row.Uom ?? DBNull.Value,
-                            requestId,
-                            requestPayload,
-                            userId,
-                            userId);
+                        // 4. Simpan via EF (seragam pola Add). StagingId identity -> terisi otomatis.
+                        DateTime dtNow = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+                        Tp_ScaleStaging st = new Tp_ScaleStaging
+                        {
+                            TransType = transType,
+                            Id = row.Id,
+                            DetId = row.DetId,
+                            DetDetId = row.DetDetId,
+                            DetDetDetId = row.DetDetDetId,
+                            TransNo = row.TransNo,
+                            DocNum = row.DocNum,
+                            ItemCode = row.ItemCode,
+                            ItemName = row.ItemName,
+                            WhsCode = row.WhsCode,
+                            Batch = row.Batch,
+                            BatchLineNum = row.BatchLineNum,
+                            ScaleLineNum = row.ScaleLineNum,
+                            Quantity = row.Quantity,
+                            Uom = row.Uom,
+                            Status = "Waiting",
+                            RequestId = requestId,
+                            RetryCount = 0,
+                            RequestPayload = requestPayload,
+                            CreatedDate = dtNow,
+                            CreatedUser = userId,
+                            ModifiedDate = dtNow,
+                            ModifiedUser = userId
+                        };
 
-                        stagingId = CONTEXT.Database.SqlQuery<long>(
-                            "SELECT MAX(\"StagingId\") AS IDU FROM \"Tp_ScaleStaging\" WHERE \"RequestId\"=:p0", requestId).FirstOrDefault();
+                        CONTEXT.Tp_ScaleStaging.Add(st);
+                        CONTEXT.SaveChanges();
+                        stagingId = st.StagingId;
 
                         CONTEXT_TRANS.Commit();
                     }

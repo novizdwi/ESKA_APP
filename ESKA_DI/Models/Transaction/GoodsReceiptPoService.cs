@@ -289,6 +289,9 @@ namespace Models.Transaction
 
         public int? LineNum { get; set; }
 
+        // Id batch dalam bentuk string — kolom "Line Num" (nested TextBox tidak me-render numerik).
+        public string DetDetIdText { get; set; }
+
         public List<GoodsReceiptPoScaleModel> GoodsReceiptPoScaleModel___ { get; set; }
     }
 
@@ -1898,6 +1901,9 @@ namespace Models.Transaction
 
                 model.GoodsReceiptPoScaleModel___ = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleModel>(sql, detDetId).ToList();
             }
+
+            // "Line Num" menampilkan id batch sbg string (nested TextBox tak me-render numerik).
+            model.DetDetIdText = model.DetDetId.ToString();
 
             return model;
         }

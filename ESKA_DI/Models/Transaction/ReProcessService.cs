@@ -350,6 +350,9 @@ namespace Models.Transaction
 
         public int? LineNum { get; set; }
 
+        // Id batch dalam bentuk string — kolom "Line Num" (nested TextBox tidak me-render numerik).
+        public string DetDetIdText { get; set; }
+
         public List<ReProcessScaleModel> ReProcessScaleModel___ { get; set; }
     }
 
@@ -372,6 +375,9 @@ namespace Models.Transaction
         public int? LineNum { get; set; }
 
         public string LineStatus { get; set; }
+
+        // Status permintaan timbang dari Tp_ScaleStaging (Waiting/Processed/Error). Null bila belum pernah diklik.
+        public string StagingStatus { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
@@ -1214,30 +1220,50 @@ namespace Models.Transaction
                     model.DetDetId = detDetId;
                 }
 
-                sql = string.Format(@"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                // Status permintaan timbang terbaru per baris scale dari Tp_ScaleStaging (per TransType/side).
+                // Ambil status baris ber-StagingId terbesar (HANA tak izinkan ORDER BY/LIMIT di subquery korelasi).
+                string transType = (s == "Receipt") ? "IssueAndReceiptReceipt" : "IssueAndReceiptIssue";
+                sql = string.Format(@"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*,
+                            (SELECT ST.""Status"" FROM ""Tp_ScaleStaging"" ST
+                             WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = :p0
+                               AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
+                                                       WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = :p1)
+                            ) AS ""StagingStatus""
                             FROM ""{0}"" T0
-                            WHERE ""DetDetId"" = :p0 ", tblScale);
+                            WHERE T0.""DetDetId"" = :p2 ", tblScale);
 
-                model.ReProcessScaleModel___ = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, detDetId).ToList();
+                model.ReProcessScaleModel___ = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, transType, transType, detDetId).ToList();
             }
+
+            // "Line Num" menampilkan id batch sbg string (nested TextBox tak me-render numerik).
+            model.DetDetIdText = model.DetDetId.ToString();
 
             return model;
         }
 
         public List<ReProcessScaleModel> ReProcess__ItemBatchScaleList(long detDetId, string side)
         {
-            string tblScale = "Tx_IssueAndReceipt_" + ScaleSide(side) + "_Item_Batch_Scale";
+            string s = ScaleSide(side);
+            string tblScale = "Tx_IssueAndReceipt_" + s + "_Item_Batch_Scale";
+            string transType = (s == "Receipt") ? "IssueAndReceiptReceipt" : "IssueAndReceiptIssue";
 
             string sql = null;
             List<ReProcessScaleModel> model = new List<ReProcessScaleModel>();
 
             using (var CONTEXT = new HANA_APP())
             {
-                sql = string.Format(@"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                // Sertakan status permintaan timbang terbaru per baris scale dari Tp_ScaleStaging.
+                // Ambil status baris ber-StagingId terbesar (HANA tak izinkan ORDER BY/LIMIT di subquery korelasi).
+                sql = string.Format(@"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*,
+                            (SELECT ST.""Status"" FROM ""Tp_ScaleStaging"" ST
+                             WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = :p0
+                               AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
+                                                       WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = :p1)
+                            ) AS ""StagingStatus""
                             FROM ""{0}"" T0
-                            WHERE ""DetDetId"" = :p0 ", tblScale);
+                            WHERE T0.""DetDetId"" = :p2 ", tblScale);
 
-                model = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, detDetId).ToList();
+                model = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, transType, transType, detDetId).ToList();
             }
             return model;
         }
