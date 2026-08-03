@@ -1,4 +1,4 @@
-﻿@using (Ajax.BeginForm("mantap", "ProductionTaskActivity", null,
+﻿@*@using (Ajax.BeginForm("mantap", "ProductionTaskActivity", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -22,4 +22,8 @@ new
         @Html.Partial("Partial/Finish/Finish_Panel_Partial")
 
     </div>
-}
+}*@
+
+<div id="Finish_contentForm">
+    @Html.Partial("Partial/Finish/Finish_Panel_Partial")
+</div>

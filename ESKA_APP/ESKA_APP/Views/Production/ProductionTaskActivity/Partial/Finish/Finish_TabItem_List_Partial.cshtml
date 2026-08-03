@@ -96,20 +96,38 @@
 
         cbo.TextField = "Name";
         cbo.ValueField = "Code";
-        cbo.ValueType = typeof(string); 
+        cbo.ValueType = typeof(string);
+        cbo.ValidationSettings.RequiredField.IsRequired = true;
 
         column.Width = 90;
         column.ReadOnly = false;
         column.Settings.AllowSort = DefaultBoolean.False;
 
     });
+
+    // 1. Kolom ASLI - biasa saja, TIDAK di-template, ikut mekanisme normal (seperti Id/DetId)
     settings.Columns.Add(column =>
     {
         column.FieldName = "ItemCode";
         column.Name = "ItemCode";
         column.Caption = "Item Code";
+        column.Width = 0;              // sembunyikan secara visual
+        column.ReadOnly = true;
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.CellStyle.Wrap = DefaultBoolean.False;
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_ItemCodeReal";   // beri nama beda biar jelas
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    // 2. Kolom DISPLAY - dummy, ini yang tampil ke user dengan tombol CFL
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";     // tetap baca dari field yang sama untuk tampilan awal
+        column.Name = "ItemCodeDisplay";   // Name beda dari FieldName, supaya tidak konflik
+        column.Caption = "Item Code";
         column.Width = 150;
         column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
         column.ReadOnly = true;
@@ -121,11 +139,10 @@
 
             Html.DevExpress().ButtonEdit(s =>
             {
-                s.Name = settings.Name + "_" + column.FieldName;
-                s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName;
+                s.Name = settings.Name + "_ItemCode";                     // <-- nama tetap "ItemCode" (dipakai JS)
+                s.Properties.ClientInstanceName = settings.Name + "_ItemCode";
 
-                s.Text = itemCode != null ? itemCode.ToString() : "";   // <-- ButtonEditSettings.Text sudah terbukti valid
-
+                s.Text = itemCode != null ? itemCode.ToString() : "";
                 s.ReadOnly = true;
                 s.Width = 125;
 
@@ -133,7 +150,6 @@
                 s.ControlStyle.CssClass = "editor";
 
                 s.Properties.Buttons.Clear();
-
                 EditButton lookUpButton = new EditButton();
                 lookUpButton.Text = "";
                 lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
@@ -141,10 +157,8 @@
                 s.Properties.Buttons.Add(lookUpButton);
 
                 s.Properties.ClientSideEvents.ButtonClick = "BtnCflItemCodePopupListOnClick";
-
             }).Render();
         });
-
     });
 
     settings.Columns.Add(column =>
@@ -157,7 +171,7 @@
         column.Width = 250;
         column.ReadOnly = true;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
-
+        column.CellStyle.Wrap = DefaultBoolean.False;
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
@@ -264,7 +278,6 @@
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 120;
         column.ReadOnly = true;
-
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.AllowMouseWheel = false;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
@@ -282,13 +295,8 @@
         column.Caption = "Netto";
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
-        column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 120;
-
-        var txt = column.PropertiesEdit as TextBoxProperties;
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
-        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Width = 120; 
 
         column.SetDataItemTemplateContent(c =>
         {
@@ -302,12 +310,18 @@
             if (isOut)
             {
                 // Direction = Out -> pakai ButtonEdit (CFL popup), readonly, pilih via popup
-                Html.DevExpress().ButtonEdit(s =>
+                Html.DevExpress().SpinEdit(s =>
                 {
                     s.Name = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
                     s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
 
-                    s.Text = quantity != null ? Convert.ToDecimal(quantity).ToString("N0") : "";
+                    s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
+
+                    s.Properties.NumberType = SpinEditNumberType.Float;
+                    s.Properties.DisplayFormatString = "#,###";
+                    s.Properties.DisplayFormatInEditMode = true;
+                    s.Properties.SpinButtons.ShowIncrementButtons = false;
+                    s.Properties.Style.HorizontalAlign = HorizontalAlign.Right;
 
                     s.ReadOnly = true;
                     s.Width = 100;
@@ -324,21 +338,27 @@
                     s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", detDetId);
 
                 }).Render();
+
             }
             else
             {
-                // Direction = In -> input manual biasa (TextBox editable)
-                Html.DevExpress().TextBox(s =>
+                Html.DevExpress().SpinEdit(s =>
                 {
                     s.Name = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
                     s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
 
-                    s.Text = quantity != null ? Convert.ToDecimal(quantity).ToString("N0") : "";
-
-                    s.ReadOnly = false;
+                    s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
+                    s.Properties.DecimalPlaces = 0;
+                    s.Properties.DisplayFormatString = "N0";
+                    s.Properties.DisplayFormatInEditMode = true;
+                    s.Properties.SpinButtons.ShowIncrementButtons = false;
+                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+                    s.Properties.AllowMouseWheel = false;
+                    s.ReadOnly = true;
                     s.Width = 100;
 
                 }).Render();
+
             }
         });
 
@@ -376,6 +396,7 @@
         e.NewValues["Id"] = Id;
         e.NewValues["DetId"] = DetId;
         e.NewValues["Direction"] = "In";
+        e.NewValues["LineNum"] = -1;
 
         e.NewValues["AdmissionDate"] = DateTime.Today;
     };
@@ -391,4 +412,5 @@
             }
         }
     };
+
 }).Bind(Model).GetHtml()

@@ -115,7 +115,7 @@ namespace Models.Production
         public string Uom { get; set; }
         public string Batch { get; set; }
         public Decimal? QuantityPlanned { get; set; }
-        public string QuantityActual { get; set; }
+        public Decimal? QuantityActual { get; set; }
         public string Comments { get; set; }
     
     }
@@ -507,7 +507,7 @@ namespace Models.Production
 
                         if (tx_ProductionTask_Activity_Item != null)
                         {
-                            var exceptColumns = new string[] { "Id", "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            var exceptColumns = new string[] { "Id", "DetId", "DetDetId", "QuantityPlanned", "CreatedUser", "CreatedDate" };
                             CopyProperty.CopyProperties(model, tx_ProductionTask_Activity_Item, false, exceptColumns);
 
                             tx_ProductionTask_Activity_Item.ModifiedDate = dtModified;

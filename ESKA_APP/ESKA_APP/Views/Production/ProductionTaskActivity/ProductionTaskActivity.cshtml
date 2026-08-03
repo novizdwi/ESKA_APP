@@ -609,7 +609,7 @@ new
     }
 
     function popupFinish_EndCallback(s, e) {
-        $.validator.unobtrusive.parse("#Finish_formDetail");
+        //$.validator.unobtrusive.parse("#Finish_formDetail");
 
         var popup = ASPxClientPopupControl.Cast("popupFinish");
         if (!popup.IsVisible()) {
@@ -707,10 +707,13 @@ new
 }
 
 <script type="text/javascript">
-
     function OnClickChoose_CflItemByWarehouseProductionTaskActivity(s, e, data) {
 
-        var ItemCode = ASPxClientTextBox.Cast("gvContentItemList_ItemCode");
+        var grid = gvContentItemList;
+        var visibleIndex = grid.GetFocusedRowIndex();
+
+        // Tampilan (display) - tetap seperti sebelumnya
+        var ItemCode = ASPxClientButtonEdit.Cast("gvContentItemList_ItemCode");
         ItemCode.SetValue(data.ItemCode);
 
         var ItemName = ASPxClientTextBox.Cast("gvContentItemList_ItemName");
@@ -723,10 +726,21 @@ new
         WhsName.SetValue(data.WhsName);
 
         var UomEntry = ASPxClientTextBox.Cast("gvContentItemList_UomEntry");
-        UomEntry.SetValue(data.WhsName); 
+        UomEntry.SetValue(data.UomEntry);
 
         var Uom = ASPxClientTextBox.Cast("gvContentItemList_Uom");
         Uom.SetValue(data.UomCode);
+
+        // KUNCI: set value ke kolom ASLI (ItemCodeReal) juga - kolom biasa, non-template
+        var ItemCodeReal = ASPxClientTextBox.Cast("gvContentItemList_ItemCodeReal");
+        ItemCodeReal.SetValue(data.ItemCode);
+
+        // batchEditApi tetap dipertahankan sebagai jaring pengaman untuk field lain
+        grid.batchEditApi.SetCellValue(visibleIndex, "ItemName", data.ItemName);
+        grid.batchEditApi.SetCellValue(visibleIndex, "WhsCode", data.WhsCode);
+        grid.batchEditApi.SetCellValue(visibleIndex, "WhsName", data.WhsName);
+        grid.batchEditApi.SetCellValue(visibleIndex, "UomEntry", data.UomEntry);
+        grid.batchEditApi.SetCellValue(visibleIndex, "Uom", data.UomCode);
 
         cflItemByWarehousePopupListProductionTaskActivity.Hide();
     }
