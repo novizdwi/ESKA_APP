@@ -862,6 +862,12 @@ namespace Models.Transaction
                         tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedDate = dtModified;
                         tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedUser = model._UserId;
 
+                        // LineNum batch: lanjut dari batch terakhir pada item ini (mulai 1).
+                        // Di-set ke entity (bukan model) karena model.LineNum bertipe long? sedangkan
+                        // kolom entity int? -- CopyProperties tidak mengonversi tipe.
+                        int? maxLineNum = CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0", model.DetId).FirstOrDefault();
+                        tx_IssueAndReceipt_Receipt_Item_Batch.LineNum = (maxLineNum ?? 0) + 1;
+
                         CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch.Add(tx_IssueAndReceipt_Receipt_Item_Batch);
                         CONTEXT.SaveChanges();
                         detDetId = tx_IssueAndReceipt_Receipt_Item_Batch.DetDetId;
@@ -918,6 +924,12 @@ namespace Models.Transaction
                         tx_IssueAndReceipt_issue_Item_Batch.CreatedUser = model._UserId;
                         tx_IssueAndReceipt_issue_Item_Batch.ModifiedDate = dtModified;
                         tx_IssueAndReceipt_issue_Item_Batch.ModifiedUser = model._UserId;
+
+                        // LineNum batch: lanjut dari batch terakhir pada item ini (mulai 1).
+                        // Di-set ke entity (bukan model) karena model.LineNum bertipe long? sedangkan
+                        // kolom entity int? -- CopyProperties tidak mengonversi tipe.
+                        int? maxLineNum = CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0", model.DetId).FirstOrDefault();
+                        tx_IssueAndReceipt_issue_Item_Batch.LineNum = (maxLineNum ?? 0) + 1;
 
                         CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch.Add(tx_IssueAndReceipt_issue_Item_Batch);
                         CONTEXT.SaveChanges();

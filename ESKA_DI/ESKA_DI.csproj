@@ -580,6 +580,7 @@
     <Compile Include="Models\_Utils\General.cs" />
     <Compile Include="Models\_Utils\GeneralFormat.cs" />
     <Compile Include="Models\_Utils\Rpt.cs" />
+    <Compile Include="Models\_Utils\ScaleStagingService.cs" />
     <Compile Include="Models\_Utils\SapCompany.cs" />
     <Compile Include="Models\_Utils\Csv.cs" />
     <Compile Include="Models\_Utils\Excel.cs" />

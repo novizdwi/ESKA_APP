@@ -99,6 +99,17 @@ namespace Controllers.Transaction
             return TabScaleListPartial(id, detId, detDetId, side);
         }
 
+        // Tombol "Scale" (Timbang) -> simpan permintaan timbang ke Tp_ScaleStaging.
+        // side membedakan TransType agar write-back nanti tahu tabel Issue/Receipt.
+        [HttpPost, ValidateInput(false)]
+        public ContentResult SaveScaleStaging(long Id, long DetId, long DetDetId, long DetDetDetId, string side = "Issue")
+        {
+            int userId = (int)Session["userId"];
+            string transType = (side == "Receipt") ? "IssueAndReceiptReceipt" : "IssueAndReceiptIssue";
+            new Models._Utils.ScaleStagingService().SaveFromScale(userId, transType, Id, DetId, DetDetId, DetDetDetId);
+            return Content("OK");
+        }
+
 
     }
 

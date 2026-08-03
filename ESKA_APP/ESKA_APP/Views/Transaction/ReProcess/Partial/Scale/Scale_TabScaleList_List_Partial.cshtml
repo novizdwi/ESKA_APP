@@ -158,6 +158,7 @@
 
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentScaleListOnBeginCallback(s, e, {0}, {1}, {2}, '{3}'); }}", Id, DetId, DetDetId, side);
     settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentScaleListOnEndCallback(s, e, {0}, {1}, {2}, '{3}'); }}", Id, DetId, DetDetId, side);
+    settings.ClientSideEvents.CustomButtonClick = string.Format("function(s, e) {{ gvContentScaleListOnCustomButtonClick(s, e, {0}, {1}, {2}, '{3}'); }}", Id, DetId, DetDetId, side);
 
     settings.InitNewRow = (s, e) =>
     {

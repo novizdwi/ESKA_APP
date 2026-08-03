@@ -120,7 +120,8 @@
         itemSettings.Name = "LineNum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Line Num";
-        itemSettings.FieldName = "LineNum";
+        // "Line Num" menampilkan id batch (DetDetId), bukan urutan LineNum.
+        itemSettings.FieldName = "DetDetId";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "Scale_LineNum";
         txt.ShowModelErrors = true;
