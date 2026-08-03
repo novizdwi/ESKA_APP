@@ -1,12 +1,14 @@
-﻿@using Models;
+@using Models;
 
-@model Models.Transaction.StockOpnameBatchView___
+@model Models.Production.ProductionTaskActivityBatchView___
 
+@* Nama editor diberi awalan "Batch_" supaya tidak menimpa client instance
+   Id/DetId milik popupFinish yang hidup bersamaan di halaman yang sama. *@
 
 @Html.DevExpress().TextBox(
         settings =>
         {
-            settings.Name = "Id";
+            settings.Name = "Batch_Id";
             settings.ControlStyle.CssClass = "editor";
             settings.ClientVisible = false;
         }
@@ -15,20 +17,20 @@
 @Html.DevExpress().TextBox(
         settings =>
         {
-            settings.Name = "DetId";
+            settings.Name = "Batch_DetId";
             settings.ControlStyle.CssClass = "editor";
             settings.ClientVisible = false;
         }
 ).Bind(Model.DetId).GetHtml()
 
-@Html.DevExpress().HyperLink(settingsHL =>
-{
-    settingsHL.Name = "ViewBatchComponent_btnCancel";
-    settingsHL.NavigateUrl = "javascript:void(0)";
-    settingsHL.Properties.Text = "Cancel";
-    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewBatch_OnClickBtnCancel(s, e) }";
-    settingsHL.Height = 20;
-}).GetHtml()
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Batch_DetDetId";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(Model.DetDetId).GetHtml()
 
 
 @Html.DevExpress().FormLayout(settings =>
@@ -83,69 +85,78 @@
         itemSettings.ColCount = 1;
         itemSettings.CssClass = "groupCol";
     });
+
     groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "ItemCode";
+        itemSettings.Name = "Batch_ItemCode";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Item Code";
         itemSettings.FieldName = "ItemCode";
+
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "ItemCode";
+        txt.Name = "Batch_ItemCode";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 250;
     });
 
     groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "ItemName";
+        itemSettings.Name = "Batch_ItemName";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Item Name";
         itemSettings.FieldName = "ItemName";
+
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "ItemName";
+        txt.Name = "Batch_ItemName";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 250;
     });
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "WhsCode";
+        itemSettings.Name = "Batch_WhsCode";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Whs Code";
         itemSettings.FieldName = "WhsCode";
+
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "WhsCode";
+        txt.Name = "Batch_WhsCode";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 250;
     });
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "WhsName";
+        itemSettings.Name = "Batch_WhsName";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Whs Name";
         itemSettings.FieldName = "WhsName";
+
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "WhsName";
+        txt.Name = "Batch_WhsName";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 250;
     });
 
     groupItem_3.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "ViewViewBatch_TabBatch";
+        group.Name = "ViewBatch_TabBatch";
         group.ColSpan = 2; // penting
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Percentage(100);
@@ -155,48 +166,21 @@
 
         group.Items.Add(item =>
         {
-            item.Name = "ViewApproval_TabViewBatchContent";
+            item.Name = "ViewBatch_TabBatchContent";
             item.Caption = "       List Batch       ";
 
             item.SetNestedContent(() =>
             {
-                //Html.DevExpress().HyperLink(hyperlink =>
-                //{
-                //    hyperlink.Name = "hlAddBatchRow";
-                //    hyperlink.Properties.Text = "+ Add Row";
-                //    hyperlink.NavigateUrl = "javascript:void(0)";
-                //    hyperlink.Properties.ClientSideEvents.Click = string.Format("function(s,e){{ btnAddBatchOnClick({0}, {1}); }}", Model.Id, Model.DetId);
-                //}).Render();
-
                 ViewContext.Writer.Write(
-                    Html.Partial( "Partial/Batch/Batch_TabBatchList_List_Partial", Model.StockOpnameBatchModel___ )
+                    Html.Partial("Partial/Batch/Batch_TabBatchList_List_Partial", Model.ProductionTaskActivityBatchModel___)
                 );
             });
         });
     });
 
-    /*
     groupItem_3.Items.Add(itemSettings =>
     {
-        itemSettings.ColSpan = 1;
-        itemSettings.ShowCaption = DefaultBoolean.False;
-
-        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
-        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
-
-        btnSettings.Name = "btnSaveChangeViewBatch";
-        btnSettings.Text = "Save Change";
-        btnSettings.Width = 120;
-
-        btnSettings.ClientSideEvents.Click = "ViewBatch_OnClickBtnSaveChange";
-        btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
-    });
-    */
-
-    groupItem_3.Items.Add(itemSettings =>
-    {
-        itemSettings.ColSpan = 1;
+        itemSettings.ColSpan = 2;
         itemSettings.ShowCaption = DefaultBoolean.False;
 
         itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Right;
@@ -212,9 +196,4 @@
         btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
     });
 
-    //});
-
 }).GetHtml()
-
-
-

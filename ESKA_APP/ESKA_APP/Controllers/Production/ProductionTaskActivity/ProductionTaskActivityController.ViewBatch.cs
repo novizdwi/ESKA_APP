@@ -1,4 +1,4 @@
-﻿using Models;
+using Models;
 using Models.Production;
 using System;
 using System.Collections.Generic;
@@ -24,80 +24,86 @@ namespace Controllers.Production
 
             productionActivityService = new ProductionActivityService();
             var model = new ProductionTaskActivityBatchView___();
-            if (id != 0 && detId != 0)
+            if (detDetId != 0)
             {
                 model = productionActivityService.GetProductionTaskActivity_Batch(id, detId, detDetId);
             }
+
             return PartialView(VIEW_ITEMBATCH_PANEL_PARTIAL, model);
         }
 
-        public ActionResult TabBatchListPartial(long Id = 0, long DetId = 0, long DetDetId = 0)
-        {
-            int userId = (int)Session["userId"]; 
-            ViewBag.Id = Id;
-            ViewBag.DetId = DetId;
-            productionActivityService = new ProductionActivityService();
-             
-            var modelList = productionActivityService.GetProductionTaskActivity_ItemBatchList(Id, DetId, DetDetId); 
-
-            return PartialView(VIEW_TAB_BATCH, modelList);
-        }
-
-        public ActionResult PopupItemTagLoadOnDemandPartial()
+        // Dipakai PopupControl saat LoadContentViaCallback = OnFirstShow.
+        public ActionResult PopupItemBatchLoadOnDemandPartial()
         {
             int userId = (int)Session["userId"];
-            var model = new ProductionTaskActivityModel();
+            var model = new ProductionTaskActivityBatchView___();
 
             return PartialView(VIEW_ITEMBATCH_FORM_PARTIAL, model);
         }
 
-        [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListAddNewRow([Bind] ProductionTaskActivityBatchModel model, long Id = 0, long DetId = 0)
+        public ActionResult TabBatchListPartial(long Id = 0, long DetId = 0, long DetDetId = 0)
         {
-            long id = Id;
-            long detId = DetId;
+            int userId = (int)Session["userId"];
+            ViewBag.Id = Id;
+            ViewBag.DetId = DetId;
+            ViewBag.DetDetId = DetDetId;
+
+            productionActivityService = new ProductionActivityService();
+
+            var modelList = productionActivityService.GetProductionTaskActivity_ItemBatchList(Id, DetId, DetDetId);
+
+            return PartialView(VIEW_TAB_BATCH, modelList);
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ActionResult TabBatchListAddNewRow([Bind] ProductionTaskActivityBatchModel model, long Id = 0, long DetId = 0, long DetDetId = 0)
+        {
             productionActivityService = new ProductionActivityService();
 
             if (ModelState.IsValid)
             {
                 model.Id = Id;
-                model.DetDetId = DetId;
+                model.DetId = DetId;
+                model.DetDetId = DetDetId;
                 model._UserId = (int)Session["userId"];
+
                 productionActivityService.ProductionTaskActivity_AddNewItemBatch(model);
             }
 
-            return TabBatchListPartial(id, detId);
+            return TabBatchListPartial(Id, DetId, DetDetId);
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListUpdateRow([Bind] ProductionTaskActivityBatchModel model, long Id = 0, long DetId = 0, long DetDetId = 0) {
-            long id = Id;
-            long detId = DetId;
+        public ActionResult TabBatchListUpdateRow([Bind] ProductionTaskActivityBatchModel model, long Id = 0, long DetId = 0, long DetDetId = 0)
+        {
             productionActivityService = new ProductionActivityService();
 
             if (ModelState.IsValid)
-            { 
+            {
+                model.Id = Id;
+                model.DetId = DetId;
+                model.DetDetId = DetDetId;
                 model._UserId = (int)Session["userId"];
+
                 productionActivityService.ProductionTaskActivity_UpdateItemBatch(model);
             }
 
-            return TabBatchListPartial(id, detId);
+            return TabBatchListPartial(Id, DetId, DetDetId);
         }
 
+        // Nama parameter kunci harus sama dengan KeyFieldName grid ("BatchId").
         [HttpPost, ValidateInput(false)]
-        public ActionResult TabBatchListDeleteRow(long DetDetId, long Id = 0, long DetId = 0)
+        public ActionResult TabBatchListDeleteRow(long BatchId, long Id = 0, long DetId = 0, long DetDetId = 0)
         {
-            long id = Id ;
-            long detId = DetId ;
             int userId = (int)Session["userId"];
             productionActivityService = new ProductionActivityService();
 
             if (ModelState.IsValid)
             {
-                productionActivityService.ProductionTaskActivity_DeleteItemBatch(userId, Id, DetId, DetDetId);
+                productionActivityService.ProductionTaskActivity_DeleteItemBatch(userId, Id, DetId, DetDetId, BatchId);
             }
 
-            return TabBatchListPartial(id, detId);
+            return TabBatchListPartial(Id, DetId, DetDetId);
         }
 
     }

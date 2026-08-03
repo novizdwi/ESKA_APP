@@ -1,10 +1,11 @@
-﻿@using Models;
-@using Models.Transaction;
-@model List<Models.Transaction.StockOpnameBatchModel>
+@using Models;
+@using Models.Production;
+@model List<Models.Production.ProductionTaskActivityBatchModel>
 
 @{
     var Id = Convert.ToInt64(Request["cbId"]);
     var DetId = Convert.ToInt64(Request["cbDetId"]);
+    var DetDetId = Convert.ToInt64(Request["cbDetDetId"]);
     int userId = (int)Session["userId"];
 
     if (ViewBag.Id != null)
@@ -15,12 +16,32 @@
     {
         DetId = ViewBag.DetId;
     }
+    if (ViewBag.DetDetId != null)
+    {
+        DetDetId = ViewBag.DetDetId;
+    }
 
+    // Batch hanya boleh diubah selama activity belum Finished.
     ViewBag.ReadOnly = false;
-    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_StockOpname\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
-    if (status != "Draft")
+    string activityStatus = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"Status\" FROM \"Tx_ProductionTask_Activity\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault();
+    if (activityStatus == "Finished")
     {
         ViewBag.ReadOnly = true;
+    }
+
+    // Quantity (= QuantityPlanned item induk) sama untuk semua baris batch;
+    // dipakai sebagai nilai kolom Quantity pada baris baru.
+    decimal quantityPlanned = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        quantityPlanned = Model[0].Quantity ?? 0;
+    }
+    else if (DetDetId != 0)
+    {
+        quantityPlanned = Models._Ef.DbProvider.dbApp.Database.SqlQuery<decimal?>(
+            "SELECT TOP 1 T0.\"QuantityPlanned\" FROM \"Tx_ProductionTask_Activity_Item\" T0 WHERE T0.\"DetDetId\"=:p0", DetDetId)
+            .FirstOrDefault() ?? 0;
     }
 }
 
@@ -28,12 +49,12 @@
 {
 
     settings.Name = "gvContentBatchList";
-    settings.KeyFieldName = "DetDetId";
+    settings.KeyFieldName = "BatchId";
     settings.Width = Unit.Percentage(100);
-    settings.CallbackRouteValues = new { Controller = "StockOpname", Action = "TabBatchListPartial", Id = Id, DetId = DetId };
-    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "StockOpname", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "StockOpname", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "StockOpname", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId };
+    settings.CallbackRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListPartial", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId, DetDetId = DetDetId };
 
     settings.SettingsBehavior.ConfirmDelete = true;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
@@ -41,14 +62,12 @@
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
 
     settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
-    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
     settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
 
     settings.CommandColumn.Visible = !ViewBag.ReadOnly;
     settings.CommandColumn.ShowNewButtonInHeader = true;
-    settings.CommandColumn.ShowDeleteButton = true;
     settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.ShowDeleteButton = true;
 
     settings.CommandColumn.Width = 100;
     settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
@@ -56,7 +75,7 @@
     settings.Settings.ShowFilterRow = false;
     settings.Settings.ShowFilterRowMenu = false;
 
-    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
+    settings.Columns.Add("BatchId", "BatchId").Visible = false;
 
     settings.Columns.Add(column =>
     {
@@ -78,6 +97,15 @@
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
     });
 
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetDetId";
+        column.Caption = "Det Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
 
     settings.Columns.Add(column =>
     {
@@ -101,6 +129,9 @@
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ValidationSettings.RequiredField.IsRequired = true;
+        txt.ValidationSettings.RequiredField.ErrorText = "Batch is required";
+        txt.ValidationSettings.Display = Display.Dynamic;
         txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
     });
 
@@ -112,17 +143,19 @@
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 100;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = ViewBag.ReadOnly;
+        column.ReadOnly = true;
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.NumberType = SpinEditNumberType.Float;
-        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatString = "#,###";
         txt.DisplayFormatInEditMode = true;
         txt.AllowMouseWheel = false;
+        txt.SpinButtons.ShowIncrementButtons = false;
 
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
     });
 
     settings.Columns.Add(column =>
@@ -132,16 +165,15 @@
         column.Caption = "Admission Date";
 
         column.ColumnType = MVCxGridViewColumnType.DateEdit;
-        column.Width = 100;
+        column.Width = 120;
         column.ReadOnly = ViewBag.ReadOnly;
 
         var txt = column.PropertiesEdit as DateEditProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
         txt.DisplayFormatString = "dd/MM/yyyy";
         txt.EditFormatString = "dd/MM/yyyy";
         txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
-
     });
 
     settings.Columns.Add(column =>
@@ -155,27 +187,30 @@
         column.ReadOnly = ViewBag.ReadOnly;
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
-        //column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
-
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.NumberType = SpinEditNumberType.Float;
-        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatString = "#,###";
         txt.DisplayFormatInEditMode = true;
         txt.AllowMouseWheel = false;
+        txt.SpinButtons.ShowIncrementButtons = false;
 
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ValidationSettings.RequiredField.IsRequired = true;
+        txt.ValidationSettings.RequiredField.ErrorText = "Netto is required";
+        txt.ValidationSettings.Display = Display.Dynamic;
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
     });
 
-    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
-    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
-    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentBatchListOnBeginCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentBatchListOnEndCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
 
     settings.InitNewRow = (s, e) =>
     {
         e.NewValues["Id"] = Id;
         e.NewValues["DetId"] = DetId;
+        e.NewValues["DetDetId"] = DetDetId;
 
+        e.NewValues["Quantity"] = quantityPlanned;
         e.NewValues["AdmissionDate"] = DateTime.Today;
     };
 

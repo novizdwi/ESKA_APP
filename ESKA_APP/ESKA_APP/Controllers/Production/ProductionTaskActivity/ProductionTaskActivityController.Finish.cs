@@ -100,7 +100,7 @@ namespace Controllers.Production   // <-- SESUAIKAN dengan namespace controller 
 
             if (ModelState.IsValid)
             {
-                productionActivityService.ProductionTaskActivity_DeleteItemBatch(userId, Id, DetId, DetDetId);
+                productionActivityService.ProductionTaskActivity_DeleteItem(userId, Id, DetId, DetDetId);
             }
 
             return TabItemListPartial(id, detId);

@@ -19,6 +19,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<long> DetDetId { get; set; }
         public long BatchId { get; set; }
         public string Batch { get; set; }
+        public Nullable<System.DateTime> AdmissionDate { get; set; }
         public Nullable<decimal> Netto { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }

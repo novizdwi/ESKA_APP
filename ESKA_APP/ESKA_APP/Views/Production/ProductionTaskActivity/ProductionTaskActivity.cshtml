@@ -674,21 +674,71 @@ new
         WhsName.SetValue(name);
     }
 
+    // Tombol kaca pembesar pada kolom Netto grid item (hanya untuk Direction = 'Out').
     function BtnCflQuantityPopupListOnClick(s, e, detDetId) {
-        key = DetId.GetValue();
-        @*var popup = ASPxClientPopupControl.Cast("popupBatch");
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
 
-        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + key + '&DetId=' + detId;
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "ProductionTaskActivity")'
+            + '?Id=' + Id.GetValue() + '&DetId=' + DetId.GetValue() + '&DetDetId=' + detDetId;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
             loadingPanel.Show();
-        }*@
+        }
     }
 
 </script>
 
 @Html.Partial("Partial/Finish/Finish_Partial")
+
+@*
+    -----------------------------------------------------------------------------
+    popup batch (netto per batch untuk item Direction = 'Out')
+
+    popupBatch sengaja dideklarasikan di root view, bukan di dalam Finish_Form_Partial,
+    supaya tidak ikut hancur saat popupFinish melakukan callback.
+    -----------------------------------------------------------------------------
+*@
+<script type="text/javascript">
+    var isUpdateBatch = false;
+
+    function popupBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(430, 130);
+        }
+    }
+
+    function ViewBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
+
+    function gvContentBatchListOnBeginCallback(s, e, Id, DetId, DetDetId) {
+        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW") {
+            isUpdateBatch = true;
+        }
+    }
+
+    function gvContentBatchListOnEndCallback(s, e, Id, DetId, DetDetId) {
+        if (isUpdateBatch) {
+
+            isUpdateBatch = false;
+
+            // Netto item = jumlah Netto seluruh batch -> segarkan grid item.
+            var gvItem = ASPxClientGridView.Cast('gvContentItemList');
+            if (gvItem != null) {
+                gvItem.PerformCallback();
+            }
+        }
+    }
+
+</script>
+
+@Html.Partial("Partial/Batch/Batch_Partial")
 
 
 @*
