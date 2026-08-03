@@ -28,19 +28,19 @@ namespace Models.Production
         public long? DetId { get; set; }
 
         public string TransNo { get; set; }
-        
+
         public string ItemCode { get; set; }
-        
+
         public string ItemName { get; set; }
-        
+
         public string DocNum { get; set; }
-        
+
         public string RoutingName { get; set; }
-        
+
         public decimal? QuantityPlanned { get; set; }
-        
+
         public decimal? QuantityActual { get; set; }
-        
+
         public decimal? QuantityRemain { get; set; }
 
         public long? EstimatedHours { get; set; }
@@ -58,10 +58,10 @@ namespace Models.Production
         public long? Id { get; set; }
 
         public long? DetId { get; set; }
-        
+
         [Required(ErrorMessage = "required")]
         public string PauseReason { get; set; }
-        
+
         public string PauseComments { get; set; }
     }
 
@@ -72,7 +72,7 @@ namespace Models.Production
         public long? DetId { get; set; }
 
         public string FinishTransNo { get; set; }
-    
+
         public string FinishDocNum { get; set; }
 
         public string FinsihItemCode { get; set; }
@@ -117,7 +117,15 @@ namespace Models.Production
         public Decimal? QuantityPlanned { get; set; }
         public Decimal? QuantityActual { get; set; }
         public string Comments { get; set; }
-    
+
+    }
+
+    // Hasil insert baris WOR1: LineNum dari SAP untuk ditulis balik ke Tx_ProductionTask_Activity_Item.
+    public class ProductionTaskActivity_Wor1Line
+    {
+        public long DetDetId { get; set; }
+
+        public int LineNum { get; set; }
     }
 
     public class ProductionTaskActivityBatchView___
@@ -291,7 +299,7 @@ namespace Models.Production
             }
         }
 
-        public ProductionActivityFinishModel GetFinishModel(long id = 0 , long detId = 0)
+        public ProductionActivityFinishModel GetFinishModel(long id = 0, long detId = 0)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -345,25 +353,35 @@ namespace Models.Production
                 DetId = detId
             };
 
-            return model; 
+            return model;
         }
         public void FinishActivity(int userId, ProductionActivityFinishModel model)
         {
             if (model != null)
             {
+                SAPbobsCOM.Company oCompany = null;
+
                 using (var CONTEXT = new HANA_APP())
                 {
                     using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
                     {
                         try
                         {
-                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "finish", "Id", model.DetId.ToString() );
+                            oCompany = SAPCachedCompany.GetCompany();
+                            oCompany.StartTransaction();
+
+                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "finish", "Id", model.DetId.ToString());
 
                             DateTime dtModified = DateTime.Now;
                             Tx_ProductionTask_Activity tx_ProductionTask_Activity = CONTEXT.Tx_ProductionTask_Activity.FirstOrDefault(x => x.DetId == model.DetId);
                             if (tx_ProductionTask_Activity != null)
                             {
                                 tx_ProductionTask_Activity.Status = "Finished";
+
+                                tx_ProductionTask_Activity.Quantity = model.Quantity;
+                                tx_ProductionTask_Activity.Batch = model.FinishBatch;
+                                tx_ProductionTask_Activity.Comments = model.Comments;
+
                                 tx_ProductionTask_Activity.Quantity = model.Quantity;
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
@@ -382,7 +400,7 @@ namespace Models.Production
                                 Tx_ProductionTask_Activity_Log tx_ProductionTask_Activity_log = new Tx_ProductionTask_Activity_Log
                                 {
                                     Id = model.Id,
-                                    DetId = model.DetId,  
+                                    DetId = model.DetId,
                                     DetailType = "Finish",
                                     Comments = model.Comments,
                                     StartTime = dtModified,
@@ -392,21 +410,227 @@ namespace Models.Production
                                     ModifiedUser = userId
                                 };
                                 CONTEXT.Tx_ProductionTask_Activity_Log.Add(tx_ProductionTask_Activity_log);
-                            
+
                             }
 
+                            UpdateItemBatchOut(CONTEXT, userId, model.DetId??0 );
                             CONTEXT.SaveChanges();
+
+                            // Validasi bisnis (SpProductionTaskActivity__TransNotif) dijalankan lebih dulu,
+                            // supaya SAP tidak disentuh kalau datanya belum valid.
                             SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "finish", "Id", model.DetId.ToString());
+
+                            // Sinkronkan komponen activity ke baris WOR1 Production Order di SAP,
+                            // lalu tulis balik LineNum hasil insert nya.
+                            var wor1Lines = SyncProductionOrderLines(CONTEXT, oCompany, model);
+                            UpdateActivityItemLineNum(CONTEXT, userId, wor1Lines);
+
+                            // QuantityActual Tx_ProductionTask + IsRunningTask = 'N' diurus di SP ini.
                             CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateTask\"(:p0,:p1)", userId, model.DetId);
+
+                            if (oCompany.InTransaction)
+                            {
+                                oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                            }
+
                             CONTEXT_TRANS.Commit();
                         }
                         catch
                         {
+                            if ((oCompany != null) && (oCompany.InTransaction))
+                            {
+                                oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                            }
+
                             CONTEXT_TRANS.Rollback();
                             throw;
                         }
+                        finally
+                        {
+                            // Wajib: GetCompany() menahan TransactionLock, Release() yang melepasnya.
+                            if (oCompany != null)
+                            {
+                                SAPCachedCompany.Release(oCompany);
+                            }
+                        }
                     }
                 }
+            }
+        }
+
+        //----------------------------------------------------------------------
+        // Sinkronisasi komponen activity -> baris WOR1 Production Order SAP
+        //----------------------------------------------------------------------
+
+        // Menyamakan Tx_ProductionTask_Activity_Item dengan baris WOR1 milik Production Order
+        // (OWOR) yang DocEntry nya tersimpan di header Tx_ProductionTask.
+        //   LineNum = -1        -> insert baris baru di WOR1
+        //   LineNum != -1       -> hanya ItemCode yang disamakan kalau berbeda
+        //   Direction = 'In'    -> PlannedQuantity dibalik jadi negatif
+        //   Direction = 'Out'   -> PlannedQuantity normal
+        // Mengembalikan pasangan DetDetId -> LineNum untuk baris yang baru di-insert.
+        private List<ProductionTaskActivity_Wor1Line> SyncProductionOrderLines(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, ProductionActivityFinishModel model)
+        {
+            var ret = new List<ProductionTaskActivity_Wor1Line>();
+
+            // DocEntry Production Order diambil dari header (Tx_ProductionTask), bukan dari activity.
+            int docEntry = CONTEXT.Database.SqlQuery<int?>(
+                @"SELECT TOP 1 T0.""DocEntry""
+                  FROM ""Tx_ProductionTask"" T0
+                  INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                  WHERE T1.""DetId"" = :p0", model.DetId).FirstOrDefault() ?? 0;
+
+            if (docEntry == 0)
+            {
+                throw new Exception("[VALIDATION] - Production Order belum punya DocEntry di SAP");
+            }
+
+            var items = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(
+                @"SELECT
+                      T0.""Id"", T0.""DetId"", T0.""DetDetId"", T0.""LineNum"",
+                      T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"", T0.""Direction"",
+                      T0.""QuantityActual""
+                  FROM ""Tx_ProductionTask_Activity_Item"" T0
+                  WHERE T0.""DetId"" = :p0
+                  ORDER BY T0.""DetDetId""", model.DetId).ToList();
+
+            if (items.Count == 0)
+            {
+                return ret;
+            }
+
+            SAPbobsCOM.ProductionOrders oPO = (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oProductionOrders);
+
+            try
+            {
+                if (!oPO.GetByKey(docEntry))
+                {
+                    throw new Exception(string.Format("[VALIDATION] - Production Order DocEntry [{0}] tidak ditemukan di SAP (OWOR)", docEntry));
+                }
+
+                // Posisi baris baru dicatat, LineNum nya baru bisa dibaca sesudah Update().
+                var newLinePos = new List<KeyValuePair<long, int>>();
+
+                int initialCount = oPO.Lines.Count;
+                bool firstNewLine = true;
+
+                foreach (var item in items)
+                {
+                    double plannedQuantity = (double)(item.QuantityActual ?? 0);
+
+                    // Direction 'In' -> komponen masuk, kuantitas dibalik negatif.
+                    if (string.Equals(item.Direction, "In", StringComparison.OrdinalIgnoreCase))
+                    {
+                        plannedQuantity = plannedQuantity * -1;
+                    }
+
+                    if ((item.LineNum ?? -1) == -1)
+                    {
+                        // Dokumen hasil GetByKey sudah punya baris, jadi baris baru selalu lewat Add().
+                        // Kalau kebetulan belum ada baris sama sekali, baris kosong bawaan dipakai.
+                        if (!(firstNewLine && initialCount == 0))
+                        {
+                            oPO.Lines.Add();
+                        }
+                        firstNewLine = false;
+
+                        oPO.Lines.ItemNo = item.ItemCode;
+                        oPO.Lines.PlannedQuantity = plannedQuantity;
+                        oPO.Lines.ProductionOrderIssueType = SAPbobsCOM.BoIssueMethod.im_Manual;
+
+                        newLinePos.Add(new KeyValuePair<long, int>(item.DetDetId ?? 0, oPO.Lines.Count - 1));
+                    }
+                    else
+                    {
+                        if (!SetCurrentLineByLineNumber(oPO, item.LineNum.Value))
+                        {
+                            throw new Exception(string.Format("[VALIDATION] - Baris WOR1 LineNum [{0}] tidak ditemukan pada Production Order DocEntry [{1}]", item.LineNum.Value, docEntry));
+                        }
+
+                        // Baris lama: hanya ItemCode yang disamakan.
+                        if (oPO.Lines.ItemNo != item.ItemCode)
+                        {
+                            oPO.Lines.ItemNo = item.ItemCode;
+                        }
+                    }
+                }
+
+                int updateResult = oPO.Update();
+                if (updateResult != 0)
+                {
+                    int nErr = oCompany.GetLastErrorCode();
+                    string errMsg = oCompany.GetLastErrorDescription();
+
+                    throw new Exception(string.Format("[VALIDATION] - Update Production Order DocEntry [{0}] : {1}|{2}", docEntry, nErr, errMsg));
+                }
+
+                // Baca balik LineNum baris yang baru di-insert.
+                if (newLinePos.Count > 0)
+                {
+                    SAPbobsCOM.ProductionOrders oPORead = (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oProductionOrders);
+
+                    try
+                    {
+                        if (!oPORead.GetByKey(docEntry))
+                        {
+                            throw new Exception(string.Format("[VALIDATION] - Production Order DocEntry [{0}] tidak bisa dibaca ulang sesudah update", docEntry));
+                        }
+
+                        foreach (var pos in newLinePos)
+                        {
+                            oPORead.Lines.SetCurrentLine(pos.Value);
+
+                            ret.Add(new ProductionTaskActivity_Wor1Line
+                            {
+                                DetDetId = pos.Key,
+                                LineNum = oPORead.Lines.LineNumber
+                            });
+                        }
+                    }
+                    finally
+                    {
+                        SapCompany.CleanUp(oPORead);
+                    }
+                }
+            }
+            finally
+            {
+                SapCompany.CleanUp(oPO);
+            }
+
+            return ret;
+        }
+
+        // WOR1 LineNum tidak selalu sama dengan posisi baris, jadi dicari satu per satu.
+        private bool SetCurrentLineByLineNumber(SAPbobsCOM.ProductionOrders oPO, int lineNum)
+        {
+            for (int i = 0; i < oPO.Lines.Count; i++)
+            {
+                oPO.Lines.SetCurrentLine(i);
+                if (oPO.Lines.LineNumber == lineNum)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void UpdateActivityItemLineNum(HANA_APP CONTEXT, int userId, List<ProductionTaskActivity_Wor1Line> lines)
+        {
+            if ((lines == null) || (lines.Count == 0))
+            {
+                return;
+            }
+
+            foreach (var line in lines)
+            {
+                CONTEXT.Database.ExecuteSqlCommand(
+                    @"UPDATE ""Tx_ProductionTask_Activity_Item""
+                      SET ""LineNum"" = :p0,
+                          ""ModifiedDate"" = CURRENT_TIMESTAMP,
+                          ""ModifiedUser"" = :p1
+                      WHERE ""DetDetId"" = :p2", line.LineNum, userId, line.DetDetId);
             }
         }
 
@@ -422,7 +646,7 @@ namespace Models.Production
                     AND  ""OperatorId"" = :p0 
                 ";
                 currentTaskId = CONTEXT.Database.SqlQuery<long>(ssql, userId).FirstOrDefault();
-                
+
             }
 
             ProductionTaskActivityModel model = new ProductionTaskActivityModel();
@@ -546,7 +770,7 @@ namespace Models.Production
             }
         }
 
-        public void ProductionTaskActivity_DeleteItem(int _userId, long Id, long DetId, long DetDetId) 
+        public void ProductionTaskActivity_DeleteItem(int _userId, long Id, long DetId, long DetDetId)
         {
             using (var CONTEXT = new HANA_APP())
             {
@@ -642,6 +866,22 @@ namespace Models.Production
             {
                 return CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(SqlSelectItemBatch, detDetId).ToList();
             }
+        }
+
+        public void UpdateItemBatchOut(HANA_APP CONTEXT, int userId, long detId) {
+            string sql = @"
+                UPDATE T1 SET
+                    T1.""Batch"" = T0.""Batch"",
+                    T1.""ModifiedDate"" = CURRENT_TIMESTAMP,
+                    T1.""ModifiedUser"" = :p1
+                FROM ""Tx_ProductionTask_Activity"" T0
+                INNER JOIN ""Tx_ProductionTask_Activity_Item"" T1 ON T0.""Id"" = T1.""Id"" AND T0.""DetId"" = T1.""DetId""
+                WHERE T1.""DetId"" = :p0
+                AND T1.""Direction"" = 'In'
+ 
+            ";
+
+            CONTEXT.Database.ExecuteSqlCommand(sql, detId, userId);
         }
 
         // Netto item induk = jumlah Netto seluruh batch nya.

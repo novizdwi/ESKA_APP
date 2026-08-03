@@ -554,6 +554,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity_Item" (
 
     "LineNum" INT,
     "Direction" NVARCHAR(100),
+	
+	"Batch" NVARCHAR(50),
 	"UomEntry" INT,
     "Uom" NVARCHAR(100), 
     "IsLocked" CHAR(1),

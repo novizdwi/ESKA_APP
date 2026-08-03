@@ -631,9 +631,17 @@ new
     function btnUpdateFinishOnClick(s, e) {
         var data = GetFormFinishData();
 
+        // Batch wajib (dicek juga di SpProductionTaskActivity__TransNotif)
+        if (data.FinishBatch == null || data.FinishBatch === "") {
+            var eBatch = ASPxClientTextBox.Cast("Batch");
+            if (eBatch != null) { eBatch.Focus(); }
+            return;
+        }
+
         // Quantity wajib
         if (data.Quantity == null || data.Quantity === "") {
-            Quantity.Focus();
+            var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
+            if (eQuantity != null) { eQuantity.Focus(); }
             return;
         }
         $.ajax({
@@ -661,11 +669,23 @@ new
     }
 
     function GetFormFinishData() {
+        // Editor diambil lewat Cast(), bukan variabel global, supaya tetap menunjuk objek
+        // yang benar sesudah popupFinish melakukan callback (LoadContentViaCallback).
+        var eId = ASPxClientTextBox.Cast("Id");
+        var eDetId = ASPxClientTextBox.Cast("DetId");
+        var eBatch = ASPxClientTextBox.Cast("Batch");
+        var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
+        var eComments = ASPxClientMemo.Cast("Comments");
+
         return {
-            Id: Id.GetValue(),
-            DetId: DetId.GetValue(),
-            Quantity: Quantity.GetValue(),
-            Comments: Comments.GetValue()
+            Id: eId != null ? eId.GetValue() : null,
+            DetId: eDetId != null ? eDetId.GetValue() : null,
+
+            // Editor bernama "Batch", tapi properti model nya "FinishBatch".
+            FinishBatch: eBatch != null ? eBatch.GetValue() : null,
+
+            Quantity: eQuantity != null ? eQuantity.GetValue() : null,
+            Comments: eComments != null ? eComments.GetValue() : null
         };
     }
 
