@@ -51,6 +51,22 @@
 
     settings.Columns.Add(column =>
     {
+        column.FieldName = "RowNo";
+        column.Name = "RowNo";
+        column.Caption = "No.";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 45;
+        column.ReadOnly = true;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Settings.AllowAutoFilter = DefaultBoolean.False;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
         column.FieldName = "ItemCode";
         column.Name = "ItemCode";
         column.Caption = "Item Code";
@@ -192,6 +208,14 @@
         });
     });
 
+    settings.TotalSummary.Add(new ASPxSummaryItem()
+    {
+        FieldName = "Netto",
+        SummaryType = DevExpress.Data.SummaryItemType.Sum,
+        DisplayFormat = "Netto : {0:N0}",
+        ShowInColumn = "Netto"
+    });
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "MsnPrd";
@@ -238,14 +262,12 @@
         column.Name = "Cost";
         column.Caption = "Cost";
 
+        // Cost diisi otomatis dari SAP (OINM) saat Post → read-only.
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 120;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = !isDraft;
-        if (!isDraft)
-        {
-            column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        }
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;

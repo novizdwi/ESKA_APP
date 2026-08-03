@@ -96,7 +96,9 @@ namespace Models.Transaction
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public decimal? Quantity { get; set; }
+        public int? QuantityCreated { get; set; }   // Total Created = SUM(Quantity batch) per item
         public decimal? Netto { get; set; }
+        public decimal? Value { get; set; }          // Receipt: total Netto per line = SUM(Netto batch)
         public string Uom { get; set; }
         public string WhsCode { get; set; }
         public string MsnPrd { get; set; }
@@ -218,6 +220,10 @@ namespace Models.Transaction
 
         public int? Quantity { get; set; }
 
+        public int? TotalNeeded { get; set; }
+
+        public int? TotalCreated { get; set; }
+
         public List<ReProcessBatchReceiptModel> ReProcessBatchReceiptModel___ { get; set; }
     }
 
@@ -269,6 +275,10 @@ namespace Models.Transaction
 
         public int? Quantity { get; set; }
 
+        public int? TotalNeeded { get; set; }
+
+        public int? TotalCreated { get; set; }
+
         public List<ReProcessBatchIssueModel> ReProcessBatchIssueModel___ { get; set; }
     }
 
@@ -305,6 +315,23 @@ namespace Models.Transaction
     }
 
 
+
+    // Baris hasil query cost SAP (OINM) per baris Goods Issue.
+    public class ReProcess_IssueCostRow
+    {
+        public int? LineNum { get; set; }
+        public string ItemCode { get; set; }
+        public decimal? IssueCost { get; set; }
+    }
+
+    // Baris ringkas item (Issue/Receipt) untuk perhitungan costing.
+    public class ReProcess_CostItemRow
+    {
+        public long DetId { get; set; }
+        public string ItemCode { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? Netto { get; set; }
+    }
 
     #endregion
 
@@ -483,7 +510,7 @@ namespace Models.Transaction
 
         public List<IssueReceipt_IssueItemModel> ReProcess_IssueItemDetails(HANA_APP CONTEXT, long id = 0)
         {
-            string ssql = @"SELECT T0.*
+            string ssql = @"SELECT ROW_NUMBER() OVER (ORDER BY T0.""DetId"" ASC) AS ""RowNo"", T0.*
                 FROM ""Tx_IssueAndReceipt_Issue_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
@@ -535,7 +562,7 @@ namespace Models.Transaction
 
         public List<IssueReceipt_ReceiptItemModel> ReProcess_ReceiptItemDetails(HANA_APP CONTEXT, long id = 0)
         {
-            string ssql = @"SELECT T0.*
+            string ssql = @"SELECT ROW_NUMBER() OVER (ORDER BY T0.""DetId"" ASC) AS ""RowNo"", T0.*
                 FROM ""Tx_IssueAndReceipt_Receipt_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
@@ -682,7 +709,9 @@ namespace Models.Transaction
                                 T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""WhsCode"",
-                                T1.""Quantity""
+                                T1.""Quantity"",
+                                T1.""Quantity"" AS ""TotalNeeded"",
+                                T1.""QuantityCreated"" AS ""TotalCreated""
                                 FROM ""Tx_IssueAndReceipt"" T0
                                 LEFT JOIN ""Tx_IssueAndReceipt_Receipt_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
@@ -713,7 +742,9 @@ namespace Models.Transaction
                                 T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""WhsCode"",
-                                T1.""Quantity""
+                                T1.""Quantity"",
+                                T1.""Quantity"" AS ""TotalNeeded"",
+                                T1.""QuantityCreated"" AS ""TotalCreated""
                                 FROM ""Tx_IssueAndReceipt"" T0
                                 LEFT JOIN ""Tx_IssueAndReceipt_Issue_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 ";
@@ -789,6 +820,8 @@ namespace Models.Transaction
                         keyValue = tx_IssueAndReceipt_Receipt_Item_Batch.DetId.ToString();
 
                         CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'Tx_IssueAndReceipt_Issue_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                        // Netto/Value/QuantityCreated item RECEIPT dihitung ulang dari batch-nya.
+                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0), 0), \"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p1), 0) WHERE \"DetId\"=:p2", model.DetId, model.DetId, model.DetId);
                        // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
@@ -846,7 +879,7 @@ namespace Models.Transaction
                         // Hitung ulang Netto item ISSUE dari batch-nya.
                         // (SP SpIssueAndReceipt_UpdateReceiptItemQuantity hanya melayani sisi Receipt --
                         //  bila dipakai utk Issue, ia malah menimpa Netto item Receipt ber-DetId sama.)
-                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", model.DetId, model.DetId);
+                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0), \"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p1), 0) WHERE \"DetId\"=:p2", model.DetId, model.DetId, model.DetId);
                         // SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
@@ -902,6 +935,8 @@ namespace Models.Transaction
 
                             CONTEXT.SaveChanges();
                             CONTEXT.Database.ExecuteSqlCommand("CALL \"SpIssueAndReceipt_UpdateReceiptItemQuantity\"(:p0, 'tx_IssueAndReceipt_Receipt_Item_Batch',:p1, :p2)", model._UserId, model.DetId, 0);
+                            // Netto/Value/QuantityCreated item RECEIPT dihitung ulang dari batch-nya.
+                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0), 0), \"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p1), 0) WHERE \"DetId\"=:p2", model.DetId, model.DetId, model.DetId);
 
                             //SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
 
@@ -958,7 +993,7 @@ namespace Models.Transaction
                             // Hitung ulang Netto item ISSUE dari batch-nya.
                         // (SP SpIssueAndReceipt_UpdateReceiptItemQuantity hanya melayani sisi Receipt --
                         //  bila dipakai utk Issue, ia malah menimpa Netto item Receipt ber-DetId sama.)
-                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", model.DetId, model.DetId);
+                        CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0), \"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p1), 0) WHERE \"DetId\"=:p2", model.DetId, model.DetId, model.DetId);
 
                             //SpNotif.SpSysControllerTransNotif(model._UserId, "IssueAndReceipt", CONTEXT, "after", "IssueAndReceipt", "updateItemBatch", "Id", keyValue);
 
@@ -1006,7 +1041,7 @@ namespace Models.Transaction
 
                             // Hitung ulang Netto item RECEIPT dari batch tersisa.
                             // (Sebelumnya memanggil SP dgn nama tabel yang tidak ada: 'Tx_IssueAndReceipt_Item_Batch'.)
-                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", DetId, DetId);
+                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p0), 0), \"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\"=:p1), 0) WHERE \"DetId\"=:p2", DetId, DetId, DetId);
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)
@@ -1050,7 +1085,7 @@ namespace Models.Transaction
                             // Hitung ulang Netto item ISSUE dari batch tersisa.
                             // (SP "SpIssueAndReceipt_UpdateIssueItemQuantity" TIDAK ADA di database --
                             //  inilah penyebab error saat delete. SP yang ada hanya versi Receipt.)
-                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0) WHERE \"DetId\"=:p1", DetId, DetId);
+                            CONTEXT.Database.ExecuteSqlCommand("UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p0), 0), \"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\"=:p1), 0) WHERE \"DetId\"=:p2", DetId, DetId, DetId);
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)
@@ -1329,6 +1364,37 @@ namespace Models.Transaction
                         throw new Exception("[VALIDATION] - Whse belum dipilih:\n" + string.Join("\n", whsErrors));
                     }
 
+                    // Validasi Total Created (QuantityCreated) harus SAMA dengan Total Needed (Quantity) tiap item.
+                    var qtyErrors = new List<string>();
+                    if (sync.ListIssueItem_ != null)
+                    {
+                        foreach (var it in sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0))
+                        {
+                            int needed = (int)(it.Quantity ?? 0);
+                            int created = it.QuantityCreated ?? 0;
+                            if (created < needed)
+                                qtyErrors.Add(string.Format("Issue {0}: Total Created {1} < Total Needed {2} (kurang {3})", it.ItemCode, created, needed, needed - created));
+                            else if (created > needed)
+                                qtyErrors.Add(string.Format("Issue {0}: Total Created {1} > Total Needed {2} (lebih {3})", it.ItemCode, created, needed, created - needed));
+                        }
+                    }
+                    if (sync.ListReceiptItem_ != null)
+                    {
+                        foreach (var it in sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0))
+                        {
+                            int needed = (int)(it.Quantity ?? 0);
+                            int created = it.QuantityCreated ?? 0;
+                            if (created < needed)
+                                qtyErrors.Add(string.Format("Receipt {0}: Total Created {1} < Total Needed {2} (kurang {3})", it.ItemCode, created, needed, needed - created));
+                            else if (created > needed)
+                                qtyErrors.Add(string.Format("Receipt {0}: Total Created {1} > Total Needed {2} (lebih {3})", it.ItemCode, created, needed, created - needed));
+                        }
+                    }
+                    if (qtyErrors.Any())
+                    {
+                        throw new Exception("[VALIDATION] - Total Created harus sama dengan Total Needed:\n" + string.Join("\n", qtyErrors));
+                    }
+
                     // Validasi kelengkapan batch: untuk item yang dikelola batch (OITM.ManBtchNum='Y'),
                     // SAP menuntut total qty batch per baris = qty baris (error -4014 bila tidak).
                     // Divalidasi di sini agar pesannya menunjuk item & angkanya, bukan -4014 mentah.
@@ -1430,6 +1496,17 @@ namespace Models.Transaction
                     }
 
                     CONTEXT_TRANS.Commit();
+
+                    // Best-effort: costing setelah post (Issue Cost dari OINM + Receipt Value/Price).
+                    // Post sudah commit; kegagalan di sini tidak membatalkan post (bisa di-backfill).
+                    try
+                    {
+                        if (issRes != null && issRes.DocEntry.HasValue)
+                        {
+                            FillCostingAfterPost(id, (int)issRes.DocEntry.Value);
+                        }
+                    }
+                    catch { }
                 }
                 catch (Exception ex)
                 {
@@ -1444,6 +1521,67 @@ namespace Models.Transaction
                 finally
                 {
                     SAPCachedCompany.Release(oCompany);
+                }
+            }
+        }
+
+        // Costing setelah post (best-effort): isi Cost item Issue dari OINM (Goods Issue, TransType 60),
+        // lalu hitung Value & Price item Receipt sebagai alokasi biaya issue per proporsi Netto.
+        //   Value  = (Netto / TotalNettoReceipt) * TotalCostIssue
+        //   Price  = Value / Quantity
+        // Dijalankan setelah dokumen commit (OINM sudah bisa dibaca). Kegagalan tak membatalkan post.
+        private void FillCostingAfterPost(long id, int issueDocEntry)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                string dbSap = DbProvider.dbSap_Name;
+
+                // a) Issue Cost per baris dari OINM (query user), urut LineNum.
+                string sqlCost =
+                    "SELECT T1.\"LineNum\" AS \"LineNum\", T1.\"ItemCode\" AS \"ItemCode\", " +
+                    "(SELECT DISTINCT ABS(TT0.\"TransValue\") FROM \"" + dbSap + "\".\"OINM\" TT0 " +
+                    " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
+                    "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueCost\" " +
+                    "FROM \"" + dbSap + "\".\"OIGE\" T0 " +
+                    "JOIN \"" + dbSap + "\".\"IGE1\" T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" " +
+                    "WHERE T0.\"DocEntry\" = :p0 ORDER BY T1.\"LineNum\" ";
+                var costRows = CONTEXT.Database.SqlQuery<ReProcess_IssueCostRow>(sqlCost, issueDocEntry).ToList();
+
+                // Item Issue kita (urut DetId; yang dikirim ke SAP hanya qty>0 -> LineNum 0-based).
+                var issueItems = CONTEXT.Database.SqlQuery<ReProcess_CostItemRow>(
+                    "SELECT \"DetId\", \"ItemCode\", \"Quantity\", \"Netto\" FROM \"Tx_IssueAndReceipt_Issue_Item\" WHERE \"Id\" = :p0 ORDER BY \"DetId\" ASC", id).ToList();
+
+                decimal totalCostIssue = 0m;
+                int lineIdx = 0;
+                foreach (var it in issueItems)
+                {
+                    if ((it.Quantity ?? 0) <= 0) continue;
+                    var row = costRows.FirstOrDefault(r => r.LineNum == lineIdx && r.ItemCode == it.ItemCode)
+                              ?? costRows.FirstOrDefault(r => r.LineNum == lineIdx);
+                    if (row != null && row.IssueCost.HasValue)
+                    {
+                        totalCostIssue += row.IssueCost.Value;
+                        CONTEXT.Database.ExecuteSqlCommand(
+                            "UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Cost\" = :p0 WHERE \"DetId\" = :p1",
+                            row.IssueCost.Value.ToString(System.Globalization.CultureInfo.InvariantCulture), it.DetId);
+                    }
+                    lineIdx++;
+                }
+
+                // b) Receipt Value & Price = alokasi biaya issue per proporsi Netto.
+                var receiptItems = CONTEXT.Database.SqlQuery<ReProcess_CostItemRow>(
+                    "SELECT \"DetId\", \"ItemCode\", \"Quantity\", \"Netto\" FROM \"Tx_IssueAndReceipt_Receipt_Item\" WHERE \"Id\" = :p0 ORDER BY \"DetId\" ASC", id).ToList();
+
+                decimal totalNettoReceipt = receiptItems.Sum(r => r.Netto ?? 0m);
+                foreach (var it in receiptItems)
+                {
+                    decimal netto = it.Netto ?? 0m;
+                    decimal value = totalNettoReceipt > 0 ? (netto / totalNettoReceipt) * totalCostIssue : 0m;
+                    decimal qty = it.Quantity ?? 0m;
+                    decimal price = qty > 0 ? value / qty : 0m;
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        "UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Value\" = :p0, \"Price\" = :p1 WHERE \"DetId\" = :p2",
+                        Math.Round(value, 2), Math.Round(price, 2), it.DetId);
                 }
             }
         }

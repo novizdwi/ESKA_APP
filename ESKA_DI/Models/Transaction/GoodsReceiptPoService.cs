@@ -399,7 +399,7 @@ namespace Models.Transaction
 
         public List<GoodsReceiptPoItem> GoodsReceiptPo_Details(HANA_APP CONTEXT, long id = 0)
         {
-            string ssql = @"SELECT T0.*
+            string ssql = @"SELECT ROW_NUMBER() OVER (ORDER BY T0.""DetId"" ASC) AS ""RowNo"", T0.*
                 FROM ""Tx_GoodsReceiptPO_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
