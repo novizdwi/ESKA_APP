@@ -1,0 +1,137 @@
+﻿@using Models.Production;
+@using System.Web.Script.Serialization;
+
+@{
+    ViewBag.UserId = Model.UserId;
+
+}
+</br>
+</br>
+@model Models.Production.ProductionTaskModel
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "ProductionTaskForm";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        }
+
+).Bind(Model.Id).GetHtml()
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = false;
+
+    var groupItem = settings.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.Caption = "Task List";
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+        itemSettings.ColCount = 2;
+
+        itemSettings.GroupBoxStyle.Caption.Paddings.Padding = 5;
+        itemSettings.GroupBoxStyle.Caption.Font.Size = 14;
+
+    });
+
+    var groupItem_2 = groupItem.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 2;
+    });
+
+    var groupItem_Col1 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 2;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ButtonEdit;
+        itemSettings.Caption = "Running Task No";
+        itemSettings.Name = "RunningTaskNo";
+        itemSettings.FieldName = "RunningTaskNo";
+        itemSettings.CaptionStyle.Font.Bold = true;
+
+        var txt = (ButtonEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "RunningTaskNo";
+        txt.Width = 300;
+        txt.Text = Model.RunningTaskNo;
+        txt.ReadOnly = true;
+
+        txt.Properties.Buttons.Add("View");   
+        bool hasRunningTask = Model.CurrentTaskId.HasValue && Model.CurrentTaskId.Value != 0;
+        txt.Properties.Buttons[0].Enabled = hasRunningTask;
+
+        if (hasRunningTask)
+        {
+            txt.Properties.ClientSideEvents.ButtonClick = "function(s,e){ ViewRunningTask(s, e, " + Model.CurrentTaskId + "); }";
+        }
+
+});
+
+groupItem_Col1.Items.Add(itemSettings =>
+{
+  itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Label;
+  itemSettings.Caption = "";
+  itemSettings.Name = "Clock";
+
+  var lbl = (LabelSettings)itemSettings.NestedExtensionSettings;
+  lbl.Name = "rtClock";
+  lbl.Text = "--:--:--";
+  lbl.ControlStyle.Font.Size = 13;
+  lbl.ControlStyle.Font.Bold = true;
+  lbl.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+  lbl.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+});
+groupItem_Col1.Items.AddTabbedGroupItem(tabGroup =>
+{
+  tabGroup.Name = "TabDetail";
+  tabGroup.ColSpan = 2;
+  tabGroup.Width = Unit.Percentage(100);
+
+  tabGroup.Items.Add(tab =>
+  {
+      tab.Name = "TabReference";
+      tab.Caption = "Today Task";
+
+      tab.SetNestedContent(() =>
+      {
+          Html.RenderPartial(
+              "Partial/ProductionTask_Form_TabReference_List_Partial",
+              Model.ListReferences_);
+      });
+  });
+
+  tabGroup.Items.Add(tab =>
+  {
+      tab.Name = "TabOutstanding";
+      tab.Caption = "Oustanding Task";
+
+      tab.SetNestedContent(() =>
+      {
+          Html.RenderPartial(
+              "Partial/ProductionTask_Form_TabOutstanding_List_Partial",
+              Model.ListOutstanding_);
+      });
+  });
+});
+
+}).GetHtml()
+
+
+

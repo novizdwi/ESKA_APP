@@ -162,18 +162,17 @@
                 settings.Nodes.Add(node1 =>
                 {
                     node1.Text = "Production";
-                    AddNode(dataTable, node1, "Process Card Monitoring", "ProcessCardMonitoring");
+                    //AddNode(dataTable, node1, "Process Card Monitoring", "ProcessCardMonitoring");
                     AddNode(dataTable, node1, "Process Card", "ProcessCard");
                     AddNode(dataTable, node1, "Production Schedule", "ProductionSchedule");
-                    AddNode(dataTable, node1, "Task List", "TaskList");
-                    AddNode(dataTable, node1, "Activity", "Activity");
+                    AddNode(dataTable, node1, "Task List", "ProductionTask");
+                    AddNode(dataTable, node1, "Activity", "ProductionTaskActivity");
 
                 });
 
                 settings.Nodes.Add(node1 =>
                 {
                     node1.Text = "Transaction";
-                    AddNode(dataTable, node1, "Issue-Receipt", "IssueReceipt"); 
                     AddNode(dataTable, node1, "Inventory Transfer", "InventoryTransfer");
                     AddNode(dataTable, node1, "Stock Opname", "StockOpname");
                     AddNode(dataTable, node1, "Goods Receipt PO", "GoodsReceiptPO");

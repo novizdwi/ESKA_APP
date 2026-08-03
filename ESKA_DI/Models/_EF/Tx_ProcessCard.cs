@@ -37,7 +37,9 @@ namespace ESKA_DI.Models._EF
         public string ApprovalMessages { get; set; }
         public Nullable<int> VisOrder { get; set; }
         public string Status { get; set; }
+        public string ProductionStatus { get; set; }
         public string IsAfterPosted { get; set; }
+        public string IsCreatedActivity { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

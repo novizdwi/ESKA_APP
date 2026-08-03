@@ -228,18 +228,26 @@ namespace Models._Utils
             }
         }
 
-        public static DataTable GetAllOperators()
+        public static DataTable GetAllOperators(string routingCode)
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return GetAllOperators(CONTEXT);
+                return GetAllOperators(CONTEXT, routingCode);
             }
         }
 
-        public static DataTable GetAllOperators(HANA_APP CONTEXT)
+        public static DataTable GetAllOperators(HANA_APP CONTEXT, string routingCode)
         {
-            var ssql = @"SELECT T0.""Id"" ""Code"", T0.""FirstName"" AS ""Name"" 
-                         FROM ""Tm_User"" T0   ";
+            var ssql = @"
+            SELECT DISTINCT T0.""Id"" ""Code"", T0.""FirstName"" AS ""Name"" 
+                FROM ""Tm_User"" T0
+                INNER JOIN ""Tm_User_Routing"" T1 ON T0.""Id"" = T1.""Id""
+                WHERE T1.""IsTick"" = 'Y'
+            ";
+            if (!string.IsNullOrEmpty(routingCode))
+            {
+                ssql += @" AND T1.""RoutingCode"" = '"+ routingCode+ @"' ";
+            }
             return GetDataTable(CONTEXT, ssql);
 
         }

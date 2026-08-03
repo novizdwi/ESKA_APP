@@ -1,0 +1,140 @@
+﻿@using Models;
+
+@{ 
+    int userId = (int)Session["userId"];
+    var Id = Convert.ToInt64(Request["cbId"]);
+    bool canUpdate = true;
+
+    int? currentTaskId = Models._Ef.DbProvider.dbApp.Database.SqlQuery<int?>(@"
+    SELECT ""Id"" AS ""CurrentTaskId"" 
+                FROM ""Tx_ProductionTask"" 
+                WHERE ""Status"" = 'Open'
+                AND ""IsRunningTask"" = 'Y' 
+                AND  ""OperatorId"" = :p0
+        ", userId).FirstOrDefault();
+
+}
+
+@Html.DevExpress().CardView(settings =>
+{
+    settings.Name = "cvProductionTaskReferenceDetail";
+    settings.KeyFieldName = "Id";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;
+
+    settings.SettingsPager.Visible = false;          // sembunyikan pager
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+    settings.CallbackRouteValues = new { Controller = "ProductionTask", Action = "TabTransListPartial" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransNo";
+        column.Name = "TransNo";
+        column.Caption = "Task No";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var transNo = DataBinder.Eval(c.DataItem, "TransNo");
+            var routingName = DataBinder.Eval(c.DataItem, "RoutingName");
+
+            ViewContext.Writer.Write("<span style='font-size:125%;' > [ <b>" + transNo + "</b> ] </span>" + routingName);
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DocNum";
+        column.Name = "DocNum";
+        column.Caption = "Work Order No";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityPlanned";
+        column.Name = "QuantityPlanned";
+        column.Caption = "Target";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var qtyActual = DataBinder.Eval(c.DataItem, "QuantityActual_");
+            var qty = DataBinder.Eval(c.DataItem, "QuantityPlanned");
+            var uom = DataBinder.Eval(c.DataItem, "Uom");
+            ViewContext.Writer.Write(
+                string.Format("{0:N2} / {1:N2} {2}", qtyActual, qty, uom)
+            );
+        });
+    });
+
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = "Status";
+    //    column.Name = "Status";
+    //    column.Caption = "Status";
+
+    //});
+
+    settings.Columns.Add(column =>
+    {
+        column.Name = "ActionRow";
+        column.Caption = "";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var id = DataBinder.Eval(c.DataItem, "Id");
+            var status = DataBinder.Eval(c.DataItem, "Status");
+
+            ViewContext.Writer.Write(
+                "<div style='display:flex;justify-content:space-between;align-items:center;border-top:1px dashed #ccc;padding-top:6px;'>" +
+                "<span>" +
+                    "<a href=\"javascript:void(0);\" onclick=\"OnStartTask(this, event, " + id + ");\" style=\"color:#2196F3;text-decoration:underline;\">[ START ]</a>" +
+                "</span>" +
+                "<span style='font-weight:bold;'>" +
+                    "<a href=\"javascript:void(0);\" onclick=\"OnCloseTask(this, event, " + id + ");\" style=\"color:#F54927;text-decoration:underline;\">[ CLOSE ]</a>" +
+                "</span>" +
+                "</div>"
+            );
+        });
+    });
+
+    settings.SettingsPager.PageSizeItemSettings.Visible = false;
+    settings.ClientSideEvents.Init = "cvProductionTaskReferenceDetailInitCallback";
+    settings.ClientSideEvents.BeginCallback = "cvProductionTaskReferenceDetailBeginCallback";
+    settings.ClientSideEvents.EndCallback = "cvProductionTaskReferenceDetailEndCallback";
+
+    settings.HtmlCardPrepared = (sender, e) =>
+    {
+        var cardView = (MVCxCardView)sender;
+        var cardId = cardView.GetCardValues(e.VisibleIndex, "Id");
+
+        if (cardId != null && currentTaskId.HasValue && Convert.ToInt64(cardId) == currentTaskId.Value)
+        {
+            e.Card.BackColor = System.Drawing.ColorTranslator.FromHtml("#F5DAC2");
+        }
+    };
+}).Bind(Model).GetHtml()
+
+
+

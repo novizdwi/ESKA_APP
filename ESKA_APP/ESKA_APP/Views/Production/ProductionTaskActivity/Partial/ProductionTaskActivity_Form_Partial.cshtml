@@ -1,0 +1,239 @@
+﻿@using Models.Transaction;
+@using System.Web.Script.Serialization;
+@using System.Web.UI.WebControls;
+@using System.Drawing
+@using System.Drawing.Imaging
+@using System.IO
+
+@model Models.Production.ProductionTaskActivityModel
+
+@{
+
+    ViewBag.Id = Model.Id ?? 0;
+
+    // ---- WAKTU MULAI : ambil jam dari ActivityDate ----
+    string waktuMulai = Model.ActivityDate.HasValue
+        ? Model.ActivityDate.Value.ToString("HH:mm")
+        : "-";
+
+    // ---- DURASI : jam saat ini dikurang ActivityDate ----
+    string durasi = "-";
+    if (Model.ActivityDate.HasValue)
+    {
+        TimeSpan ts = DateTime.Now - Model.ActivityDate.Value;
+        if (ts.TotalSeconds < 0)
+        {
+            ts = TimeSpan.Zero;
+        }
+        durasi = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
+    }
+
+    // ---- Status: tentukan tombol Pause / Start ----
+    bool isPaused = string.Equals(Model.ActivityStatus, "Paused", StringComparison.OrdinalIgnoreCase);
+    string pauseText = isPaused ? "Start" : "Pause";
+    string pauseClientHandler = isPaused ? "OnClickBtnStart" : "OnClickBtnPause";
+    // Pause hanya enabled saat OnProgres; saat Paused tombolnya jadi Start (tetap enabled).
+}
+
+@* ======= PADDING via CSS (agar tidak mepet ke tepi, seperti Process Card) ======= *@
+<style>
+    #formLayout {
+        padding: 0 20px;
+    }
+</style>
+
+<br />
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Id";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).Bind(Model.Id).GetHtml()
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "DetId";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ShowModelErrors = true;
+            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            settings.ClientVisible = false;
+        }
+).Bind(Model.DetId).GetHtml()
+
+@Html.DevExpress().FormLayout(settings =>
+{
+    settings.Name = "formLayout";
+    settings.EncodeHtml = false;
+    settings.Width = Unit.Percentage(100);
+    settings.AlignItemCaptionsInAllGroups = true;
+    settings.ShowItemCaptionColon = true;
+    settings.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+    // ===================== HEADER : TASK NO =====================
+    var groupHeader = settings.Items.AddGroupItem(g =>
+    {
+        g.Caption = "";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.ShowCaption = DefaultBoolean.False;
+        g.ColCount = 1;
+        g.Width = Unit.Percentage(100);
+    });
+
+    groupHeader.Items.Add(x =>
+    {
+        x.ShowCaption = DefaultBoolean.False;
+        x.HorizontalAlign = FormLayoutHorizontalAlign.Left;
+    }).SetNestedContent(() =>
+    {
+        string pausedBadge = isPaused
+            ? " <span style='color:#E7180B;'>PAUSED</span>"
+            : "";
+
+        ViewContext.Writer.Write(
+            "<span style='margin:0; font-size:250%; font-weight:bolder;'>" +
+            "<b>TASK NO: [ " + Model.TransNo + " ]</b>" +
+            pausedBadge +
+            "</span>"
+        );
+    });
+
+    // spacer
+    groupHeader.Items.AddEmptyItem().Height = 12;
+
+    groupHeader.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>Work Order No</span>";
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.DocNum) + " - " + Html.Encode(Model.RoutingName) + "</div>"));
+    });
+
+    groupHeader.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>Item</span>";
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.ItemName) + "</div>"));
+    });
+
+    settings.Items.AddEmptyItem().Height = 12;
+
+    // ===================== ANGKA : TARGET / SELESAI / SISA =====================
+    var groupQty = settings.Items.AddGroupItem(g =>
+    {
+        g.Caption = "";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.ShowCaption = DefaultBoolean.False;
+        g.ColCount = 1;
+    });
+
+    groupQty.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>TARGET</span>";
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + (Model.QuantityPlanned.HasValue ? Model.QuantityPlanned.Value.ToString("0.####") : "0") + "</b> </div>"));
+    });
+
+    groupQty.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>FINISHED</span>";
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityActual.HasValue ? Model.QuantityActual.Value.ToString("0.####") : "0") + "</b></div>"));
+    });
+
+    groupQty.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>REMAINING</span>";
+    }).SetNestedContent(() =>
+    {
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityRemain.HasValue ? Model.QuantityRemain.Value.ToString("0.####") : "0") + "</b></div>"));
+    });
+
+    settings.Items.AddEmptyItem().Height = 12;
+
+    // ===================== WAKTU MULAI / DURASI =====================
+    var groupTime = settings.Items.AddGroupItem(g =>
+    {
+        g.Caption = "";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.ShowCaption = DefaultBoolean.False;
+        g.ColCount = 1;
+    });
+
+    groupTime.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>START TIME</span>";
+    }).SetNestedContent(() =>
+    {
+
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + waktuMulai + "</b> </div>"));
+    });
+
+    groupTime.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>DURATION</span>";
+    }).SetNestedContent(() =>
+    {
+        var activityIso = Model.ActivityDate.HasValue
+            ? Model.ActivityDate.Value.ToString("yyyy/MM/dd HH:mm:ss")
+            : "";
+
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + "<b id='lblDurasi' data-start='" + activityIso + "'>" + durasi + "</b>" + "</div>"));
+    });
+
+    settings.Items.AddEmptyItem().Height = 16;
+
+    // ===================== TOMBOL : PAUSE/START & FINISH =====================
+    var groupBtn = settings.Items.AddGroupItem(g =>
+    {
+        g.Caption = "";
+        g.GroupBoxDecoration = GroupBoxDecoration.None;
+        g.ShowCaption = DefaultBoolean.False;
+        g.ColCount = 2;
+    });
+
+    // Tombol Pause / Start (teks & handler berubah sesuai status)
+    groupBtn.Items.Add(item =>
+    {
+        item.ShowCaption = DefaultBoolean.False;
+        item.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+        item.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+
+        var btn = (ButtonSettings)item.NestedExtensionSettings;
+        btn.Name = "btnPause";
+        btn.Text = pauseText;
+        btn.ControlStyle.Font.Size = new FontUnit(18);
+        btn.Enabled = ViewBag.Id == 0 ? false : true;
+        btn.ClientSideEvents.Click = pauseClientHandler;
+        btn.Width = new Unit(28, UnitType.Em);
+        btn.Height = new Unit(3, UnitType.Em);
+        btn.ControlStyle.BackColor = isPaused == false ? System.Drawing.Color.IndianRed : System.Drawing.Color.FromName("#2D9966");
+    });
+
+    // Tombol Finish -> munculkan popup
+    groupBtn.Items.Add(item =>
+    {
+        item.ShowCaption = DefaultBoolean.False;
+        item.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+        item.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+
+        var btn = (ButtonSettings)item.NestedExtensionSettings;
+        btn.Name = "btnFinish";
+        btn.Text = "Finish";
+        btn.ControlStyle.Font.Size = new FontUnit(18);
+        btn.Enabled = ViewBag.Id == 0 ? false : true;
+        btn.ClientSideEvents.Click = "OnClickBtnFinish";
+        btn.Width = new Unit(28, UnitType.Em);
+        btn.Height = new Unit(3, UnitType.Em);
+    });
+
+}).GetHtml()

@@ -1,0 +1,244 @@
+﻿@using Models;
+
+@{ 
+    int userId = (int)Session["userId"];
+    var Id = Convert.ToInt64(Request["cbId"]);
+    bool canUpdate = true;
+
+    string strCanUpdate = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(@"
+        SELECT TOP 1 COALESCE(T1.""IsAccess"", 'N')
+        FROM ""Tm_User"" T0X
+        INNER JOIN ""Tm_Role"" T0 ON T0.""Id"" = T0X.""RoleId""
+        INNER JOIN ""Tm_Role_Auth"" T1 ON T1.""Id"" = T0.""Id""
+        WHERE T0X.""Id"" = 1 AND T1.""MenuCode"" = 'ProductionSchedule/Update'
+        ", userId).FirstOrDefault();
+
+    if (userId != 1)
+    {
+        canUpdate = strCanUpdate == "Y"? true : false ;
+    }
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvProductionScheduleReferenceDetail";
+    settings.KeyFieldName = "Id";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 300;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.CallbackRouteValues = new { Controller = "ProductionSchedule", Action = "TabTransListPartial" };
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+
+    settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = false;
+    settings.SettingsDetail.ShowDetailRow = true;
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
+
+
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Columns.Add("Id", "Id").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "VisOrder";
+        column.Name = "VisOrder";
+        column.Caption = "Vis Order";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+        column.Width = 70;
+        column.ReadOnly = !canUpdate;
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Settings.AllowSort = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Integer;
+        txt.DisplayFormatString = "#,###";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+        txt.Width = 90;
+        txt.MinValue = 0;
+
+        txt.SpinButtons.ShowIncrementButtons = false;
+        txt.SpinButtons.ShowLargeIncrementButtons = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TransNo";
+        column.Name = "TransNo";
+        column.Caption = "Process No";
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        column.Width = 100;
+
+        column.SetDataItemTemplateContent(c =>
+        {
+            if (c.ItemIndex >= 0)
+            {
+                string ProgressNo = (string)DataBinder.Eval(c.DataItem, "TransNo");
+
+                Html.DevExpress().HyperLink(settingsHL =>
+                {
+                    settingsHL.Name = "ChooseDocument_" + DataBinder.Eval(c.DataItem, "TransNo") + "_" + Guid.NewGuid().ToString();
+                    settingsHL.NavigateUrl = "javascript:void(0)";
+                    settingsHL.Properties.Text = ProgressNo;
+                    settings.ClientVisible = true;
+                    settingsHL.Properties.ClientSideEvents.Click = string.Format("function(s, e) {{ OnClickChooseTransNo(s, e, '{0}'); }}", DataBinder.Eval(c.DataItem, "Id"));
+                    settingsHL.ControlStyle.ForeColor = System.Drawing.Color.DarkBlue;
+
+                }).Render();
+            }
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemCode";
+        column.Name = "ItemCode";
+        column.Caption = "Item Code";
+        column.Width = 300;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemName";
+        column.Name = "ItemName";
+        column.Caption = "Item Name";
+        column.Width = 500;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "SerialNumber";
+        column.Name = "SerialNumber";
+        column.Caption = "Serial Number";
+        column.Width = 200;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = true;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.CellStyle.ForeColor = System.Drawing.Color.Black;
+        //column.EditFormSettings.Visible = DefaultBoolean.False;
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.Width = 80;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+
+        ASPxSummaryItem summary = new ASPxSummaryItem();
+        summary.FieldName = column.FieldName;
+        summary.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+        summary.DisplayFormat = "{0:#,###}";
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ProductionStatus";
+        column.Name = "ProductionStatus";
+        column.Caption = "Status";
+        column.Width = 300;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = !canUpdate;
+        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = Models._Utils.GeneralGetList.GetList("ProductionStatus");
+        cbo.ClientInstanceName = "gvSalesOrderContentDetail_Brand";
+
+        cbo.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        cbo.TextField = "Name";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);
+
+        column.Width = 100;
+        column.ReadOnly = false;
+        column.Settings.AllowSort = DefaultBoolean.False;
+
+    });
+
+
+    settings.SetDetailRowTemplateContent(c =>
+    {
+        long id = Convert.ToInt64(DataBinder.Eval(c.DataItem, "Id")) ;
+        Html.RenderAction("TabReferenceDetailListPartial", new { Id = id});
+    });
+
+    //settings.PreRender = (sender, e) =>
+    //{
+    //    ((MVCxGridView)sender).DetailRows.ExpandRow(0);
+    //};
+    settings.Settings.ShowFooter = true;
+
+    settings.SettingsPager.Position = PagerPosition.Bottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.AlwaysShowPager = true;
+
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50" };
+
+    settings.Settings.ShowFooter = true;
+
+    settings.ClientSideEvents.Init = "gvProductionScheduleReferenceDetailInitCallback";
+    settings.ClientSideEvents.BeginCallback = "gvProductionScheduleReferenceDetailBeginCallback";
+    settings.ClientSideEvents.EndCallback = "gvProductionScheduleReferenceDetailEndCallback";
+
+}).Bind(Model).GetHtml()
+
+
+

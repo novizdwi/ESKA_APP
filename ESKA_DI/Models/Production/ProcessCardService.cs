@@ -68,13 +68,7 @@ namespace Models.Production
 
         public string ItemName { get; set; }
 
-        public decimal? Quantity { get; set; }
-
-        public long? DocEntry { get; set; }
-
-        public string DocNum { get; set; }
-
-        public string DocNum_ { get; set; }
+        public decimal? Quantity { get; set; } 
 
         public string Status { get; set; }
 
@@ -179,13 +173,13 @@ namespace Models.Production
 
         public string RoutingCode { get; set; }
 
-        public string DocNum_ { get; set; }
+        public string DocNum { get; set; }
         
         public string RoutingName { get; set; }
 
         public string RoutingStatus { get; set; }
 
-        public string LineStatus { get; set; }
+        public string LineStatus_ { get; set; }
 
         public int?  OperatorId { get; set; }
 
@@ -199,11 +193,14 @@ namespace Models.Production
 
         public string MachineName { get; set; }
 
-        public int? PracticeHours { get; set; }
+        public int? DurationPerItem { get; set; }
+        
+        public int? DurationTotal { get; set; }
 
         public int? ActualHours { get; set; }
 
         public string Comments { get; set; }
+        public string DurationTotal_ { get; set; }
 
     }
 
@@ -231,6 +228,8 @@ namespace Models.Production
         public int? Id { get; set; }
         public long? DetId { get; set; }
         public int? DocEntry { get; set; }
+        public int? DurationPerItem { get; set; }
+        public int? DurationTotal { get; set; }
         public string DocNum { get; set; }
     }
 
@@ -264,6 +263,10 @@ namespace Models.Production
         public decimal QtyOrder { get; set; }
 
         public decimal TotalQty { get; set; }
+
+        public int? DurationPerItem { get; set; }
+
+        public int? DurationTotal { get; set; }
     }
 
     public class ProductionOrderModel
@@ -298,6 +301,10 @@ namespace Models.Production
         public string DocEntry { get; set; }   // DocEntry OWOR setelah Add()
 
         public string SapStatus { get; set; }   // null / "Posted" / "Error"
+        
+        public int? DurationPerItem { get; set; } 
+
+        public int? DurationTotal { get; set; } 
 
         public List<ProductionOrder_DetailModel> ListDetails_ { get; set; } = new List<ProductionOrder_DetailModel>();
     }
@@ -409,9 +416,10 @@ namespace Models.Production
         public List<ProcessCard_DetailModel> ProcessCard_Details(HANA_APP CONTEXT, long id = 0)
         {
             string ssql = @"
-                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.*, T2.""DocNum"" AS ""DocNum_""
-                FROM ""Tx_ProcessCard_Detail"" T0 
-                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWOR"" T2 ON T0.""DocEntry"" = T2.""DocEntry""
+                SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.*,
+                LPAD(CAST(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 60) AS NVARCHAR), 2, '0') || ':' || 
+                LPAD(CAST(MOD(COALESCE(T0.""DurationTotal"", 0), 60) AS NVARCHAR), 2, '0') AS ""DurationTotal_""
+                FROM ""Tx_ProcessCard_Detail"" T0  
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
@@ -774,20 +782,20 @@ namespace Models.Production
             if (model != null)
             {
 
-                Tx_ProcessCard_Detail Tx_ProcessCard_Detail = new Tx_ProcessCard_Detail();
+                Tx_ProcessCard_Detail tx_ProcessCard_Detail = new Tx_ProcessCard_Detail();
 
-                CopyProperty.CopyProperties(model, Tx_ProcessCard_Detail, false);
+                CopyProperty.CopyProperties(model, tx_ProcessCard_Detail, false);
 
                 DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                Tx_ProcessCard_Detail.Id = Id;
-                Tx_ProcessCard_Detail.CreatedDate = dtModified;
-                Tx_ProcessCard_Detail.CreatedUser = UserId;
-                Tx_ProcessCard_Detail.ModifiedDate = dtModified;
-                Tx_ProcessCard_Detail.ModifiedUser = UserId;
+                tx_ProcessCard_Detail.Id = Id;
+                tx_ProcessCard_Detail.CreatedDate = dtModified;
+                tx_ProcessCard_Detail.CreatedUser = UserId;
+                tx_ProcessCard_Detail.ModifiedDate = dtModified;
+                tx_ProcessCard_Detail.ModifiedUser = UserId;
 
-                CONTEXT.Tx_ProcessCard_Detail.Add(Tx_ProcessCard_Detail);
+                CONTEXT.Tx_ProcessCard_Detail.Add(tx_ProcessCard_Detail);
                 CONTEXT.SaveChanges();
-                DetId = Tx_ProcessCard_Detail.DetId;
+                DetId = tx_ProcessCard_Detail.DetId;
 
             }
 
@@ -898,7 +906,9 @@ namespace Models.Production
 
                             tx_ProcessCard.PostingDate = dtModified;
                             tx_ProcessCard.Status = "Posted";
+                            tx_ProcessCard.ProductionStatus = "Pending";
                             tx_ProcessCard.IsAfterPosted = "Y";
+                            tx_ProcessCard.IsCreatedActivity = "N";
                             tx_ProcessCard.ModifiedDate = dtModified;
                             tx_ProcessCard.ModifiedUser = userId;
 
@@ -1009,6 +1019,8 @@ namespace Models.Production
                     TreeType = g.First().TreeType,
                     QtyOrder = g.First().QtyOrder,
                     PlannedQty = g.First().TotalQty,
+                    DurationPerItem = g.First().DurationPerItem,
+                    DurationTotal = g.First().DurationTotal,
                     DetId = model.ListDetails_
                                        .Where(d => d.Sort == g.Key.RoutingLevel)
                                        .Select(d => d.DetId)
@@ -1046,7 +1058,8 @@ namespace Models.Production
                     oPO.StartDate = startDate;
                     oPO.ProductionOrderType = SAPbobsCOM.BoProductionOrderTypeEnum.bopotStandard; 
                     oPO.Remarks = string.Format( "Routing: {0} | Level: {1} | FG: {2} | Ref: {3}", po.RoutingName, po.RoutingLevel, po.FG, po.TransNo);
-
+                    
+                    //oPO.ProductionOrderStatus = BoProductionOrderStatusEnum.boposReleased;
                     oPO.UserFields.Fields.Item("U_IDU_WebId").Value = id.ToString();
                     oPO.UserFields.Fields.Item("U_IDU_WebTransNo").Value = po.TransNo;
                     oPO.UserFields.Fields.Item("U_IDU_RoutingStage").Value = po.RoutingName;
@@ -1086,7 +1099,21 @@ namespace Models.Production
 
                     // ---- Ambil DocEntry & DocNum ----
                     string newDocEntry = oCompany.GetNewObjectKey();
-                    string newDocNum = string.Empty; 
+                    string newDocNum = string.Empty;
+                    //update to released
+                    
+                    ProductionOrders oProd = (ProductionOrders)oCompany.GetBusinessObject(BoObjectTypes.oProductionOrders);
+                    oProd.GetByKey(Convert.ToInt32(newDocEntry) );
+                    oProd.ProductionOrderStatus = BoProductionOrderStatusEnum.boposReleased;
+                    oProd.Update();
+
+                    SAPbobsCOM.Recordset rsDocNum = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+                    rsDocNum.DoQuery($@"SELECT ""DocNum"" FROM ""{DbProvider.dbSap_Name}"".""OWOR"" WHERE ""DocEntry"" = {newDocEntry}");
+                    if (!rsDocNum.EoF)
+                    {
+                        newDocNum = rsDocNum.Fields.Item("DocNum").Value?.ToString();
+                    }
+
                     SapCompany.CleanUp(oPO);
 
                     ret.Add(new ProductionOrder_ReturnModel
@@ -1094,8 +1121,11 @@ namespace Models.Production
                         Id = (int?)id,
                         DetId = po.DetId,
                         DocEntry = Convert.ToInt32(newDocEntry),
-                        DocNum = newDocNum
+                        DocNum = newDocNum,
+                        DurationPerItem = po.DurationPerItem,
+                        DurationTotal = po.DurationTotal
                     });
+
                 }
                 catch
                 {
@@ -1122,7 +1152,11 @@ namespace Models.Production
                 if (txDetail == null) continue;
 
                 txDetail.DocEntry = po.DocEntry; 
-                txDetail.RoutingStatus = "Ready";
+                txDetail.DocNum = po.DocNum;  
+
+                txDetail.DurationPerItem = po.DurationPerItem;
+                txDetail.DurationTotal = po.DurationTotal;
+
                 txDetail.ModifiedDate = dtModified;
                 txDetail.ModifiedUser = userId;
             }

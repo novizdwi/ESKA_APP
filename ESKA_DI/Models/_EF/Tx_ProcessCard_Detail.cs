@@ -21,15 +21,15 @@ namespace ESKA_DI.Models._EF
         public string RoutingName { get; set; }
         public string RoutingStatus { get; set; }
         public Nullable<int> DocEntry { get; set; }
+        public string DocNum { get; set; }
         public Nullable<int> OperatorId { get; set; }
         public string OperatorName { get; set; }
         public Nullable<System.DateTime> ProcessingDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<int> MachineId { get; set; }
         public string MachineName { get; set; }
-        public Nullable<System.TimeSpan> PracticeHours { get; set; }
-        public Nullable<System.TimeSpan> ActualHours { get; set; }
-        public string LineStatus { get; set; }
+        public Nullable<int> DurationPerItem { get; set; }
+        public Nullable<int> DurationTotal { get; set; }
         public string Comments { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }

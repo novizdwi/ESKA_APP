@@ -19,7 +19,7 @@
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -498,6 +498,10 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
+    <Content Include="Scripts\SQLs\Create Schema.sql" />
+    <Content Include="Scripts\SQLs\Insert Into.sql" />
+    <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
     <Content Include="Scripts\Test\DXR.js" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -726,6 +730,11 @@
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\ProcessCard.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\ProductionSchedule.cshtml" />
+    <Content Include="Views\Production\ProductionSchedule\Partial\ProductionSchedule_Form_TabReference_List_DetailPartial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\Batch\Batch_Partial.cshtml" />
@@ -737,7 +746,21 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Transaction\ReProcess\ReProcess.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_TabOutstanding_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\Partial\ProductionTask_Form_TabReference_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTask\ProductionTask.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Finish\Finish_TabItem_List_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Pause\Pause_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\ProductionTaskActivity_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\ProductionTaskActivity_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\ProductionTaskActivity.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchIssue\BatchIssue_Form_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchIssue\BatchIssue_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchIssue\BatchIssue_Partial.cshtml" />
@@ -760,6 +783,7 @@
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_Panel_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\ReProcess\ReProcess.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -796,6 +820,7 @@
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
     <Compile Include="Controllers\Notification\_NotificationController.List.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Approval.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.CancelReason.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.cs" />
@@ -803,6 +828,14 @@
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Nav.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.Tab.Detail.cs" />
     <Compile Include="Controllers\Production\ProcessCard\ProcessCardController.ViewApproval.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.Detail.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.cs" />
+    <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Pause.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Finish.cs" />
+    <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.cs" />
+    <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Oustanding.cs" />
+    <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Reference.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.cs" />
     <Compile Include="Controllers\Report\ReportAlert\ReportAlertController.ListDetail.Export.cs" />
