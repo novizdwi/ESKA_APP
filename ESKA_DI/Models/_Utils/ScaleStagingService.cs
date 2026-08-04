@@ -135,6 +135,7 @@ namespace Models._Utils
                         string requestPayload = new JavaScriptSerializer().Serialize(new
                         {
                             RequestId = requestId,
+                            TransType = transType,
                             row.ItemCode,
                             row.Batch,
                             row.Quantity,

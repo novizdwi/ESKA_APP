@@ -150,6 +150,22 @@
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
     });
 
+    // Status permintaan timbang dari Tp_ScaleStaging (terisi bila tombol Scale sudah diklik).
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "StagingStatus";
+        column.Name = "StagingStatus";
+        column.Caption = "Status";
+        column.Width = 90;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentScaleListOnBeginCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
     settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentScaleListOnEndCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
     settings.ClientSideEvents.CustomButtonClick = string.Format("function(s, e) {{ gvContentScaleListOnCustomButtonClick(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);

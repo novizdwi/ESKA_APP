@@ -350,7 +350,13 @@ namespace Models.Transaction
 
         public int? LineNum { get; set; }
 
-        // Id batch dalam bentuk string — kolom "Line Num" (nested TextBox tidak me-render numerik).
+        // Nomor batch (kolom Batch) untuk header popup Scale.
+        public string Batch { get; set; }
+
+        // LineNum batch dalam bentuk string — nested TextBox tidak me-render numerik.
+        public string LineNumText { get; set; }
+
+        // Id batch dalam bentuk string (tidak dipakai lagi di form; disimpan untuk kompatibilitas).
         public string DetDetIdText { get; set; }
 
         public List<ReProcessScaleModel> ReProcessScaleModel___ { get; set; }
@@ -1204,7 +1210,8 @@ namespace Models.Transaction
                                 T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""Uom"",
-                                T2.""LineNum""
+                                T2.""LineNum"",
+                                T2.""Batch""
                                 FROM ""Tx_IssueAndReceipt"" T0
                                 LEFT JOIN ""{0}"" T1 ON T0.""Id"" = T1.""Id""
                                 LEFT JOIN ""{1}"" T2 ON T1.""DetId"" = T2.""DetId""
@@ -1235,7 +1242,8 @@ namespace Models.Transaction
                 model.ReProcessScaleModel___ = CONTEXT.Database.SqlQuery<ReProcessScaleModel>(sql, transType, transType, detDetId).ToList();
             }
 
-            // "Line Num" menampilkan id batch sbg string (nested TextBox tak me-render numerik).
+            // "Line Num" = nilai LineNum batch, disajikan string (nested TextBox tak me-render numerik).
+            model.LineNumText = model.LineNum.HasValue ? model.LineNum.Value.ToString() : "";
             model.DetDetIdText = model.DetDetId.ToString();
 
             return model;

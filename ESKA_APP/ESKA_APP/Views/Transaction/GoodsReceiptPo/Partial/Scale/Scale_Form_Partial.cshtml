@@ -115,13 +115,37 @@
         txt.Width = 250;
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+    var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
+    {
+        itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
+        itemSettings.ShowCaption = DefaultBoolean.False;
+        itemSettings.ColCount = 1;
+        itemSettings.CssClass = "groupCol";
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "Batch";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Batch";
+        itemSettings.FieldName = "Batch";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Scale_Batch";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.Name = "LineNum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
         itemSettings.Caption = "Line Num";
-        // "Line Num" menampilkan id batch (DetDetId) sbg string; nested TextBox tak me-render numerik.
-        itemSettings.FieldName = "DetDetIdText";
+        // "Line Num" = nilai LineNum batch (nomor urut) sbg string; nested TextBox tak me-render numerik.
+        itemSettings.FieldName = "LineNumText";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "Scale_LineNum";
         txt.ShowModelErrors = true;
