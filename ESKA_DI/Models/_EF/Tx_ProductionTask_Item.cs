@@ -15,13 +15,17 @@ namespace ESKA_DI.Models._EF
     public partial class Tx_ProductionTask_Item
     {
         public Nullable<long> Id { get; set; }
-        public long DetId { get; set; }
+        public long DetDetId { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public string WhsCode { get; set; }
         public string WhsName { get; set; }
+        public Nullable<int> LineNum { get; set; }
         public string Direction { get; set; }
+        public string Batch { get; set; }
+        public Nullable<int> UomEntry { get; set; }
         public string Uom { get; set; }
+        public string IsLocked { get; set; }
         public Nullable<decimal> QuantityPlanned { get; set; }
         public Nullable<decimal> QuantityActual { get; set; }
         public string Comments { get; set; }
