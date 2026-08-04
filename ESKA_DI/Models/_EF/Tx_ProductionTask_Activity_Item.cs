@@ -15,7 +15,6 @@ namespace ESKA_DI.Models._EF
     public partial class Tx_ProductionTask_Activity_Item
     {
         public Nullable<long> Id { get; set; }
-        public Nullable<long> DetId { get; set; }
         public long DetDetId { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
@@ -23,6 +22,7 @@ namespace ESKA_DI.Models._EF
         public string WhsName { get; set; }
         public Nullable<int> LineNum { get; set; }
         public string Direction { get; set; }
+        public string Batch { get; set; }
         public Nullable<int> UomEntry { get; set; }
         public string Uom { get; set; }
         public string IsLocked { get; set; }
