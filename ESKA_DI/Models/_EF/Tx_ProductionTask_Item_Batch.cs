@@ -12,11 +12,10 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProductionTask_Activity_Item_Batch
+    public partial class Tx_ProductionTask_Item_Batch
     {
         public Nullable<long> Id { get; set; }
         public Nullable<long> DetId { get; set; }
-        public Nullable<long> DetDetId { get; set; }
         public long BatchId { get; set; }
         public string Batch { get; set; }
         public Nullable<System.DateTime> AdmissionDate { get; set; }

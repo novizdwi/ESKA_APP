@@ -372,7 +372,7 @@ namespace Models.Production
                             oCompany = SAPCachedCompany.GetCompany();
                             oCompany.StartTransaction();
 
-                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "finish", "Id", model.Id.ToString());
+                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "finish", "Id", model.DetId.ToString());
 
                             DateTime dtModified = DateTime.Now;
                             Tx_ProductionTask_Activity tx_ProductionTask_Activity = CONTEXT.Tx_ProductionTask_Activity.FirstOrDefault(x => x.DetId == model.DetId);
@@ -420,7 +420,7 @@ namespace Models.Production
 
                             // Validasi bisnis (SpProductionTaskActivity__TransNotif) dijalankan lebih dulu,
                             // supaya SAP tidak disentuh kalau datanya belum valid.
-                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "finish", "Id", model.Id.ToString());
+                            SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "finish", "Id", model.DetId.ToString());
 
                             // Sinkronkan komponen activity ke baris WOR1 Production Order di SAP,
                             // lalu tulis balik LineNum hasil insert nya.
@@ -696,7 +696,7 @@ namespace Models.Production
                         String keyValue;
                         keyValue = tx_ProductionTask_Item.Id.ToString();
 
-                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItem", "Id", model.Id.ToString() );
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItem", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
 
@@ -940,7 +940,7 @@ namespace Models.Production
                         keyValue = (model.DetId ?? 0).ToString();
 
                         UpdateItemQuantityActual(CONTEXT, model._UserId, model.DetId ?? 0);
-                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItemBatch", "Id", model.Id.ToString() );
+                        SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItemBatch", "Id", keyValue);
 
                         CONTEXT_TRANS.Commit();
 
@@ -997,7 +997,7 @@ namespace Models.Production
 
                             long detId_ = tx_ProductionTask_Item_Batch.DetId ?? 0;
                             UpdateItemQuantityActual(CONTEXT, model._UserId, detId_);
-                            SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "updateItemBatch", "Id", model.Id.ToString());
+                            SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "updateItemBatch", "Id", detId_.ToString());
 
                         }
 
@@ -1034,13 +1034,13 @@ namespace Models.Production
                     {
                         try
                         {
-                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItemBatch", "Id", Id.ToString());
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItemBatch", "Id", DetId.ToString());
 
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"BatchId\"=:p0", BatchId);
                             CONTEXT.SaveChanges();
 
                             UpdateItemQuantityActual(CONTEXT, _userId, DetId);
-                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "deleteItemBatch", "Id", Id.ToString());
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "deleteItemBatch", "Id", DetId.ToString());
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)

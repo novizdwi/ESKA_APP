@@ -15,7 +15,7 @@ namespace ESKA_DI.Models._EF
     public partial class Tx_ProductionTask_Item
     {
         public Nullable<long> Id { get; set; }
-        public long DetDetId { get; set; }
+        public long DetId { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public string WhsCode { get; set; }

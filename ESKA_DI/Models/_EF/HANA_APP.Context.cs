@@ -102,9 +102,8 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tp_ScaleStaging> Tp_ScaleStaging { get; set; }
         public virtual DbSet<Tx_ProductionTask> Tx_ProductionTask { get; set; }
         public virtual DbSet<Tx_ProductionTask_Activity> Tx_ProductionTask_Activity { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Activity_Item> Tx_ProductionTask_Activity_Item { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Activity_Item_Batch> Tx_ProductionTask_Activity_Item_Batch { get; set; }
         public virtual DbSet<Tx_ProductionTask_Activity_Log> Tx_ProductionTask_Activity_Log { get; set; }
+        public virtual DbSet<Tx_ProductionTask_Item_Batch> Tx_ProductionTask_Item_Batch { get; set; }
         public virtual DbSet<Tx_ProductionTask_Item> Tx_ProductionTask_Item { get; set; }
     }
 }
