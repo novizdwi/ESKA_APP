@@ -166,6 +166,33 @@
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
     });
 
+    // Tombol per baris sesuai status Tp_ScaleStaging:
+    //  Processed -> hanya Delete (Edit & Scale disembunyikan)
+    //  Waiting   -> Edit & Delete (Scale disembunyikan)
+    //  (kosong)  -> Edit, Delete, Scale (default)
+    // Tombol built-in (Edit): CommandButtonInitialize. Tombol custom (Scale): CustomButtonInitialize.
+    settings.CommandButtonInitialize = (s, e) =>
+    {
+        if (e.VisibleIndex < 0) return;
+        ASPxGridView gridView = (ASPxGridView)s;
+        string st = Convert.ToString(gridView.GetRowValues(e.VisibleIndex, "StagingStatus"));
+        if (st == "Processed" && e.ButtonType == ColumnCommandButtonType.Edit)
+        {
+            e.Visible = false;
+        }
+    };
+
+    settings.CustomButtonInitialize = (s, e) =>
+    {
+        if (e.VisibleIndex < 0) return;
+        ASPxGridView gridView = (ASPxGridView)s;
+        string st = Convert.ToString(gridView.GetRowValues(e.VisibleIndex, "StagingStatus"));
+        if (e.ButtonID == "timbangButton" && (st == "Waiting" || st == "Processed" || st == "Error"))
+        {
+            e.Visible = DefaultBoolean.False;
+        }
+    };
+
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentScaleListOnBeginCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
     settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentScaleListOnEndCallback(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);
     settings.ClientSideEvents.CustomButtonClick = string.Format("function(s, e) {{ gvContentScaleListOnCustomButtonClick(s, e, {0}, {1}, {2}); }}", Id, DetId, DetDetId);

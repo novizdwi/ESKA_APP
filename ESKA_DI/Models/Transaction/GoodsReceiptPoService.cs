@@ -2055,6 +2055,8 @@ namespace Models.Transaction
                         try
                         {
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetDetId\"=:p0", DetDetDetId);
+                            // Hapus juga permintaan timbang terkait di staging.
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tp_ScaleStaging\" WHERE \"DetDetDetId\"=:p0 AND \"TransType\"='GoodsReceiptPo'", DetDetDetId);
                             CONTEXT.SaveChanges();
 
                             UpdateBatchNettoFromScale(CONTEXT, _userId, DetDetId);

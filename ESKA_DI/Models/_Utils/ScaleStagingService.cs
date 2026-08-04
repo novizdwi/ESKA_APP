@@ -122,12 +122,30 @@ namespace Models._Utils
                         }
 
                         // 2. Anti-duplikat: satu 'Waiting' per baris scale (per TransType).
-                        int waiting = CONTEXT.Database.SqlQuery<int>(
-                            "SELECT COUNT(*) AS IDU FROM \"Tp_ScaleStaging\" WHERE \"DetDetDetId\"=:p0 AND \"TransType\"=:p1 AND \"Status\"='Waiting'",
-                            detDetDetId, transType).FirstOrDefault();
-                        if (waiting > 0)
+                        //int waiting = CONTEXT.Database.SqlQuery<int>(
+                        //    "SELECT COUNT(*) AS IDU FROM \"Tp_ScaleStaging\" WHERE \"DetDetDetId\"=:p0 AND \"TransType\"=:p1 AND \"Status\"='Waiting'",
+                        //    detDetDetId, transType).FirstOrDefault();
+                        //if (waiting > 0)
+                        //{
+                        //    throw new Exception("[VALIDATION] Permintaan timbang untuk baris ini sudah dalam antrean. ");
+                        //}
+
+                        string status = CONTEXT.Database.SqlQuery<string>(
+                                                                        @"SELECT TOP 1 ""Status""
+                                                                          FROM ""Tp_ScaleStaging""
+                                                                          WHERE ""DetDetDetId"" = :p0
+                                                                            AND ""TransType"" = :p1
+                                                                          ORDER BY ""Id"" DESC",
+                                                                        detDetDetId, transType).FirstOrDefault();
+
+                        if (status == "Waiting")
                         {
-                            throw new Exception("[VALIDATION] Permintaan timbang untuk baris ini sudah dalam antrean. ");
+                            throw new Exception("[VALIDATION] Permintaan timbang untuk baris ini sudah dalam antrean.");
+                        }
+
+                        if (status == "Processed")
+                        {
+                            throw new Exception("[VALIDATION] Baris ini sudah pernah ditimbang.");
                         }
 
                         // 3. RequestId = UUID 32 char (kolom NVARCHAR(32)); RequestPayload minimal.

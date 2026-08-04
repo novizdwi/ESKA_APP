@@ -858,7 +858,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="Uom" Type="nvarchar" MaxLength="50" />
           <Property Name="Netto" Type="decimal" Precision="21" Scale="6" />
           <Property Name="WeightKg" Type="decimal" Precision="21" Scale="6" />
-          <Property Name="ScaleStatus" Type="nvarchar" MaxLength="500" />
+          <Property Name="ScaleStatus" Type="int" />
           <Property Name="Status" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="RequestId" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="SentDate" Type="timestamp" />
@@ -2369,7 +2369,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Netto" Type="Decimal" Precision="21" Scale="6" />
           <Property Name="WeightKg" Type="Decimal" Precision="21" Scale="6" />
-          <Property Name="ScaleStatus" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ScaleStatus" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RequestId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SentDate" Type="DateTime" />

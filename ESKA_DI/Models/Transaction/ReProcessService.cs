@@ -1427,6 +1427,9 @@ namespace Models.Transaction
                         try
                         {
                             CONTEXT.Database.ExecuteSqlCommand(string.Format("DELETE FROM \"{0}\"  WHERE \"DetDetDetId\"=:p0", tblScale), DetDetDetId);
+                            // Hapus juga permintaan timbang terkait di staging (per TransType/side).
+                            string transType = (s == "Receipt") ? "IssueAndReceiptReceipt" : "IssueAndReceiptIssue";
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tp_ScaleStaging\" WHERE \"DetDetDetId\"=:p0 AND \"TransType\"=:p1", DetDetDetId, transType);
                             CONTEXT.SaveChanges();
 
                             UpdateBatchNettoFromScale(CONTEXT, _userId, DetDetId, s);
