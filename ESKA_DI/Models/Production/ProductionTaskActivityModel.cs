@@ -121,6 +121,24 @@ namespace Models.Production
 
     }
 
+    // Data header task yang dipakai saat membuat OIGN / OIGE.
+    public class ProductionTaskSapHeaderModel
+    {
+        public long Id { get; set; }
+
+        public string TransNo { get; set; }
+
+        public int? DocEntry { get; set; }
+
+        // ItemCode produk jadi (baris utama Receipt from Production).
+        public string ItemCode { get; set; }
+
+        // "Id" pada Tx_ProductionTask_Activity -> UDF baris produk jadi.
+        public long ActivityId { get; set; }
+
+        public decimal? ActivityQuantity { get; set; }
+    }
+
     // Hasil insert baris WOR1: LineNum dari SAP untuk ditulis balik ke Tx_ProductionTask_Item.
     public class ProductionTaskActivity_Wor1Line
     {
@@ -415,17 +433,20 @@ namespace Models.Production
 
                             }
 
-                            UpdateItemBatchOut(CONTEXT, userId, model.DetId??0 );
+                            UpdateItemBatchOut(CONTEXT, userId, model.DetId ?? 0);
                             CONTEXT.SaveChanges();
 
                             // Validasi bisnis (SpProductionTaskActivity__TransNotif) dijalankan lebih dulu,
                             // supaya SAP tidak disentuh kalau datanya belum valid.
                             SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "finish", "Id", model.Id.ToString());
-
                             // Sinkronkan komponen activity ke baris WOR1 Production Order di SAP,
                             // lalu tulis balik LineNum hasil insert nya.
                             var wor1Lines = SyncProductionOrderLines(CONTEXT, oCompany, model);
                             UpdateActivityItemLineNum(CONTEXT, userId, wor1Lines);
+
+                            // Sesudah OWOR ter-update: Receipt from Production (OIGN)
+                            // dan Issue for Production (OIGE).
+                            PostInventoryDocuments(CONTEXT, oCompany, model);
 
                             // QuantityActual Tx_ProductionTask + IsRunningTask = 'N' diurus di SP ini.
                             CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateTask\"(:p0,:p1)", userId, model.DetId);
@@ -621,6 +642,170 @@ namespace Models.Production
             }
 
             return false;
+        }
+
+        //----------------------------------------------------------------------
+        // Receipt from Production (OIGN) & Issue for Production (OIGE)
+        //----------------------------------------------------------------------
+
+        // BaseType dokumen Production Order di SAP.
+        private const int BASETYPE_PRODUCTION_ORDER = 202;
+
+        private void PostInventoryDocuments(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, ProductionActivityFinishModel model)
+        {
+            var task = CONTEXT.Database.SqlQuery<ProductionTaskSapHeaderModel>(
+                @"SELECT TOP 1
+                      T0.""Id"", T0.""TransNo"", T0.""DocEntry"", T0.""ItemCode"",
+                      T1.""Id"" AS ""ActivityId"", T1.""Quantity"" AS ""ActivityQuantity""
+                  FROM ""Tx_ProductionTask"" T0
+                  INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                  WHERE T1.""DetId"" = :p0", model.DetId).FirstOrDefault();
+
+            if (task == null)
+            {
+                throw new Exception("[VALIDATION] - Data Production Task tidak ditemukan");
+            }
+
+            if ((task.DocEntry ?? 0) == 0)
+            {
+                throw new Exception("[VALIDATION] - Production Order belum punya DocEntry di SAP");
+            }
+
+            var items = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(
+                @"SELECT
+                      T0.""Id"", T0.""DetId"", T0.""LineNum"",
+                      T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"",
+                      T0.""Direction"", T0.""QuantityActual""
+                  FROM ""Tx_ProductionTask_Item"" T0
+                  WHERE T0.""Id"" = :p0
+                  ORDER BY T0.""DetId""", task.Id).ToList();
+
+            AddReceiptFromProduction(oCompany, task, items);
+            AddIssueForProduction(oCompany, task, items);
+        }
+
+        // OIGN: baris produk jadi (dari Tx_ProductionTask) + item ber-Direction 'In'.
+        private void AddReceiptFromProduction(SAPbobsCOM.Company oCompany, ProductionTaskSapHeaderModel task, List<ProductionTaskDetailItemModel> items)
+        {
+            var inItems = items
+                .Where(x => string.Equals(x.Direction, "In", StringComparison.OrdinalIgnoreCase)
+                            && ((x.QuantityActual ?? 0) > 0))
+                .ToList();
+
+            bool hasParentLine = (task.ActivityQuantity ?? 0) > 0;
+
+            if (!hasParentLine && (inItems.Count == 0))
+            {
+                return;
+            }
+
+            SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
+
+            try
+            {
+                oDoc.UserFields.Fields.Item("U_IDU_WebTransNo").Value = task.TransNo ?? "";
+                oDoc.UserFields.Fields.Item("U_IDU_WebId").Value = task.Id.ToString();
+
+                bool firstLine = true;
+
+                // Produk jadi: ItemCode dari Tx_ProductionTask, qty dari Tx_ProductionTask_Activity.
+                if (hasParentLine)
+                {
+                    oDoc.Lines.ItemCode = task.ItemCode;
+                    oDoc.Lines.Quantity = (double)(task.ActivityQuantity ?? 0);
+                    oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
+                    oDoc.Lines.BaseEntry = task.DocEntry ?? 0;
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = task.ActivityId.ToString();
+
+                    firstLine = false;
+                }
+
+                foreach (var item in inItems)
+                {
+                    if (!firstLine)
+                    {
+                        oDoc.Lines.Add();
+                    }
+                    firstLine = false;
+
+                    oDoc.Lines.ItemCode = item.ItemCode;
+                    oDoc.Lines.Quantity = (double)(item.QuantityActual ?? 0);
+                    oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
+                    oDoc.Lines.BaseEntry = task.DocEntry ?? 0;
+                    oDoc.Lines.BaseLine = item.LineNum ?? 0;
+
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = (item.Id ?? 0).ToString();
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_DetId").Value = (item.DetId ?? 0).ToString();
+                }
+
+                int result = oDoc.Add();
+                if (result != 0)
+                {
+                    int nErr = oCompany.GetLastErrorCode();
+                    string errMsg = oCompany.GetLastErrorDescription();
+
+                    throw new Exception(string.Format("[VALIDATION] - Add Receipt from Production : {0}|{1}", nErr, errMsg));
+                }
+            }
+            finally
+            {
+                SapCompany.CleanUp(oDoc);
+            }
+        }
+
+        // OIGE: item ber-Direction 'Out'.
+        private void AddIssueForProduction(SAPbobsCOM.Company oCompany, ProductionTaskSapHeaderModel task, List<ProductionTaskDetailItemModel> items)
+        {
+            var outItems = items
+                .Where(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)
+                            && ((x.QuantityActual ?? 0) > 0))
+                .ToList();
+
+            if (outItems.Count == 0)
+            {
+                return;
+            }
+
+            SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenExit);
+
+            try
+            {
+                oDoc.UserFields.Fields.Item("U_IDU_WebTransNo").Value = task.TransNo ?? "";
+                oDoc.UserFields.Fields.Item("U_IDU_WebId").Value = task.Id.ToString();
+
+                bool firstLine = true;
+
+                foreach (var item in outItems)
+                {
+                    if (!firstLine)
+                    {
+                        oDoc.Lines.Add();
+                    }
+                    firstLine = false;
+
+                    oDoc.Lines.ItemCode = item.ItemCode;
+                    oDoc.Lines.Quantity = (double)(item.QuantityActual ?? 0);
+                    oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
+                    oDoc.Lines.BaseEntry = task.DocEntry ?? 0;
+                    oDoc.Lines.BaseLine = item.LineNum ?? 0;
+
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = (item.Id ?? 0).ToString();
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_DetId").Value = (item.DetId ?? 0).ToString();
+                }
+
+                int result = oDoc.Add();
+                if (result != 0)
+                {
+                    int nErr = oCompany.GetLastErrorCode();
+                    string errMsg = oCompany.GetLastErrorDescription();
+
+                    throw new Exception(string.Format("[VALIDATION] - Add Issue for Production : {0}|{1}", nErr, errMsg));
+                }
+            }
+            finally
+            {
+                SapCompany.CleanUp(oDoc);
+            }
         }
 
         private void UpdateActivityItemLineNum(HANA_APP CONTEXT, int userId, List<ProductionTaskActivity_Wor1Line> lines)
@@ -874,7 +1059,8 @@ namespace Models.Production
             }
         }
 
-        public void UpdateItemBatchOut(HANA_APP CONTEXT, int userId, long detId) {
+        public void UpdateItemBatchOut(HANA_APP CONTEXT, int userId, long detId)
+        {
             string sql = @"
                 UPDATE T1 SET
                     T1.""Batch"" = T0.""Batch"",
