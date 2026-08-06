@@ -1,13 +1,17 @@
-﻿@using Models;
+@using Models;
 
 
-@model Models.Transaction.ReProcessBatchReceiptView___
+@model Models.Transaction.ReProcessScaleView___
+
+@{
+    string side = (ViewBag.Side as string) ?? Request["side"] ?? "Issue";
+}
 
 
 @Html.DevExpress().TextBox(
         settings =>
         {
-            settings.Name = "Receipt_Id";
+            settings.Name = "Scale_Id";
             settings.ControlStyle.CssClass = "editor";
             settings.ClientVisible = false;
         }
@@ -16,25 +20,43 @@
 @Html.DevExpress().TextBox(
         settings =>
         {
-            settings.Name = "Receipt_DetId";
+            settings.Name = "Scale_DetId";
             settings.ControlStyle.CssClass = "editor";
             settings.ClientVisible = false;
         }
 ).Bind(Model.DetId).GetHtml()
 
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Scale_DetDetId";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(Model.DetDetId).GetHtml()
+
+@Html.DevExpress().TextBox(
+        settings =>
+        {
+            settings.Name = "Scale_Side";
+            settings.ControlStyle.CssClass = "editor";
+            settings.ClientVisible = false;
+        }
+).Bind(side).GetHtml()
+
 @Html.DevExpress().HyperLink(settingsHL =>
 {
-    settingsHL.Name = "ViewReceiptBatchComponent_btnCancel";
+    settingsHL.Name = "ViewScaleComponent_btnCancel";
     settingsHL.NavigateUrl = "javascript:void(0)";
     settingsHL.Properties.Text = "Cancel";
-    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewReceiptBatch_OnClickBtnCancel(s, e) }";
+    settingsHL.Properties.ClientSideEvents.Click = "function(s, e){ ViewScale_OnClickBtnCancel(s, e) }";
     settingsHL.Height = 20;
 }).GetHtml()
 
 
 @Html.DevExpress().FormLayout(settings =>
 {
-    settings.Name = "ViewReceiptBatch_formLayout";
+    settings.Name = "ViewScale_formLayout";
     settings.EncodeHtml = false;
     settings.Width = Unit.Percentage(100);
     settings.AlignItemCaptionsInAllGroups = true;
@@ -56,7 +78,7 @@
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         itemSettings.GroupBoxDecoration = GroupBoxDecoration.None;
         itemSettings.ShowCaption = DefaultBoolean.False;
-        itemSettings.ColCount = 4;
+        itemSettings.ColCount = 2;
     });
 
     var groupItem_3 = groupItem.Items.AddGroupItem(itemSettings =>
@@ -76,6 +98,36 @@
         itemSettings.CssClass = "groupCol";
     });
 
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "ItemCode";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Item Code";
+        itemSettings.FieldName = "ItemCode";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Scale_ItemCode";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "Description";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Description";
+        itemSettings.FieldName = "ItemName";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Scale_ItemName";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
     var groupItem_Col2 = groupItem_2.Items.AddGroupItem(itemSettings =>
     {
         itemSettings.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
@@ -85,29 +137,14 @@
         itemSettings.CssClass = "groupCol";
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
+    groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "Receipt_BaseDocNum";
+        itemSettings.Name = "Batch";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "No";
-        itemSettings.FieldName = "BaseDocNum";
+        itemSettings.Caption = "Batch";
+        itemSettings.FieldName = "Batch";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Receipt_BaseDocNum";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "Receipt_ItemCode";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Item Code";
-        itemSettings.FieldName = "ItemCode";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Receipt_ItemCode";
+        txt.Name = "Scale_Batch";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
@@ -117,57 +154,14 @@
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.Name = "Receipt_WhsCode";
+        itemSettings.Name = "LineNum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Whs Code";
-        itemSettings.FieldName = "WhsCode";
+        itemSettings.Caption = "Line Num";
+        // "Line Num" = nilai LineNum batch (nomor urut) sbg string; nested TextBox tak me-render numerik.
+        itemSettings.FieldName = "LineNumText";
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Receipt_WhsCode";
+        txt.Name = "Scale_LineNum";
         txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-
-    groupItem_Col2.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "Receipt_ItemName";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Item Name";
-        itemSettings.FieldName = "ItemName";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Receipt_ItemName";
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "Receipt_TotalNeeded";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Total Needed";
-        itemSettings.FieldName = "TotalNeeded";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Receipt_TotalNeeded";
-        txt.ReadOnly = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 250;
-    });
-
-    groupItem_Col2.Items.Add(itemSettings =>
-    {
-        itemSettings.Name = "Receipt_TotalCreated";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "Total Created";
-        itemSettings.FieldName = "TotalCreated";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Receipt_TotalCreated";
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -176,8 +170,8 @@
 
     groupItem_3.Items.AddTabbedGroupItem(group =>
     {
-        group.Name = "ViewViewBatch_TabBatch";
-        group.ColSpan = 2; // penting
+        group.Name = "ViewViewScale_TabScale";
+        group.ColSpan = 2;
         group.Width = Unit.Percentage(100);
         group.Height = Unit.Percentage(100);
 
@@ -186,44 +180,18 @@
 
         group.Items.Add(item =>
         {
-            item.Name = "ViewReceiptApproval_TabViewBatchContent";
-            item.Caption = "       Receipt Batch List      ";
+            item.Name = "ViewScale_TabScaleContent";
+            item.Caption = "       List Scale       ";
 
             item.SetNestedContent(() =>
             {
-                //Html.DevExpress().HyperLink(hyperlink =>
-                //{
-                //    hyperlink.Name = "hlAddBatchRow";
-                //    hyperlink.Properties.Text = "+ Add Row";
-                //    hyperlink.NavigateUrl = "javascript:void(0)";
-                //    hyperlink.Properties.ClientSideEvents.Click = string.Format("function(s,e){{ btnAddBatchOnClick({0}, {1}); }}", Model.Id, Model.DetId);
-                //}).Render();
-
                 ViewContext.Writer.Write(
-                    Html.Partial("Partial/BatchReceipt/BatchReceipt_TabBatchList_List_Partial", Model.ReProcessBatchReceiptModel___)
+                    Html.Partial("Partial/Scale/Scale_TabScaleList_List_Partial",
+                        Model.ReProcessScaleModel___ ?? new List<Models.Transaction.ReProcessScaleModel>())
                 );
             });
         });
     });
-
-    /*
-    groupItem_3.Items.Add(itemSettings =>
-    {
-        itemSettings.ColSpan = 1;
-        itemSettings.ShowCaption = DefaultBoolean.False;
-
-        itemSettings.HorizontalAlign = FormLayoutHorizontalAlign.Left;
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
-        var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
-
-        btnSettings.Name = "btnSaveChangeViewBatch";
-        btnSettings.Text = "Save Change";
-        btnSettings.Width = 120;
-
-        btnSettings.ClientSideEvents.Click = "ViewBatch_OnClickBtnSaveChange";
-        btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
-    });
-    */
 
     groupItem_3.Items.Add(itemSettings =>
     {
@@ -234,18 +202,13 @@
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
         var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
 
-        btnSettings.Name = "btnCancelReceiptViewBatch";
+        btnSettings.Name = "btnCancelViewScale";
         btnSettings.Text = "Close";
         btnSettings.Width = 120;
 
-        btnSettings.ClientSideEvents.Click = "ViewReceiptBatch_OnClickBtnCancel";
+        btnSettings.ClientSideEvents.Click = "ViewScale_OnClickBtnCancel";
         btnSettings.ControlStyle.ForeColor = System.Drawing.Color.White;
         btnSettings.ControlStyle.BackColor = System.Drawing.Color.Gray;
     });
 
-    //});
-
 }).GetHtml()
-
-
-

@@ -289,6 +289,15 @@ namespace Models.Transaction
 
         public int? LineNum { get; set; }
 
+        // Nomor batch (kolom Batch) untuk header popup Scale.
+        public string Batch { get; set; }
+
+        // LineNum batch dalam bentuk string — nested TextBox tidak me-render numerik.
+        public string LineNumText { get; set; }
+
+        // Id batch dalam bentuk string (tidak dipakai lagi di form; disimpan untuk kompatibilitas).
+        public string DetDetIdText { get; set; }
+
         public List<GoodsReceiptPoScaleModel> GoodsReceiptPoScaleModel___ { get; set; }
     }
 
@@ -311,6 +320,9 @@ namespace Models.Transaction
         public int? LineNum { get; set; }
 
         public string LineStatus { get; set; }
+
+        // Status permintaan timbang dari Tp_ScaleStaging (Waiting/Processed/Error). Null bila belum pernah diklik.
+        public string StagingStatus { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
@@ -399,7 +411,7 @@ namespace Models.Transaction
 
         public List<GoodsReceiptPoItem> GoodsReceiptPo_Details(HANA_APP CONTEXT, long id = 0)
         {
-            string ssql = @"SELECT T0.*
+            string ssql = @"SELECT ROW_NUMBER() OVER (ORDER BY T0.""DetId"" ASC) AS ""RowNo"", T0.*
                 FROM ""Tx_GoodsReceiptPO_Item"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
@@ -1876,7 +1888,8 @@ namespace Models.Transaction
                                 T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""Uom"",
-                                T2.""LineNum""
+                                T2.""LineNum"",
+                                T2.""Batch""
                                 FROM ""Tx_GoodsReceiptPO"" T0
                                 LEFT JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 LEFT JOIN ""Tx_GoodsReceiptPO_Item_Batch"" T2 ON T1.""DetId"" = T2.""DetId""
@@ -1892,12 +1905,23 @@ namespace Models.Transaction
                     model.DetDetId = detDetId;
                 }
 
-                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                // Status permintaan timbang terbaru per baris scale dari Tp_ScaleStaging.
+                // Ambil status baris ber-StagingId terbesar (HANA tak izinkan ORDER BY/LIMIT di subquery korelasi).
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*,
+                            (SELECT ST.""Status"" FROM ""Tp_ScaleStaging"" ST
+                             WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = 'GoodsReceiptPo'
+                               AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
+                                                       WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = 'GoodsReceiptPo')
+                            ) AS ""StagingStatus""
                             FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" T0
-                            WHERE ""DetDetId"" = :p0 ";
+                            WHERE T0.""DetDetId"" = :p0 ";
 
                 model.GoodsReceiptPoScaleModel___ = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleModel>(sql, detDetId).ToList();
             }
+
+            // "Line Num" = nilai LineNum batch, disajikan string (nested TextBox tak me-render numerik).
+            model.LineNumText = model.LineNum.HasValue ? model.LineNum.Value.ToString() : "";
+            model.DetDetIdText = model.DetDetId.ToString();
 
             return model;
         }
@@ -1909,9 +1933,16 @@ namespace Models.Transaction
 
             using (var CONTEXT = new HANA_APP())
             {
-                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*
+                // Sertakan status permintaan timbang terbaru per baris scale dari Tp_ScaleStaging.
+                // Ambil status baris ber-StagingId terbesar (HANA tak izinkan ORDER BY/LIMIT di subquery korelasi).
+                sql = @"SELECT ROW_NUMBER() OVER (ORDER BY ""LineNum"", ""DetDetDetId"") AS ""RowNo"", T0.*,
+                            (SELECT ST.""Status"" FROM ""Tp_ScaleStaging"" ST
+                             WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = 'GoodsReceiptPo'
+                               AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
+                                                       WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = 'GoodsReceiptPo')
+                            ) AS ""StagingStatus""
                             FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" T0
-                            WHERE ""DetDetId"" = :p0 ";
+                            WHERE T0.""DetDetId"" = :p0 ";
 
                 model = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleModel>(sql, detDetId).ToList();
             }
@@ -2024,6 +2055,8 @@ namespace Models.Transaction
                         try
                         {
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetDetId\"=:p0", DetDetDetId);
+                            // Hapus juga permintaan timbang terkait di staging.
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tp_ScaleStaging\" WHERE \"DetDetDetId\"=:p0 AND \"TransType\"='GoodsReceiptPo'", DetDetDetId);
                             CONTEXT.SaveChanges();
 
                             UpdateBatchNettoFromScale(CONTEXT, _userId, DetDetId);

@@ -147,6 +147,35 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Width = 250;
     });
+
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "TotalNeeded";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Total Needed";
+        itemSettings.FieldName = "TotalNeeded";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "TotalNeeded";
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "TotalCreated";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Total Created";
+        itemSettings.FieldName = "TotalCreated";
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "TotalCreated";
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 250;
+    });
+
     groupItem_3.Items.AddTabbedGroupItem(group =>
     {
         group.Name = "ViewBatch_TabBatch";

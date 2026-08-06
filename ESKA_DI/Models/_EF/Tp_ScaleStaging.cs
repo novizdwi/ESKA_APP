@@ -11,7 +11,7 @@ namespace ESKA_DI.Models._EF
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Tp_ScaleStaging
     {
         public long StagingId { get; set; }
@@ -32,7 +32,7 @@ namespace ESKA_DI.Models._EF
         public string Uom { get; set; }
         public Nullable<decimal> Netto { get; set; }
         public Nullable<decimal> WeightKg { get; set; }
-        public string ScaleStatus { get; set; }
+        public Nullable<int> ScaleStatus { get; set; }
         public string Status { get; set; }
         public string RequestId { get; set; }
         public Nullable<System.DateTime> SentDate { get; set; }

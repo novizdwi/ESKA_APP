@@ -82,10 +82,13 @@
     settings.Columns.Add(column =>
     {
         column.FieldName = "RowNo";
-        column.Caption = "Row No";
+        column.Caption = "No";
         column.Width = 60;
         column.ReadOnly = true;
 
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.PropertiesEdit.Style.HorizontalAlign = HorizontalAlign.Center;
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
     });
 
@@ -144,27 +147,44 @@
 
     });
 
+    // Netto batch diisi lewat popup Timbangan (Scale). Kolom read-only + tombol kaca pembesar.
     settings.Columns.Add(column =>
     {
         column.FieldName = "Netto";
         column.Name = "Netto";
         column.Caption = "Netto";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
-        column.Width = 100;
+        column.Width = 120;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = ViewBag.ReadOnly;
+        column.ReadOnly = true;
 
-        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
-        //column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        column.SetDataItemTemplateContent(c =>
+        {
+            var visibleIndex = c.VisibleIndex;
+            var detDetId = DataBinder.Eval(c.DataItem, "DetDetId");
+            var netto = DataBinder.Eval(c.DataItem, "Netto");
 
-        var txt = column.PropertiesEdit as SpinEditProperties;
-        txt.NumberType = SpinEditNumberType.Float;
-        txt.DisplayFormatString = "N0";
-        txt.DisplayFormatInEditMode = true;
-        txt.AllowMouseWheel = false;
+            Html.DevExpress().ButtonEdit(s =>
+            {
+                s.Name = "gvContentReceiptBatchList_Netto_" + visibleIndex;
+                s.Text = (netto == null) ? "0" : Convert.ToDecimal(netto).ToString("N0");
+                s.ReadOnly = true;
+                s.Width = 100;
 
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+                s.Properties.Buttons.Clear();
+
+                EditButton btn = new EditButton();
+                btn.Text = "";
+                btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                btn.Image.Width = 15;
+                s.Properties.Buttons.Add(btn);
+
+                if (!ViewBag.ReadOnly)
+                {
+                    s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnScalePopupListOnClick(s, e, 'Receipt', '{0}', '{1}'); }}", DetId, detDetId);
+                }
+            }).Render();
+        });
     });
 
     settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentReceiptBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);

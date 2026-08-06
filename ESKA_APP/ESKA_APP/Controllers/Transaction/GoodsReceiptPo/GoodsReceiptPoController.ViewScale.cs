@@ -96,6 +96,15 @@ namespace Controllers.Transaction
             return TabScaleListPartial(id, detId, detDetId);
         }
 
+        // Tombol "Scale" (Timbang) -> simpan permintaan timbang ke Tp_ScaleStaging.
+        [HttpPost, ValidateInput(false)]
+        public ContentResult SaveScaleStaging(long Id, long DetId, long DetDetId, long DetDetDetId)
+        {
+            int userId = (int)Session["userId"];
+            new Models._Utils.ScaleStagingService().SaveFromScale(userId, "GoodsReceiptPo", Id, DetId, DetDetId, DetDetDetId);
+            return Content("OK");
+        }
+
 
     }
 

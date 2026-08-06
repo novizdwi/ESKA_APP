@@ -975,6 +975,22 @@ new
         }
     }
 
+    // Tombol "Scale" (Timbang) -> simpan permintaan timbang ke Tp_ScaleStaging.
+    function gvContentScaleListOnCustomButtonClick(s, e, Id, DetId, DetDetId) {
+        if (e.buttonID == "timbangButton") {
+            var detDetDetId = s.GetRowKey(e.visibleIndex);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveScaleStaging", "GoodsReceiptPo")',
+                data: { Id: Id, DetId: DetId, DetDetId: DetDetId, DetDetDetId: detDetDetId },
+                beforeSend: function () { OnBegin(); },
+                success: function () { OnSuccessMsgBox(); s.PerformCallback(); },
+                error: function (jqXhr, textStatus, errorThrown) { OnFailure(jqXhr, textStatus, errorThrown); },
+                complete: function () { OnComplete(); }
+            });
+        }
+    }
+
 </script>
 
 @Html.Partial("Partial/Scale/Scale_Partial")
