@@ -6,3 +6,5 @@
 /ESKA_APP/SAP HANA CLIENT 2.0 FOR B1
 /ESKA_APP/Scripts/SQLs/Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql
 /ESKA_APP/CLAUDE.md
+/graphify-out
+/ESKA_APP/graphify-out/cache
