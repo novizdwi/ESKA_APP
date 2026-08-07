@@ -88,7 +88,7 @@ namespace Controllers.Transaction
         }
 
         [HttpPost, ValidateInput(false)]
-        public ContentResult UpdateQtyIssue(long DetId, decimal? Quantity, string WhsCode, string MsnPrd, string Department, string Cost)
+        public ContentResult UpdateQtyIssue(long DetId, decimal? Quantity, string WhsCode, string MsnPrd, string Department, decimal? Cost)
         {
             int userId = (int)Session["userId"];
             reProcessService = new ReProcessService();

@@ -324,6 +324,9 @@ namespace Models.Transaction
         // Status permintaan timbang dari Tp_ScaleStaging (Waiting/Processed/Error). Null bila belum pernah diklik.
         public string StagingStatus { get; set; }
 
+        // RequestId permintaan timbang dari Tp_ScaleStaging (baris staging terkini).
+        public string StagingRequestId { get; set; }
+
         public DateTime? CreatedDate { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
@@ -943,6 +946,7 @@ namespace Models.Transaction
                         CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", detDetId);
                     }
 
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tp_ScaleStaging\" WHERE \"DetId\"=:p0 AND \"TransType\"='GoodsReceiptPo'", detId);
                     CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch\"  WHERE \"DetId\"=:p0", detId);
                     CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item\"  WHERE \"DetId\"=:p0", detId);
                     CONTEXT.SaveChanges();
@@ -1190,6 +1194,40 @@ namespace Models.Transaction
                         if (qtyErrors.Any())
                         {
                             throw new Exception("[VALIDATION] - Total Created harus sama dengan Total Needed:\n" + string.Join("\n", qtyErrors));
+                        }
+
+                        // Validasi Scale/Netto: tiap batch yang dikirim ke SAP harus SUDAH punya baris scale
+                        // dan tidak sedang menunggu hasil timbang (staging Status='Waiting').
+                        var scaleErrors = new List<string>();
+                        if (syncGRPO.ListDetails_ != null)
+                        {
+                            foreach (var item in syncGRPO.ListDetails_.Where(x => (x.Quantity ?? 0) > 0))
+                            {
+                                if (item.ListItemBatch_ == null) continue;
+                                foreach (var b in item.ListItemBatch_)
+                                {
+                                    long detDetId = b.DetDetId;
+                                    if (detDetId == 0) continue;
+                                    long scaleCount = CONTEXT.Database.SqlQuery<long>(
+                                        "SELECT COUNT(*) AS IDU FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\" WHERE \"DetDetId\"=:p0", detDetId).FirstOrDefault();
+                                    if (scaleCount == 0)
+                                    {
+                                        scaleErrors.Add(string.Format("Batch {0}: belum ada data Scale. Isi baris scale (popup Scale) terlebih dahulu.", b.Batch));
+                                        continue;
+                                    }
+                                    int waitingCount = CONTEXT.Database.SqlQuery<int>(
+                                        "SELECT COUNT(*) AS IDU FROM \"Tp_ScaleStaging\" ST " +
+                                        "WHERE ST.\"DetDetId\"=:p0 AND ST.\"Status\"='Waiting'", detDetId).FirstOrDefault();
+                                    if (waitingCount > 0)
+                                    {
+                                        scaleErrors.Add(string.Format("Batch {0}: masih ada permintaan timbang menunggu (Status Waiting). Tunggu proses selesai / hasil diterima, atau hapus baris scale yang menunggu.", b.Batch));
+                                    }
+                                }
+                            }
+                        }
+                        if (scaleErrors.Any())
+                        {
+                            throw new Exception("[VALIDATION] - Data Scale belum siap untuk di-Post:\n" + string.Join("\n", scaleErrors));
                         }
 
                         GRPOAddResultModel GRPOResult = AddGoodsReceiptPO(oCompany, userId, id, syncGRPO);
@@ -1844,6 +1882,7 @@ namespace Models.Transaction
                         {
                             //SpNotif.SpSysControllerTransNotif(_userId, "StockOpname", CONTEXT, "before", "StockOpname", "deleteItemBatch", "Id", Id.ToString());
 
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tp_ScaleStaging\" WHERE \"DetDetId\"=:p0 AND \"TransType\"='GoodsReceiptPo'", DetDetId);
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_GoodsReceiptPO_Item_Batch\"  WHERE \"DetDetId\"=:p0", DetDetId);
                             CONTEXT.SaveChanges();
@@ -1912,7 +1951,12 @@ namespace Models.Transaction
                              WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = 'GoodsReceiptPo'
                                AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
                                                        WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = 'GoodsReceiptPo')
-                            ) AS ""StagingStatus""
+                            ) AS ""StagingStatus"",
+                            (SELECT ST.""RequestId"" FROM ""Tp_ScaleStaging"" ST
+                             WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = 'GoodsReceiptPo'
+                               AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
+                                                       WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = 'GoodsReceiptPo')
+                            ) AS ""StagingRequestId""
                             FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" T0
                             WHERE T0.""DetDetId"" = :p0 ";
 
@@ -1940,7 +1984,12 @@ namespace Models.Transaction
                              WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = 'GoodsReceiptPo'
                                AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
                                                        WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = 'GoodsReceiptPo')
-                            ) AS ""StagingStatus""
+                            ) AS ""StagingStatus"",
+                            (SELECT ST.""RequestId"" FROM ""Tp_ScaleStaging"" ST
+                             WHERE ST.""DetDetDetId"" = T0.""DetDetDetId"" AND ST.""TransType"" = 'GoodsReceiptPo'
+                               AND ST.""StagingId"" = (SELECT MAX(ST2.""StagingId"") FROM ""Tp_ScaleStaging"" ST2
+                                                       WHERE ST2.""DetDetDetId"" = T0.""DetDetDetId"" AND ST2.""TransType"" = 'GoodsReceiptPo')
+                            ) AS ""StagingRequestId""
                             FROM ""Tx_GoodsReceiptPO_Item_Batch_Scale"" T0
                             WHERE T0.""DetDetId"" = :p0 ";
 
