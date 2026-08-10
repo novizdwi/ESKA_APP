@@ -247,7 +247,9 @@
 
     //});
 
-}).GetHtml()
+// FormLayout di-bind eksplisit ke model agar field header (Item Code, Item Name, Whs Code,
+// No, Total Needed, Total Created) terisi dari @Model — tidak menunggu auto-bind yang rawan kosong.
+}).Bind(Model).GetHtml()
 
 
 

@@ -150,6 +150,22 @@
         txt.Style.HorizontalAlign = HorizontalAlign.Right;
     });
 
+    // RequestId permintaan timbang dari Tp_ScaleStaging (baris staging terkini).
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "StagingRequestId";
+        column.Name = "StagingRequestId";
+        column.Caption = "RequestId";
+        column.Width = 180;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
     // Status permintaan timbang dari Tp_ScaleStaging (terisi bila tombol Scale sudah diklik).
     settings.Columns.Add(column =>
     {
