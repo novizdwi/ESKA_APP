@@ -15,7 +15,7 @@ namespace ESKA_DI.Models._EF
     public partial class Tx_IssueAndReceipt_Issue_Item
     {
         public long DetId { get; set; }
-        public Nullable<long> Id { get; set; }
+        public long Id { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public Nullable<int> Quantity { get; set; }
@@ -24,8 +24,8 @@ namespace ESKA_DI.Models._EF
         public string WhsCode { get; set; }
         public Nullable<decimal> Netto { get; set; }
         public Nullable<decimal> Value { get; set; }
-        public string MsnPrd { get; set; }
         public Nullable<decimal> Cost { get; set; }
+        public string MsnPrd { get; set; }
         public string Department { get; set; }
         public Nullable<long> DocEntry { get; set; }
         public Nullable<int> LineNum { get; set; }
@@ -33,6 +33,6 @@ namespace ESKA_DI.Models._EF
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
-        public Nullable<int> ModifiedUser { get; set; } 
+        public Nullable<int> ModifiedUser { get; set; }
     }
 }

@@ -492,9 +492,6 @@
     <Compile Include="Models\_EF\Tp_Approval.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tp_ScaleStaging.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\_EF\Tp_UserAlert.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
