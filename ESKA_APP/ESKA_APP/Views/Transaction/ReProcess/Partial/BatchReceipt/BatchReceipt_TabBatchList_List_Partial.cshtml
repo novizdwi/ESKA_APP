@@ -179,10 +179,9 @@
                 btn.Image.Width = 15;
                 s.Properties.Buttons.Add(btn);
 
-                if (!ViewBag.ReadOnly)
-                {
-                    s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnScalePopupListOnClick(s, e, 'Receipt', '{0}', '{1}'); }}", DetId, detDetId);
-                }
+                // Selalu pasang handler supaya popup Scale tetap bisa dibuka (mis. saat status Posted,
+                // popup yang terbuka akan read-only sesuai ViewBag.ReadOnly di view Scale).
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnScalePopupListOnClick(s, e, 'Receipt', '{0}', '{1}'); }}", DetId, detDetId);
             }).Render();
         });
     });

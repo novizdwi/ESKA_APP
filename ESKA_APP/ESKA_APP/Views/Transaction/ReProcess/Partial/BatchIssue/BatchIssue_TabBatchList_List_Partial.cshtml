@@ -22,6 +22,15 @@
     {
         ViewBag.ReadOnly = true;
     }
+
+    // ItemCode item yang dibuka popup ini. ViewBag hanya terisi saat render awal; pada callback
+    // (New/simpan/hapus) kosong, jadi dicari dari DetId langsung agar combobox tetap terisi.
+    string batchItemCode = (ViewBag.ItemCode as string) ?? Request["itemCode"] ?? "";
+    if (string.IsNullOrEmpty(batchItemCode))
+    {
+        batchItemCode = new Models.Transaction.ReProcessService().GetIssueItemCode(DetId);
+    }
+    System.Data.DataTable obtnBatchList = new Models.Transaction.ReProcessService().ReProcess_OBTNBatches(batchItemCode, DetId);
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -97,13 +106,19 @@
         column.Name = "Batch";
         column.Caption = "Batch";
 
-        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        // ComboBox daftar batch SAP (OBTN) per ItemCode item yang sedang dibuka popup ini.
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
         column.Width = 200;
         column.ReadOnly = ViewBag.ReadOnly;
 
-        var txt = column.PropertiesEdit as TextBoxProperties;
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = obtnBatchList;
+        cbo.TextField = "Value";
+        cbo.ValueField = "Value";
+        cbo.ValueType = typeof(string);
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        cbo.ClientInstanceName = settings.Name + "_" + column.FieldName;
     });
 
     settings.Columns.Add(column =>
@@ -178,10 +193,9 @@
                 btn.Image.Width = 15;
                 s.Properties.Buttons.Add(btn);
 
-                if (!ViewBag.ReadOnly)
-                {
-                    s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnScalePopupListOnClick(s, e, 'Issue', '{0}', '{1}'); }}", DetId, detDetId);
-                }
+                // Selalu pasang handler supaya popup Scale tetap bisa dibuka (mis. saat status Posted,
+                // popup yang terbuka akan read-only sesuai ViewBag.ReadOnly di view Scale).
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnScalePopupListOnClick(s, e, 'Issue', '{0}', '{1}'); }}", DetId, detDetId);
             }).Render();
         });
     });

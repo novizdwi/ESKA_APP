@@ -113,6 +113,13 @@
                         btnCancel.SetEnabled(true);
 
                         break;
+                    case 'IssuePosted':
+                        // Goods Issue sudah ter-post ke SAP, Goods Receipt belum -- izinkan retry Post atau Cancel.
+                        btnUpdate.SetEnabled(true);
+                        btnPost.SetEnabled(true);
+                        btnCancel.SetEnabled(true);
+
+                        break;
                     case 'Cancel':
                         btnUpdate.SetEnabled(false);
 

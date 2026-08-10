@@ -27,6 +27,7 @@ namespace Controllers.Transaction
             {
                 model = reProcessService.GetIssueBatch(id, detId);
             }
+            ViewBag.ItemCode = model?.ItemCode;
             return PartialView(VIEW_ISSUE_ITEMTAG_PANEL_PARTIAL, model);
         }
 

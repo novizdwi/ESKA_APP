@@ -334,6 +334,13 @@ namespace Models.Transaction
         public decimal? Netto { get; set; }
     }
 
+    public class ReceiptPriceRow
+    {
+        public string ItemCode { get; set; }
+
+        public decimal? Price { get; set; }
+    }
+
     // Header popup Timbangan (Scale) — dipakai bersama Issue & Receipt (dibedakan `side`).
     public class ReProcessScaleView___
     {
@@ -1742,34 +1749,8 @@ namespace Models.Transaction
 
         public void PostSAP(int userId, long id)
         {
-            ReProcessModel sync = GetById(userId, id);
-
-            // ---- Fase 1: Goods Issue (SAP transaksi #1 + DB transaksi #1) ----
-            // Dilewati bila dokumen sudah "IssuePosted" (retry Fase 2 setelah Fase 2 gagal sebelumnya).
-            IssueReceipt_PostResult issRes;
-            using (var CONTEXT = new HANA_APP())
-            {
-                Tx_IssueAndReceipt txPeek = CONTEXT.Tx_IssueAndReceipt.Find(id);
-                if (txPeek != null && txPeek.Status == "IssuePosted")
-                {
-                    issRes = new IssueReceipt_PostResult { DocEntry = txPeek.IssueDocEntry, DocNum = txPeek.IssueDocNum };
-                }
-                else
-                {
-                    issRes = PostSAP_Phase1_Issue(userId, id, sync);
-                }
-            }
-
-            // ---- Fase 2: Costing + Goods Receipt (SAP transaksi #2 + DB transaksi #2) ----
-            PostSAP_Phase2_Receipt(userId, id, sync, issRes);
-        }
-
-        // Fase 1: validasi + AddGoodsIssue dalam satu transaksi SAP dan satu transaksi DB.
-        // Sukses -> tx.Status = "IssuePosted" (durable), commit SAP + commit DB bersamaan.
-        // Gagal -> rollback SAP + rollback DB, tx.Status tetap "Draft" (sama seperti sebelum perubahan ini).
-        private IssueReceipt_PostResult PostSAP_Phase1_Issue(int userId, long id, ReProcessModel sync)
-        {
             SAPbobsCOM.Company oCompany = null;
+            ReProcessModel sync = GetById(userId, id);
 
             using (var CONTEXT = new HANA_APP())
             using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
@@ -1948,9 +1929,61 @@ namespace Models.Transaction
                         throw new Exception("[VALIDATION] - Data Scale belum siap untuk di-Post:\n" + string.Join("\n", scaleErrors));
                     }
 
-                    // Fase 1 hanya membuat Goods Issue. Goods Receipt (dengan UnitPrice benar) dibuat
-                    // di Fase 2, SETELAH Goods Issue ini commit ke SAP (OINM baru terbaca setelah commit).
+                    // 2 dokumen dalam SATU transaksi DB: bila gagal, keduanya rollback.
                     IssueReceipt_PostResult issRes = AddGoodsIssue(CONTEXT, oCompany, sync);
+
+                    // Pre-hitung Value & Price Receipt item (alokasi biaya issue per proporsi Netto)
+                    // SETELAH Goods Issue terbentuk (butuh DocEntry utk baca OINM), tapi SEBELUM
+                    // AddGoodsReceipt — agar UnitPrice SAP terisi dari kolom Price Receipt item.
+                    if (issRes != null && issRes.DocEntry.HasValue && sync.ListReceiptItem_ != null && sync.ListReceiptItem_.Any(x => (x.Quantity ?? 0) > 0))
+                    {
+                        string dbSap = DbProvider.dbSap_Name;
+
+                        string sqlCost =
+                            "SELECT T1.\"LineNum\" AS \"LineNum\", T1.\"ItemCode\" AS \"ItemCode\", " +
+                            "(SELECT DISTINCT ABS(TT0.\"TransValue\") / NULLIF(TT0.\"OutQty\", 0) FROM \"" + dbSap + "\".\"OINM\" TT0 " +
+                            " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
+                            "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueCost\", " +
+                            "(SELECT DISTINCT ABS(TT0.\"TransValue\") FROM \"" + dbSap + "\".\"OINM\" TT0 " +
+                            " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
+                            "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueValue\" " +
+                            "FROM \"" + dbSap + "\".\"OIGE\" T0 " +
+                            "JOIN \"" + dbSap + "\".\"IGE1\" T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" " +
+                            "WHERE T0.\"DocEntry\" = :p0 ORDER BY T1.\"LineNum\" ";
+                        var costRows = CONTEXT.Database.SqlQuery<ReProcess_IssueCostRow>(sqlCost, issRes.DocEntry.Value).ToList();
+
+                        // Item Issue dikirim hanya qty>0 -> LineNum 0-based.
+                        var issueItems = sync.ListIssueItem_ == null
+                            ? new List<IssueReceipt_IssueItemModel>()
+                            : sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0).ToList();
+
+                        decimal totalCostIssue = 0m;
+                        int lineIdx = 0;
+                        foreach (var it in issueItems)
+                        {
+                            var row = costRows.FirstOrDefault(r => r.LineNum == lineIdx && r.ItemCode == it.ItemCode)
+                                      ?? costRows.FirstOrDefault(r => r.LineNum == lineIdx);
+                            if (row != null)
+                            {
+                                totalCostIssue += row.IssueCost ?? row.IssueValue ?? 0m;
+                            }
+                            lineIdx++;
+                        }
+
+                        // Alokasi ke Receipt: Value = (Netto/TotalNettoReceipt)*TotalCostIssue; Price = Value/Quantity.
+                        var receiptItems = sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0).ToList();
+                        decimal totalNettoReceipt = receiptItems.Sum(r => r.Netto ?? 0m);
+                        foreach (var it in receiptItems)
+                        {
+                            decimal netto = it.Netto ?? 0m;
+                            decimal value = totalNettoReceipt > 0 ? (netto / totalNettoReceipt) * totalCostIssue : 0m;
+                            decimal qty = it.Quantity ?? 0m;
+                            it.Value = Math.Round(value, 2);
+                            it.Price = qty > 0 ? Math.Round(value / qty, 2) : 0m;
+                        }
+                    }
+
+                    IssueReceipt_PostResult recRes = AddGoodsReceipt(CONTEXT, oCompany, sync);
 
                     DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
@@ -1968,73 +2001,6 @@ namespace Models.Transaction
                                 issRes.DocEntry.Value, id);
                         }
                     }
-
-                    // Status antara: Issue sudah di SAP, Receipt menyusul di Fase 2. Bila Fase 2 gagal,
-                    // status ini tetap tersimpan (bukan Draft, bukan Posted) sehingga Post bisa di-retry
-                    // (lanjut Fase 2 saja, tanpa membuat Goods Issue dobel) atau dokumen di-Cancel.
-                    tx.Status = "IssuePosted";
-                    tx.ModifiedDate = dtModified;
-                    tx.ModifiedUser = userId;
-
-                    CONTEXT.SaveChanges();
-
-                    if (oCompany.InTransaction)
-                    {
-                        oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                    }
-
-                    CONTEXT_TRANS.Commit();
-
-                    return issRes;
-                }
-                catch (Exception ex)
-                {
-                    if (oCompany != null && oCompany.InTransaction)
-                    {
-                        oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                    }
-                    CONTEXT_TRANS.Rollback();
-
-                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
-                }
-                finally
-                {
-                    SAPCachedCompany.Release(oCompany);
-                }
-            }
-        }
-
-        // Fase 2: costing (OINM sudah terbaca karena Goods Issue Fase 1 sudah commit) + AddGoodsReceipt
-        // dalam transaksi SAP #2 dan transaksi DB #2 sendiri, terpisah dari Fase 1.
-        // Gagal -> rollback SAP #2 (Goods Receipt belum tersentuh SAP) + rollback DB #2 (Status tx TIDAK
-        // ikut rollback -- tetap "IssuePosted" dari Fase 1 yang sudah commit sebelumnya) -> retry via Post lagi.
-        private void PostSAP_Phase2_Receipt(int userId, long id, ReProcessModel sync, IssueReceipt_PostResult issRes)
-        {
-            SAPbobsCOM.Company oCompany = null;
-
-            using (var CONTEXT = new HANA_APP())
-            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
-            {
-                try
-                {
-                    Tx_IssueAndReceipt tx = CONTEXT.Tx_IssueAndReceipt.Find(id);
-                    if (tx == null)
-                    {
-                        throw new Exception("[VALIDATION] - ReProcess tidak ditemukan");
-                    }
-
-                    if (issRes != null && issRes.DocEntry.HasValue && sync.ListReceiptItem_ != null && sync.ListReceiptItem_.Any(x => (x.Quantity ?? 0) > 0))
-                    {
-                        FillCosting(CONTEXT, id, (int)issRes.DocEntry.Value, sync);
-                    }
-
-                    oCompany = SAPCachedCompany.GetCompany();
-                    oCompany.StartTransaction();
-
-                    IssueReceipt_PostResult recRes = AddGoodsReceipt(CONTEXT, oCompany, sync);
-
-                    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-
                     if (recRes != null)
                     {
                         tx.ReceiptDocEntry = recRes.DocEntry;
@@ -2064,6 +2030,18 @@ namespace Models.Transaction
                     }
 
                     CONTEXT_TRANS.Commit();
+
+                    // Best-effort: costing setelah post (Issue Cost dari OINM + Receipt Value/Price).
+                    // Post sudah commit; kegagalan di sini tidak membatalkan post (bisa di-backfill).
+                    try
+                    {
+                        if (issRes != null && issRes.DocEntry.HasValue)
+                        {
+                            FillCostingAfterPost(id, (int)issRes.DocEntry.Value);
+                            UpdateGoodsReceiptPrice(CONTEXT, oCompany, (int)recRes.DocEntry.Value, id);
+                        }
+                    }
+                    catch { }
                 }
                 catch (Exception ex)
                 {
@@ -2073,10 +2051,7 @@ namespace Models.Transaction
                     }
                     CONTEXT_TRANS.Rollback();
 
-                    string issueInfo = (issRes != null && issRes.DocEntry.HasValue)
-                        ? string.Format(" (Goods Issue sudah ter-post, DocEntry {0} -- klik Post lagi untuk melanjutkan Goods Receipt)", issRes.DocEntry.Value)
-                        : "";
-                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message + issueInfo : string.Format("[VALIDATION] {0}{1} ", ex.Message, issueInfo));
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
                 }
                 finally
                 {
@@ -2085,71 +2060,111 @@ namespace Models.Transaction
             }
         }
 
-        // Costing: isi Cost item Issue dari OINM (Goods Issue, TransType 60), lalu hitung Value & Price
-        // item Receipt sebagai alokasi biaya issue per proporsi Netto.
-        //   Value  = (Netto / TotalNettoReceipt) * TotalCostIssue
-        //   Price  = Value / Quantity
-        // Dipanggil di Fase 2, setelah Goods Issue Fase 1 sudah commit (OINM baru bisa dibaca setelah commit).
-        // Menulis hasil ke DB DAN ke `sync` in-memory (dipakai AddGoodsReceipt utk isi UnitPrice SAP).
-        private void FillCosting(HANA_APP CONTEXT, long id, int issueDocEntry, ReProcessModel sync)
+        private void UpdateGoodsReceiptPrice( HANA_APP CONTEXT,SAPbobsCOM.Company company,int docEntry,long id)
         {
-            string dbSap = DbProvider.dbSap_Name;
+            var receiptItems =
+                CONTEXT.Database.SqlQuery<ReceiptPriceRow>(
+                @"SELECT
+                    ""ItemCode"",
+                    ""Price""
+                FROM ""Tx_IssueAndReceipt_Receipt_Item""
+                WHERE ""Id""=:p0
+                ORDER BY ""DetId""",
+                id).ToList();
 
-            // Issue Cost per baris dari OINM, urut LineNum.
-            // Cost  = unit cost = ABS(TransValue)/OutQty
-            // Value = total cost = ABS(TransValue)
-            string sqlCost =
-                "SELECT T1.\"LineNum\" AS \"LineNum\", T1.\"ItemCode\" AS \"ItemCode\", " +
-                "(SELECT DISTINCT ABS(TT0.\"TransValue\") / NULLIF(TT0.\"OutQty\", 0) FROM \"" + dbSap + "\".\"OINM\" TT0 " +
-                " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
-                "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueCost\", " +
-                "(SELECT DISTINCT ABS(TT0.\"TransValue\") FROM \"" + dbSap + "\".\"OINM\" TT0 " +
-                " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
-                "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueValue\" " +
-                "FROM \"" + dbSap + "\".\"OIGE\" T0 " +
-                "JOIN \"" + dbSap + "\".\"IGE1\" T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" " +
-                "WHERE T0.\"DocEntry\" = :p0 ORDER BY T1.\"LineNum\" ";
-            var costRows = CONTEXT.Database.SqlQuery<ReProcess_IssueCostRow>(sqlCost, issueDocEntry).ToList();
+            SAPbobsCOM.Documents doc =
+                (SAPbobsCOM.Documents)
+                company.GetBusinessObject(
+                    SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
 
-            // Item Issue dikirim ke SAP hanya qty>0 -> LineNum 0-based, sesuai urutan AddGoodsIssue.
-            var issueItems = sync.ListIssueItem_ == null
-                ? new List<IssueReceipt_IssueItemModel>()
-                : sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0).ToList();
+            if (!doc.GetByKey(docEntry))
+                throw new Exception("Goods Receipt tidak ditemukan.");
 
-            decimal totalCostIssue = 0m;
-            int lineIdx = 0;
-            foreach (var it in issueItems)
+            for (int i = 0; i < receiptItems.Count; i++)
             {
-                var row = costRows.FirstOrDefault(r => r.LineNum == lineIdx && r.ItemCode == it.ItemCode)
-                          ?? costRows.FirstOrDefault(r => r.LineNum == lineIdx);
-                if (row != null && (row.IssueCost.HasValue || row.IssueValue.HasValue))
-                {
-                    decimal unitCost = row.IssueCost ?? row.IssueValue ?? 0m;
-                    totalCostIssue += unitCost;
-                    it.Cost = Math.Round(unitCost, 2);
-                    CONTEXT.Database.ExecuteSqlCommand(
-                        "UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Cost\" = :p0, \"Value\" = :p1 WHERE \"DetId\" = :p2",
-                        Math.Round(unitCost, 2), Math.Round(row.IssueValue ?? 0m, 2), it.DetId);
-                }
-                lineIdx++;
+                doc.Lines.SetCurrentLine(i);
+
+                doc.Lines.UnitPrice =
+                    (double)(receiptItems[i].Price ?? 0);
             }
 
-            // Alokasi ke Receipt: Value = (Netto/TotalNettoReceipt)*TotalCostIssue; Price = Value/Quantity.
-            var receiptItems = sync.ListReceiptItem_ == null
-                ? new List<IssueReceipt_ReceiptItemModel>()
-                : sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0).ToList();
-            decimal totalNettoReceipt = receiptItems.Sum(r => r.Netto ?? 0m);
-            foreach (var it in receiptItems)
+            // Header
+            doc.Comments = "TEST UPDATE " + DateTime.Now.ToString("HH:mm:ss");
+
+            int ret = doc.Update();
+
+            if (ret != 0)
+                throw new Exception(company.GetLastErrorDescription());
+
+            SapCompany.CleanUp(doc);
+        }
+
+        // Costing setelah post (best-effort): isi Cost item Issue dari OINM (Goods Issue, TransType 60),
+        // lalu hitung Value & Price item Receipt sebagai alokasi biaya issue per proporsi Netto.
+        //   Value  = (Netto / TotalNettoReceipt) * TotalCostIssue
+        //   Price  = Value / Quantity
+        // Dijalankan setelah dokumen commit (OINM sudah bisa dibaca). Kegagalan tak membatalkan post.
+        private void FillCostingAfterPost(long id, int issueDocEntry)
+        {
+            using (var CONTEXT = new HANA_APP())
             {
-                decimal netto = it.Netto ?? 0m;
-                decimal value = totalNettoReceipt > 0 ? (netto / totalNettoReceipt) * totalCostIssue : 0m;
-                decimal qty = it.Quantity ?? 0m;
-                decimal price = qty > 0 ? value / qty : 0m;
-                it.Value = Math.Round(value, 2);
-                it.Price = Math.Round(price, 2);
-                CONTEXT.Database.ExecuteSqlCommand(
-                    "UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Value\" = :p0, \"Price\" = :p1 WHERE \"DetId\" = :p2",
-                    Math.Round(value, 2), Math.Round(price, 2), it.DetId);
+                string dbSap = DbProvider.dbSap_Name;
+
+                // a) Issue Cost per baris dari OINM (query user), urut LineNum.
+                // Cost  = unit cost = ABS(TransValue)/OutQty
+                // Value = total cost = ABS(TransValue)
+                string sqlCost =
+                    "SELECT T1.\"LineNum\" AS \"LineNum\", T1.\"ItemCode\" AS \"ItemCode\", " +
+                    "(SELECT DISTINCT ABS(TT0.\"TransValue\") / NULLIF(TT0.\"OutQty\", 0) FROM \"" + dbSap + "\".\"OINM\" TT0 " +
+                    " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
+                    "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueCost\", " +
+                    "(SELECT DISTINCT ABS(TT0.\"TransValue\") FROM \"" + dbSap + "\".\"OINM\" TT0 " +
+                    " WHERE TT0.\"CreatedBy\" = T0.\"DocEntry\" AND TT0.\"BASE_REF\" = T0.\"DocNum\" " +
+                    "   AND TT0.\"DocLineNum\" = T1.\"LineNum\" AND TT0.\"ItemCode\" = T1.\"ItemCode\" AND TT0.\"TransType\" = 60) AS \"IssueValue\" " +
+                    "FROM \"" + dbSap + "\".\"OIGE\" T0 " +
+                    "JOIN \"" + dbSap + "\".\"IGE1\" T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" " +
+                    "WHERE T0.\"DocEntry\" = :p0 ORDER BY T1.\"LineNum\" ";
+                var costRows = CONTEXT.Database.SqlQuery<ReProcess_IssueCostRow>(sqlCost, issueDocEntry).ToList();
+
+                // Item Issue kita (urut DetId; yang dikirim ke SAP hanya qty>0 -> LineNum 0-based).
+                var issueItems = CONTEXT.Database.SqlQuery<ReProcess_CostItemRow>(
+                    "SELECT \"DetId\", \"ItemCode\", \"Quantity\", \"Netto\" FROM \"Tx_IssueAndReceipt_Issue_Item\" WHERE \"Id\" = :p0 ORDER BY \"DetId\" ASC", id).ToList();
+
+                decimal totalCostIssue = 0m;
+                int lineIdx = 0;
+                foreach (var it in issueItems)
+                {
+                    if ((it.Quantity ?? 0) <= 0) continue;
+                    var row = costRows.FirstOrDefault(r => r.LineNum == lineIdx && r.ItemCode == it.ItemCode)
+                              ?? costRows.FirstOrDefault(r => r.LineNum == lineIdx);
+                    if (row != null && (row.IssueCost.HasValue || row.IssueValue.HasValue))
+                    {
+                        // totalCostIssue memakai nilai Cost (unit) agar alokasi Value/Price Receipt sesuai Cost.
+                        totalCostIssue += row.IssueCost.Value;
+                        // unit cost (Cost) = TransValue/OutQty; fallback ke total bila OutQty 0.
+                        decimal unitCost = row.IssueCost ?? row.IssueValue ?? 0m;
+                        CONTEXT.Database.ExecuteSqlCommand(
+                            "UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Cost\" = :p0, \"Value\" = :p1 WHERE \"DetId\" = :p2",
+                            Math.Round(unitCost, 2), Math.Round(row.IssueValue ?? 0m, 2), it.DetId);
+                    }
+                    lineIdx++;
+                }
+
+                // b) Receipt Value & Price = alokasi biaya issue per proporsi Netto.
+                var receiptItems = CONTEXT.Database.SqlQuery<ReProcess_CostItemRow>(
+                    "SELECT \"DetId\", \"ItemCode\", \"Quantity\", \"Netto\" FROM \"Tx_IssueAndReceipt_Receipt_Item\" WHERE \"Id\" = :p0 ORDER BY \"DetId\" ASC", id).ToList();
+
+                decimal totalNettoReceipt = receiptItems.Sum(r => r.Netto ?? 0m);
+                foreach (var it in receiptItems)
+                {
+                    decimal netto = it.Netto ?? 0m;
+                    decimal value = totalNettoReceipt > 0 ? (netto / totalNettoReceipt) * totalCostIssue : 0m;
+                    decimal qty = it.Quantity ?? 0m;
+                    decimal price = qty > 0 ? value / qty : 0m;
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        "UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET \"Value\" = :p0, \"Price\" = :p1 WHERE \"DetId\" = :p2",
+                        Math.Round(value, 2), Math.Round(price, 2), it.DetId);
+                }
             }
         }
 
