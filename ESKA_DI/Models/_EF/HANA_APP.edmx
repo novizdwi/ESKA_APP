@@ -971,8 +971,9 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="Uom" Type="nvarchar" MaxLength="50" />
           <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Netto" Type="decimal" Precision="21" Scale="2" />
+          <Property Name="Value" Type="decimal" Precision="21" Scale="2" />
           <Property Name="MsnPrd" Type="nvarchar" MaxLength="50" />
-          <Property Name="Cost" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cost" Type="decimal" Precision="21" Scale="2" />
           <Property Name="Department" Type="nvarchar" MaxLength="50" />
           <Property Name="DocEntry" Type="bigint" />
           <Property Name="LineNum" Type="int" />
@@ -2464,8 +2465,9 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Netto" Type="Decimal" Precision="21" Scale="2" />
+          <Property Name="Value" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="MsnPrd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Cost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cost" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DocEntry" Type="Int64" />
           <Property Name="LineNum" Type="Int32" />
@@ -3888,6 +3890,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="DocEntry" ColumnName="DocEntry" />
                 <ScalarProperty Name="Department" ColumnName="Department" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="MsnPrd" ColumnName="MsnPrd" />
                 <ScalarProperty Name="Netto" ColumnName="Netto" />
                 <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
