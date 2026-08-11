@@ -1550,7 +1550,7 @@ namespace Models.Transaction
                     int nextLine = (CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_IssueAndReceipt_Issue_Item\" WHERE \"Id\"=:p0", model.Id).FirstOrDefault() ?? -1) + 1;
 
                     var ent = new Tx_IssueAndReceipt_Issue_Item();
-                    ent.Id = model.Id;
+                    ent.Id = (long)model.Id;
                     ent.ItemCode = model.ItemCode;
                     ent.ItemName = model.ItemName;
                     ent.Quantity = (int)(model.Quantity ?? 0);

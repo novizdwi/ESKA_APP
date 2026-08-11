@@ -83,7 +83,6 @@
         <EntityTypeShape EntityType="Model1.Tx_ProductionTask_Activity" Width="1.5" PointX="22.75" PointY="18.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProductionTask_Activity_Log" Width="1.5" PointX="22.75" PointY="23.75" />
         <EntityTypeShape EntityType="Model1.Tx_ProductionTask_Item" Width="1.5" PointX="24.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model1.Tx_ProductionTask_Item_Batch" Width="1.5" PointX="24.75" PointY="6.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname" Width="1.5" PointX="24.75" PointY="10.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Approval" Width="1.5" PointX="24.75" PointY="16.75" />
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item" Width="1.5" PointX="24.75" PointY="21.75" />
@@ -91,6 +90,7 @@
         <EntityTypeShape EntityType="Model1.Tx_StockOpname_Item_Batch_Scale" Width="1.5" PointX="0.75" PointY="26.75" />
         <EntityTypeShape EntityType="Model1.WeighbridgeTransactions" Width="1.5" PointX="26.75" PointY="5.75" />
         <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="26.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Model1.Tx_ProductionTask_Item_Batch" Width="1.5" PointX="11.375" PointY="26.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

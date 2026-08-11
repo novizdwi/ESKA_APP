@@ -15,7 +15,8 @@ namespace ESKA_DI.Models._EF
     public partial class Tx_ProductionTask_Item_Batch
     {
         public Nullable<long> Id { get; set; }
-        public Nullable<long> DetId { get; set; }
+        public Nullable<long> ItemDetId { get; set; }
+        public Nullable<long> ActivityDetId { get; set; }
         public long BatchId { get; set; }
         public string Batch { get; set; }
         public Nullable<System.DateTime> AdmissionDate { get; set; }

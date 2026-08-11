@@ -700,9 +700,13 @@ new
         var popup = ASPxClientPopupControl.Cast("popupBatch");
 
         var eId = ASPxClientTextBox.Cast("Id");
+        // Editor "DetId" milik popupFinish sebenarnya adalah kunci Tx_ProductionTask_Activity.
+        var eActivityDetId = ASPxClientTextBox.Cast("DetId");
 
         popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "ProductionTaskActivity")'
-            + '?Id=' + (eId != null ? eId.GetValue() : '') + '&DetId=' + itemDetId;
+            + '?Id=' + (eId != null ? eId.GetValue() : '')
+            + '&DetId=' + itemDetId
+            + '&ActivityDetId=' + (eActivityDetId != null ? eActivityDetId.GetValue() : '');
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
