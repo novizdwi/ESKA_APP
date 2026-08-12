@@ -406,27 +406,125 @@ namespace Models.Production
             }
         }
 
+        // Transaksi didorong lewat oCompany (SAP DI API), bukan CONTEXT_TRANS (EF) --
+        // Tx_ProductionTask diubah lewat SQL string (Recordset), sama seperti pola PostSAP
+        // di TransferSummaryInService.
         public void Close(long id, int userId)
         {
+            SAPbobsCOM.Company oCompany = null;
+
             using (var CONTEXT = new HANA_APP())
             {
-                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction()) 
-                { 
-                    Tx_ProductionTask tx_ProductionTask = CONTEXT.Tx_ProductionTask.Find(id);
+                try
+                {
+                    oCompany = SAPCachedCompany.GetCompany();
+                    oCompany.StartTransaction();
+
+                    String keyValue = id.ToString();
+
+                    int? docEntry = CONTEXT.Database.SqlQuery<int?>(
+                        @"SELECT ""DocEntry"" FROM ""Tx_ProductionTask"" WHERE ""Id"" = :p0", id).FirstOrDefault();
+
+                    if (docEntry == null)
                     {
-                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "before", "ProductionTask", "close", "Id", id.ToString() );
-                        
-                        DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                        tx_ProductionTask.Status = "Closed";
-                        tx_ProductionTask.ModifiedDate = dtModified;
-                        tx_ProductionTask.ModifiedUser = userId;
+                        throw new Exception("[VALIDATION] Production task not found");
+                    }
 
-                        CONTEXT.SaveChanges();
+                    SpNotif.SpSysControllerTransNotif(userId, "ProductionTask", oCompany, "before", "ProductionTask", "close", "Id", keyValue);
 
-                        SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "after", "ProductionTask", "close", "Id", id.ToString() );
-                        CONTEXT_TRANS.Commit();
+                    // DocEntry Production Order (OWOR) diambil dari header Tx_ProductionTask.
+                    if (docEntry.Value > 0)
+                    {
+                        CloseProductionOrder(oCompany, docEntry.Value);
+                    }
+
+                    SAPbobsCOM.Recordset rs = (SAPbobsCOM.Recordset)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                    string sqlUpdate = $@"
+                        UPDATE ""{DbProvider.dbApp_Name}"".""Tx_ProductionTask""
+                        SET ""Status""       = 'Closed',
+                            ""ModifiedUser"" = {userId},
+                            ""ModifiedDate"" = CURRENT_TIMESTAMP
+                        WHERE ""Id"" = {id}";
+
+                    ExecuteQuery(rs, sqlUpdate, "Update Tx_ProductionTask");
+
+                    SpNotif.SpSysControllerTransNotif(userId, "ProductionTask", oCompany, "after", "ProductionTask", "close", "Id", keyValue);
+
+                    if (oCompany.InTransaction)
+                    {
+                        oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
                     }
                 }
+                catch (Exception ex)
+                {
+                    if ((oCompany != null) && (oCompany.InTransaction))
+                    {
+                        oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                    }
+
+                    string errorMassage;
+                    if (ex.Message.Substring(12) == "[VALIDATION]")
+                    {
+                        errorMassage = ex.Message;
+                    }
+                    else
+                    {
+                        errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                    }
+
+                    throw new Exception(errorMassage);
+                }
+                finally
+                {
+                    SapCompany.CleanUpGCCollect();
+                    // Wajib: GetCompany() menahan TransactionLock, Release() yang melepasnya.
+                    if (oCompany != null)
+                    {
+                        SAPCachedCompany.Release(oCompany);
+                    }
+                }
+            }
+        }
+
+        // Ubah status Production Order (OWOR) di SAP jadi Closed.
+        private void CloseProductionOrder(SAPbobsCOM.Company oCompany, int docEntry)
+        {
+            SAPbobsCOM.ProductionOrders oPO = (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oProductionOrders);
+
+            try
+            {
+                if (!oPO.GetByKey(docEntry))
+                {
+                    throw new Exception(string.Format("[VALIDATION] - Production Order DocEntry [{0}] tidak ditemukan di SAP (OWOR)", docEntry));
+                }
+
+                oPO.ProductionOrderStatus = SAPbobsCOM.BoProductionOrderStatusEnum.boposClosed;
+
+                int result = oPO.Update();
+                if (result != 0)
+                {
+                    int nErr = oCompany.GetLastErrorCode();
+                    string errMsg = oCompany.GetLastErrorDescription();
+
+                    throw new Exception(string.Format("[VALIDATION] - Close Production Order DocEntry [{0}] : {1}|{2}", docEntry, nErr, errMsg));
+                }
+            }
+            finally
+            {
+                SapCompany.CleanUp(oPO);
+            }
+        }
+
+        private void ExecuteQuery(SAPbobsCOM.Recordset rs, string sql, string context = "")
+        {
+            try
+            {
+                rs.DoQuery(sql);
+            }
+            catch (System.Runtime.InteropServices.COMException ex)
+            {
+                throw new Exception($"[VALIDATION] {context}: {ex.ErrorCode} - {ex.Message}");
             }
         }
 

@@ -29,7 +29,21 @@
     if (activityStatus == "Finished")
     {
         ViewBag.ReadOnly = true;
-    } 
+    }
+
+    // ItemCode + WhsCode item yang popup batch nya dibuka (kunci DetId = Tx_ProductionTask_Item).
+    // Dicari dari tabel item supaya drop down batch (GeneralGetList.GetBatch) tahu item apa.
+    string batchItemCode = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"ItemCode\" FROM \"Tx_ProductionTask_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+    string batchWhsCode = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"WhsCode\" FROM \"Tx_ProductionTask_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+
+    // Daftar batch SAP (OBTN) yang tersedia untuk item + gudang ini, menampilkan Code dan Quantity.
+    System.Data.DataTable obtnBatchList = new System.Data.DataTable();
+    if (!string.IsNullOrEmpty(batchItemCode))
+    {
+        obtnBatchList = Models._Utils.GeneralGetList.GetBatch(batchItemCode, batchWhsCode);
+    }
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -110,17 +124,23 @@
         column.Name = "Batch";
         column.Caption = "Batch";
 
-        column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 200; 
+        // Dropdown daftar batch SAP (OBTN) per ItemCode + WhsCode item yang popup nya dibuka.
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        column.Width = 200;
 
-        var txt = column.PropertiesEdit as TextBoxProperties;
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ValidationSettings.RequiredField.IsRequired = true;
-        txt.ValidationSettings.RequiredField.ErrorText = "Batch is required";
-        txt.ValidationSettings.Display = Display.Dynamic;
-        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = obtnBatchList;
+        cbo.TextField = "Code";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        cbo.ValidationSettings.RequiredField.IsRequired = true;
+        cbo.ValidationSettings.RequiredField.ErrorText = "Batch is required";
+        cbo.ValidationSettings.Display = Display.Dynamic;
+        cbo.ClientInstanceName = settings.Name + "_" + column.FieldName;
     });
-     
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "AdmissionDate";

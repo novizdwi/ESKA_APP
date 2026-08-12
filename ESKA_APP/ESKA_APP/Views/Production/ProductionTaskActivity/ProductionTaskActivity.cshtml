@@ -685,8 +685,32 @@ new
             FinishBatch: eBatch != null ? eBatch.GetValue() : null,
 
             Quantity: eQuantity != null ? eQuantity.GetValue() : null,
-            Comments: eComments != null ? eComments.GetValue() : null
+            Comments: eComments != null ? eComments.GetValue() : null,
+
+            // Kontribusi QuantityActivity_ item Direction=In (diketik manual, belum persisted).
+            itemQuantitiesJson: JSON.stringify(GetItemActivityQuantities())
         };
+    }
+
+    // Kumpulkan QuantityActivity_ tiap item Direction=In dari grid popup Finish.
+    // Item Direction=Out TIDAK diikutkan -- nilainya dihitung server-side dari popup batch.
+    function GetItemActivityQuantities() {
+        var ids = window.productionActivityInItemDetIds || [];
+        var result = [];
+
+        for (var i = 0; i < ids.length; i++) {
+            var detId = ids[i];
+            var editor = ASPxClientSpinEdit.Cast('gvContentItemList_QuantityActivity__' + detId);
+            if (editor == null) { continue; }
+
+            result.push({
+                DetId: detId,
+                Direction: 'In',
+                QuantityActivity_: editor.GetValue()
+            });
+        }
+
+        return result;
     }
 
     function gvDetail_WhsCodeOnChange(s, e, name) {

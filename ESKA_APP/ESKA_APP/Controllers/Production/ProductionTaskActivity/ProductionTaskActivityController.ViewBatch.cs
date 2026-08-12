@@ -28,7 +28,7 @@ namespace Controllers.Production
             var model = new ProductionTaskActivityBatchView___();
             if (detId != 0)
             {
-                model = productionActivityService.GetProductionTaskActivity_Batch(id, detId);
+                model = productionActivityService.GetProductionTaskActivity_Batch(id, detId, activityDetId);
             }
 
             return PartialView(VIEW_ITEMBATCH_PANEL_PARTIAL, model);
@@ -52,7 +52,7 @@ namespace Controllers.Production
 
             productionActivityService = new ProductionActivityService();
 
-            var modelList = productionActivityService.GetProductionTaskActivity_ItemBatchList(Id, DetId);
+            var modelList = productionActivityService.GetProductionTaskActivity_ItemBatchList(Id, DetId, ActivityDetId);
 
             return PartialView(VIEW_TAB_BATCH, modelList);
         }

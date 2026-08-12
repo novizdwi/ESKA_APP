@@ -1007,6 +1007,25 @@ namespace Models._Utils
             }
         }
 
+        public static DataTable GetBatch(string itemCode, string whsCode)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                string ssql = @"
+                    SELECT DISTINCT ""DistNumber"" AS ""Code"", (T2.""Quantity"" - ""CommitQty"") AS ""Quantity""
+                    FROM ""{0}"".""OBTN"" T0
+                    INNER JOIN ""{0}"".""OBTW"" T1 ON T0.""SysNumber"" = T1.""SysNumber"" AND T0.""ItemCode"" = T1.""ItemCode""
+                    INNER JOIN ""{0}"".""OBTQ"" T2 ON T0.""SysNumber"" = T2.""SysNumber"" AND T0.""ItemCode"" = T2.""ItemCode""
+                    WHERE(T2.""Quantity"" - ""CommitQty"") > 0
+                    AND T0.""ItemCode"" = '{1}'
+                    AND T1.""WhsCode"" = '{2}'                
+                ";
+
+                ssql = string.Format(ssql, DbProvider.dbSap_Name, itemCode, whsCode);
+                return GetDataTable(CONTEXT, ssql);
+            }
+        } 
+
     }
 
 
