@@ -102,7 +102,7 @@ namespace Controllers.Production
 
             if (ModelState.IsValid)
             {
-                productionActivityService.ProductionTaskActivity_DeleteItemBatch(userId, Id, DetId, BatchId);
+                productionActivityService.ProductionTaskActivity_DeleteItemBatch(userId, Id, DetId, ActivityDetId, BatchId);
             }
 
             return TabBatchListPartial(Id, DetId, ActivityDetId);

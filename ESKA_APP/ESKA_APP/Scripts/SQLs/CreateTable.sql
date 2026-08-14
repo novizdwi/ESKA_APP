@@ -515,6 +515,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Item" (
 	
     "QuantityPlanned" DECIMAL(16,4),
     "QuantityActual" DECIMAL(16,4),
+    "QuantitySession" DECIMAL(16,4),
+	
     "Comments" NVARCHAR(254),
 
     "CreatedDate" TIMESTAMP,

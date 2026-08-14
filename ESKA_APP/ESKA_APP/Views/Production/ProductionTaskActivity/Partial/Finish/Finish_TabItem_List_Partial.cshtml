@@ -311,8 +311,8 @@
         // Out: read-only, otomatis = SUM Netto batch popup untuk item + activity ini.
         // In: diketik manual user; nilainya dikirim ke server saat submit Finish (bukan lewat
         // AJAX row-update grid ini), dibaca lewat GetItemActivityQuantities() di ProductionTaskActivity.cshtml.
-        column.FieldName = "QuantityActivity_";
-        column.Name = "QuantityActivity_";
+        column.FieldName = "QuantitySession";
+        column.Name = "QuantitySession";
         column.Caption = "Netto";
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
@@ -322,8 +322,8 @@
         column.SetDataItemTemplateContent(c =>
         {
             var itemDetId = DataBinder.Eval(c.DataItem, "DetId");
-            var quantity = DataBinder.Eval(c.DataItem, "QuantityActivity_");
             var direction = DataBinder.Eval(c.DataItem, "Direction");
+            var quantity = DataBinder.Eval(c.DataItem, "QuantitySession");
 
             bool isOut = direction != null && direction.ToString() == "Out";
 
@@ -362,7 +362,6 @@
             }
             else
             {
-                // Direction = In -> editable langsung; TIDAK memicu AJAX row-update.
                 Html.DevExpress().SpinEdit(s =>
                 {
                     s.Name = settings.Name + "_" + column.FieldName + "_" + itemDetId;
@@ -375,7 +374,7 @@
                     s.Properties.SpinButtons.ShowIncrementButtons = false;
                     s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
                     s.Properties.AllowMouseWheel = false;
-                    s.ReadOnly = false;
+                    s.ReadOnly = true;
                     s.Width = 100;
 
                 }).Render();

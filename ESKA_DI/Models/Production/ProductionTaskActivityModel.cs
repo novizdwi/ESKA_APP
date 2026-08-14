@@ -117,7 +117,7 @@ namespace Models.Production
         public string Batch { get; set; }
         public Decimal? QuantityPlanned { get; set; }
         public Decimal? QuantityActual { get; set; }
-        public Decimal? QuantityActivity_ { get; set; }
+        public Decimal? QuantitySession { get; set; }
         public string Comments { get; set; }
 
         // Batch per item (Tx_ProductionTask_Item_Batch, difilter ItemDetId + ActivityDetId) -> dipakai OIGE.
@@ -135,6 +135,8 @@ namespace Models.Production
 
         // ItemCode produk jadi (baris utama Receipt from Production).
         public string ItemCode { get; set; }
+        
+        public string ItemName { get; set; }
 
         // "Id" pada Tx_ProductionTask_Activity -> UDF baris produk jadi.
         public long ActivityId { get; set; }
@@ -179,6 +181,29 @@ namespace Models.Production
         public List<ProductionTaskActivityBatchModel> ProductionTaskActivityBatchModel___ { get; set; }
 
     }
+
+    public class ProductionTaskReceiptIssueModel {
+        public string TransNo { get; set; }
+
+        public long? Id { get; set; }
+        
+        public long? DetId { get; set; }
+
+        public long? ActivityId { get; set; }
+        
+        public string ItemCode { get; set; }
+        
+        public string ItemName { get; set; }
+        
+        public decimal? Quantity { get; set; }
+        
+        public int? DocEntry { get; set; }
+        
+        public int? LineNum { get; set; }
+        
+        public string  BatchNumber { get; set; }
+    }
+
 
     public class ProductionTaskActivityBatchModel
     {
@@ -353,9 +378,7 @@ namespace Models.Production
                     WHERE T1.""DetId"" = :p0
                 ";
                 ProductionActivityFinishModel model = CONTEXT.Database.SqlQuery<ProductionActivityFinishModel>(SqlSelect, detId).SingleOrDefault();
-
-                // Item menempel pada TASK, jadi diambil pakai Id task -- bukan DetId activity.
-                // activityDetId (= detId activity yang sedang dibuka) dipakai hitung QuantityActivity_.
+                 
                 model.ListItem_ = this.GetProductionTaskDetailItems(model != null ? model.Id : null, detId);
 
                 return model;
@@ -364,27 +387,20 @@ namespace Models.Production
 
         // Item milik Tx_ProductionTask (level 2), kuncinya "Id" task.
         // activityDetId = kunci Tx_ProductionTask_Activity yang sedang di-Finish -> dipakai hitung
-        // QuantityActivity_ (kontribusi activity ini saja, bukan QuantityActual yang kumulatif).
+        // QuantitySession (kontribusi activity ini saja, bukan QuantityActual yang kumulatif).
         public List<ProductionTaskDetailItemModel> GetProductionTaskDetailItems(long? id, long activityDetId = 0)
         {
             List<ProductionTaskDetailItemModel> ret = new List<ProductionTaskDetailItemModel>();
             using (var CONTEXT = new HANA_APP())
             {
                 string sqls = @"
-                    SELECT T0.*,
-                        CASE WHEN T0.""Direction"" = 'Out' THEN
-                            COALESCE((
-                                SELECT SUM(B.""Netto"")
-                                FROM ""Tx_ProductionTask_Item_Batch"" B
-                                WHERE B.""ItemDetId"" = T0.""DetId"" AND B.""ActivityDetId"" = :p1
-                            ), 0)
-                        ELSE NULL END AS ""QuantityActivity_""
+                    SELECT T0.* 
                     FROM ""Tx_ProductionTask_Item"" T0
                     WHERE T0.""Id"" = :p0
                     ORDER BY T0.""DetId""
                 ";
 
-                ret = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(sqls, id ?? 0, activityDetId).ToList();
+                ret = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(sqls, id ?? 0).ToList();
             }
 
             return ret;
@@ -459,23 +475,16 @@ namespace Models.Production
                             }
 
                             UpdateItemBatchOut(CONTEXT, userId, model.DetId ?? 0);
-
-                            // Item Direction=In: QuantityActivity_ diketik manual user (tidak persisted
-                            // sampai Finish disubmit) -> akumulasikan ke QuantityActual item.
-                            AccumulateItemQuantityActualForIn(CONTEXT, userId, model.ListItem_);
-
+                             
                             CONTEXT.SaveChanges();
 
                             // Validasi bisnis (SpProductionTaskActivity__TransNotif) dijalankan lebih dulu,
                             // supaya SAP tidak disentuh kalau datanya belum valid.
                             SpNotif.SpSysControllerTransNotif(userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "finish", "Id", model.Id.ToString());
-                            // Sinkronkan komponen activity ke baris WOR1 Production Order di SAP,
-                            // lalu tulis balik LineNum hasil insert nya.
+ 
                             var wor1Lines = SyncProductionOrderLines(CONTEXT, oCompany, model);
                             UpdateActivityItemLineNum(CONTEXT, userId, wor1Lines);
-
-                            // Sesudah OWOR ter-update: Receipt from Production (OIGN)
-                            // dan Issue for Production (OIGE).
+                             
                             PostInventoryDocuments(CONTEXT, oCompany, model);
 
                             // QuantityActual Tx_ProductionTask + IsRunningTask = 'N' diurus di SP ini.
@@ -685,7 +694,7 @@ namespace Models.Production
         {
             var task = CONTEXT.Database.SqlQuery<ProductionTaskSapHeaderModel>(
                 @"SELECT TOP 1
-                      T0.""Id"", T0.""TransNo"", T0.""DocEntry"", T0.""ItemCode"",
+                      T0.""Id"", T0.""TransNo"", T0.""DocEntry"", T0.""ItemCode"", T0.""ItemName"",
                       T1.""Id"" AS ""ActivityId"", T1.""DetId"" AS ""ActivityDetId"",
                       T1.""Quantity"" AS ""ActivityQuantity"", T1.""Batch""
                   FROM ""Tx_ProductionTask"" T0
@@ -702,60 +711,58 @@ namespace Models.Production
                 throw new Exception("[VALIDATION] - Production Order belum punya DocEntry di SAP");
             }
 
+            string batchNo = model.FinishBatch;             
+            ProductionTaskReceiptIssueModel itemHeader = new ProductionTaskReceiptIssueModel{ 
+                Id = model.Id,
+                TransNo = model.FinishTransNo,
+                DetId = model.DetId,
+                ActivityId = task.ActivityId,
+                ItemCode = task.ItemCode,
+                ItemName = task.ItemName,
+                LineNum = null,
+                DocEntry = task.DocEntry,
+                BatchNumber = model.FinishBatch,
+                Quantity = model.Quantity
+            };
+
             var items = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(
                 @"SELECT
                       T0.""Id"", T0.""DetId"", T0.""LineNum"",
                       T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"",
-                      T0.""Direction"", T0.""QuantityActual""
+                      T0.""Direction"", T0.""QuantitySession""
                   FROM ""Tx_ProductionTask_Item"" T0
                   WHERE T0.""Id"" = :p0
                   ORDER BY T0.""DetId""", task.Id).ToList();
 
-            // Qty & batch yang diposting ke OIGN/OIGE HARUS kontribusi activity ini saja
-            // (bukan QuantityActual yang kumulatif lintas activity) -> diisi ke QuantityActivity_.
-            var inQuantityByDetId = (model.ListItem_ ?? new List<ProductionTaskDetailItemModel>())
-                .Where(x => string.Equals(x.Direction, "In", StringComparison.OrdinalIgnoreCase))
-                .ToDictionary(x => x.DetId ?? 0, x => x.QuantityActivity_ ?? 0);
 
-            foreach (var item in items)
+            foreach (var item in items.Where(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)))
             {
-                if (string.Equals(item.Direction, "Out", StringComparison.OrdinalIgnoreCase))
-                {
-                    // Batch komponen (Direction 'Out') -> Tx_ProductionTask_Item_Batch, difilter per item + activity.
-                    item.ListBatch_ = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(
-                        @"SELECT T0.""Id"", T0.""ItemDetId"", T0.""ActivityDetId"", T0.""BatchId"", T0.""Batch"", T0.""Netto""
-                          FROM ""Tx_ProductionTask_Item_Batch"" T0
-                          WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
-                          ORDER BY T0.""BatchId""", item.DetId, task.ActivityDetId).ToList();
-
-                    item.QuantityActivity_ = item.ListBatch_.Sum(b => b.Netto ?? 0);
-                }
-                else
-                {
-                    // In: diketik manual user, dikirim client bersama form Finish (model.ListItem_).
-                    decimal qty;
-                    item.QuantityActivity_ = inQuantityByDetId.TryGetValue(item.DetId ?? 0, out qty) ? qty : 0;
-                }
+                // Batch komponen (Direction 'Out') -> Tx_ProductionTask_Item_Batch, difilter per item + activity.
+                item.ListBatch_ = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(
+                    @"SELECT T0.""Id"", T0.""ItemDetId"", T0.""ActivityDetId"", T0.""BatchId"", T0.""Batch"", T0.""Netto""
+                        FROM ""Tx_ProductionTask_Item_Batch"" T0
+                        WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
+                        ORDER BY T0.""BatchId""", item.DetId, task.ActivityDetId).ToList();                
             }
 
-            AddReceiptFromProduction(oCompany, task, items);
+            AddReceiptFromProduction(oCompany, task, itemHeader, items);
             AddIssueForProduction(oCompany, task, items);
         }
 
         // OIGN: baris produk jadi (dari Tx_ProductionTask) + item ber-Direction 'In'.
-        private void AddReceiptFromProduction(SAPbobsCOM.Company oCompany, ProductionTaskSapHeaderModel task, List<ProductionTaskDetailItemModel> items)
+        private void AddReceiptFromProduction(SAPbobsCOM.Company oCompany, ProductionTaskSapHeaderModel task, ProductionTaskReceiptIssueModel itemHeader, List<ProductionTaskDetailItemModel> items)
         {
             var inItems = items
                 .Where(x => string.Equals(x.Direction, "In", StringComparison.OrdinalIgnoreCase)
-                            && ((x.QuantityActivity_ ?? 0) > 0))
+                            && ((x.QuantitySession ?? 0) > 0))
                 .ToList();
 
-            bool hasParentLine = (task.ActivityQuantity ?? 0) > 0;
+            //bool hasParentLine = (task.ActivityQuantity ?? 0) > 0;
 
-            if (!hasParentLine && (inItems.Count == 0))
-            {
-                return;
-            }
+            //if (!hasParentLine && (inItems.Count == 0))
+            //{
+            //    return;
+            //}
 
             SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
 
@@ -768,30 +775,27 @@ namespace Models.Production
 
                 // Produk jadi: ItemCode dari Tx_ProductionTask, qty dari Tx_ProductionTask_Activity.
                 // Semua baris OIGN pakai batch yang sama: Tx_ProductionTask_Activity.Batch.
-                if (hasParentLine)
-                {
-                    //oDoc.Lines.ItemCode = task.ItemCode;
-                    oDoc.Lines.Quantity = (double)(task.ActivityQuantity ?? 0);
-                    oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
-                    oDoc.Lines.BaseEntry = task.DocEntry ?? 0;
-                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = task.ActivityId.ToString();
+                //oDoc.Lines.ItemCode = task.ItemCode;
+                
+                oDoc.Lines.Quantity = (double)(itemHeader.Quantity ?? 0);
+                oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
+                oDoc.Lines.BaseEntry = itemHeader.DocEntry ?? 0;
+                oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = itemHeader.ActivityId.ToString();
 
-                    oDoc.Lines.BatchNumbers.BatchNumber = task.Batch;
-                    oDoc.Lines.BatchNumbers.Quantity = (double)(task.ActivityQuantity ?? 0);
+                oDoc.Lines.BatchNumbers.BatchNumber = itemHeader.BatchNumber;
+                oDoc.Lines.BatchNumbers.Quantity = (double)(itemHeader.Quantity ?? 0);
 
-                    firstLine = false;
-                }
+                firstLine = false;
 
                 foreach (var item in inItems)
-                {
-                    if (!firstLine)
-                    {
-                        oDoc.Lines.Add();
+                { 
+                    if(!firstLine )
+                    { 
+                        oDoc.Lines.Add(); 
                     }
                     firstLine = false;
-
                     //oDoc.Lines.ItemCode = item.ItemCode;
-                    oDoc.Lines.Quantity = (double)(item.QuantityActivity_ ?? 0);
+                    oDoc.Lines.Quantity = (double)(item.QuantitySession ?? 0);
                     oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
                     oDoc.Lines.BaseEntry = task.DocEntry ?? 0;
                     oDoc.Lines.BaseLine = item.LineNum ?? 0;
@@ -800,7 +804,7 @@ namespace Models.Production
                     oDoc.Lines.UserFields.Fields.Item("U_IDU_DetId").Value = (item.DetId ?? 0).ToString();
 
                     oDoc.Lines.BatchNumbers.BatchNumber = task.Batch;
-                    oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantityActivity_ ?? 0);
+                    oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantitySession ?? 0);
                 }
 
                 int result = oDoc.Add();
@@ -823,7 +827,7 @@ namespace Models.Production
         {
             var outItems = items
                 .Where(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)
-                            && ((x.QuantityActivity_ ?? 0) > 0))
+                            && ((x.QuantitySession ?? 0) > 0))
                 .ToList();
 
             if (outItems.Count == 0)
@@ -849,7 +853,7 @@ namespace Models.Production
                     firstLine = false;
 
                     //oDoc.Lines.ItemCode = item.ItemCode;
-                    oDoc.Lines.Quantity = (double)(item.QuantityActivity_ ?? 0);
+                    oDoc.Lines.Quantity = (double)(item.QuantitySession ?? 0);
                     oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
                     oDoc.Lines.BaseEntry = task.DocEntry ?? 0;
                     oDoc.Lines.BaseLine = item.LineNum ?? 0;
@@ -1163,40 +1167,25 @@ namespace Models.Production
 
             CONTEXT.Database.ExecuteSqlCommand(sql, detId, userId);
         }
-
-        // Item Direction=In: QuantityActivity_ (diketik manual user, dikirim dari client saat submit
-        // Finish) MENAMBAH QuantityActual yang sudah ada -- akumulasi lintas activity, bukan overwrite.
-        private void AccumulateItemQuantityActualForIn(HANA_APP CONTEXT, int userId, List<ProductionTaskDetailItemModel> items)
-        {
-            if (items == null) return;
-
-            foreach (var item in items.Where(x => (x.QuantityActivity_ ?? 0) != 0))
-            {
-                CONTEXT.Database.ExecuteSqlCommand(
-                    @"UPDATE ""Tx_ProductionTask_Item""
-                      SET ""QuantityActual"" = COALESCE(""QuantityActual"", 0) + :p0,
-                          ""ModifiedDate"" = CURRENT_TIMESTAMP,
-                          ""ModifiedUser"" = :p1
-                      WHERE ""DetId"" = :p2", item.QuantityActivity_ ?? 0, userId, item.DetId ?? 0);
-            }
-        }
+         
 
         // Netto item induk = jumlah Netto seluruh batch nya.
-        private void UpdateItemQuantityActual(HANA_APP CONTEXT, int userId, long detId)
+        private void UpdateItemQuantityActual(HANA_APP CONTEXT, int userId, long itemDetId, long activityDetId)
         {
-            string sql = @"
+            string sql = $@"
                 UPDATE ""Tx_ProductionTask_Item""
-                SET ""QuantityActual"" = COALESCE((
+                SET ""QuantitySession"" = COALESCE((
                         SELECT SUM(""Netto"")
                         FROM ""Tx_ProductionTask_Item_Batch""
-                        WHERE ""ItemDetId"" = :p0
+                        WHERE ""ItemDetId"" = {itemDetId}
+                          AND ""ActivityDetId"" = {activityDetId}
                     ), 0),
                     ""ModifiedDate"" = CURRENT_TIMESTAMP,
-                    ""ModifiedUser"" = :p1
-                WHERE ""DetId"" = :p2
+                    ""ModifiedUser"" = {userId}
+                WHERE ""DetId"" = {itemDetId}
             ";
 
-            CONTEXT.Database.ExecuteSqlCommand(sql, detId, userId, detId);
+            CONTEXT.Database.ExecuteSqlCommand(sql);
         }
 
         public long ProductionTaskActivity_AddNewItemBatch(ProductionTaskActivityBatchModel model)
@@ -1227,8 +1216,8 @@ namespace Models.Production
 
                         String keyValue;
                         keyValue = (model.ItemDetId ?? 0).ToString();
-
-                        UpdateItemQuantityActual(CONTEXT, model._UserId, model.ItemDetId ?? 0);
+                        
+                        UpdateItemQuantityActual(CONTEXT, model._UserId, model.ItemDetId ?? 0, model.ActivityDetId ??0);
                         SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "addItemBatch", "Id", model.Id.ToString() );
 
                         CONTEXT_TRANS.Commit();
@@ -1285,7 +1274,8 @@ namespace Models.Production
                             CONTEXT.SaveChanges();
 
                             long detId_ = tx_ProductionTask_Item_Batch.ItemDetId ?? 0;
-                            UpdateItemQuantityActual(CONTEXT, model._UserId, detId_);
+
+                            UpdateItemQuantityActual(CONTEXT, model._UserId, tx_ProductionTask_Item_Batch.ItemDetId ?? 0, tx_ProductionTask_Item_Batch.ActivityDetId ?? 0);
                             SpNotif.SpSysControllerTransNotif(model._UserId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "updateItemBatch", "Id", model.Id.ToString());
 
                         }
@@ -1313,23 +1303,23 @@ namespace Models.Production
             }
         }
 
-        public void ProductionTaskActivity_DeleteItemBatch(int _userId, long Id, long ItemDetId, long BatchId)
+        public void ProductionTaskActivity_DeleteItemBatch(int _userId, long id, long itemDetId, long activityId, long batchId)
         {
             using (var CONTEXT = new HANA_APP())
             {
                 using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
                 {
-                    if (BatchId != 0)
+                    if (batchId != 0)
                     {
                         try
                         {
-                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItemBatch", "Id", Id.ToString());
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItemBatch", "Id", id.ToString());
 
-                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"BatchId\"=:p0", BatchId);
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"BatchId\"=:p0", batchId);
                             CONTEXT.SaveChanges();
 
-                            UpdateItemQuantityActual(CONTEXT, _userId, ItemDetId);
-                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "deleteItemBatch", "Id", Id.ToString());
+                            UpdateItemQuantityActual(CONTEXT, _userId, itemDetId, activityId);
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "deleteItemBatch", "Id", id.ToString());
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)

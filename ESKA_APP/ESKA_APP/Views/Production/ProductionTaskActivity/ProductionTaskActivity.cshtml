@@ -406,6 +406,7 @@
     function OnClickBtnFinish(s, e) {
         var key = Id.GetValue();
         var keyDet = DetId.GetValue();
+        console.log(key, " ", keyDet);
         btnShowFinishOnClick(s, e, key, keyDet);
     }
 
@@ -643,7 +644,7 @@ new
             var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
             if (eQuantity != null) { eQuantity.Focus(); }
             return;
-        }
+        } 
         $.ajax({
             type: "POST",
             url: '@Url.Action("FinishActivity", "ProductionTaskActivity")',
@@ -676,7 +677,7 @@ new
         var eBatch = ASPxClientTextBox.Cast("Batch");
         var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
         var eComments = ASPxClientMemo.Cast("Comments");
-
+         
         return {
             Id: eId != null ? eId.GetValue() : null,
             DetId: eDetId != null ? eDetId.GetValue() : null,
@@ -687,10 +688,10 @@ new
             Quantity: eQuantity != null ? eQuantity.GetValue() : null,
             Comments: eComments != null ? eComments.GetValue() : null,
 
-            // Kontribusi QuantityActivity_ item Direction=In (diketik manual, belum persisted).
-            itemQuantitiesJson: JSON.stringify(GetItemActivityQuantities())
+            //ListItem_: Details_
         };
     }
+     
 
     // Kumpulkan QuantityActivity_ tiap item Direction=In dari grid popup Finish.
     // Item Direction=Out TIDAK diikutkan -- nilainya dihitung server-side dari popup batch.
@@ -766,10 +767,18 @@ new
     function ViewBatch_OnClickBtnCancel(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupBatch");
         popup.Hide();
+        popupBatch_OnCloseUp(popup, null);
+    }
+
+    function popupBatch_OnCloseUp(s, e) {
+        var gvItem = ASPxClientGridView.Cast('gvContentItemList');
+        if (gvItem != null) {
+            gvItem.PerformCallback();
+        }
     }
 
     function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
-        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW") {
+        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW" || e.command == "ADDNEWROW") {
             isUpdateBatch = true;
         }
     }
