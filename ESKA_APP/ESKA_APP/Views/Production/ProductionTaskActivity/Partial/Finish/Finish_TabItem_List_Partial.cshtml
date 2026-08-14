@@ -1,4 +1,6 @@
-﻿@using System.Collections.Generic;
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Linq;
 @using Models;
 @model List<Models.Production.ProductionTaskDetailItemModel>
 
@@ -281,20 +283,47 @@
 
     settings.Columns.Add(column =>
     {
+        // Total kumulatif lintas SEMUA activity -- selalu read-only, tidak pernah diedit di sini.
         column.FieldName = "QuantityActual";
         column.Name = "QuantityActual";
+        column.Caption = "Quantity Actual";
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Width = 120;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###";
+        txt.DisplayFormatInEditMode = true;
+        txt.SpinButtons.ShowIncrementButtons = false;
+        txt.AllowMouseWheel = false;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        // Kontribusi activity yang sedang di-Finish saja (bukan kumulatif).
+        // Out: read-only, otomatis = SUM Netto batch popup untuk item + activity ini.
+        // In: diketik manual user; nilainya dikirim ke server saat submit Finish (bukan lewat
+        // AJAX row-update grid ini), dibaca lewat GetItemActivityQuantities() di ProductionTaskActivity.cshtml.
+        column.FieldName = "QuantitySession";
+        column.Name = "QuantitySession";
         column.Caption = "Netto";
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
-        column.Width = 120; 
+        column.Width = 120;
 
         column.SetDataItemTemplateContent(c =>
         {
-            var visibleIndex = c.VisibleIndex;
             var itemDetId = DataBinder.Eval(c.DataItem, "DetId");
-            var quantity = DataBinder.Eval(c.DataItem, "QuantityActual");
             var direction = DataBinder.Eval(c.DataItem, "Direction");
+            var quantity = DataBinder.Eval(c.DataItem, "QuantitySession");
 
             bool isOut = direction != null && direction.ToString() == "Out";
 
@@ -303,8 +332,8 @@
                 // Direction = Out -> pakai ButtonEdit (CFL popup), readonly, pilih via popup
                 Html.DevExpress().SpinEdit(s =>
                 {
-                    s.Name = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
-                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
+                    s.Name = settings.Name + "_" + column.FieldName + "_" + itemDetId;
+                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + itemDetId;
 
                     s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
 
@@ -335,8 +364,8 @@
             {
                 Html.DevExpress().SpinEdit(s =>
                 {
-                    s.Name = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
-                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + visibleIndex;
+                    s.Name = settings.Name + "_" + column.FieldName + "_" + itemDetId;
+                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + itemDetId;
 
                     s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
                     s.Properties.DecimalPlaces = 0;
@@ -374,7 +403,7 @@
     settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentItemListOnRowInserting(s, e, {0}, {1}); }}", Id, ActivityDetId);
     settings.ClientSideEvents.BatchEditStartEditing =
     "function(s, e) { " +
-        "if (e.focusedColumn.fieldName == 'QuantityActual') { " +
+        "if (e.focusedColumn.fieldName == 'QuantityActivity_') { " +
             "var direction = s.batchEditApi.GetCellValue(e.visibleIndex, 'Direction'); " +
             "if (direction == 'Out') { " +
                 "e.cancel = true; " +
@@ -392,7 +421,7 @@
 
     settings.HtmlDataCellPrepared = (sender, e) =>
     {
-        if (e.DataColumn.FieldName == "QuantityActual")
+        if (e.DataColumn.FieldName == "QuantityActivity_")
         {
             var direction = e.GetValue("Direction");
             if (direction != null && direction.ToString() == "Out")
@@ -403,3 +432,12 @@
     };
 
 }).Bind(Model).GetHtml()
+
+@* DetId item Direction=In pada halaman ini -> dibaca GetItemActivityQuantities() di
+   ProductionTaskActivity.cshtml untuk mengumpulkan input QuantityActivity_ manual user
+   saat submit Finish (nilai TIDAK di-AJAX-simpan lewat grid, baru dipakai saat Finish). *@
+<script type="text/javascript">
+    window.productionActivityInItemDetIds = [@Html.Raw(string.Join(",", (Model ?? new List<Models.Production.ProductionTaskDetailItemModel>())
+        .Where(x => string.Equals(x.Direction, "In", StringComparison.OrdinalIgnoreCase))
+        .Select(x => x.DetId ?? 0)))];
+</script>

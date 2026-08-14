@@ -406,6 +406,7 @@
     function OnClickBtnFinish(s, e) {
         var key = Id.GetValue();
         var keyDet = DetId.GetValue();
+        console.log(key, " ", keyDet);
         btnShowFinishOnClick(s, e, key, keyDet);
     }
 
@@ -643,7 +644,7 @@ new
             var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
             if (eQuantity != null) { eQuantity.Focus(); }
             return;
-        }
+        } 
         $.ajax({
             type: "POST",
             url: '@Url.Action("FinishActivity", "ProductionTaskActivity")',
@@ -676,7 +677,7 @@ new
         var eBatch = ASPxClientTextBox.Cast("Batch");
         var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
         var eComments = ASPxClientMemo.Cast("Comments");
-
+         
         return {
             Id: eId != null ? eId.GetValue() : null,
             DetId: eDetId != null ? eDetId.GetValue() : null,
@@ -685,8 +686,32 @@ new
             FinishBatch: eBatch != null ? eBatch.GetValue() : null,
 
             Quantity: eQuantity != null ? eQuantity.GetValue() : null,
-            Comments: eComments != null ? eComments.GetValue() : null
+            Comments: eComments != null ? eComments.GetValue() : null,
+
+            //ListItem_: Details_
         };
+    }
+     
+
+    // Kumpulkan QuantityActivity_ tiap item Direction=In dari grid popup Finish.
+    // Item Direction=Out TIDAK diikutkan -- nilainya dihitung server-side dari popup batch.
+    function GetItemActivityQuantities() {
+        var ids = window.productionActivityInItemDetIds || [];
+        var result = [];
+
+        for (var i = 0; i < ids.length; i++) {
+            var detId = ids[i];
+            var editor = ASPxClientSpinEdit.Cast('gvContentItemList_QuantityActivity__' + detId);
+            if (editor == null) { continue; }
+
+            result.push({
+                DetId: detId,
+                Direction: 'In',
+                QuantityActivity_: editor.GetValue()
+            });
+        }
+
+        return result;
     }
 
     function gvDetail_WhsCodeOnChange(s, e, name) {
@@ -700,9 +725,13 @@ new
         var popup = ASPxClientPopupControl.Cast("popupBatch");
 
         var eId = ASPxClientTextBox.Cast("Id");
+        // Editor "DetId" milik popupFinish sebenarnya adalah kunci Tx_ProductionTask_Activity.
+        var eActivityDetId = ASPxClientTextBox.Cast("DetId");
 
         popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "ProductionTaskActivity")'
-            + '?Id=' + (eId != null ? eId.GetValue() : '') + '&DetId=' + itemDetId;
+            + '?Id=' + (eId != null ? eId.GetValue() : '')
+            + '&DetId=' + itemDetId
+            + '&ActivityDetId=' + (eActivityDetId != null ? eActivityDetId.GetValue() : '');
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -738,10 +767,18 @@ new
     function ViewBatch_OnClickBtnCancel(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupBatch");
         popup.Hide();
+        popupBatch_OnCloseUp(popup, null);
+    }
+
+    function popupBatch_OnCloseUp(s, e) {
+        var gvItem = ASPxClientGridView.Cast('gvContentItemList');
+        if (gvItem != null) {
+            gvItem.PerformCallback();
+        }
     }
 
     function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
-        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW") {
+        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW" || e.command == "ADDNEWROW") {
             isUpdateBatch = true;
         }
     }

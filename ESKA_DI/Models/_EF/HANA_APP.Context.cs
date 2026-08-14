@@ -72,6 +72,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_User> Tm_User { get; set; }
         public virtual DbSet<Tm_User_Routing> Tm_User_Routing { get; set; }
         public virtual DbSet<Tp_Approval> Tp_Approval { get; set; }
+        public virtual DbSet<Tp_ScaleStaging> Tp_ScaleStaging { get; set; }
         public virtual DbSet<Ts_FormatNumbering> Ts_FormatNumbering { get; set; }
         public virtual DbSet<Ts_LayoutForm> Ts_LayoutForm { get; set; }
         public virtual DbSet<Ts_List> Ts_List { get; set; }

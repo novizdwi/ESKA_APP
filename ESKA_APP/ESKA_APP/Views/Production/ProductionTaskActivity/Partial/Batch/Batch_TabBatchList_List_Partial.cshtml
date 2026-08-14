@@ -5,7 +5,8 @@
 @{
     var Id = Convert.ToInt64(Request["cbId"]);
     var DetId = Convert.ToInt64(Request["cbDetId"]);
-    
+    var ActivityDetId = Convert.ToInt64(Request["cbActivityDetId"]);
+
     int userId = (int)Session["userId"];
 
     if (ViewBag.Id != null)
@@ -15,6 +16,10 @@
     if (ViewBag.DetId != null)
     {
         DetId = ViewBag.DetId;
+    }
+    if (ViewBag.ActivityDetId != null)
+    {
+        ActivityDetId = ViewBag.ActivityDetId;
     }
 
     // Batch hanya boleh diubah selama activity belum Finished.
@@ -26,18 +31,18 @@
         ViewBag.ReadOnly = true;
     }
 
-    // Quantity (= QuantityPlanned item induk) sama untuk semua baris batch;
-    // dipakai sebagai nilai kolom Quantity pada baris baru.
-    decimal quantityPlanned = 0;
-    if (Model != null && Model.Count > 0)
+    // ItemCode + WhsCode item yang popup batch nya dibuka (kunci DetId = Tx_ProductionTask_Item).
+    // Dicari dari tabel item supaya drop down batch (GeneralGetList.GetBatch) tahu item apa.
+    string batchItemCode = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"ItemCode\" FROM \"Tx_ProductionTask_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+    string batchWhsCode = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"WhsCode\" FROM \"Tx_ProductionTask_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+
+    // Daftar batch SAP (OBTN) yang tersedia untuk item + gudang ini, menampilkan Code dan Quantity.
+    System.Data.DataTable obtnBatchList = new System.Data.DataTable();
+    if (!string.IsNullOrEmpty(batchItemCode))
     {
-        quantityPlanned = Model[0].Quantity ?? 0;
-    }
-    else if (DetId != 0)
-    {
-        quantityPlanned = Models._Ef.DbProvider.dbApp.Database.SqlQuery<decimal?>(
-            "SELECT TOP 1 T0.\"QuantityPlanned\" FROM \"Tx_ProductionTask_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId)
-            .FirstOrDefault() ?? 0;
+        obtnBatchList = Models._Utils.GeneralGetList.GetBatch(batchItemCode, batchWhsCode);
     }
 }
 
@@ -47,10 +52,10 @@
     settings.Name = "gvContentBatchList";
     settings.KeyFieldName = "BatchId";
     settings.Width = Unit.Percentage(100);
-    settings.CallbackRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListPartial", Id = Id, DetId = DetId };
-    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId };
-    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId };
+    settings.CallbackRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListPartial", Id = Id, DetId = DetId, ActivityDetId = ActivityDetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId, ActivityDetId = ActivityDetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId, ActivityDetId = ActivityDetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ProductionTaskActivity", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId, ActivityDetId = ActivityDetId };
 
     settings.SettingsBehavior.ConfirmDelete = true;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
@@ -60,7 +65,7 @@
     settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
     settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
 
-    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.Visible = true;
     settings.CommandColumn.ShowNewButtonInHeader = true;
     settings.CommandColumn.ShowEditButton = true;
     settings.CommandColumn.ShowDeleteButton = true;
@@ -85,8 +90,18 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "DetId";
-        column.Caption = "Det Id";
+        column.FieldName = "ItemDetId";
+        column.Caption = "Item Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ActivityDetId";
+        column.Caption = "Activity Det Id";
         column.Width = 0;
         column.ReadOnly = true;
 
@@ -109,39 +124,21 @@
         column.Name = "Batch";
         column.Caption = "Batch";
 
-        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        // Dropdown daftar batch SAP (OBTN) per ItemCode + WhsCode item yang popup nya dibuka.
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
         column.Width = 200;
-        column.ReadOnly = ViewBag.ReadOnly;
 
-        var txt = column.PropertiesEdit as TextBoxProperties;
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ValidationSettings.RequiredField.IsRequired = true;
-        txt.ValidationSettings.RequiredField.ErrorText = "Batch is required";
-        txt.ValidationSettings.Display = Display.Dynamic;
-        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "Quantity";
-        column.Name = "Quantity";
-        column.Caption = "Quantity";
-        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
-        column.Width = 100;
-        column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = true;
-
-        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
-        var txt = column.PropertiesEdit as SpinEditProperties;
-        txt.NumberType = SpinEditNumberType.Float;
-        txt.DisplayFormatString = "#,###";
-        txt.DisplayFormatInEditMode = true;
-        txt.AllowMouseWheel = false;
-        txt.SpinButtons.ShowIncrementButtons = false;
-
-        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.Style.HorizontalAlign = HorizontalAlign.Right;
-        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = obtnBatchList;
+        cbo.TextField = "Code";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        cbo.ValidationSettings.RequiredField.IsRequired = true;
+        cbo.ValidationSettings.RequiredField.ErrorText = "Batch is required";
+        cbo.ValidationSettings.Display = Display.Dynamic;
+        cbo.ClientInstanceName = settings.Name + "_" + column.FieldName;
     });
 
     settings.Columns.Add(column =>
@@ -169,8 +166,7 @@
         column.Caption = "Netto";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 100;
-        column.Settings.AllowSort = DefaultBoolean.False;
-        column.ReadOnly = ViewBag.ReadOnly;
+        column.Settings.AllowSort = DefaultBoolean.False; 
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         var txt = column.PropertiesEdit as SpinEditProperties;
@@ -193,9 +189,9 @@
     settings.InitNewRow = (s, e) =>
     {
         e.NewValues["Id"] = Id;
-        e.NewValues["DetId"] = DetId;
+        e.NewValues["ItemDetId"] = DetId;
+        e.NewValues["ActivityDetId"] = ActivityDetId;
 
-        e.NewValues["Quantity"] = quantityPlanned;
         e.NewValues["AdmissionDate"] = DateTime.Today;
     };
 
