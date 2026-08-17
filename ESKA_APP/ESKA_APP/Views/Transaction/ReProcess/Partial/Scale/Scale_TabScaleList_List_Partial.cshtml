@@ -138,7 +138,9 @@
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 90;
-        column.ReadOnly = ViewBag.ReadOnly;
+        // Uom selalu diturunkan dari Uom item induk -> tidak bisa diisi manual.
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;

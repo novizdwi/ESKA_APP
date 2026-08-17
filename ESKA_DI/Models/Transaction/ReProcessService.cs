@@ -316,6 +316,24 @@ namespace Models.Transaction
 
 
 
+    // Proyeksi seragam item/batch untuk validasi Post berjenjang (Item -> Batch -> Scale).
+    // Model Issue & Receipt punya tipe batch berbeda (dan ListBatch_ Receipt menyembunyikan
+    // milik base class), jadi keduanya dipetakan ke bentuk ini supaya aturan validasinya
+    // ditulis sekali dan berlaku sama untuk kedua sisi.
+    public class ReProcess_ValidateItem
+    {
+        public string ItemCode { get; set; }
+        public decimal Quantity { get; set; }
+        public List<ReProcess_ValidateBatch> Batches { get; set; }
+    }
+
+    public class ReProcess_ValidateBatch
+    {
+        public string Batch { get; set; }
+        public decimal Quantity { get; set; }
+        public long DetDetId { get; set; }
+    }
+
     // Baris hasil query cost SAP (OINM) per baris Goods Issue.
     public class ReProcess_IssueCostRow
     {
@@ -1047,7 +1065,13 @@ namespace Models.Transaction
 
                         if (tx_IssueAndReceipt_Receipt_Item_Batch != null)
                         {
-                            var exceptColumns = new string[] { "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            // LineNum & Netto TIDAK boleh disalin dari grid:
+                            //  - LineNum di-generate server-side saat Add dan tidak ada di grid batch,
+                            //    jadi DevExpress mengirimnya null -> bila disalin, LineNum jadi NULL dan
+                            //    header "Line Num" pada popup Scale kehilangan nilainya.
+                            //  - Netto batch dihitung dari SUM(Netto baris scale) via UpdateBatchNettoFromScale;
+                            //    kolomnya read-only di grid sehingga juga terkirim null.
+                            var exceptColumns = new string[] { "DetId", "DetDetId", "LineNum", "Netto", "CreatedUser", "CreatedDate" };
                             CopyProperty.CopyProperties(model, tx_IssueAndReceipt_Receipt_Item_Batch, false, exceptColumns);
 
                             tx_IssueAndReceipt_Receipt_Item_Batch.ModifiedDate = dtModified;
@@ -1103,7 +1127,13 @@ namespace Models.Transaction
 
                         if (tx_IssueAndReceipt_Issue_Item_Batch != null)
                         {
-                            var exceptColumns = new string[] { "DetId", "DetDetId", "CreatedUser", "CreatedDate" };
+                            // LineNum & Netto TIDAK boleh disalin dari grid:
+                            //  - LineNum di-generate server-side saat Add dan tidak ada di grid batch,
+                            //    jadi DevExpress mengirimnya null -> bila disalin, LineNum jadi NULL dan
+                            //    header "Line Num" pada popup Scale kehilangan nilainya.
+                            //  - Netto batch dihitung dari SUM(Netto baris scale) via UpdateBatchNettoFromScale;
+                            //    kolomnya read-only di grid sehingga juga terkirim null.
+                            var exceptColumns = new string[] { "DetId", "DetDetId", "LineNum", "Netto", "CreatedUser", "CreatedDate" };
                             CopyProperty.CopyProperties(model, tx_IssueAndReceipt_Issue_Item_Batch, false, exceptColumns);
 
                             tx_IssueAndReceipt_Issue_Item_Batch.ModifiedDate = dtModified;
@@ -1252,17 +1282,24 @@ namespace Models.Transaction
 
             using (var CONTEXT = new HANA_APP())
             {
+                // "LineNum" di-COALESCE dengan nomor urut batch (berdasarkan DetDetId, sama seperti
+                // penomoran saat batch dibuat). Sebagian data lama ber-LineNum NULL karena dulu
+                // tertimpa saat baris batch diedit, dan header popup ini jadi kosong -- fallback
+                // membuatnya tetap tampil tanpa menunggu perbaikan data.
                 sql = string.Format(@"SELECT T0.""Id"",
                                 T1.""DetId"",
                                 T2.""DetDetId"",
                                 T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""Uom"",
-                                T2.""LineNum"",
+                                CAST(COALESCE(T2.""LineNum"", T3.""LineNumUrut"") AS INTEGER) AS ""LineNum"",
                                 T2.""Batch""
                                 FROM ""Tx_IssueAndReceipt"" T0
                                 LEFT JOIN ""{0}"" T1 ON T0.""Id"" = T1.""Id""
                                 LEFT JOIN ""{1}"" T2 ON T1.""DetId"" = T2.""DetId""
+                                LEFT JOIN (SELECT ""DetDetId"", ""DetId"",
+                                                  ROW_NUMBER() OVER (PARTITION BY ""DetId"" ORDER BY ""DetDetId"") AS ""LineNumUrut""
+                                             FROM ""{1}"") T3 ON T3.""DetDetId"" = T2.""DetDetId""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 AND T2.""DetDetId"" = :p2 ", tblItem, tblBatch);
 
                 model = CONTEXT.Database.SqlQuery<ReProcessScaleView___>(sql, id, detId, detDetId).FirstOrDefault();
@@ -1354,15 +1391,12 @@ namespace Models.Transaction
                         int? maxLineNum = CONTEXT.Database.SqlQuery<int?>(string.Format("SELECT MAX(\"LineNum\") AS IDU FROM \"{0}\" WHERE \"DetDetId\"=:p0", tblScale), model.DetDetId).FirstOrDefault();
                         int nextLineNum = (maxLineNum ?? 0) + 1;
 
-                        // Uom default mengikuti item induk bila tidak diisi.
-                        string uom = model.Uom;
-                        if (string.IsNullOrEmpty(uom))
-                        {
-                            uom = CONTEXT.Database.SqlQuery<string>(string.Format(@"SELECT T1.""Uom"" AS IDU
-                                        FROM ""{0}"" T0
-                                        INNER JOIN ""{1}"" T1 ON T0.""DetId"" = T1.""DetId""
-                                        WHERE T0.""DetDetId""=:p0 ", tblBatch, tblItem), model.DetDetId).FirstOrDefault();
-                        }
+                        // Uom baris scale SELALU mengikuti Uom item induk, bukan input user
+                        // (kolomnya read-only di grid).
+                        string uom = CONTEXT.Database.SqlQuery<string>(string.Format(@"SELECT T1.""Uom"" AS IDU
+                                    FROM ""{0}"" T0
+                                    INNER JOIN ""{1}"" T1 ON T0.""DetId"" = T1.""DetId""
+                                    WHERE T0.""DetDetId""=:p0 ", tblBatch, tblItem), model.DetDetId).FirstOrDefault();
 
                         string lineStatus = string.IsNullOrEmpty(model.LineStatus) ? "O" : model.LineStatus;
 
@@ -1427,7 +1461,9 @@ namespace Models.Transaction
                         DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
                         // LineNum (Sequence) di-generate server-side, jangan ditimpa dari grid.
-                        var exceptColumns = new string[] { "DetDetId", "DetDetDetId", "LineNum", "CreatedUser", "CreatedDate" };
+                        // Uom juga dikecualikan: nilainya selalu diturunkan dari Uom item induk, dan
+                        // karena kolomnya read-only DevExpress mengirimnya null -- bila disalin, Uom jadi NULL.
+                        var exceptColumns = new string[] { "DetDetId", "DetDetDetId", "LineNum", "CreatedUser", "CreatedDate", "Uom" };
                         long? detDetId = null;
 
                         if (s == "Receipt")
@@ -1740,6 +1776,39 @@ namespace Models.Transaction
             PostSAP(userId, model.Id);
         }
 
+        // Susun pesan [VALIDATION] yang panjangnya dijamin aman.
+        //
+        // BaseController (file template, tidak diubah) menaruh pesan exception ke
+        // HttpResponse.Status. Reason phrase HTTP dibatasi 512 karakter; pesan yang lebih
+        // panjang membuat setter-nya melempar ArgumentOutOfRangeException, sehingga pesan
+        // validasi asli HILANG dan user hanya melihat "Specified argument was out of the
+        // range of valid values" -- error yang sama sekali tidak menjelaskan masalahnya.
+        //
+        // Dokumen ber-item banyak mudah melewati batas itu karena detailnya satu baris per
+        // item/batch bermasalah. Karena itu detail dibatasi MAX_DETAIL baris dan sisanya
+        // diringkas jadi jumlah saja.
+        private static string BuildValidationMessage(string header, List<string> details)
+        {
+            const int MAX_DETAIL = 5;
+            const int SAFE_MAX = 460; // di bawah 512, sisakan ruang untuk prefix "500 "
+
+            List<string> shown = details.Take(MAX_DETAIL).ToList();
+            string msg = "[VALIDATION] - " + header + ":\n" + string.Join("\n", shown);
+
+            if (details.Count > shown.Count)
+            {
+                msg += string.Format("\n...dan {0} lainnya.", details.Count - shown.Count);
+            }
+
+            // Jaring pengaman: ItemCode/Batch yang panjang bisa tetap melewati batas.
+            if (msg.Length > SAFE_MAX)
+            {
+                msg = msg.Substring(0, SAFE_MAX) + "...";
+            }
+
+            return msg;
+        }
+
         public void PostSAP(int userId, long id)
         {
             ReProcessModel sync = GetById(userId, id);
@@ -1814,138 +1883,159 @@ namespace Models.Transaction
                     }
                     if (whsErrors.Any())
                     {
-                        throw new Exception("[VALIDATION] - Whse belum dipilih:\n" + string.Join("\n", whsErrors));
+                        throw new Exception(BuildValidationMessage("Whse belum dipilih", whsErrors));
                     }
 
-                    // Validasi Total Created (QuantityCreated) harus SAMA dengan Total Needed (Quantity) tiap item.
+                    // ---- Validasi berjenjang Item -> Batch -> Scale, untuk sisi Issue DAN Receipt ----
+                    // Dokumen hanya boleh di-Post bila seluruh jenjang di KEDUA sisi sudah selesai dan
+                    // tidak ada quantity outstanding. Tiap jenjang dievaluasi untuk kedua sisi lalu
+                    // dilaporkan bersama; bila ada error, Post berhenti di jenjang itu (tidak lanjut ke
+                    // jenjang berikutnya) supaya user memperbaiki dari hulu ke hilir.
+                    //
+                    // Kedua sisi diproyeksikan ke bentuk seragam agar aturannya ditulis SEKALI saja.
+                    // ListBatch_ pada model Receipt "menyembunyikan" milik base class (field `new`),
+                    // jadi proyeksi dilakukan per sisi dengan tipe konkretnya masing-masing.
+                    var sides = new List<Tuple<string, List<ReProcess_ValidateItem>>>();
+                    sides.Add(Tuple.Create("Issue", sync.ListIssueItem_ == null
+                        ? new List<ReProcess_ValidateItem>()
+                        : sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0).Select(x => new ReProcess_ValidateItem
+                        {
+                            ItemCode = x.ItemCode,
+                            Quantity = x.Quantity ?? 0,
+                            Batches = (x.ListBatch_ ?? new List<IssueReceipt_IssueBatchModel>())
+                                .Select(b => new ReProcess_ValidateBatch { Batch = b.Batch, Quantity = b.Quantity ?? 0, DetDetId = b.DetDetId ?? 0 })
+                                .ToList()
+                        }).ToList()));
+                    sides.Add(Tuple.Create("Receipt", sync.ListReceiptItem_ == null
+                        ? new List<ReProcess_ValidateItem>()
+                        : sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0).Select(x => new ReProcess_ValidateItem
+                        {
+                            ItemCode = x.ItemCode,
+                            Quantity = x.Quantity ?? 0,
+                            Batches = (x.ListBatch_ ?? new List<IssueReceipt_ReceiptBatchModel>())
+                                .Select(b => new ReProcess_ValidateBatch { Batch = b.Batch, Quantity = b.Quantity ?? 0, DetDetId = b.DetDetId ?? 0 })
+                                .ToList()
+                        }).ToList()));
+
+                    // --- Jenjang 1: Item. Total Created (= SUM qty batch) harus SAMA dengan Total Needed.
+                    // Dihitung langsung dari batch, BUKAN dari kolom "QuantityCreated": kolom itu
+                    // di-refresh manual di banyak tempat sehingga bisa stale -- bila stale, dokumen yang
+                    // batch-nya sudah benar malah tertolak (atau yang belum benar malah lolos).
                     var qtyErrors = new List<string>();
-                    if (sync.ListIssueItem_ != null)
+                    foreach (var side in sides)
                     {
-                        foreach (var it in sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0))
+                        foreach (var it in side.Item2)
                         {
-                            int needed = (int)(it.Quantity ?? 0);
-                            int created = it.QuantityCreated ?? 0;
+                            decimal needed = it.Quantity;
+                            decimal created = it.Batches.Sum(b => b.Quantity);
                             if (created < needed)
-                                qtyErrors.Add(string.Format("Issue {0}: Total Created {1} < Total Needed {2} (kurang {3})", it.ItemCode, created, needed, needed - created));
+                            {
+                                qtyErrors.Add(string.Format("{0} {1}: Created {2} < Needed {3} (outstanding {4})",
+                                    side.Item1, it.ItemCode, created, needed, needed - created));
+                            }
                             else if (created > needed)
-                                qtyErrors.Add(string.Format("Issue {0}: Total Created {1} > Total Needed {2} (lebih {3})", it.ItemCode, created, needed, created - needed));
-                        }
-                    }
-                    if (sync.ListReceiptItem_ != null)
-                    {
-                        foreach (var it in sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0))
-                        {
-                            int needed = (int)(it.Quantity ?? 0);
-                            int created = it.QuantityCreated ?? 0;
-                            if (created < needed)
-                                qtyErrors.Add(string.Format("Receipt {0}: Total Created {1} < Total Needed {2} (kurang {3})", it.ItemCode, created, needed, needed - created));
-                            else if (created > needed)
-                                qtyErrors.Add(string.Format("Receipt {0}: Total Created {1} > Total Needed {2} (lebih {3})", it.ItemCode, created, needed, created - needed));
+                            {
+                                qtyErrors.Add(string.Format("{0} {1}: Created {2} > Needed {3} (lebih {4})",
+                                    side.Item1, it.ItemCode, created, needed, created - needed));
+                            }
                         }
                     }
                     if (qtyErrors.Any())
                     {
-                        throw new Exception("[VALIDATION] - Total Created harus sama dengan Total Needed:\n" + string.Join("\n", qtyErrors));
+                        throw new Exception(BuildValidationMessage("Total Created harus sama dengan Total Needed", qtyErrors));
                     }
 
-                    // Validasi kelengkapan batch: untuk item yang dikelola batch (OITM.ManBtchNum='Y'),
-                    // SAP menuntut total qty batch per baris = qty baris (error -4014 bila tidak).
-                    // Divalidasi di sini agar pesannya menunjuk item & angkanya, bukan -4014 mentah.
-                    var allItemCodes = new List<string>();
-                    if (sync.ListIssueItem_ != null)
-                    {
-                        allItemCodes.AddRange(sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0 && !string.IsNullOrEmpty(x.ItemCode)).Select(x => x.ItemCode));
-                    }
-                    if (sync.ListReceiptItem_ != null)
-                    {
-                        allItemCodes.AddRange(sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0 && !string.IsNullOrEmpty(x.ItemCode)).Select(x => x.ItemCode));
-                    }
-                    allItemCodes = allItemCodes.Distinct().ToList();
-
-                    var batchManagedItems = new List<string>();
-                    if (allItemCodes.Any())
-                    {
-                        string inList = string.Join(",", allItemCodes.Select(c => "'" + c.Replace("'", "''") + "'"));
-                        batchManagedItems = CONTEXT.Database.SqlQuery<string>(
-                            "SELECT \"ItemCode\" FROM \"" + DbProvider.dbSap_Name + "\".\"OITM\" WHERE \"ManBtchNum\"='Y' AND \"ItemCode\" IN (" + inList + ")").ToList();
-                    }
-
+                    // --- Jenjang 2: Batch. Tiap item wajib punya baris batch (semua item di ReProcess
+                    // dikelola batch), dan batch wajib sudah tersimpan (DetDetId terisi) karena
+                    // AddGoodsIssue/AddGoodsReceipt mengirim seluruh ListBatch_ ke SAP apa adanya.
                     var batchErrors = new List<string>();
-                    if (sync.ListIssueItem_ != null)
+                    foreach (var side in sides)
                     {
-                        foreach (var it in sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0))
+                        foreach (var it in side.Item2)
                         {
-                            if (!batchManagedItems.Contains(it.ItemCode)) continue;
-                            decimal sumBatch = it.ListBatch_ == null ? 0 : it.ListBatch_.Sum(b => b.Quantity ?? 0);
-                            if (sumBatch != (it.Quantity ?? 0))
+                            if (!it.Batches.Any())
                             {
-                                batchErrors.Add(string.Format("Issue {0}: total batch {1} <> qty item {2}", it.ItemCode, sumBatch, it.Quantity ?? 0));
+                                batchErrors.Add(string.Format("{0} {1}: belum ada Batch", side.Item1, it.ItemCode));
+                                continue;
                             }
-                        }
-                    }
-                    if (sync.ListReceiptItem_ != null)
-                    {
-                        foreach (var it in sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0))
-                        {
-                            if (!batchManagedItems.Contains(it.ItemCode)) continue;
-                            decimal sumBatch = it.ListBatch_ == null ? 0 : it.ListBatch_.Sum(b => b.Quantity ?? 0);
-                            if (sumBatch != (it.Quantity ?? 0))
+                            foreach (var b in it.Batches.Where(x => x.DetDetId == 0))
                             {
-                                batchErrors.Add(string.Format("Receipt {0}: total batch {1} <> qty item {2}", it.ItemCode, sumBatch, it.Quantity ?? 0));
+                                batchErrors.Add(string.Format("{0} {1}: Batch {2} belum tersimpan", side.Item1, it.ItemCode, b.Batch));
                             }
                         }
                     }
                     if (batchErrors.Any())
                     {
-                        throw new Exception("[VALIDATION] - Batch belum lengkap (total batch harus = qty item):\n" + string.Join("\n", batchErrors));
+                        throw new Exception(BuildValidationMessage("Batch belum lengkap", batchErrors));
                     }
 
-                    // Validasi Scale/Netto: tiap batch yang dikirim ke SAP harus SUDAH punya baris scale
-                    // dan tidak sedang menunggu hasil timbang (staging Status='Waiting').
-                    // Kondisi ini ditolak agar Netto timbangan tidak kosong/belum final saat dokumen diposting.
+                    // --- Jenjang 3: Scale. Tiap batch wajib punya minimal satu baris scale, hasil
+                    // timbangnya sudah final (tidak ada staging 'Waiting'), dan Netto-nya sudah terisi.
                     var scaleErrors = new List<string>();
                     Action<string, string, long> addScaleError = (label, batch, detDetId) =>
                     {
+                        string tblScale = "Tx_IssueAndReceipt_" + label + "_Item_Batch_Scale";
+
                         long scaleCount = CONTEXT.Database.SqlQuery<long>(
-                            "SELECT COUNT(*) AS IDU FROM \"Tx_IssueAndReceipt_" + label + "_Item_Batch_Scale\" WHERE \"DetDetId\"=:p0", detDetId).FirstOrDefault();
+                            "SELECT COUNT(*) AS IDU FROM \"" + tblScale + "\" WHERE \"DetDetId\"=:p0", detDetId).FirstOrDefault();
                         // tidak ada baris scale sama sekali pada batch ini
                         if (scaleCount == 0)
                         {
-                            scaleErrors.Add(string.Format("{0} Batch {1}: belum ada data Scale. Isi baris scale (popup Scale) terlebih dahulu.", label, batch));
+                            // Teks per baris dijaga pendek; instruksinya ada di header pesan
+                            // (lihat BuildValidationMessage) agar tidak berulang tiap baris.
+                            scaleErrors.Add(string.Format("{0} Batch {1}: belum ada data Scale", label, batch));
                             return;
                         }
-                        // ada baris scale yang masih Waiting di staging -> hasil timbang belum final
+
+                        // ada baris scale yang masih Waiting di staging -> hasil timbang belum final.
+                        // WAJIB difilter TransType: "DetDetId" adalah identity per-tabel batch, dan
+                        // GRPO/Issue/Receipt menulis ke satu Tp_ScaleStaging -> nilainya bertabrakan
+                        // antar dokumen. Tanpa filter ini, baris Waiting milik dokumen lain ikut terhitung.
+                        // Hanya baris staging TERKINI per baris scale yang dinilai (pola MAX(StagingId)
+                        // sama dengan grid di ReProcess__ItemBatchScaleList), sebab SaveFromScale
+                        // menambah baris staging baru saat percobaan sebelumnya berstatus Error.
+                        string transType = (label == "Receipt") ? "IssueAndReceiptReceipt" : "IssueAndReceiptIssue";
                         int waitingCount = CONTEXT.Database.SqlQuery<int>(
-                            "SELECT COUNT(*) AS IDU FROM \"Tp_ScaleStaging\" ST " +
-                            "WHERE ST.\"DetDetId\"=:p0 AND ST.\"Status\"='Waiting'", detDetId).FirstOrDefault();
+                            "SELECT COUNT(*) AS IDU " +
+                            "FROM \"" + tblScale + "\" SC " +
+                            "INNER JOIN \"Tp_ScaleStaging\" ST ON ST.\"DetDetDetId\" = SC.\"DetDetDetId\" AND ST.\"TransType\" = :p1 " +
+                            "WHERE SC.\"DetDetId\" = :p0 AND ST.\"Status\" = 'Waiting' " +
+                            "  AND ST.\"StagingId\" = (SELECT MAX(ST2.\"StagingId\") FROM \"Tp_ScaleStaging\" ST2 " +
+                            "                          WHERE ST2.\"DetDetDetId\" = SC.\"DetDetDetId\" AND ST2.\"TransType\" = :p2)",
+                            detDetId, transType, transType).FirstOrDefault();
                         if (waitingCount > 0)
                         {
-                            scaleErrors.Add(string.Format("{0} Batch {1}: masih ada permintaan timbang menunggu (Status Waiting). Tunggu proses selesai / hasil diterima, atau hapus baris scale yang menunggu.", label, batch));
+                            scaleErrors.Add(string.Format("{0} Batch {1}: menunggu hasil timbang", label, batch));
+                            return;
+                        }
+
+                        // Netto hanya diisi API (callback hasil timbang). Netto kosong berarti hasil
+                        // timbang belum masuk -- termasuk kasus vendor GAGAL menimbang, yang membuat
+                        // staging jadi Status='Error' + Netto=NULL sehingga TIDAK tertangkap cek
+                        // 'Waiting' di atas. Tanpa cek ini dokumen bisa ter-post dengan Netto kosong,
+                        // lalu FillCosting menghitung totalNettoReceipt=0 -> Price/Value Receipt jadi 0.
+                        int nettoKosong = CONTEXT.Database.SqlQuery<int>(
+                            "SELECT COUNT(*) AS IDU FROM \"" + tblScale + "\" " +
+                            "WHERE \"DetDetId\"=:p0 AND (\"Netto\" IS NULL OR \"Netto\" <= 0)", detDetId).FirstOrDefault();
+                        if (nettoKosong > 0)
+                        {
+                            scaleErrors.Add(string.Format("{0} Batch {1}: Netto belum terisi", label, batch));
                         }
                     };
 
-                    if (sync.ListIssueItem_ != null)
+                    foreach (var side in sides)
                     {
-                        foreach (var b in sync.ListIssueItem_.Where(x => (x.Quantity ?? 0) > 0).SelectMany(x => x.ListBatch_))
+                        foreach (var b in side.Item2.SelectMany(x => x.Batches))
                         {
-                            long dd = b.DetDetId ?? 0;
-                            if (dd == 0) continue;
-                            addScaleError("Issue", b.Batch, dd);
-                        }
-                    }
-                    if (sync.ListReceiptItem_ != null)
-                    {
-                        foreach (var b in sync.ListReceiptItem_.Where(x => (x.Quantity ?? 0) > 0).SelectMany(x => x.ListBatch_))
-                        {
-                            long dd = b.DetDetId ?? 0;
-                            if (dd == 0) continue;
-                            addScaleError("Receipt", b.Batch, dd);
+                            addScaleError(side.Item1, b.Batch, b.DetDetId);
                         }
                     }
 
                     if (scaleErrors.Any())
                     {
-                        throw new Exception("[VALIDATION] - Data Scale belum siap untuk di-Post:\n" + string.Join("\n", scaleErrors));
+                        throw new Exception(BuildValidationMessage(
+                            "Data Scale belum siap untuk di-Post (tunggu hasil timbang selesai, atau hapus baris scale yang menunggu)",
+                            scaleErrors));
                     }
 
                     // Fase 1 hanya membuat Goods Issue. Goods Receipt (dengan UnitPrice benar) dibuat
