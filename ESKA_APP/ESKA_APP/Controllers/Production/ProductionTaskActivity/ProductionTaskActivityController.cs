@@ -73,7 +73,7 @@ namespace Controllers.Production
         {
             int userId = (int)Session["userId"];
 
-            // Kontribusi QuantityActivity_ item Direction=In diketik manual di client (tidak
+            // Kontribusi QuantitySession item Direction=In diketik manual di client (tidak
             // persisted sampai Finish disubmit) -> dikirim terpisah sebagai JSON, bukan lewat
             // model binding grid biasa.
             if (!string.IsNullOrEmpty(itemQuantitiesJson))

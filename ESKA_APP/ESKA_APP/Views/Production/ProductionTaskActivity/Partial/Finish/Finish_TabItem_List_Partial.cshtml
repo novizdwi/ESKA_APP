@@ -265,12 +265,16 @@
         column.FieldName = "QuantityPlanned";
         column.Name = "QuantityPlanned";
         column.Caption = "Quantity Planned";
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 120;
-        column.ReadOnly = true;
+
+        // Read-only nya per BARIS, bukan per kolom -> diatur di CellEditorInitialize:
+        // baris yang sudah punya LineNum (sudah ada di WOR1) tidak boleh diubah,
+        // baris baru (LineNum -1 / kosong) boleh diisi.
+        column.ReadOnly = false;
+
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.AllowMouseWheel = false;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
@@ -403,7 +407,7 @@
     settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentItemListOnRowInserting(s, e, {0}, {1}); }}", Id, ActivityDetId);
     settings.ClientSideEvents.BatchEditStartEditing =
     "function(s, e) { " +
-        "if (e.focusedColumn.fieldName == 'QuantityActivity_') { " +
+        "if (e.focusedColumn.fieldName == 'QuantitySession') { " +
             "var direction = s.batchEditApi.GetCellValue(e.visibleIndex, 'Direction'); " +
             "if (direction == 'Out') { " +
                 "e.cancel = true; " +
@@ -419,12 +423,49 @@
         e.NewValues["LineNum"] = -1;
     };
 
+    // QuantityPlanned hanya bisa diisi kalau barisnya belum punya LineNum, yaitu baris baru
+    // yang belum pernah masuk WOR1. Baris yang sudah ada di WOR1 mengikuti angka SAP.
+    settings.CellEditorInitialize = (sender, e) =>
+    {
+        if (e.Column.FieldName == "QuantityPlanned")
+        {
+            bool isNewLine = true;
+
+            // VisibleIndex < 0 = baris baru yang sedang diinsert -> selalu boleh diisi.
+            if (e.VisibleIndex >= 0)
+            {
+                MVCxGridView grid = sender as MVCxGridView;
+                object lineNum = grid.GetRowValues(e.VisibleIndex, "LineNum");
+
+                isNewLine = (lineNum == null) || (lineNum is DBNull) || (Convert.ToInt32(lineNum) == -1);
+            }
+
+            ASPxSpinEdit editor = e.Editor as ASPxSpinEdit;
+            if (editor != null)
+            {
+                editor.ReadOnly = !isNewLine;
+            }
+        }
+    };
+
     settings.HtmlDataCellPrepared = (sender, e) =>
     {
-        if (e.DataColumn.FieldName == "QuantityActivity_")
+        if (e.DataColumn.FieldName == "QuantitySession")
         {
             var direction = e.GetValue("Direction");
             if (direction != null && direction.ToString() == "Out")
+            {
+                e.Cell.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            }
+        }
+
+        // Tandai QuantityPlanned yang tidak bisa diedit (sudah punya LineNum di WOR1).
+        if (e.DataColumn.FieldName == "QuantityPlanned")
+        {
+            var lineNum = e.GetValue("LineNum");
+            bool isNewLine = (lineNum == null) || (lineNum is DBNull) || (Convert.ToInt32(lineNum) == -1);
+
+            if (!isNewLine)
             {
                 e.Cell.BackColor = System.Drawing.Color.FromName("#EDEDED");
             }
@@ -434,7 +475,7 @@
 }).Bind(Model).GetHtml()
 
 @* DetId item Direction=In pada halaman ini -> dibaca GetItemActivityQuantities() di
-   ProductionTaskActivity.cshtml untuk mengumpulkan input QuantityActivity_ manual user
+   ProductionTaskActivity.cshtml untuk mengumpulkan input QuantitySession manual user
    saat submit Finish (nilai TIDAK di-AJAX-simpan lewat grid, baru dipakai saat Finish). *@
 <script type="text/javascript">
     window.productionActivityInItemDetIds = [@Html.Raw(string.Join(",", (Model ?? new List<Models.Production.ProductionTaskDetailItemModel>())
