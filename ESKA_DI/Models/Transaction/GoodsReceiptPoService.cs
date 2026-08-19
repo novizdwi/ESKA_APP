@@ -1057,6 +1057,39 @@ namespace Models.Transaction
             }
         }
 
+        // Susun pesan [VALIDATION] yang panjangnya dijamin aman.
+        //
+        // BaseController (file template, tidak diubah) menaruh pesan exception ke
+        // HttpResponse.Status. Reason phrase HTTP dibatasi 512 karakter; pesan yang lebih
+        // panjang membuat setter-nya melempar ArgumentOutOfRangeException, sehingga pesan
+        // validasi asli HILANG dan user hanya melihat "Specified argument was out of the
+        // range of valid values" -- error yang sama sekali tidak menjelaskan masalahnya.
+        //
+        // Dokumen ber-item banyak mudah melewati batas itu karena detailnya satu baris per
+        // item/batch bermasalah. Karena itu detail dibatasi MAX_DETAIL baris dan sisanya
+        // diringkas jadi jumlah saja. Kembar dengan ReProcessService.BuildValidationMessage.
+        private static string BuildValidationMessage(string header, List<string> details)
+        {
+            const int MAX_DETAIL = 5;
+            const int SAFE_MAX = 460; // di bawah 512, sisakan ruang untuk prefix "500 "
+
+            List<string> shown = details.Take(MAX_DETAIL).ToList();
+            string msg = "[VALIDATION] - " + header + ":\n" + string.Join("\n", shown);
+
+            if (details.Count > shown.Count)
+            {
+                msg += string.Format("\n...dan {0} lainnya.", details.Count - shown.Count);
+            }
+
+            // Jaring pengaman: ItemCode/Batch yang panjang bisa tetap melewati batas.
+            if (msg.Length > SAFE_MAX)
+            {
+                msg = msg.Substring(0, SAFE_MAX) + "...";
+            }
+
+            return msg;
+        }
+
         //public void PostSAP(int userId, long id)
         //{
         //    SAPbobsCOM.Company oCompany = null;
@@ -1193,7 +1226,7 @@ namespace Models.Transaction
                         }
                         if (qtyErrors.Any())
                         {
-                            throw new Exception("[VALIDATION] - Total Created harus sama dengan Total Needed:\n" + string.Join("\n", qtyErrors));
+                            throw new Exception(BuildValidationMessage("Total Created harus sama dengan Total Needed", qtyErrors));
                         }
 
                         // Validasi Scale/Netto: tiap batch yang dikirim ke SAP harus SUDAH punya baris scale
@@ -1212,22 +1245,37 @@ namespace Models.Transaction
                                         "SELECT COUNT(*) AS IDU FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\" WHERE \"DetDetId\"=:p0", detDetId).FirstOrDefault();
                                     if (scaleCount == 0)
                                     {
-                                        scaleErrors.Add(string.Format("Batch {0}: belum ada data Scale. Isi baris scale (popup Scale) terlebih dahulu.", b.Batch));
+                                        // Teks per baris dijaga pendek; instruksinya ada di header pesan
+                                        // (lihat BuildValidationMessage) agar tidak berulang tiap baris.
+                                        scaleErrors.Add(string.Format("Batch {0}: belum ada data Scale", b.Batch));
                                         continue;
                                     }
+                                    // WAJIB difilter TransType: "DetDetId" adalah identity per-tabel batch, dan
+                                    // GRPO/Issue/Receipt menulis ke satu Tp_ScaleStaging -> nilainya bertabrakan
+                                    // antar dokumen. Tanpa filter ini, baris Waiting milik dokumen lain ikut terhitung.
+                                    // Hanya baris staging TERKINI per baris scale yang dinilai (pola MAX(StagingId)
+                                    // sama dengan grid), sebab SaveFromScale menambah baris staging baru saat
+                                    // percobaan sebelumnya berstatus Error.
                                     int waitingCount = CONTEXT.Database.SqlQuery<int>(
-                                        "SELECT COUNT(*) AS IDU FROM \"Tp_ScaleStaging\" ST " +
-                                        "WHERE ST.\"DetDetId\"=:p0 AND ST.\"Status\"='Waiting'", detDetId).FirstOrDefault();
+                                        "SELECT COUNT(*) AS IDU " +
+                                        "FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\" SC " +
+                                        "INNER JOIN \"Tp_ScaleStaging\" ST ON ST.\"DetDetDetId\" = SC.\"DetDetDetId\" AND ST.\"TransType\" = 'GoodsReceiptPo' " +
+                                        "WHERE SC.\"DetDetId\" = :p0 AND ST.\"Status\" = 'Waiting' " +
+                                        "  AND ST.\"StagingId\" = (SELECT MAX(ST2.\"StagingId\") FROM \"Tp_ScaleStaging\" ST2 " +
+                                        "                          WHERE ST2.\"DetDetDetId\" = SC.\"DetDetDetId\" AND ST2.\"TransType\" = 'GoodsReceiptPo')",
+                                        detDetId).FirstOrDefault();
                                     if (waitingCount > 0)
                                     {
-                                        scaleErrors.Add(string.Format("Batch {0}: masih ada permintaan timbang menunggu (Status Waiting). Tunggu proses selesai / hasil diterima, atau hapus baris scale yang menunggu.", b.Batch));
+                                        scaleErrors.Add(string.Format("Batch {0}: menunggu hasil timbang", b.Batch));
                                     }
                                 }
                             }
                         }
                         if (scaleErrors.Any())
                         {
-                            throw new Exception("[VALIDATION] - Data Scale belum siap untuk di-Post:\n" + string.Join("\n", scaleErrors));
+                            throw new Exception(BuildValidationMessage(
+                                "Data Scale belum siap untuk di-Post (tunggu hasil timbang selesai, atau hapus baris scale yang menunggu)",
+                                scaleErrors));
                         }
 
                         GRPOAddResultModel GRPOResult = AddGoodsReceiptPO(oCompany, userId, id, syncGRPO);
@@ -1834,7 +1882,9 @@ namespace Models.Transaction
                         {
                             // LineNum & LineStatus di-generate server-side dan tidak dikirim grid.
                             // Tanpa dikecualikan, CopyProperties akan menimpanya dengan null tiap kali edit.
-                            var exceptColumns = new string[] { "DetId", "DetDetId", "LineNum", "LineStatus", "CreatedUser", "CreatedDate" };
+                            // Netto juga: nilainya dihitung dari SUM(Netto baris scale) via
+                            // UpdateBatchNettoFromScale, dan kolomnya read-only di grid (terkirim null).
+                            var exceptColumns = new string[] { "DetId", "DetDetId", "LineNum", "LineStatus", "Netto", "CreatedUser", "CreatedDate" };
                             CopyProperty.CopyProperties(model, tx_GoodsReceiptPO_Item_Batch, false, exceptColumns);
 
                             tx_GoodsReceiptPO_Item_Batch.ModifiedDate = dtModified;
@@ -1921,17 +1971,22 @@ namespace Models.Transaction
 
             using (var CONTEXT = new HANA_APP())
             {
+                // "LineNum" di-COALESCE dengan nomor urut batch (berdasarkan DetDetId, sama seperti
+                // penomoran saat batch dibuat), agar header tetap tampil pada data lama ber-LineNum NULL.
                 sql = @"SELECT T0.""Id"",
                                 T1.""DetId"",
                                 T2.""DetDetId"",
                                 T1.""ItemCode"",
                                 T1.""ItemName"",
                                 T1.""Uom"",
-                                T2.""LineNum"",
+                                CAST(COALESCE(T2.""LineNum"", T3.""LineNumUrut"") AS INTEGER) AS ""LineNum"",
                                 T2.""Batch""
                                 FROM ""Tx_GoodsReceiptPO"" T0
                                 LEFT JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""Id"" = T1.""Id""
                                 LEFT JOIN ""Tx_GoodsReceiptPO_Item_Batch"" T2 ON T1.""DetId"" = T2.""DetId""
+                                LEFT JOIN (SELECT ""DetDetId"", ""DetId"",
+                                                  ROW_NUMBER() OVER (PARTITION BY ""DetId"" ORDER BY ""DetDetId"") AS ""LineNumUrut""
+                                             FROM ""Tx_GoodsReceiptPO_Item_Batch"") T3 ON T3.""DetDetId"" = T2.""DetDetId""
                                 WHERE T0.""Id""=:p0 AND T1.""DetId"" = :p1 AND T2.""DetDetId"" = :p2 ";
 
                 model = CONTEXT.Database.SqlQuery<GoodsReceiptPoScaleView___>(sql, id, detId, detDetId).FirstOrDefault();
@@ -2019,14 +2074,12 @@ namespace Models.Transaction
                         int? maxLineNum = CONTEXT.Database.SqlQuery<int?>("SELECT MAX(\"LineNum\") AS IDU FROM \"Tx_GoodsReceiptPO_Item_Batch_Scale\" WHERE \"DetDetId\"=:p0", model.DetDetId).FirstOrDefault();
                         tx_Scale.LineNum = (maxLineNum ?? 0) + 1;
 
-                        // Uom default mengikuti item induk bila tidak diisi.
-                        if (string.IsNullOrEmpty(tx_Scale.Uom))
-                        {
-                            tx_Scale.Uom = CONTEXT.Database.SqlQuery<string>(@"SELECT T1.""Uom"" AS IDU
-                                        FROM ""Tx_GoodsReceiptPO_Item_Batch"" T0
-                                        INNER JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""DetId"" = T1.""DetId""
-                                        WHERE T0.""DetDetId""=:p0 ", model.DetDetId).FirstOrDefault();
-                        }
+                        // Uom baris scale SELALU mengikuti Uom item induk, bukan input user
+                        // (kolomnya read-only di grid).
+                        tx_Scale.Uom = CONTEXT.Database.SqlQuery<string>(@"SELECT T1.""Uom"" AS IDU
+                                    FROM ""Tx_GoodsReceiptPO_Item_Batch"" T0
+                                    INNER JOIN ""Tx_GoodsReceiptPO_Item"" T1 ON T0.""DetId"" = T1.""DetId""
+                                    WHERE T0.""DetDetId""=:p0 ", model.DetDetId).FirstOrDefault();
 
                         if (string.IsNullOrEmpty(tx_Scale.LineStatus))
                         {
@@ -2071,7 +2124,9 @@ namespace Models.Transaction
                         if (tx_Scale != null)
                         {
                             // LineNum (Sequence) di-generate server-side, jangan ditimpa dari grid.
-                            var exceptColumns = new string[] { "DetDetId", "DetDetDetId", "LineNum", "CreatedUser", "CreatedDate" };
+                            // Uom juga dikecualikan: nilainya selalu diturunkan dari Uom item induk, dan
+                            // karena kolomnya read-only DevExpress mengirimnya null -- bila disalin, Uom jadi NULL.
+                            var exceptColumns = new string[] { "DetDetId", "DetDetDetId", "LineNum", "CreatedUser", "CreatedDate", "Uom" };
                             CopyProperty.CopyProperties(model, tx_Scale, false, exceptColumns);
 
                             tx_Scale.ModifiedDate = dtModified;
