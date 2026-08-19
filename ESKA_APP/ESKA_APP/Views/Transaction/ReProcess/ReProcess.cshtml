@@ -72,6 +72,8 @@
 
         var btnCancel = ASPxClientButton.Cast('btnCancel');
 
+        var btnCopyTo = ASPxClientButton.Cast('btnCopyTo');
+
         var formMode = '';
         if ((Id.GetValue() == '') || Id.GetValue() == '0') {
             formMode = 'new';
@@ -81,6 +83,11 @@
 
         btnPost.SetEnabled(false);
         btnCancel.SetEnabled(false);
+        // Copy To hanya perlu dokumen yang sudah tersimpan; berlaku untuk semua status
+        // (termasuk Posted) karena justru dokumen jadi yang sering disalin ulang.
+        if (btnCopyTo != null) {
+            btnCopyTo.SetEnabled(false);
+        }
         switch (formMode) {
             case 'new':
 
@@ -100,6 +107,9 @@
                 //btnAdd.SetEnabled(false);
                 btnRefresh.SetEnabled(true);
                 btnUpdate.SetEnabled(true);
+                if (btnCopyTo != null) {
+                    btnCopyTo.SetEnabled(true);
+                }
                 var Status = ASPxClientComboBox.Cast('Status');
                 switch (Status.GetValue()) {
                     case 'Draft':
@@ -282,6 +292,36 @@
             });
         }
 
+    }
+
+    // Copy To: salin dokumen ini (Item + Batch + Scale) jadi Draft baru, lalu buka dokumen barunya.
+    function OnClickBtnCopyTo(s, e) {
+        var key = Id.GetValue();
+        if (!key || key == 0) {
+            alert('Simpan dokumen terlebih dahulu sebelum menyalin.');
+            return;
+        }
+
+        if (confirm('Salin dokumen ini menjadi dokumen Draft baru?')) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CopyTo", "ReProcess")',
+                data: { Id: key },
+                beforeSend: function () {
+                    OnBegin();
+                },
+                success: function (response) {
+                    RefreshAfterSuccess(response);
+                    OnSuccessMsgBox();
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    OnFailure(jqXhr, textStatus, errorThrown)
+                },
+                complete: function () {
+                    OnComplete()
+                }
+            });
+        }
     }
 
     ///-------------------------------------FORM CANCEL-----------------------------------///

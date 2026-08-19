@@ -30,7 +30,10 @@
     {
         batchItemCode = new Models.Transaction.ReProcessService().GetIssueItemCode(DetId);
     }
-    System.Data.DataTable obtnBatchList = new Models.Transaction.ReProcessService().ReProcess_OBTNBatches(batchItemCode, DetId);
+    // WhsCode item dipakai memfilter stok batch per gudang (OBTQ) supaya qty yang tampil
+    // di dropdown adalah stok batch DI GUDANG item ini, bukan total semua gudang.
+    string batchWhsCode = new Models.Transaction.ReProcessService().GetIssueItemWhsCode(DetId);
+    System.Data.DataTable obtnBatchList = new Models.Transaction.ReProcessService().ReProcess_OBTNBatches(batchItemCode, DetId, batchWhsCode);
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -113,7 +116,9 @@
 
         var cbo = column.PropertiesEdit as ComboBoxProperties;
         cbo.DataSource = obtnBatchList;
-        cbo.TextField = "Value";
+        // Tampilkan "Batch - Qty" (stok batch di gudang item), tapi SIMPAN DistNumber saja:
+        // kolom Batch dikirim ke SAP apa adanya, jadi teks tampilan tidak boleh ikut tersimpan.
+        cbo.TextField = "Display";
         cbo.ValueField = "Value";
         cbo.ValueType = typeof(string);
         cbo.DropDownStyle = DropDownStyle.DropDownList;

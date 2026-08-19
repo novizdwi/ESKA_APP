@@ -142,6 +142,22 @@ namespace Controllers.Transaction
             return PartialView(VIEW_FORM_PARTIAL, ReProcessModel);
         }
 
+        // Copy To: salin dokumen ini (Item + Batch + Scale) menjadi dokumen Draft baru,
+        // lalu tampilkan dokumen barunya di form.
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CopyTo(long Id)
+        {
+            int userId = (int)Session["userId"];
+            reProcessService = new ReProcessService();
+
+            long newId = reProcessService.Duplicate(userId, Id);
+
+            ReProcessModel model = reProcessService.GetById(userId, newId);
+            model._FormMode = FormModeEnum.Edit;
+
+            return PartialView(VIEW_FORM_PARTIAL, model);
+        }
+
 
         [HttpPost, ValidateInput(false)]
         public ActionResult Cancel(long Id, string CancelReason = "")

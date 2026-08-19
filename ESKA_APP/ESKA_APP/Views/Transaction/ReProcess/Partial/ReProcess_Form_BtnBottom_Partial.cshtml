@@ -73,7 +73,7 @@
                     var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
                     btnSettings.Name = "btnCancel";
                     btnSettings.Text = "Cancel";
-                    btnSettings.Width = Unit.Percentage(75);
+                    btnSettings.Width = Unit.Percentage(90);
                     btnSettings.ClientSideEvents.Click = "OnClickBtnCancel";
                     btnSettings.ToolTip = "Cancel";
                     btnSettings.ImagePosition = ImagePosition.Left;
@@ -81,6 +81,25 @@
                     btnSettings.Styles.Style.CssClass = "btn-shadow";
                     btnSettings.Styles.Style.Paddings.Padding = 2;
                     btnSettings.Styles.Style.BackColor = System.Drawing.Color.IndianRed;
+
+                });
+
+                // Copy To: buat dokumen Draft baru berisi salinan Item + Batch + Scale dokumen ini.
+                groupBtnSettings.Items.Add(itemSettings =>
+                {
+                    itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
+                    itemSettings.VerticalAlign = FormLayoutVerticalAlign.Top;
+                    var btnSettings = (ButtonSettings)itemSettings.NestedExtensionSettings;
+                    btnSettings.Name = "btnCopyTo";
+                    btnSettings.Text = "Copy To";
+                    btnSettings.Width = Unit.Percentage(90);
+                    btnSettings.ClientSideEvents.Click = "OnClickBtnCopyTo";
+                    btnSettings.ToolTip = "Salin dokumen ini menjadi Draft baru";
+                    btnSettings.Styles.Style.CssClass = "btn-shadow";
+                    btnSettings.Styles.Style.Paddings.Padding = 2;
+                    // Tombol ini tanpa ikon, jadi kotaknya lebih pendek daripada Post/Cancel.
+                    // Diregangkan mengikuti tinggi sel supaya sejajar, tanpa mengubah tampilannya.
+                    btnSettings.Height = Unit.Percentage(100);
 
                 });
             });

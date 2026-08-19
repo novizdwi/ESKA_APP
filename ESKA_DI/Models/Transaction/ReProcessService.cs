@@ -477,6 +477,235 @@ namespace Models.Transaction
             return Id;
         }
 
+        // Salin sebuah dokumen ReProcess menjadi dokumen Draft BARU, lengkap dengan
+        // Issue/Receipt Item -> Batch -> Scale. Mengembalikan Id dokumen baru.
+        //
+        // Dipakai untuk membuat dokumen uji/berulang tanpa entri ulang. Semua PK adalah
+        // identity, jadi penyalinan dilakukan berjenjang: simpan induk -> ambil PK barunya
+        // -> pakai sebagai FK anak.
+        public long Duplicate(int userId, long sourceId)
+        {
+            long newId = 0;
+
+            using (var CONTEXT = new HANA_APP())
+            using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+            {
+                try
+                {
+                    Tx_IssueAndReceipt src = CONTEXT.Tx_IssueAndReceipt.Find(sourceId);
+                    if (src == null)
+                    {
+                        throw new Exception("[VALIDATION] - Dokumen sumber tidak ditemukan");
+                    }
+
+                    DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+                    // Header dibuat manual (bukan CopyProperties) supaya jejak posting dokumen
+                    // sumber -- DocEntry/DocNum/PostingDate SAP -- TIDAK ikut terbawa; dokumen
+                    // baru harus tampak murni Draft yang belum pernah menyentuh SAP.
+                    Tx_IssueAndReceipt ent = new Tx_IssueAndReceipt();
+                    ent.TransType = "IssueAndReceipt";
+                    ent.TransDate = dtModified;
+                    ent.Status = "Draft";
+                    ent.RefNo = src.RefNo;
+                    ent.BaseEntry = src.BaseEntry;
+                    ent.BaseDocNum = src.BaseDocNum;
+                    ent.BaseProcessCardTransNo = src.BaseProcessCardTransNo;
+                    ent.BaseProcessCardId = src.BaseProcessCardId;
+                    ent.BaseProcessCardSort = src.BaseProcessCardSort;
+                    ent.BaseProcessCardRoutingCode = src.BaseProcessCardRoutingCode;
+                    ent.BaseProcessCardRoutingName = src.BaseProcessCardRoutingName;
+                    ent.BaseProcessCardOperatorId = src.BaseProcessCardOperatorId;
+                    ent.BaseProcessCardOperatorName = src.BaseProcessCardOperatorName;
+                    ent.CreatedDate = dtModified;
+                    ent.CreatedUser = userId;
+                    ent.ModifiedDate = dtModified;
+                    ent.ModifiedUser = userId;
+
+                    string dateX = dtModified.ToString("yyyy-MM-dd");
+                    ent.TransNo = CONTEXT.Database.SqlQuery<string>(
+                        "CALL \"SpSysGetNumbering\" (" + userId.ToString() + ",'IssueAndReceipt','" + dateX + "','') ").SingleOrDefault();
+
+                    CONTEXT.Tx_IssueAndReceipt.Add(ent);
+                    CONTEXT.SaveChanges();
+                    newId = ent.Id;
+
+                    // ---- Sisi ISSUE: Item -> Batch -> Scale ----
+                    var srcIssueItems = CONTEXT.Tx_IssueAndReceipt_Issue_Item
+                        .Where(x => x.Id == sourceId).OrderBy(x => x.DetId).ToList();
+
+                    foreach (var si in srcIssueItems)
+                    {
+                        var ni = new Tx_IssueAndReceipt_Issue_Item();
+                        ni.Id = newId;
+                        ni.ItemCode = si.ItemCode;
+                        ni.ItemName = si.ItemName;
+                        ni.Quantity = si.Quantity;
+                        ni.Uom = si.Uom;
+                        ni.WhsCode = si.WhsCode;
+                        ni.MsnPrd = si.MsnPrd;
+                        ni.Department = si.Department;
+                        ni.LineNum = si.LineNum;
+                        ni.LineStatus = si.LineStatus;
+                        // Netto & QuantityCreated dihitung ulang dari batch/scale di akhir.
+                        ni.Netto = 0;
+                        ni.QuantityCreated = 0;
+                        // Cost/Value = hasil FillCosting saat Post, dan DocEntry = nomor dokumen SAP.
+                        // Sengaja dikosongkan supaya dokumen baru menghitungnya sendiri saat di-Post.
+                        ni.CreatedDate = dtModified;
+                        ni.CreatedUser = userId;
+                        ni.ModifiedDate = dtModified;
+                        ni.ModifiedUser = userId;
+                        CONTEXT.Tx_IssueAndReceipt_Issue_Item.Add(ni);
+                        CONTEXT.SaveChanges();
+
+                        var srcBatches = CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch
+                            .Where(x => x.DetId == si.DetId).OrderBy(x => x.DetDetId).ToList();
+
+                        foreach (var sb in srcBatches)
+                        {
+                            var nb = new Tx_IssueAndReceipt_Issue_Item_Batch();
+                            nb.DetId = ni.DetId;
+                            nb.Batch = sb.Batch;
+                            nb.Quantity = sb.Quantity;
+                            nb.AdmissionDate = sb.AdmissionDate;
+                            nb.LineNum = sb.LineNum;
+                            nb.LineStatus = sb.LineStatus;
+                            nb.Netto = 0; // dihitung ulang dari scale
+                            nb.CreatedDate = dtModified;
+                            nb.CreatedUser = userId;
+                            nb.ModifiedDate = dtModified;
+                            nb.ModifiedUser = userId;
+                            CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch.Add(nb);
+                            CONTEXT.SaveChanges();
+
+                            var srcScales = CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch_Scale
+                                .Where(x => x.DetDetId == sb.DetDetId).OrderBy(x => x.DetDetDetId).ToList();
+
+                            foreach (var ss in srcScales)
+                            {
+                                var ns = new Tx_IssueAndReceipt_Issue_Item_Batch_Scale();
+                                ns.DetDetId = nb.DetDetId;
+                                ns.Quantity = ss.Quantity;
+                                ns.Uom = ss.Uom;
+                                ns.LineNum = ss.LineNum;
+                                ns.LineStatus = ss.LineStatus;
+                                // Netto IKUT disalin. Normalnya hanya diisi API hasil timbang, tapi
+                                // tanpa Netto dokumen hasil salin akan ditolak validasi Post ("Netto
+                                // belum terisi") dan costing-nya jadi 0 -- tidak bisa dipakai sama sekali.
+                                ns.Netto = ss.Netto;
+                                ns.CreatedDate = dtModified;
+                                ns.CreatedUser = userId;
+                                ns.ModifiedDate = dtModified;
+                                ns.ModifiedUser = userId;
+                                CONTEXT.Tx_IssueAndReceipt_Issue_Item_Batch_Scale.Add(ns);
+                            }
+                            CONTEXT.SaveChanges();
+                        }
+                    }
+
+                    // ---- Sisi RECEIPT: Item -> Batch -> Scale ----
+                    var srcReceiptItems = CONTEXT.Tx_IssueAndReceipt_Receipt_Item
+                        .Where(x => x.Id == sourceId).OrderBy(x => x.DetId).ToList();
+
+                    foreach (var si in srcReceiptItems)
+                    {
+                        var ni = new Tx_IssueAndReceipt_Receipt_Item();
+                        ni.Id = newId;
+                        ni.ItemCode = si.ItemCode;
+                        ni.ItemName = si.ItemName;
+                        ni.Quantity = si.Quantity;
+                        ni.Uom = si.Uom;
+                        ni.WhsCode = si.WhsCode;
+                        ni.MsnPrd = si.MsnPrd;
+                        ni.Department = si.Department;
+                        ni.LineNum = si.LineNum;
+                        ni.LineStatus = si.LineStatus;
+                        ni.Netto = 0;
+                        // Price (dan kolom Value/QuantityCreated yang hanya ada di DB) sengaja
+                        // dibiarkan kosong -- diisi FillCosting saat Post.
+                        ni.CreatedDate = dtModified;
+                        ni.CreatedUser = userId;
+                        ni.ModifiedDate = dtModified;
+                        ni.ModifiedUser = userId;
+                        CONTEXT.Tx_IssueAndReceipt_Receipt_Item.Add(ni);
+                        CONTEXT.SaveChanges();
+
+                        var srcBatches = CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch
+                            .Where(x => x.DetId == si.DetId).OrderBy(x => x.DetDetId).ToList();
+
+                        foreach (var sb in srcBatches)
+                        {
+                            var nb = new Tx_IssueAndReceipt_Receipt_Item_Batch();
+                            nb.DetId = ni.DetId;
+                            nb.Batch = sb.Batch;
+                            nb.Quantity = sb.Quantity;
+                            nb.AdmissionDate = sb.AdmissionDate;
+                            nb.LineNum = sb.LineNum;
+                            nb.LineStatus = sb.LineStatus;
+                            nb.Netto = 0;
+                            nb.CreatedDate = dtModified;
+                            nb.CreatedUser = userId;
+                            nb.ModifiedDate = dtModified;
+                            nb.ModifiedUser = userId;
+                            CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch.Add(nb);
+                            CONTEXT.SaveChanges();
+
+                            var srcScales = CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale
+                                .Where(x => x.DetDetId == sb.DetDetId).OrderBy(x => x.DetDetDetId).ToList();
+
+                            foreach (var ss in srcScales)
+                            {
+                                var ns = new Tx_IssueAndReceipt_Receipt_Item_Batch_Scale();
+                                ns.DetDetId = nb.DetDetId;
+                                ns.Quantity = ss.Quantity;
+                                ns.Uom = ss.Uom;
+                                ns.LineNum = ss.LineNum;
+                                ns.LineStatus = ss.LineStatus;
+                                ns.Netto = ss.Netto;
+                                ns.CreatedDate = dtModified;
+                                ns.CreatedUser = userId;
+                                ns.ModifiedDate = dtModified;
+                                ns.ModifiedUser = userId;
+                                CONTEXT.Tx_IssueAndReceipt_Receipt_Item_Batch_Scale.Add(ns);
+                            }
+                            CONTEXT.SaveChanges();
+                        }
+                    }
+
+                    // ---- Rollup: hitung ulang Netto & QuantityCreated dari data yang tersalin ----
+                    // Dipakai raw SQL karena kolom "QuantityCreated"/"Value" pada tabel Receipt ada di
+                    // DB tapi tidak dipetakan di model EF.
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        "UPDATE \"Tx_IssueAndReceipt_Issue_Item_Batch\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch_Scale\" WHERE \"DetDetId\" = \"Tx_IssueAndReceipt_Issue_Item_Batch\".\"DetDetId\"), 0) " +
+                        "WHERE \"DetId\" IN (SELECT \"DetId\" FROM \"Tx_IssueAndReceipt_Issue_Item\" WHERE \"Id\"=:p0)", newId);
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        "UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET " +
+                        "\"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\" = \"Tx_IssueAndReceipt_Issue_Item\".\"DetId\"), 0), " +
+                        "\"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" WHERE \"DetId\" = \"Tx_IssueAndReceipt_Issue_Item\".\"DetId\"), 0) " +
+                        "WHERE \"Id\"=:p0", newId);
+
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        "UPDATE \"Tx_IssueAndReceipt_Receipt_Item_Batch\" SET \"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch_Scale\" WHERE \"DetDetId\" = \"Tx_IssueAndReceipt_Receipt_Item_Batch\".\"DetDetId\"), 0) " +
+                        "WHERE \"DetId\" IN (SELECT \"DetId\" FROM \"Tx_IssueAndReceipt_Receipt_Item\" WHERE \"Id\"=:p0)", newId);
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        "UPDATE \"Tx_IssueAndReceipt_Receipt_Item\" SET " +
+                        "\"Netto\" = COALESCE((SELECT SUM(\"Netto\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\" = \"Tx_IssueAndReceipt_Receipt_Item\".\"DetId\"), 0), " +
+                        "\"QuantityCreated\" = COALESCE((SELECT SUM(\"Quantity\") FROM \"Tx_IssueAndReceipt_Receipt_Item_Batch\" WHERE \"DetId\" = \"Tx_IssueAndReceipt_Receipt_Item\".\"DetId\"), 0) " +
+                        "WHERE \"Id\"=:p0", newId);
+
+                    CONTEXT_TRANS.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CONTEXT_TRANS.Rollback();
+                    throw new Exception(ex.Message.StartsWith("[VALIDATION]") ? ex.Message : string.Format("[VALIDATION] {0} ", ex.Message));
+                }
+            }
+
+            return newId;
+        }
+
         public void Update(ReProcessModel model, string method = "")
         {
             if (model != null)
@@ -872,14 +1101,39 @@ namespace Models.Transaction
             }
         }
 
+        // Baris batch OBTN + stok per gudang (OBTQ) untuk ComboBox kolom Batch.
+        private class ReProcess_ObtnBatchRow
+        {
+            public string DistNumber { get; set; }
+            public decimal? Quantity { get; set; }
+        }
+
+        // ItemCode + WhsCode baris item Issue — WhsCode dipakai memfilter stok batch per gudang.
+        public string GetIssueItemWhsCode(long detId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return CONTEXT.Database.SqlQuery<string>(
+                    "SELECT T0.\"WhsCode\" FROM \"Tx_IssueAndReceipt_Issue_Item\" T0 WHERE T0.\"DetId\"=:p0", detId).FirstOrDefault();
+            }
+        }
+
         // Daftar batch SAP (OBTN) untuk sebuah item — dipakai ComboBox kolom Batch pada batch popup.
         // Hanya batch yang BELUM dipilih (belum ada di Tx_IssueAndReceipt_Issue_Item_Batch utk DetId ini).
-        // Mengembalikan DataTable berkolom "Value" (pola sama seperti GetWarehouses) agar
-        // ComboBox bisa di-bind lewat TextField/ValueField="Value".
-        public System.Data.DataTable ReProcess_OBTNBatches(string itemCode, long detId)
+        //
+        // Mengembalikan DataTable 2 kolom:
+        //   "Value"   -> DistNumber murni; INI yang tersimpan ke kolom Batch (ValueField).
+        //   "Display" -> "DistNumber - Qty" untuk ditampilkan di dropdown (TextField).
+        // Dipisah supaya teks tampilan TIDAK ikut tersimpan sebagai nomor batch.
+        //
+        // Qty diambil dari OBTQ (stok batch per gudang) difilter ItemCode + WhsCode + DistNumber.
+        // LEFT JOIN dipakai agar batch yang tidak punya baris stok di gudang itu tetap muncul
+        // dengan qty 0 (bukan hilang dari daftar).
+        public System.Data.DataTable ReProcess_OBTNBatches(string itemCode, long detId, string whsCode)
         {
             var dt = new System.Data.DataTable();
             dt.Columns.Add("Value", typeof(string));
+            dt.Columns.Add("Display", typeof(string));
 
             if (string.IsNullOrEmpty(itemCode))
             {
@@ -888,16 +1142,27 @@ namespace Models.Transaction
 
             using (var CONTEXT = new HANA_APP())
             {
-                string ssql = "SELECT T0.\"DistNumber\" FROM \"" + DbProvider.dbSap_Name + "\".\"OBTN\" T0 " +
-                              "WHERE T0.\"ItemCode\"=:p0 AND IFNULL(T0.\"Status\",'0')='0' " +
-                              "AND T0.\"DistNumber\" NOT IN (" +
-                              "  SELECT T1.\"Batch\" FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" T1 " +
-                              "  WHERE T1.\"DetId\"=:p1 AND T1.\"Batch\" IS NOT NULL)" +
-                              "GROUP BY T0.\"DistNumber\" ORDER BY T0.\"DistNumber\"";
-                var rows = CONTEXT.Database.SqlQuery<string>(ssql, itemCode, detId).ToList();
-                foreach (var b in rows)
+                string dbSap = DbProvider.dbSap_Name;
+                string ssql =
+                    "SELECT T0.\"DistNumber\" AS \"DistNumber\", " +
+                    "       IFNULL(SUM(T2.\"Quantity\"), 0) AS \"Quantity\" " +
+                    "FROM \"" + dbSap + "\".\"OBTN\" T0 " +
+                    "LEFT JOIN \"" + dbSap + "\".\"OBTQ\" T2 " +
+                    "       ON T2.\"SysNumber\" = T0.\"SysNumber\" " +
+                    "      AND T2.\"ItemCode\"  = T0.\"ItemCode\" " +
+                    "      AND T2.\"WhsCode\"   = :p2 " +
+                    "WHERE T0.\"ItemCode\"=:p0 AND IFNULL(T0.\"Status\",'0')='0' " +
+                    "AND T0.\"DistNumber\" NOT IN (" +
+                    "  SELECT T1.\"Batch\" FROM \"Tx_IssueAndReceipt_Issue_Item_Batch\" T1 " +
+                    "  WHERE T1.\"DetId\"=:p1 AND T1.\"Batch\" IS NOT NULL) " +
+                    "GROUP BY T0.\"DistNumber\" ORDER BY T0.\"DistNumber\"";
+
+                var rows = CONTEXT.Database.SqlQuery<ReProcess_ObtnBatchRow>(ssql, itemCode, detId, whsCode ?? "").ToList();
+                foreach (var r in rows)
                 {
-                    dt.Rows.Add(b);
+                    decimal qty = r.Quantity ?? 0;
+                    // Qty batch berupa bilangan bulat di layar (mengikuti format kolom Quantity grid).
+                    dt.Rows.Add(r.DistNumber, string.Format("{0} - {1}", r.DistNumber, qty.ToString("0.##")));
                 }
             }
             return dt;
@@ -2214,12 +2479,20 @@ namespace Models.Transaction
                           ?? costRows.FirstOrDefault(r => r.LineNum == lineIdx);
                 if (row != null && (row.IssueCost.HasValue || row.IssueValue.HasValue))
                 {
-                    decimal unitCost = row.IssueCost ?? row.IssueValue ?? 0m;
-                    totalCostIssue += unitCost;
+                    // Cost  = biaya per UNIT  (ABS(TransValue)/OutQty) -> kolom "Cost" item Issue.
+                    // Value = biaya TOTAL baris (ABS(TransValue), sudah dikali qty) -> kolom "Value".
+                    decimal unitCost = row.IssueCost ?? 0m;
+                    decimal lineValue = row.IssueValue ?? (unitCost * (it.Quantity ?? 0));
+
+                    // Yang diakumulasi untuk dialokasikan ke Receipt adalah biaya TOTAL, bukan biaya
+                    // per unit -- menjumlahkan harga satuan antar item berbeda tidak bermakna dan
+                    // membuat Value/Price Receipt jauh lebih kecil dari semestinya.
+                    totalCostIssue += lineValue;
+
                     it.Cost = Math.Round(unitCost, 2);
                     CONTEXT.Database.ExecuteSqlCommand(
                         "UPDATE \"Tx_IssueAndReceipt_Issue_Item\" SET \"Cost\" = :p0, \"Value\" = :p1 WHERE \"DetId\" = :p2",
-                        Math.Round(unitCost, 2), Math.Round(row.IssueValue ?? 0m, 2), it.DetId);
+                        Math.Round(unitCost, 2), Math.Round(lineValue, 2), it.DetId);
                 }
                 lineIdx++;
             }
