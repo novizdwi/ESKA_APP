@@ -55,7 +55,7 @@ namespace Controllers.Production   // <-- SESUAIKAN dengan namespace controller 
             productionActivityService = new ProductionActivityService();
 
             // Item menempel pada task, jadi diambil pakai Id -- bukan kunci activity.
-            // ActivityDetId dipakai hitung QuantityActivity_ (kontribusi activity ini saja).
+            // ActivityDetId dipakai hitung QuantitySession (kontribusi activity ini saja).
             var modelList = productionActivityService.GetProductionTaskDetailItems(Id, ActivityDetId);
 
             return PartialView(VIEW_TAB_ITEM, modelList);

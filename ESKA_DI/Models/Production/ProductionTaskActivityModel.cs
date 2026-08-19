@@ -150,6 +150,16 @@ namespace Models.Production
         public string Batch { get; set; }
     }
 
+    // Data yang dibaca sebelum baris item dihapus, untuk ikut menghapus barisnya di WOR1.
+    public class ProductionTaskItemDeleteModel
+    {
+        public long DetId { get; set; }
+
+        public int? LineNum { get; set; }
+
+        public int? DocEntry { get; set; }
+    }
+
     // Hasil insert baris WOR1: LineNum dari SAP untuk ditulis balik ke Tx_ProductionTask_Item.
     public class ProductionTaskActivity_Wor1Line
     {
@@ -601,6 +611,9 @@ namespace Models.Production
                         }
                         firstNewLine = false;
 
+                        if (string.Equals(item.Direction, "In", StringComparison.OrdinalIgnoreCase)) 
+                            oPO.Lines.BaseQuantity = -1;
+
                         oPO.Lines.ItemNo = item.ItemCode;
                         oPO.Lines.PlannedQuantity = plannedQuantity;
                         oPO.Lines.ProductionOrderIssueType = SAPbobsCOM.BoIssueMethod.im_Manual;
@@ -745,8 +758,12 @@ namespace Models.Production
                         ORDER BY T0.""BatchId""", item.DetId, task.ActivityDetId).ToList();                
             }
 
-            AddReceiptFromProduction(oCompany, task, itemHeader, items);
+            // Issue DULU, baru Receipt. SAP menolak Receipt from Production selama work order
+            // belum punya IssuedQty ("Item Issued Qty in work order should be larger than zero").
+            // Urutannya juga mengikuti alur produksi nyata: komponen dikeluarkan dulu,
+            // barang jadi diterima kemudian.
             AddIssueForProduction(oCompany, task, items);
+            AddReceiptFromProduction(oCompany, task, itemHeader, items);
         }
 
         // OIGN: baris produk jadi (dari Tx_ProductionTask) + item ber-Direction 'In'.
@@ -757,12 +774,16 @@ namespace Models.Production
                             && ((x.QuantitySession ?? 0) > 0))
                 .ToList();
 
-            //bool hasParentLine = (task.ActivityQuantity ?? 0) > 0;
+            // Penjagaan qty 0: baris produk jadi memakai Quantity dari popup Finish,
+            // baris item Direction 'In' memakai QuantitySession (sudah difilter > 0 di atas).
+            // Kalau dua-duanya kosong, dokumen tidak dibuat -- SAP menolak dokumen tanpa baris
+            // dengan pesan yang tidak menjelaskan apa-apa.
+            bool hasParentLine = (itemHeader.Quantity ?? 0) > 0;
 
-            //if (!hasParentLine && (inItems.Count == 0))
-            //{
-            //    return;
-            //}
+            if (!hasParentLine && (inItems.Count == 0))
+            {
+                return;
+            }
 
             SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
 
@@ -774,18 +795,21 @@ namespace Models.Production
                 bool firstLine = true;
 
                 // Produk jadi: ItemCode dari Tx_ProductionTask, qty dari Tx_ProductionTask_Activity.
-                // Semua baris OIGN pakai batch yang sama: Tx_ProductionTask_Activity.Batch.
-                //oDoc.Lines.ItemCode = task.ItemCode;
-                
-                oDoc.Lines.Quantity = (double)(itemHeader.Quantity ?? 0);
-                oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
-                oDoc.Lines.BaseEntry = itemHeader.DocEntry ?? 0;
-                oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = itemHeader.ActivityId.ToString();
+                // Batch nya dari popup Finish (Direction 'In' pakai satu batch).
+                if (hasParentLine)
+                {
+                    //oDoc.Lines.ItemCode = task.ItemCode;
 
-                oDoc.Lines.BatchNumbers.BatchNumber = itemHeader.BatchNumber;
-                oDoc.Lines.BatchNumbers.Quantity = (double)(itemHeader.Quantity ?? 0);
+                    oDoc.Lines.Quantity = (double)(itemHeader.Quantity ?? 0);
+                    oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
+                    oDoc.Lines.BaseEntry = itemHeader.DocEntry ?? 0;
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = itemHeader.ActivityId.ToString();
 
-                firstLine = false;
+                    oDoc.Lines.BatchNumbers.BatchNumber = itemHeader.BatchNumber;
+                    oDoc.Lines.BatchNumbers.Quantity = (double)(itemHeader.Quantity ?? 0);
+
+                    firstLine = false;
+                }
 
                 foreach (var item in inItems)
                 { 
@@ -1052,6 +1076,8 @@ namespace Models.Production
 
         public void ProductionTaskActivity_DeleteItem(int _userId, long Id, long DetId)
         {
+            SAPbobsCOM.Company oCompany = null;
+
             using (var CONTEXT = new HANA_APP())
             {
                 using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
@@ -1062,19 +1088,58 @@ namespace Models.Production
                         {
                             SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItem", "Id", Id.ToString());
 
-                            //CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTaskActivity_Item_Batch_Scale\"  WHERE \"DetId\"=:p0", DetId);
+                            // LineNum + DocEntry harus dibaca SEBELUM barisnya dihapus,
+                            // sesudah itu informasinya hilang.
+                            var target = CONTEXT.Database.SqlQuery<ProductionTaskItemDeleteModel>(
+                                @"SELECT TOP 1 T0.""DetId"", T0.""LineNum"", T1.""DocEntry""
+                                  FROM ""Tx_ProductionTask_Item"" T0
+                                  INNER JOIN ""Tx_ProductionTask"" T1 ON T0.""Id"" = T1.""Id""
+                                  WHERE T0.""DetId"" = :p0", DetId).FirstOrDefault();
+
+                            bool adaDiWor1 = (target != null)
+                                             && ((target.LineNum ?? -1) != -1)
+                                             && ((target.DocEntry ?? 0) != 0);
+
+                            // Baris yang sudah ada di WOR1 ikut dihapus di SAP.
+                            if (adaDiWor1)
+                            {
+                                oCompany = SAPCachedCompany.GetCompany();
+                                oCompany.StartTransaction();
+
+                                DeleteProductionOrderLine(oCompany, target.DocEntry.Value, target.LineNum.Value);
+                            }
+
+                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"ItemDetId\"=:p0", DetId);
                             CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item\"  WHERE \"DetId\"=:p0", DetId);
                             CONTEXT.SaveChanges();
 
-                            //CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProductionTaskActivity_UpdateItemQuantity\"(:p0, 'Tx_ProductionTaskActivity_Item_Batch',:p1, :p2)", _userId, DetId, 0);
+                            // SAP menomori ulang baris sesudah ada yang dihapus, jadi LineNum
+                            // item lain pada task ini disamakan lagi dengan WOR1.
+                            if (adaDiWor1)
+                            {
+                                ResyncProductionOrderLineNum(CONTEXT, oCompany, _userId, Id, target.DocEntry.Value);
+                            }
+
+                            SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "deleteItem", "Id", Id.ToString());
+
+                            if ((oCompany != null) && (oCompany.InTransaction))
+                            {
+                                oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
+                            }
+
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)
                         {
+                            if ((oCompany != null) && (oCompany.InTransaction))
+                            {
+                                oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
+                            }
+
                             CONTEXT_TRANS.Rollback();
 
                             string errorMassage;
-                            if (ex.Message.Substring(12) == "[VALIDATION]")
+                            if (ex.Message.StartsWith("[VALIDATION]"))
                             {
                                 errorMassage = ex.Message;
                             }
@@ -1085,11 +1150,114 @@ namespace Models.Production
 
                             throw new Exception(errorMassage);
                         }
+                        finally
+                        {
+                            // Wajib: GetCompany() menahan TransactionLock, Release() yang melepasnya.
+                            if (oCompany != null)
+                            {
+                                SAPCachedCompany.Release(oCompany);
+                            }
+                        }
                     }
 
                 }
             }
 
+        }
+
+        // Hapus satu baris WOR1 berdasarkan LineNumber nya.
+        private void DeleteProductionOrderLine(SAPbobsCOM.Company oCompany, int docEntry, int lineNum)
+        {
+            SAPbobsCOM.ProductionOrders oPO = (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oProductionOrders);
+
+            try
+            {
+                if (!oPO.GetByKey(docEntry))
+                {
+                    throw new Exception(string.Format("[VALIDATION] - Production Order DocEntry [{0}] tidak ditemukan di SAP (OWOR)", docEntry));
+                }
+
+                // Kalau barisnya memang sudah tidak ada di SAP, tidak perlu diapa-apakan.
+                if (!SetCurrentLineByLineNumber(oPO, lineNum))
+                {
+                    return;
+                }
+
+                oPO.Lines.Delete();
+
+                int result = oPO.Update();
+                if (result != 0)
+                {
+                    int nErr = oCompany.GetLastErrorCode();
+                    string errMsg = oCompany.GetLastErrorDescription();
+
+                    throw new Exception(string.Format("[VALIDATION] - Hapus baris WOR1 LineNum [{0}] pada Production Order [{1}] : {2}|{3}", lineNum, docEntry, nErr, errMsg));
+                }
+            }
+            finally
+            {
+                SapCompany.CleanUp(oPO);
+            }
+        }
+
+        // Sesudah baris WOR1 dihapus, LineNum baris lain bisa bergeser. WOR1 dibaca ulang lewat
+        // DI API (bukan SQL -- perubahan SAP belum ter-commit dan tidak terlihat oleh koneksi EF),
+        // lalu LineNum di Tx_ProductionTask_Item disamakan berdasarkan ItemCode.
+        private void ResyncProductionOrderLineNum(HANA_APP CONTEXT, SAPbobsCOM.Company oCompany, int userId, long id, int docEntry)
+        {
+            SAPbobsCOM.ProductionOrders oPO = (SAPbobsCOM.ProductionOrders)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oProductionOrders);
+
+            try
+            {
+                if (!oPO.GetByKey(docEntry))
+                {
+                    return;
+                }
+
+                // ItemCode yang muncul lebih dari sekali dilewati -- tidak bisa dipetakan pasti.
+                var lineNumByItem = new Dictionary<string, int>();
+                var ambigu = new HashSet<string>();
+
+                for (int i = 0; i < oPO.Lines.Count; i++)
+                {
+                    oPO.Lines.SetCurrentLine(i);
+
+                    string itemCode = oPO.Lines.ItemNo;
+                    if (string.IsNullOrEmpty(itemCode))
+                    {
+                        continue;
+                    }
+
+                    if (lineNumByItem.ContainsKey(itemCode))
+                    {
+                        ambigu.Add(itemCode);
+                        continue;
+                    }
+
+                    lineNumByItem.Add(itemCode, oPO.Lines.LineNumber);
+                }
+
+                foreach (var pair in lineNumByItem)
+                {
+                    if (ambigu.Contains(pair.Key))
+                    {
+                        continue;
+                    }
+
+                    CONTEXT.Database.ExecuteSqlCommand(
+                        @"UPDATE ""Tx_ProductionTask_Item""
+                          SET ""LineNum"" = :p0,
+                              ""ModifiedDate"" = CURRENT_TIMESTAMP,
+                              ""ModifiedUser"" = :p1
+                          WHERE ""Id"" = :p2
+                            AND ""ItemCode"" = :p3
+                            AND COALESCE(""LineNum"", -1) <> -1", pair.Value, userId, id, pair.Key);
+                }
+            }
+            finally
+            {
+                SapCompany.CleanUp(oPO);
+            }
         }
 
         #region item batch

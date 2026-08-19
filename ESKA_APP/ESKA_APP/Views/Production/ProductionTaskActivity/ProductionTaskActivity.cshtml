@@ -693,7 +693,7 @@ new
     }
      
 
-    // Kumpulkan QuantityActivity_ tiap item Direction=In dari grid popup Finish.
+    // Kumpulkan QuantitySession tiap item Direction=In dari grid popup Finish.
     // Item Direction=Out TIDAK diikutkan -- nilainya dihitung server-side dari popup batch.
     function GetItemActivityQuantities() {
         var ids = window.productionActivityInItemDetIds || [];
@@ -701,13 +701,13 @@ new
 
         for (var i = 0; i < ids.length; i++) {
             var detId = ids[i];
-            var editor = ASPxClientSpinEdit.Cast('gvContentItemList_QuantityActivity__' + detId);
+            var editor = ASPxClientSpinEdit.Cast('gvContentItemList_QuantitySession_' + detId);
             if (editor == null) { continue; }
 
             result.push({
                 DetId: detId,
                 Direction: 'In',
-                QuantityActivity_: editor.GetValue()
+                QuantitySession: editor.GetValue()
             });
         }
 
