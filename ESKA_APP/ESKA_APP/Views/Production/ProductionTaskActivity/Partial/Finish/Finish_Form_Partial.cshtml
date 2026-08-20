@@ -136,8 +136,9 @@
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Name = "Batch";
         itemSettings.Caption = "Batch";
-        itemSettings.FieldName = "GrpBatch";
+        itemSettings.FieldName = "FinishBatch";
 
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "Batch";
@@ -291,8 +292,8 @@
         btnSettings.Styles.Style.Paddings.Padding = 0;
     });
 
-    groupBtn.Items.AddEmptyItem();   
-    
+    groupBtn.Items.AddEmptyItem();
+
     groupBtn.Items.Add(itemSettings =>
     {
         itemSettings.ShowCaption = DefaultBoolean.False;

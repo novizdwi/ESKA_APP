@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
 using Models.Production;
+using Newtonsoft.Json;
 
 namespace Controllers.Production
 {
@@ -67,10 +68,18 @@ namespace Controllers.Production
             return PartialView(VIEW_FORM_PARTIAL, model);
         }
 
-        [HttpPost]
-        public ActionResult FinishActivity(ProductionActivityFinishModel model)
+        [HttpPost, ValidateInput(false)]
+        public ActionResult FinishActivity(ProductionActivityFinishModel model, string itemQuantitiesJson)
         {
             int userId = (int)Session["userId"];
+
+            // Kontribusi QuantitySession item Direction=In diketik manual di client (tidak
+            // persisted sampai Finish disubmit) -> dikirim terpisah sebagai JSON, bukan lewat
+            // model binding grid biasa.
+            if (!string.IsNullOrEmpty(itemQuantitiesJson))
+            {
+                model.ListItem_ = JsonConvert.DeserializeObject<List<ProductionTaskDetailItemModel>>(itemQuantitiesJson);
+            }
 
             productionActivityService = new ProductionActivityService();
             productionActivityService.FinishActivity(userId, model);

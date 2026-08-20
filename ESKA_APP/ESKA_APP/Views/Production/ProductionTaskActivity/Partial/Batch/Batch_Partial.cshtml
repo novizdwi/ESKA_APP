@@ -1,0 +1,25 @@
+@using (Ajax.BeginForm("mantap", "ProductionTaskActivity", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "Batch_contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "Batch_formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="Batch_contentForm">
+        @Html.Partial("Partial/Batch/Batch_Panel_Partial")
+
+    </div>
+}

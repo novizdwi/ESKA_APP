@@ -1,12 +1,15 @@
-﻿@Html.DevExpress().PopupControl(settings =>
+@Html.DevExpress().PopupControl(settings =>
 {
-    settings.Name = "popupFinish";
-    settings.CallbackRouteValues = new { Controller = "ProductionTaskActivity", Action = "Finish_PopupListOnDemandPartial" };
+    settings.Name = "popupBatch";
+    settings.CallbackRouteValues = new { Controller = "ProductionTaskActivity", Action = "ViewBatch_PopupListOnDemandPartial" };
     settings.CloseAction = CloseAction.CloseButton;
 
     settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
-    settings.Modal = true;
+
+    // Popup ini dibuka DI ATAS popupFinish (yang modal).
+    // Modal dimatikan agar tidak tertutup overlay milik popupFinish.
+    settings.Modal = false;
 
     settings.ShowFooter = true;
     settings.AllowDragging = true;
@@ -23,21 +26,21 @@
     settings.PopupAnimationType = AnimationType.Fade;
 
     settings.LoadContentViaCallback = LoadContentViaCallback.OnFirstShow;
-    settings.ClientSideEvents.EndCallback = "popupFinish_EndCallback";
+    settings.ClientSideEvents.EndCallback = "popupBatch_EndCallback";
+    settings.ClientSideEvents.CloseUp = "popupBatch_OnCloseUp";
     settings.PopupElementID = "ShowButton";
-    settings.HeaderText = "Finish Activity";
+    settings.HeaderText = "Item Batch List";
 
     settings.SetContent(() =>
     {
-        Html.RenderPartial("Partial/Finish/Finish_Form_Partial");
+        Html.RenderPartial("Partial/Batch/Batch_Form_Partial");
 
     });
 
     settings.PreRender = (sender, e) =>
     {
         ASPxPopupControl popup = (ASPxPopupControl)sender;
-
-        popup.Width = 850;
+        popup.Width = 700;
         popup.Height = 220;
     };
 

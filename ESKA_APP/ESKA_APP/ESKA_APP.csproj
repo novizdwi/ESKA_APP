@@ -784,6 +784,10 @@
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\Partial\BatchReceipt\BatchReceipt_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\Transaction\ReProcess\ReProcess.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -833,6 +837,7 @@
     <Compile Include="Controllers\Production\ProductionSchedule\ProductionScheduleController.Tab.Reference.cs" />
     <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Pause.cs" />
     <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.Finish.cs" />
+    <Compile Include="Controllers\Production\ProductionTaskActivity\ProductionTaskActivityController.ViewBatch.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Oustanding.cs" />
     <Compile Include="Controllers\Production\ProductionTask\ProductionTaskController.Tab.Reference.cs" />

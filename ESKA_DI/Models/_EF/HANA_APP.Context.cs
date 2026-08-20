@@ -90,6 +90,14 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_IssueAndReceipt_Receipt_Item> Tx_IssueAndReceipt_Receipt_Item { get; set; }
         public virtual DbSet<Tx_IssueAndReceipt_Receipt_Item_Batch> Tx_IssueAndReceipt_Receipt_Item_Batch { get; set; }
         public virtual DbSet<Tx_IssueAndReceipt_Receipt_Item_Batch_Scale> Tx_IssueAndReceipt_Receipt_Item_Batch_Scale { get; set; }
+        public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Approval> Tx_ProcessCard_Approval { get; set; }
+        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
+        public virtual DbSet<Tx_ProductionTask> Tx_ProductionTask { get; set; }
+        public virtual DbSet<Tx_ProductionTask_Activity> Tx_ProductionTask_Activity { get; set; }
+        public virtual DbSet<Tx_ProductionTask_Activity_Log> Tx_ProductionTask_Activity_Log { get; set; }
+        public virtual DbSet<Tx_ProductionTask_Item> Tx_ProductionTask_Item { get; set; }
+        public virtual DbSet<Tx_ProductionTask_Item_Batch> Tx_ProductionTask_Item_Batch { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
@@ -97,14 +105,5 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_StockOpname_Item_Batch_Scale> Tx_StockOpname_Item_Batch_Scale { get; set; }
         public virtual DbSet<WeighbridgeTransactions> WeighbridgeTransactions { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
-        public virtual DbSet<Tx_ProcessCard> Tx_ProcessCard { get; set; }
-        public virtual DbSet<Tx_ProcessCard_Approval> Tx_ProcessCard_Approval { get; set; }
-        public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Item> Tx_ProductionTask_Item { get; set; }
-        public virtual DbSet<Tx_ProductionTask> Tx_ProductionTask { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Activity> Tx_ProductionTask_Activity { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Activity_Item_Batch> Tx_ProductionTask_Activity_Item_Batch { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Activity_Log> Tx_ProductionTask_Activity_Log { get; set; }
-        public virtual DbSet<Tx_ProductionTask_Activity_Item> Tx_ProductionTask_Activity_Item { get; set; }
     }
 }

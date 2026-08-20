@@ -331,6 +331,47 @@ namespace Models.Production
             }
         }
 
+        // Mengisi Tx_ProductionTask_Item dari komponen WOR1 milik Production Order task.
+        //   Id        = Id Tx_ProductionTask
+        //   ItemCode / ItemName / LineNum  -> WOR1
+        //   WhsCode   -> WOR1."wareHouse"
+        //   WhsName   -> OWHS
+        //   Direction -> 'Out' (nilai awal)
+        //   IsLocked  -> 'N'
+        private void GenerateProductionTaskItem(HANA_APP CONTEXT, int userId, long id, int? docEntry)
+        {
+            if ((docEntry ?? 0) == 0)
+            {
+                return;
+            }
+
+            string ssql = @"
+                INSERT INTO ""Tx_ProductionTask_Item""
+                    (""Id"", ""ItemCode"", ""ItemName"", ""WhsCode"", ""WhsName"",
+                     ""LineNum"", ""Direction"", ""UomEntry"", ""Uom"", ""IsLocked"",
+                     ""QuantityPlanned"",
+                     ""CreatedDate"", ""CreatedUser"", ""ModifiedDate"", ""ModifiedUser"")
+                SELECT
+                    :p0,
+                    T1.""ItemCode"",
+                    T1.""ItemName"",
+                    T1.""wareHouse"",
+                    T2.""WhsName"",
+                    T1.""LineNum"",
+                    'Out',
+                    T1.""UomEntry"",
+                    T1.""UomCode"",
+                    'N',
+                    T1.""PlannedQty"",
+                    CURRENT_TIMESTAMP, :p1, CURRENT_TIMESTAMP, :p2
+                FROM """ + DbProvider.dbSap_Name + @""".""WOR1"" T1
+                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWHS"" T2 ON T1.""wareHouse"" = T2.""WhsCode""
+                WHERE T1.""DocEntry"" = :p3
+            ";
+
+            CONTEXT.Database.ExecuteSqlCommand(ssql, id, userId, userId, docEntry.Value);
+        }
+
         private void UpdateDetail(HANA_APP CONTEXT, int userId, ProductionSchedule_ReferenceModel model)
         {
             if (model != null)
@@ -377,6 +418,9 @@ namespace Models.Production
                                     CONTEXT.Tx_ProductionTask.Add(tx_ProductionTask);
                                     CONTEXT.SaveChanges();
 
+                                    // Item task digenerate dari komponen WOR1 milik Production Order
+                                    // task ini. Item menempel pada TASK (level 2), bukan pada activity.
+                                    GenerateProductionTaskItem(CONTEXT, userId, tx_ProductionTask.Id, tx_ProductionTask.DocEntry);
                                 }
                             }
                         }

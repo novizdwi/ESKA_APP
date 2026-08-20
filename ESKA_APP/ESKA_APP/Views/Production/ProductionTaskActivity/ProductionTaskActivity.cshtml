@@ -406,6 +406,7 @@
     function OnClickBtnFinish(s, e) {
         var key = Id.GetValue();
         var keyDet = DetId.GetValue();
+        console.log(key, " ", keyDet);
         btnShowFinishOnClick(s, e, key, keyDet);
     }
 
@@ -470,6 +471,16 @@
             PauseReason: null,
             PauseComments: null
         };
+    }
+
+    function BtnCflItemCodePopupListOnClick(s, e) {
+        //cflWarehousePopupListSalesOrder.Show();
+
+        var popup = ASPxClientPopupControl.Cast("cflItemByWarehousePopupListProductionTaskActivity");
+        popup.callbackUrl = '@Url.Action("PopupListLoadOnDemandPartial", "_CflItemByWarehouse")';
+        popup.PerformCallback();
+        popup.Show();
+
     }
 
 </script>
@@ -580,14 +591,11 @@ new
     -----------------------------------------------------------------------------
 *@
 <script type="text/javascript">
-    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+    function gvContentItemListOnBeginCallback(s, e, Id, DetId) {
 
     }
 
-    function gvContentItemListOnEndCallback(s, e, Id, DetId) {
-        if (s.IsNewRowEditing && s.IsNewRowEditing()) {
-            s.FocusEditor("Batch");
-        }
+    function gvContentItemListOnEndCallback(s, e, Id, DetId) { 
     }
 
     function gvContentItemListOnBatchEditStartEditing(s, e, Id, DetId) {
@@ -597,12 +605,12 @@ new
 
     }
 
-    function gvContentItemListOnBatchEditRowValidating(s, e, Id, DetId) {
+    function gvContentItemListOnRowInserting(s, e, Id, DetId) {
 
     }
 
     function popupFinish_EndCallback(s, e) {
-        $.validator.unobtrusive.parse("#Finish_formDetail");
+        //$.validator.unobtrusive.parse("#Finish_formDetail");
 
         var popup = ASPxClientPopupControl.Cast("popupFinish");
         if (!popup.IsVisible()) {
@@ -624,11 +632,19 @@ new
     function btnUpdateFinishOnClick(s, e) {
         var data = GetFormFinishData();
 
-        // Quantity wajib
-        if (data.Quantity == null || data.Quantity === "") {
-            Quantity.Focus();
+        // Batch wajib (dicek juga di SpProductionTaskActivity__TransNotif)
+        if (data.FinishBatch == null || data.FinishBatch === "") {
+            var eBatch = ASPxClientTextBox.Cast("Batch");
+            if (eBatch != null) { eBatch.Focus(); }
             return;
         }
+
+        // Quantity wajib
+        if (data.Quantity == null || data.Quantity === "") {
+            var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
+            if (eQuantity != null) { eQuantity.Focus(); }
+            return;
+        } 
         $.ajax({
             type: "POST",
             url: '@Url.Action("FinishActivity", "ProductionTaskActivity")',
@@ -654,17 +670,196 @@ new
     }
 
     function GetFormFinishData() {
+        // Editor diambil lewat Cast(), bukan variabel global, supaya tetap menunjuk objek
+        // yang benar sesudah popupFinish melakukan callback (LoadContentViaCallback).
+        var eId = ASPxClientTextBox.Cast("Id");
+        var eDetId = ASPxClientTextBox.Cast("DetId");
+        var eBatch = ASPxClientTextBox.Cast("Batch");
+        var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
+        var eComments = ASPxClientMemo.Cast("Comments");
+         
         return {
-            Id: Id.GetValue(),
-            DetId: DetId.GetValue(),
-            Quantity: Quantity.GetValue(),
-            Comments: Comments.GetValue()
+            Id: eId != null ? eId.GetValue() : null,
+            DetId: eDetId != null ? eDetId.GetValue() : null,
+
+            // Editor bernama "Batch", tapi properti model nya "FinishBatch".
+            FinishBatch: eBatch != null ? eBatch.GetValue() : null,
+
+            Quantity: eQuantity != null ? eQuantity.GetValue() : null,
+            Comments: eComments != null ? eComments.GetValue() : null,
+
+            //ListItem_: Details_
         };
+    }
+     
+
+    // Kumpulkan QuantitySession tiap item Direction=In dari grid popup Finish.
+    // Item Direction=Out TIDAK diikutkan -- nilainya dihitung server-side dari popup batch.
+    function GetItemActivityQuantities() {
+        var ids = window.productionActivityInItemDetIds || [];
+        var result = [];
+
+        for (var i = 0; i < ids.length; i++) {
+            var detId = ids[i];
+            var editor = ASPxClientSpinEdit.Cast('gvContentItemList_QuantitySession_' + detId);
+            if (editor == null) { continue; }
+
+            result.push({
+                DetId: detId,
+                Direction: 'In',
+                QuantitySession: editor.GetValue()
+            });
+        }
+
+        return result;
+    }
+
+    function gvDetail_WhsCodeOnChange(s, e, name) {
+        var WhsName = ASPxClientTextBox.Cast("gvContentItemList_WhsName");
+        WhsName.SetValue(name);
+    }
+
+    // Tombol kaca pembesar pada kolom Netto grid item (hanya untuk Direction = 'Out').
+    // itemDetId = kunci baris Tx_ProductionTask_Item, BUKAN kunci activity.
+    function BtnCflQuantityPopupListOnClick(s, e, itemDetId) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+
+        var eId = ASPxClientTextBox.Cast("Id");
+        // Editor "DetId" milik popupFinish sebenarnya adalah kunci Tx_ProductionTask_Activity.
+        var eActivityDetId = ASPxClientTextBox.Cast("DetId");
+
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "ProductionTaskActivity")'
+            + '?Id=' + (eId != null ? eId.GetValue() : '')
+            + '&DetId=' + itemDetId
+            + '&ActivityDetId=' + (eActivityDetId != null ? eActivityDetId.GetValue() : '');
+        popup.PerformCallback();
+
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
     }
 
 </script>
 
 @Html.Partial("Partial/Finish/Finish_Partial")
+
+@*
+    -----------------------------------------------------------------------------
+    popup batch (netto per batch untuk item Direction = 'Out')
+
+    popupBatch sengaja dideklarasikan di root view, bukan di dalam Finish_Form_Partial,
+    supaya tidak ikut hancur saat popupFinish melakukan callback.
+    -----------------------------------------------------------------------------
+*@
+<script type="text/javascript">
+    var isUpdateBatch = false;
+
+    function popupBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(430, 130);
+        }
+    }
+
+    function ViewBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+        popupBatch_OnCloseUp(popup, null);
+    }
+
+    function popupBatch_OnCloseUp(s, e) {
+        var gvItem = ASPxClientGridView.Cast('gvContentItemList');
+        if (gvItem != null) {
+            gvItem.PerformCallback();
+        }
+    }
+
+    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+        if (e.command == "UPDATEEDIT" || e.command == "DELETEROW" || e.command == "ADDNEWROW") {
+            isUpdateBatch = true;
+        }
+    }
+
+    function gvContentBatchListOnEndCallback(s, e, Id, DetId) {
+        if (isUpdateBatch) {
+
+            isUpdateBatch = false;
+
+            // Netto item = jumlah Netto seluruh batch -> segarkan grid item.
+            var gvItem = ASPxClientGridView.Cast('gvContentItemList');
+            if (gvItem != null) {
+                gvItem.PerformCallback();
+            }
+        }
+    }
+
+</script>
+
+@Html.Partial("Partial/Batch/Batch_Partial")
+
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflItemCode
+    -----------------------------------------------------------------------------
+*@
+
+@{
+    var cflItemByWarehouse_ParamModel = new CflItemByWarehouse_ParamModel();
+    cflItemByWarehouse_ParamModel.Name = "ProductionTaskActivity";
+    cflItemByWarehouse_ParamModel.Type = "ProductionTaskActivity";
+    cflItemByWarehouse_ParamModel.Header = "";
+    cflItemByWarehouse_ParamModel.SqlWhere = "";
+    cflItemByWarehouse_ParamModel.IsMulti = "N";
+}
+
+<script type="text/javascript">
+    function OnClickChoose_CflItemByWarehouseProductionTaskActivity(s, e, data) {
+
+        var grid = gvContentItemList;
+        var visibleIndex = grid.GetFocusedRowIndex();
+
+        // Tampilan (display) - tetap seperti sebelumnya
+        var ItemCode = ASPxClientButtonEdit.Cast("gvContentItemList_ItemCode");
+        ItemCode.SetValue(data.ItemCode);
+
+        var ItemName = ASPxClientTextBox.Cast("gvContentItemList_ItemName");
+        ItemName.SetValue(data.ItemName);
+
+        var WhsCode = ASPxClientTextBox.Cast("gvContentItemList_WhsCode");
+        WhsCode.SetValue(data.WhsCode);
+
+        var WhsName = ASPxClientTextBox.Cast("gvContentItemList_WhsName");
+        WhsName.SetValue(data.WhsName);
+
+        var UomEntry = ASPxClientTextBox.Cast("gvContentItemList_UomEntry");
+        UomEntry.SetValue(data.UomEntry);
+
+        var Uom = ASPxClientTextBox.Cast("gvContentItemList_Uom");
+        Uom.SetValue(data.UomCode);
+
+        // KUNCI: set value ke kolom ASLI (ItemCodeReal) juga - kolom biasa, non-template
+        var ItemCodeReal = ASPxClientTextBox.Cast("gvContentItemList_ItemCodeReal");
+        ItemCodeReal.SetValue(data.ItemCode);
+
+        // batchEditApi tetap dipertahankan sebagai jaring pengaman untuk field lain
+        grid.batchEditApi.SetCellValue(visibleIndex, "ItemName", data.ItemName);
+        grid.batchEditApi.SetCellValue(visibleIndex, "WhsCode", data.WhsCode);
+        grid.batchEditApi.SetCellValue(visibleIndex, "WhsName", data.WhsName);
+        grid.batchEditApi.SetCellValue(visibleIndex, "UomEntry", data.UomEntry);
+        grid.batchEditApi.SetCellValue(visibleIndex, "Uom", data.UomCode);
+
+        cflItemByWarehousePopupListProductionTaskActivity.Hide();
+    }
+
+
+</script>
+@Html.Partial("~/Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_Panel_List_Partial.cshtml", cflItemByWarehouse_ParamModel)
+
+
 
 @*
     -----------------------------------------------------------------------------

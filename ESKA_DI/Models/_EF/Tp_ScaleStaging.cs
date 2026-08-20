@@ -11,7 +11,7 @@ namespace ESKA_DI.Models._EF
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class Tp_ScaleStaging
     {
         public long StagingId { get; set; }
