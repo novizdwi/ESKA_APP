@@ -89,6 +89,40 @@
         });
     });
 
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "EstimatedHours";
+        column.Name = "EstimatedHours";
+        column.Caption = "Duration";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var estimatedValue = DataBinder.Eval(c.DataItem, "EstimatedHours");
+            var actualValue = DataBinder.Eval(c.DataItem, "ActualHours");
+
+            double estimatedHours = estimatedValue == null || estimatedValue == DBNull.Value ? 0 : Convert.ToDouble(estimatedValue);
+            double actualHours = actualValue == null || actualValue == DBNull.Value ? 0 : Convert.ToDouble(actualValue);
+
+            TimeSpan etaDuration = TimeSpan.FromSeconds(estimatedHours);
+            TimeSpan actDuration = TimeSpan.FromSeconds(actualHours);
+
+            string etaDurationText = string.Format(
+                "{0:00}:{1:00}",
+                (int)etaDuration.TotalHours,
+                etaDuration.Minutes
+            );
+
+            string actDurationText = string.Format(
+                "{0:00}:{1:00}",
+                (int)actDuration.TotalHours,
+                actDuration.Minutes
+            );
+
+            ViewContext.Writer.Write(
+                string.Format("{0} / {1}", etaDurationText, actDurationText)
+            );
+        });
+    });
+
     //settings.Columns.Add(column =>
     //{
     //    column.FieldName = "Status";

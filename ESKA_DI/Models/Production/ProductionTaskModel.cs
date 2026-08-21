@@ -62,6 +62,10 @@ namespace Models.Production
  
         public decimal? QuantityPlanned { get; set; }
 
+        public long? EstimatedHours { get; set; }
+
+        public long? ActualHours { get; set; }
+
         public string Uom { get; set; }
 
         public string Status { get; set; }  
