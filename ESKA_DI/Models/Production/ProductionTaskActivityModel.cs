@@ -244,8 +244,7 @@ namespace Models.Production
 
         // PK Tx_ProductionTask_Item_Batch (identity) -> KeyFieldName grid.
         public long BatchId { get; set; }
-
-        [Required(ErrorMessage = "required")]
+         
         public string Batch { get; set; }
 
         // Kolom milik Tx_ProductionTask_Item_Batch sendiri, diinput user di popup batch
@@ -866,10 +865,7 @@ namespace Models.Production
                     oDoc.Lines.UserFields.Fields.Item("U_IDU_DetId").Value = (item.DetId ?? 0).ToString();
 
                     oDoc.Lines.BatchNumbers.BatchNumber = task.Batch;
-                    oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantitySession ?? 0);
-
-                    // Item 'In' memakai SATU batch (batch dari popup Finish), jadi TotalKg nya
-                    // adalah jumlah Netto seluruh baris batch item ini = NettoSession.
+                    oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantitySession ?? 0); 
                     oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(item.NettoSession ?? 0);
                 }
 
@@ -946,10 +942,7 @@ namespace Models.Production
                             // Lines.Quantity = QuantitySession = SUM(batch."Quantity").
                             // Kalau dipakai Netto -> -4014 "Cannot add row without complete
                             // selection of batch/serial numbers".
-                            oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0);
-
-                            // Netto tidak dipakai SAP sebagai kuantitas, hanya dibawa sebagai UDF.
-                            oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(batch.Netto ?? 0);
+                            oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0); 
 
                             batchIndex++;
                         }
