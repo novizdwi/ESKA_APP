@@ -221,6 +221,8 @@ namespace Models.Production
         public int? DocEntry { get; set; }
         
         public int? LineNum { get; set; }
+
+        public decimal? Netto { get; set; }
         
         public string  BatchNumber { get; set; }
     }
@@ -755,6 +757,7 @@ namespace Models.Production
                 ItemName = task.ItemName,
                 LineNum = null,
                 DocEntry = task.DocEntry,
+                Netto = model.Netto,
                 BatchNumber = model.FinishBatch,
                 Quantity = model.Quantity
             };
@@ -763,7 +766,7 @@ namespace Models.Production
                 @"SELECT
                       T0.""Id"", T0.""DetId"", T0.""LineNum"",
                       T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"",
-                      T0.""Direction"", T0.""QuantitySession""
+                      T0.""Direction"", T0.""QuantitySession"", T0.""NettoSession""
                   FROM ""Tx_ProductionTask_Item"" T0
                   WHERE T0.""Id"" = :p0
                   ORDER BY T0.""DetId""", task.Id).ToList();
@@ -841,6 +844,7 @@ namespace Models.Production
 
                     oDoc.Lines.BatchNumbers.BatchNumber = itemHeader.BatchNumber;
                     oDoc.Lines.BatchNumbers.Quantity = (double)(itemHeader.Quantity ?? 0);
+                    oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(itemHeader.Netto ?? 0);
 
                     firstLine = false;
                 }
@@ -863,6 +867,10 @@ namespace Models.Production
 
                     oDoc.Lines.BatchNumbers.BatchNumber = task.Batch;
                     oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantitySession ?? 0);
+
+                    // Item 'In' memakai SATU batch (batch dari popup Finish), jadi TotalKg nya
+                    // adalah jumlah Netto seluruh baris batch item ini = NettoSession.
+                    oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(item.NettoSession ?? 0);
                 }
 
                 int result = oDoc.Add();
@@ -939,6 +947,9 @@ namespace Models.Production
                             // Kalau dipakai Netto -> -4014 "Cannot add row without complete
                             // selection of batch/serial numbers".
                             oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0);
+
+                            // Netto tidak dipakai SAP sebagai kuantitas, hanya dibawa sebagai UDF.
+                            oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(batch.Netto ?? 0);
 
                             batchIndex++;
                         }
