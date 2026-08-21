@@ -84,6 +84,10 @@ namespace Models.Production
 
         [Required(ErrorMessage = "required")]
         public Decimal? Quantity { get; set; }
+
+        // Netto produk jadi -> Tx_ProductionTask."Netto".
+        public Decimal? Netto { get; set; }
+
         public Decimal? QuantityPlanned { get; set; }
         public Decimal? QuantityActual { get; set; }
         public Decimal? QuantityRemain { get; set; }
@@ -116,8 +120,15 @@ namespace Models.Production
         public string Uom { get; set; }
         public string Batch { get; set; }
         public Decimal? QuantityPlanned { get; set; }
+
+        // QuantityActual / NettoTotal = kumulatif lintas SEMUA activity.
+        // QuantitySession / NettoSession = kontribusi activity yang sedang di-Finish saja,
+        // dihitung dari Tx_ProductionTask_Item_Batch (popup batch).
         public Decimal? QuantityActual { get; set; }
         public Decimal? QuantitySession { get; set; }
+        public Decimal? NettoTotal { get; set; }
+        public Decimal? NettoSession { get; set; }
+
         public string Comments { get; set; }
 
         // Batch per item (Tx_ProductionTask_Item_Batch, difilter ItemDetId + ActivityDetId) -> dipakai OIGE.
@@ -235,8 +246,10 @@ namespace Models.Production
         [Required(ErrorMessage = "required")]
         public string Batch { get; set; }
 
-        // Read only: "QuantityPlanned" milik item induk, tidak disimpan di tabel batch.
-        public decimal? Quantity { get; set; }
+        // Kolom milik Tx_ProductionTask_Item_Batch sendiri, diinput user di popup batch
+        // (berlaku untuk Direction 'In' maupun 'Out').
+        [Required(ErrorMessage = "required")]
+        public int? Quantity { get; set; }
 
         // Default hari ini saat baris baru dibuat (lihat InitNewRow di grid).
         [Required(ErrorMessage = "required")]
@@ -453,6 +466,11 @@ namespace Models.Production
                                 tx_ProductionTask_Activity.Batch = model.FinishBatch;
                                 tx_ProductionTask_Activity.Comments = model.Comments;
 
+                                // Netto produk jadi disimpan per ACTIVITY. Akumulasinya ke
+                                // Tx_ProductionTask."Netto" diurus SpProductionTaskActivity_UpdateTask,
+                                // sama seperti Quantity -> QuantityActual.
+                                tx_ProductionTask_Activity.Netto = model.Netto;
+
                                 tx_ProductionTask_Activity.Quantity = model.Quantity;
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
@@ -566,7 +584,7 @@ namespace Models.Production
                 @"SELECT
                       T0.""Id"", T0.""DetId"", T0.""LineNum"",
                       T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"", T0.""Direction"",
-                      T0.""QuantityActual""
+                      T0.""QuantityPlanned"", T0.""QuantityActual""
                   FROM ""Tx_ProductionTask_Item"" T0
                   WHERE T0.""Id"" = :p0
                   ORDER BY T0.""DetId""", taskId).ToList();
@@ -593,7 +611,10 @@ namespace Models.Production
 
                 foreach (var item in items)
                 {
-                    double plannedQuantity = (double)(item.QuantityActual ?? 0);
+                    // PlannedQuantity WOR1 mengikuti "QuantityPlanned" milik ITEM.
+                    // Kalau dibiarkan 0/kosong, SAP menghitung sendiri dari planned quantity
+                    // HEADER production order -- itu sebabnya angkanya sempat ikut header.
+                    double plannedQuantity = (double)(item.QuantityPlanned ?? 0);
 
                     // Direction 'In' -> komponen masuk, kuantitas dibalik negatif.
                     if (string.Equals(item.Direction, "In", StringComparison.OrdinalIgnoreCase))
@@ -752,10 +773,30 @@ namespace Models.Production
             {
                 // Batch komponen (Direction 'Out') -> Tx_ProductionTask_Item_Batch, difilter per item + activity.
                 item.ListBatch_ = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(
-                    @"SELECT T0.""Id"", T0.""ItemDetId"", T0.""ActivityDetId"", T0.""BatchId"", T0.""Batch"", T0.""Netto""
+                    @"SELECT T0.""Id"", T0.""ItemDetId"", T0.""ActivityDetId"", T0.""BatchId"", T0.""Batch"",
+                             T0.""Quantity"", T0.""Netto""
                         FROM ""Tx_ProductionTask_Item_Batch"" T0
                         WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
                         ORDER BY T0.""BatchId""", item.DetId, task.ActivityDetId).ToList();                
+            }
+
+            // ---- Validasi sebelum SAP disentuh ----
+            // Yang dikirim ke IGN1/IGE1 hanya item ber-QuantitySession > 0.
+
+            // Minimal satu item Direction 'Out' harus terisi -- tanpa komponen yang di-issue,
+            // Receipt from Production pasti ditolak SAP.
+            bool adaOut = items.Any(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)
+                                         && ((x.QuantitySession ?? 0) > 0));
+            if (!adaOut)
+            {
+                throw new Exception("[VALIDATION] - Minimal harus ada satu item Direction 'Out' dengan Quantity lebih dari 0");
+            }
+
+            // Item Direction 'In' boleh tidak ada sama sekali -- baris produk jadi tetap dibuat.
+            // Tapi Quantity di header Finish wajib lebih dari 0.
+            if ((itemHeader.Quantity ?? 0) <= 0)
+            {
+                throw new Exception("[VALIDATION] - Quantity pada Finish harus lebih dari 0");
             }
 
             // Issue DULU, baru Receipt. SAP menolak Receipt from Production selama work order
@@ -774,16 +815,9 @@ namespace Models.Production
                             && ((x.QuantitySession ?? 0) > 0))
                 .ToList();
 
-            // Penjagaan qty 0: baris produk jadi memakai Quantity dari popup Finish,
-            // baris item Direction 'In' memakai QuantitySession (sudah difilter > 0 di atas).
-            // Kalau dua-duanya kosong, dokumen tidak dibuat -- SAP menolak dokumen tanpa baris
-            // dengan pesan yang tidak menjelaskan apa-apa.
-            bool hasParentLine = (itemHeader.Quantity ?? 0) > 0;
-
-            if (!hasParentLine && (inItems.Count == 0))
-            {
-                return;
-            }
+            // Baris produk jadi SELALU ada -- Quantity header sudah divalidasi > 0 di
+            // PostInventoryDocuments. Item Direction 'In' sifatnya opsional.
+            bool hasParentLine = true;
 
             SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
 
@@ -898,7 +932,13 @@ namespace Models.Production
                             }
 
                             oDoc.Lines.BatchNumbers.BatchNumber = batch.Batch;
-                            oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Netto ?? 0);
+
+                            // WAJIB pakai Quantity, bukan Netto: SAP mengharuskan jumlah
+                            // BatchNumbers.Quantity sama persis dengan Lines.Quantity, dan
+                            // Lines.Quantity = QuantitySession = SUM(batch."Quantity").
+                            // Kalau dipakai Netto -> -4014 "Cannot add row without complete
+                            // selection of batch/serial numbers".
+                            oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0);
 
                             batchIndex++;
                         }
@@ -1273,11 +1313,10 @@ namespace Models.Production
                 T0.""ActivityDetId"",
                 T0.""BatchId"",
                 T0.""Batch"",
-                T1.""QuantityPlanned"" AS ""Quantity"",
+                T0.""Quantity"",
                 T0.""AdmissionDate"",
                 T0.""Netto""
             FROM ""Tx_ProductionTask_Item_Batch"" T0
-            INNER JOIN ""Tx_ProductionTask_Item"" T1 ON T0.""ItemDetId"" = T1.""DetId""
             WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
             ORDER BY T0.""BatchId""
         ";
@@ -1340,9 +1379,17 @@ namespace Models.Production
         // Netto item induk = jumlah Netto seluruh batch nya.
         private void UpdateItemQuantityActual(HANA_APP CONTEXT, int userId, long itemDetId, long activityDetId)
         {
+            // Batch sekarang punya Quantity DAN Netto sendiri, jadi keduanya dijumlahkan
+            // ke kolom session masing-masing.
             string sql = $@"
                 UPDATE ""Tx_ProductionTask_Item""
                 SET ""QuantitySession"" = COALESCE((
+                        SELECT SUM(""Quantity"")
+                        FROM ""Tx_ProductionTask_Item_Batch""
+                        WHERE ""ItemDetId"" = {itemDetId}
+                          AND ""ActivityDetId"" = {activityDetId}
+                    ), 0),
+                    ""NettoSession"" = COALESCE((
                         SELECT SUM(""Netto"")
                         FROM ""Tx_ProductionTask_Item_Batch""
                         WHERE ""ItemDetId"" = {itemDetId}

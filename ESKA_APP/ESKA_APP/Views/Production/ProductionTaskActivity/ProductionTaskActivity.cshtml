@@ -676,8 +676,9 @@ new
         var eDetId = ASPxClientTextBox.Cast("DetId");
         var eBatch = ASPxClientTextBox.Cast("Batch");
         var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
+        var eNetto = ASPxClientSpinEdit.Cast("Netto");
         var eComments = ASPxClientMemo.Cast("Comments");
-         
+
         return {
             Id: eId != null ? eId.GetValue() : null,
             DetId: eDetId != null ? eDetId.GetValue() : null,
@@ -686,6 +687,7 @@ new
             FinishBatch: eBatch != null ? eBatch.GetValue() : null,
 
             Quantity: eQuantity != null ? eQuantity.GetValue() : null,
+            Netto: eNetto != null ? eNetto.GetValue() : null,
             Comments: eComments != null ? eComments.GetValue() : null,
 
             //ListItem_: Details_

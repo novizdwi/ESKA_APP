@@ -480,6 +480,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask" (
 
     "QuantityPlanned" DECIMAL(16,4),
     "QuantityActual" DECIMAL(16,4),
+	"Netto" DECIMAL(16,4),
+	
 	"IsRunningTask" CHAR(1),
 	
     "EstimatedHours" INT,
@@ -516,6 +518,10 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Item" (
     "QuantityPlanned" DECIMAL(16,4),
     "QuantityActual" DECIMAL(16,4),
     "QuantitySession" DECIMAL(16,4),
+
+	"NettoTotal" DECIMAL(16,4),
+	"NettoSession" DECIMAL(16,4),
+	
 	
     "Comments" NVARCHAR(254),
 
@@ -535,7 +541,8 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Item_Batch" (
 
     "Batch" NVARCHAR(50), 
 	"AdmissionDate" TIMESTAMP,
-    "Netto" DECIMAL(16,4),
+    "Quantity" INTEGER, 
+    "Netto" DECIMAL(21,2),
 	 
     "CreatedDate" TIMESTAMP,
     "CreatedUser" INTEGER,
@@ -553,6 +560,7 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity" (
     "OperatorName" NVARCHAR(100),
     
     "Quantity" DECIMAL(16,4),
+	"Netto" DECIMAL(16,4),
 	"Batch" NVARCHAR(50),
 		
     "StartTime" TIMESTAMP,

@@ -464,7 +464,7 @@ namespace Models.Production
                     }
 
                     string errorMassage;
-                    if (ex.Message.Substring(12) == "[VALIDATION]")
+                    if (ex.Message.StartsWith("[VALIDATION]"))
                     {
                         errorMassage = ex.Message;
                     }
@@ -497,6 +497,14 @@ namespace Models.Production
                 if (!oPO.GetByKey(docEntry))
                 {
                     throw new Exception(string.Format("[VALIDATION] - Production Order DocEntry [{0}] tidak ditemukan di SAP (OWOR)", docEntry));
+                }
+
+                // Status SAP dicek DULU. Kalau Production Order nya memang sudah Closed,
+                // Update() akan ditolak SAP dan status Tx_ProductionTask tidak pernah ikut
+                // tersimpan. Cukup dilewati -- update status lokal tetap jalan di pemanggil.
+                if (oPO.ProductionOrderStatus == SAPbobsCOM.BoProductionOrderStatusEnum.boposClosed)
+                {
+                    return;
                 }
 
                 oPO.ProductionOrderStatus = SAPbobsCOM.BoProductionOrderStatusEnum.boposClosed;

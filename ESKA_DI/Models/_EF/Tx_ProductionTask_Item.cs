@@ -28,11 +28,13 @@ namespace ESKA_DI.Models._EF
         public string IsLocked { get; set; }
         public Nullable<decimal> QuantityPlanned { get; set; }
         public Nullable<decimal> QuantityActual { get; set; }
+        public Nullable<decimal> QuantitySession { get; set; }
+        public Nullable<decimal> NettoTotal { get; set; }
+        public Nullable<decimal> NettoSession { get; set; }
         public string Comments { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public Nullable<decimal> QuantitySession { get; set; }
     }
 }

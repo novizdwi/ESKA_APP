@@ -309,83 +309,104 @@
         txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
     });
 
+    // Kontribusi activity yang sedang di-Finish saja (bukan kumulatif).
+    // Read-only untuk SEMUA Direction -- nilainya dihitung server-side dari popup batch
+    // (SUM Quantity / SUM Netto pada Tx_ProductionTask_Item_Batch per item + activity).
+    // Tombol kaca pembesar membuka popup batch, sekarang untuk 'In' maupun 'Out'.
     settings.Columns.Add(column =>
     {
-        // Kontribusi activity yang sedang di-Finish saja (bukan kumulatif).
-        // Out: read-only, otomatis = SUM Netto batch popup untuk item + activity ini.
-        // In: diketik manual user; nilainya dikirim ke server saat submit Finish (bukan lewat
-        // AJAX row-update grid ini), dibaca lewat GetItemActivityQuantities() di ProductionTaskActivity.cshtml.
         column.FieldName = "QuantitySession";
         column.Name = "QuantitySession";
+        column.Caption = "Quantity";
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Width = 120;
+        column.ReadOnly = true;
+
+        column.SetDataItemTemplateContent(c =>
+        {
+            var itemDetId = DataBinder.Eval(c.DataItem, "DetId");
+            var quantity = DataBinder.Eval(c.DataItem, "QuantitySession");
+
+            Html.DevExpress().SpinEdit(s =>
+            {
+                s.Name = settings.Name + "_" + column.FieldName + "_" + itemDetId;
+                s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + itemDetId;
+
+                s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
+
+                s.Properties.NumberType = SpinEditNumberType.Float;
+                s.Properties.DisplayFormatString = "#,###";
+                s.Properties.DisplayFormatInEditMode = true;
+                s.Properties.SpinButtons.ShowIncrementButtons = false;
+                s.Properties.Style.HorizontalAlign = HorizontalAlign.Right;
+
+                s.ReadOnly = true;
+                s.Width = 100;
+
+                s.Properties.Buttons.Clear();
+
+                EditButton btn = new EditButton();
+                btn.Text = "";
+                btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                btn.Image.Width = 15;
+
+                s.Properties.Buttons.Add(btn);
+
+                s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", itemDetId);
+
+            }).Render();
+        });
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        // Kumulatif lintas SEMUA activity.
+        column.FieldName = "NettoTotal";
+        column.Name = "NettoTotal";
+        column.Caption = "Total Netto";
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Width = 120;
+        column.ReadOnly = true;
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###";
+        txt.DisplayFormatInEditMode = true;
+        txt.SpinButtons.ShowIncrementButtons = false;
+        txt.AllowMouseWheel = false;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        // Kontribusi activity ini saja = SUM Netto batch popup.
+        column.FieldName = "NettoSession";
+        column.Name = "NettoSession";
         column.Caption = "Netto";
         column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.Width = 120;
+        column.ReadOnly = true;
 
-        column.SetDataItemTemplateContent(c =>
-        {
-            var itemDetId = DataBinder.Eval(c.DataItem, "DetId");
-            var direction = DataBinder.Eval(c.DataItem, "Direction");
-            var quantity = DataBinder.Eval(c.DataItem, "QuantitySession");
-
-            bool isOut = direction != null && direction.ToString() == "Out";
-
-            if (isOut)
-            {
-                // Direction = Out -> pakai ButtonEdit (CFL popup), readonly, pilih via popup
-                Html.DevExpress().SpinEdit(s =>
-                {
-                    s.Name = settings.Name + "_" + column.FieldName + "_" + itemDetId;
-                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + itemDetId;
-
-                    s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
-
-                    s.Properties.NumberType = SpinEditNumberType.Float;
-                    s.Properties.DisplayFormatString = "#,###";
-                    s.Properties.DisplayFormatInEditMode = true;
-                    s.Properties.SpinButtons.ShowIncrementButtons = false;
-                    s.Properties.Style.HorizontalAlign = HorizontalAlign.Right;
-
-                    s.ReadOnly = true;
-                    s.Width = 100;
-
-                    s.Properties.Buttons.Clear();
-
-                    EditButton btn = new EditButton();
-                    btn.Text = "";
-                    btn.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
-                    btn.Image.Width = 15;
-
-                    s.Properties.Buttons.Add(btn);
-
-                    s.Properties.ClientSideEvents.ButtonClick = string.Format("function(s, e) {{ BtnCflQuantityPopupListOnClick(s, e, '{0}'); }}", itemDetId);
-
-                }).Render();
-
-            }
-            else
-            {
-                Html.DevExpress().SpinEdit(s =>
-                {
-                    s.Name = settings.Name + "_" + column.FieldName + "_" + itemDetId;
-                    s.Properties.ClientInstanceName = settings.Name + "_" + column.FieldName + "_" + itemDetId;
-
-                    s.Number = quantity != null ? Convert.ToDecimal(quantity) : 0;
-                    s.Properties.DecimalPlaces = 0;
-                    s.Properties.DisplayFormatString = "N0";
-                    s.Properties.DisplayFormatInEditMode = true;
-                    s.Properties.SpinButtons.ShowIncrementButtons = false;
-                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
-                    s.Properties.AllowMouseWheel = false;
-                    s.ReadOnly = true;
-                    s.Width = 100;
-
-                }).Render();
-
-            }
-        });
-
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###";
+        txt.DisplayFormatInEditMode = true;
+        txt.SpinButtons.ShowIncrementButtons = false;
+        txt.AllowMouseWheel = false;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
     });
 
     settings.Columns.Add(column =>

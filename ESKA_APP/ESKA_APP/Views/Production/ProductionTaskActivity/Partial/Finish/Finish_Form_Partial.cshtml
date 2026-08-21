@@ -228,6 +228,29 @@
 
     });
 
+    // Netto produk jadi -> Tx_ProductionTask."Netto". Diletakkan tepat di bawah Quantity.
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Netto";
+        itemSettings.FieldName = "Netto";
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.NumberType = SpinEditNumberType.Float;
+        txt.Properties.DisplayFormatString = "#,###";
+        txt.Properties.DisplayFormatInEditMode = true;
+        txt.Name = "Netto";
+        txt.Properties.AllowMouseWheel = false;
+
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Width = 230;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
+    });
+
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
