@@ -180,6 +180,26 @@
 
     groupTime.Items.Add(x =>
     {
+        x.Caption = "<span style='font-size:150%;'>PAUSE DURATION</span>";
+    }).SetNestedContent(() =>
+    {
+        string pauseDuration = "00:00";
+        if (Model.PauseHours.HasValue)
+        {
+            TimeSpan pauseTs = TimeSpan.FromSeconds((double)Model.PauseHours.Value);
+
+            pauseDuration = string.Format(
+                "{0:00}:{1:00}",
+                (int)pauseTs.TotalHours,
+                pauseTs.Minutes
+            );
+        }
+
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + pauseDuration + "</b> </div>"));
+    });
+
+    groupTime.Items.Add(x =>
+    {
         x.Caption = "<span style='font-size:150%;'>DURATION</span>";
     }).SetNestedContent(() =>
     {

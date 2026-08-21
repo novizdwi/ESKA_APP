@@ -46,6 +46,7 @@ namespace Models.Production
         public long? EstimatedHours { get; set; }
 
         public long? ActualHours { get; set; }
+        public long? PauseHours { get; set; }
 
         public DateTime? ActivityDate { get; set; }
 
@@ -280,7 +281,20 @@ namespace Models.Production
 	        COALESCE(T0.""QuantityPlanned"", 0 ) - COALESCE(T0.""QuantityActual"", 0) AS ""QuantityRemain"",
 	        T0.""EstimatedHours"",
 	        T0.""ActualHours"",
-	        T0.""CreatedDate"" AS ""ActivityDate"",
+            (   
+                SELECT COALESCE( 
+                SUM( SECONDS_BETWEEN(
+                    Tx.""StartTime"",
+                    Tx.""EndTime""
+                    )
+                    ), 0
+                )
+                FROM ""Tx_ProductionTask_Activity_Log"" Tx
+                WHERE Tx.""DetailType"" = 'Paused'
+                AND Tx.""Id"" = T0.""Id""
+            ) AS ""PauseHours"",
+
+	        T1.""CreatedDate"" AS ""ActivityDate"",
             T1.""Status"" AS ""ActivityStatus""
         FROM ""Tx_ProductionTask"" T0
         INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
