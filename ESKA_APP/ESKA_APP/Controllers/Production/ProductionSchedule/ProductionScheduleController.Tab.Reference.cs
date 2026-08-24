@@ -19,12 +19,25 @@ namespace Controllers.Production
     {
         public ActionResult TabTransListPartial()
         {
-            int userId = (int)Session["userId"]; 
-            productionScheduleService = new ProductionScheduleService(); 
+            int userId = (int)Session["userId"];
+            productionScheduleService = new ProductionScheduleService();
 
             var modelList = productionScheduleService.ProductionSchedule_GetReferences(userId);
 
             return PartialView(VIEW_FORM_TABREFERENCE_PARTIAL, modelList);
+        }
+
+        // Dipanggil sesudah user memindahkan baris (drag & drop).
+        // ids = Id Tx_ProcessCard sesuai urutan tampil terbaru -> VisOrder diisi ulang 1..N.
+        [HttpPost, ValidateInput(false)]
+        public ActionResult UpdateVisOrder(List<long> ids)
+        {
+            int userId = (int)Session["userId"];
+            productionScheduleService = new ProductionScheduleService();
+
+            productionScheduleService.UpdateVisOrder(userId, ids);
+
+            return Json(new { success = true });
         }
 
 

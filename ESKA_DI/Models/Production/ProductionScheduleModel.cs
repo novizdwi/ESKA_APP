@@ -199,7 +199,65 @@ namespace Models.Production
             CALL ""SpProductionSchedule_GetReferences"" (
                 :p0 --userId
             )";
-            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql, userId).ToList();
+
+            // Urutan baris HARUS mengikuti VisOrder supaya hasil drag & drop tetap sama
+            // sesudah halaman di-refresh. Diurutkan di sini, bukan di procedure, supaya
+            // tidak bergantung pada ORDER BY di dalam SpProductionSchedule_GetReferences.
+            // Baris yang VisOrder nya masih kosong ditaruh paling belakang.
+            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql, userId)
+                .ToList()
+                .OrderBy(x => x.VisOrder.HasValue ? 0 : 1)
+                .ThenBy(x => x.VisOrder ?? 0)
+                .ThenBy(x => x.Id)
+                .ToList();
+        }
+
+        // Menyusun ulang VisOrder mengikuti urutan baris hasil drag & drop.
+        // ids = daftar Id Tx_ProcessCard sesuai urutan tampil terbaru; VisOrder diisi 1..N
+        // sehingga tidak ada nilai kembar maupun lompat.
+        public void UpdateVisOrder(int userId, List<long> ids)
+        {
+            if ((ids == null) || (ids.Count == 0))
+            {
+                return;
+            }
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        for (int i = 0; i < ids.Count; i++)
+                        {
+                            CONTEXT.Database.ExecuteSqlCommand(
+                                @"UPDATE ""Tx_ProcessCard""
+                                  SET ""VisOrder"" = :p0,
+                                      ""ModifiedDate"" = CURRENT_TIMESTAMP,
+                                      ""ModifiedUser"" = :p1
+                                  WHERE ""Id"" = :p2", i + 1, userId, ids[i]);
+                        }
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.StartsWith("[VALIDATION]"))
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
         }
 
         public List<ProductionScheduleDetailModel> ProductionSchedule_TabReferenceDetails(long id)

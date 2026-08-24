@@ -269,6 +269,7 @@
 
     function gvProductionScheduleReferenceDetailInitCallback(s, e) {
         AdjustGridViewHeight();
+        InitReferenceRowDragDrop();
     }
 
     function gvProductionScheduleReferenceDetailBeginCallback(s, e) {
@@ -277,6 +278,105 @@
 
     function gvProductionScheduleReferenceDetailEndCallback(s, e) {
         AdjustGridViewHeight();
+
+        // Grid dirender ulang tiap callback, jadi handler drag harus dipasang lagi.
+        InitReferenceRowDragDrop();
+    }
+
+    //-------------------------------------------------------------------------
+    // Drag & drop baris -> VisOrder dihitung ulang 1..N lalu disimpan.
+    //
+    // ASPxGridView DevExpress 20.1 tidak punya drag & drop baris bawaan, jadi
+    // dipakai HTML5 drag & drop biasa: tidak menambah library baru.
+    //-------------------------------------------------------------------------
+    var referenceDragSourceIndex = null;
+
+    function ReferenceRowPrefix() {
+        return 'gvProductionScheduleReferenceDetail_DXDataRow';
+    }
+
+    function ReferenceRowIndexOf(tr) {
+        var prefix = ReferenceRowPrefix();
+        if (!tr || !tr.id || tr.id.indexOf(prefix) !== 0) { return null; }
+
+        var n = parseInt(tr.id.substring(prefix.length), 10);
+        return isNaN(n) ? null : n;
+    }
+
+    function InitReferenceRowDragDrop() {
+        var grid = (typeof gvProductionScheduleReferenceDetail !== 'undefined')
+            ? gvProductionScheduleReferenceDetail : null;
+        if (grid == null) { return; }
+
+        var rows = document.querySelectorAll('tr[id^="' + ReferenceRowPrefix() + '"]');
+
+        for (var i = 0; i < rows.length; i++) {
+            var tr = rows[i];
+
+            // Jangan pasang dua kali kalau elemennya belum diganti.
+            if (tr.getAttribute('data-dnd') === 'Y') { continue; }
+            tr.setAttribute('data-dnd', 'Y');
+
+            tr.draggable = true;
+            tr.style.cursor = 'move';
+
+            tr.addEventListener('dragstart', function (ev) {
+                referenceDragSourceIndex = ReferenceRowIndexOf(this);
+                if (ev.dataTransfer) {
+                    ev.dataTransfer.effectAllowed = 'move';
+                    // Firefox butuh data terisi supaya drag nya jalan.
+                    ev.dataTransfer.setData('text/plain', String(referenceDragSourceIndex));
+                }
+            });
+
+            tr.addEventListener('dragover', function (ev) {
+                ev.preventDefault();
+                if (ev.dataTransfer) { ev.dataTransfer.dropEffect = 'move'; }
+            });
+
+            tr.addEventListener('drop', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                var targetIndex = ReferenceRowIndexOf(this);
+                ReferenceRowDropped(referenceDragSourceIndex, targetIndex);
+                referenceDragSourceIndex = null;
+            });
+        }
+    }
+
+    function ReferenceRowDropped(sourceIndex, targetIndex) {
+        if (sourceIndex == null || targetIndex == null) { return; }
+        if (sourceIndex === targetIndex) { return; }
+
+        var grid = gvProductionScheduleReferenceDetail;
+        var count = grid.GetVisibleRowsOnPage();
+
+        // Urutan Id saat ini, lalu baris sumber dipindah ke posisi tujuan.
+        var ids = [];
+        for (var i = 0; i < count; i++) {
+            ids.push(grid.GetRowKey(i));
+        }
+
+        var moved = ids.splice(sourceIndex, 1)[0];
+        ids.splice(targetIndex, 0, moved);
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: '@Url.Action("UpdateVisOrder", "ProductionSchedule")',
+            data: { ids: ids },
+            beforeSend: function () { OnBegin(); },
+            success: function () {
+                // Baca ulang dari database supaya yang tampil benar-benar urutan tersimpan,
+                // bukan hasil geser di layar saja.
+                grid.PerformCallback();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown);
+            },
+            complete: function () { OnComplete(); }
+        });
     }
 
 
