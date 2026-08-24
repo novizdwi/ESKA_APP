@@ -426,6 +426,25 @@ namespace Models.Production
         // Item milik Tx_ProductionTask (level 2), kuncinya "Id" task.
         // activityDetId = kunci Tx_ProductionTask_Activity yang sedang di-Finish -> dipakai hitung
         // QuantitySession (kontribusi activity ini saja, bukan QuantityActual yang kumulatif).
+        // Item Direction 'Out' yang kuantitas ter-issue nya (QuantityActual + QuantitySession)
+        // MELEBIHI QuantityPlanned. Dipakai untuk konfirmasi sebelum Finish dijalankan.
+        // detId = kunci Tx_ProductionTask_Activity yang sedang di-Finish.
+        public List<string> GetOverIssuedItems(long detId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return CONTEXT.Database.SqlQuery<string>(
+                    @"SELECT T0.""ItemCode""
+                      FROM ""Tx_ProductionTask_Item"" T0
+                      INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                      WHERE T1.""DetId"" = :p0
+                        AND T0.""Direction"" = 'Out'
+                        AND COALESCE(T0.""QuantityActual"", 0) + COALESCE(T0.""QuantitySession"", 0)
+                            > COALESCE(T0.""QuantityPlanned"", 0)
+                      ORDER BY T0.""DetId""", detId).ToList();
+            }
+        }
+
         public List<ProductionTaskDetailItemModel> GetProductionTaskDetailItems(long? id, long activityDetId = 0)
         {
             List<ProductionTaskDetailItemModel> ret = new List<ProductionTaskDetailItemModel>();

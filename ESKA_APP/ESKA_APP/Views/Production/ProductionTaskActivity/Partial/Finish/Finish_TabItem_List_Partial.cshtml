@@ -173,18 +173,19 @@
 
     settings.Columns.Add(column =>
     {
+        // 1. Kolom ASLI - non-template, ini yang benar-benar ikut ter-submit.
         column.FieldName = "WhsCode";
         column.Name = "WhsCode";
         column.Caption = "Whs Code";
 
         column.ColumnType = MVCxGridViewColumnType.TextBox;
-        column.Width = 92;
+        column.Width = 0;              // sembunyikan secara visual
         column.ReadOnly = true;
-        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+        txt.ClientInstanceName = settings.Name + "_WhsCodeReal";
 
         //column.ColumnType = MVCxGridViewColumnType.ComboBox;
         //var cbo = column.PropertiesEdit as ComboBoxProperties;
@@ -206,6 +207,44 @@
         //cbo.TextFormatString = "{0}";
         //cbo.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         //cbo.ValidationSettings.RequiredField.IsRequired = true;
+    });
+
+    // 2. Kolom DISPLAY - inilah yang tampil ke user, dengan tombol CFL Warehouse.
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "WhsCode";      // baca dari field yang sama untuk tampilan awal
+        column.Name = "WhsCodeDisplay";    // Name beda dari FieldName supaya tidak konflik
+        column.Caption = "Whs Code";
+        column.Width = 120;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        column.SetEditItemTemplateContent(c =>
+        {
+            var whsCode = DataBinder.Eval(c.DataItem, "WhsCode");
+
+            Html.DevExpress().ButtonEdit(s =>
+            {
+                s.Name = settings.Name + "_WhsCode";                     // <-- nama dipakai JS
+                s.Properties.ClientInstanceName = settings.Name + "_WhsCode";
+
+                s.Text = whsCode != null ? whsCode.ToString() : "";
+                s.ReadOnly = true;
+                s.Width = 95;
+
+                s.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+                s.ControlStyle.CssClass = "editor";
+
+                s.Properties.Buttons.Clear();
+                EditButton lookUpButton = new EditButton();
+                lookUpButton.Text = "";
+                lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+                lookUpButton.Image.Width = 15;
+                s.Properties.Buttons.Add(lookUpButton);
+
+                s.Properties.ClientSideEvents.ButtonClick = "BtnCflWhsCodePopupListOnClick";
+            }).Render();
+        });
     });
 
     settings.Columns.Add(column =>

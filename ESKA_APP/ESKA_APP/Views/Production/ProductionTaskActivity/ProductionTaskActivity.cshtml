@@ -474,13 +474,17 @@
     }
 
     function BtnCflItemCodePopupListOnClick(s, e) {
-        //cflWarehousePopupListSalesOrder.Show();
-
-        var popup = ASPxClientPopupControl.Cast("cflItemByWarehousePopupListProductionTaskActivity");
-        popup.callbackUrl = '@Url.Action("PopupListLoadOnDemandPartial", "_CflItemByWarehouse")';
+        var popup = ASPxClientPopupControl.Cast("cflItemPopupListProductionTaskActivity");
+        popup.SetContentHtml("");
         popup.PerformCallback();
         popup.Show();
+    }
 
+    function BtnCflWhsCodePopupListOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("cflWarehousePopupListProductionTaskActivity");
+        popup.SetContentHtml("");
+        popup.PerformCallback();
+        popup.Show();
     }
 
 </script>
@@ -644,7 +648,37 @@ new
             var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
             if (eQuantity != null) { eQuantity.Focus(); }
             return;
-        } 
+        }
+
+        // Item Direction 'Out' yang ter-issue melebihi rencana -> minta konfirmasi dulu.
+        // Dicek ke server, bukan dibaca dari grid: QuantitySession berubah tiap kali popup
+        // batch disimpan, jadi nilai di layar bisa tertinggal.
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckOverIssue", "ProductionTaskActivity")',
+            data: { DetId: data.DetId },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (res) {
+                OnComplete();
+
+                if (res && res.hasOver) {
+                    if (!confirm(res.message)) {
+                        return;   // user memilih No -> tidak terjadi apa-apa
+                    }
+                }
+
+                SubmitFinish(data);
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnComplete();
+                OnFailure(jqXhr, textStatus, errorThrown);
+            }
+        });
+    }
+
+    function SubmitFinish(data) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("FinishActivity", "ProductionTaskActivity")',
@@ -810,56 +844,76 @@ new
 *@
 
 @{
-    var cflItemByWarehouse_ParamModel = new CflItemByWarehouse_ParamModel();
-    cflItemByWarehouse_ParamModel.Name = "ProductionTaskActivity";
-    cflItemByWarehouse_ParamModel.Type = "ProductionTaskActivity";
-    cflItemByWarehouse_ParamModel.Header = "";
-    cflItemByWarehouse_ParamModel.SqlWhere = "";
-    cflItemByWarehouse_ParamModel.IsMulti = "N";
+    var cflItem_ParamModel = new CflItem_ParamModel();
+    cflItem_ParamModel.Name = "ProductionTaskActivity";
+    cflItem_ParamModel.Type = "ProductionTaskActivity";
+    cflItem_ParamModel.Header = "";
+    cflItem_ParamModel.SqlWhere = "";
+    cflItem_ParamModel.IsMulti = "N";
+
+    var cflWarehouse_ParamModel = new CflWarehouse_ParamModel();
+    cflWarehouse_ParamModel.Name = "ProductionTaskActivity";
+    cflWarehouse_ParamModel.Type = "ProductionTaskActivity";
+    cflWarehouse_ParamModel.Header = "";
+    cflWarehouse_ParamModel.SqlWhere = "";
+    cflWarehouse_ParamModel.IsMulti = "N";
 }
 
 <script type="text/javascript">
-    function OnClickChoose_CflItemByWarehouseProductionTaskActivity(s, e, data) {
+    // Item dan Warehouse sekarang dipilih TERPISAH: item dari master item (CflItem),
+    // gudang dari CflWarehouse. Sebelumnya keduanya sekaligus lewat CflItemByWarehouse.
+    function OnClickChoose_CflItemProductionTaskActivity(s, e, data) {
 
         var grid = gvContentItemList;
         var visibleIndex = grid.GetFocusedRowIndex();
 
-        // Tampilan (display) - tetap seperti sebelumnya
         var ItemCode = ASPxClientButtonEdit.Cast("gvContentItemList_ItemCode");
-        ItemCode.SetValue(data.ItemCode);
+        if (ItemCode != null) { ItemCode.SetValue(data.ItemCode); }
 
         var ItemName = ASPxClientTextBox.Cast("gvContentItemList_ItemName");
-        ItemName.SetValue(data.ItemName);
-
-        var WhsCode = ASPxClientTextBox.Cast("gvContentItemList_WhsCode");
-        WhsCode.SetValue(data.WhsCode);
-
-        var WhsName = ASPxClientTextBox.Cast("gvContentItemList_WhsName");
-        WhsName.SetValue(data.WhsName);
+        if (ItemName != null) { ItemName.SetValue(data.ItemName); }
 
         var UomEntry = ASPxClientTextBox.Cast("gvContentItemList_UomEntry");
-        UomEntry.SetValue(data.UomEntry);
+        if (UomEntry != null) { UomEntry.SetValue(data.IUoMEntry); }
 
         var Uom = ASPxClientTextBox.Cast("gvContentItemList_Uom");
-        Uom.SetValue(data.UomCode);
+        if (Uom != null) { Uom.SetValue(data.UomCode); }
 
-        // KUNCI: set value ke kolom ASLI (ItemCodeReal) juga - kolom biasa, non-template
+        // KUNCI: set juga ke kolom ASLI (non-template), itu yang ikut ter-submit.
         var ItemCodeReal = ASPxClientTextBox.Cast("gvContentItemList_ItemCodeReal");
-        ItemCodeReal.SetValue(data.ItemCode);
+        if (ItemCodeReal != null) { ItemCodeReal.SetValue(data.ItemCode); }
 
-        // batchEditApi tetap dipertahankan sebagai jaring pengaman untuk field lain
         grid.batchEditApi.SetCellValue(visibleIndex, "ItemName", data.ItemName);
-        grid.batchEditApi.SetCellValue(visibleIndex, "WhsCode", data.WhsCode);
-        grid.batchEditApi.SetCellValue(visibleIndex, "WhsName", data.WhsName);
-        grid.batchEditApi.SetCellValue(visibleIndex, "UomEntry", data.UomEntry);
+        grid.batchEditApi.SetCellValue(visibleIndex, "UomEntry", data.IUoMEntry);
         grid.batchEditApi.SetCellValue(visibleIndex, "Uom", data.UomCode);
 
-        cflItemByWarehousePopupListProductionTaskActivity.Hide();
+        cflItemPopupListProductionTaskActivity.Hide();
+    }
+
+    function OnClickChoose_CflWarehouseProductionTaskActivity(s, e, data) {
+
+        var grid = gvContentItemList;
+        var visibleIndex = grid.GetFocusedRowIndex();
+
+        var WhsCode = ASPxClientButtonEdit.Cast("gvContentItemList_WhsCode");
+        if (WhsCode != null) { WhsCode.SetValue(data.WhsCode); }
+
+        var WhsName = ASPxClientTextBox.Cast("gvContentItemList_WhsName");
+        if (WhsName != null) { WhsName.SetValue(data.WhsName); }
+
+        // Kolom ASLI WhsCode (non-template) -- ini yang benar-benar tersimpan.
+        var WhsCodeReal = ASPxClientTextBox.Cast("gvContentItemList_WhsCodeReal");
+        if (WhsCodeReal != null) { WhsCodeReal.SetValue(data.WhsCode); }
+
+        grid.batchEditApi.SetCellValue(visibleIndex, "WhsName", data.WhsName);
+
+        cflWarehousePopupListProductionTaskActivity.Hide();
     }
 
 
 </script>
-@Html.Partial("~/Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_Panel_List_Partial.cshtml", cflItemByWarehouse_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItem_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_Panel_List_Partial.cshtml", cflWarehouse_ParamModel)
 
 
 

@@ -35,6 +35,25 @@ namespace Controllers.Production   // <-- SESUAIKAN dengan namespace controller 
             return PartialView(VIEW_FINISH_PANEL_PARTIAL, model);
         }
 
+        // Dicek dari JS sebelum Finish dijalankan. Mengembalikan daftar item Direction 'Out'
+        // yang ter-issue melebihi rencana, supaya user dimintai konfirmasi lebih dulu.
+        [HttpPost]
+        public ActionResult CheckOverIssue(long DetId = 0)
+        {
+            int userId = (int)Session["userId"];
+
+            productionActivityService = new ProductionActivityService();
+            var overIssued = productionActivityService.GetOverIssuedItems(DetId);
+
+            string message = "";
+            if (overIssued.Count > 0)
+            {
+                message = string.Format("Item {0} issued over than planned, proceed to finish?", string.Join("; ", overIssued));
+            }
+
+            return Json(new { hasOver = overIssued.Count > 0, message = message });
+        }
+
         // Dipakai PopupControl saat LoadContentViaCallback = OnFirstShow.
         public ActionResult PopupFinishLoadOnDemandPartial()
         {
