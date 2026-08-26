@@ -16,6 +16,6 @@ C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.AssemblyReference.cache
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\Interop.SAPbobsCOM.dll
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.ResolveComReference.cache
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CoreCompileInputs.cache
-C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.CopyComplete
+C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.csproj.Up2Date
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.dll
 C:\Project\ESKA_APP\ESKA_DI\obj\Debug\ESKA_DI.pdb
