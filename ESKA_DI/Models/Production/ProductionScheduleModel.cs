@@ -291,16 +291,18 @@ namespace Models.Production
                     -- ""DurationTotal"" dan ""ActualHours"" dua-duanya disimpan dalam DETIK
                     -- (""ActualHours"" diisi SpProductionTaskActivity_UpdateTask dari
                     -- SECONDS_BETWEEN, meski namanya ""Hours""). Diformat jadi HH:MM.
+                    -- FLOOR di HANA mengembalikan DESIMAL, jadi TO_VARCHAR-nya menghasilkan
+                    -- ""0.000000"". Harus dibungkus TO_INTEGER dulu.
                     -- Jam TIDAK di-LPAD: LPAD memotong kalau string lebih panjang dari
                     -- target, jadi 100 jam akan jadi ""10"". Nol di depan ditambah manual
                     -- lewat CASE (36000 detik = 10 jam), sehingga 100+ jam tetap utuh.
                     CASE WHEN COALESCE(T0.""DurationTotal"", 0) < 36000 THEN '0' ELSE '' END
-                        || TO_VARCHAR(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 3600)) || ':' ||
-                    LPAD(TO_VARCHAR(FLOOR(MOD(COALESCE(T0.""DurationTotal"", 0), 3600) / 60)), 2, '0') AS ""DurationTotal_"",
+                        || TO_VARCHAR(TO_INTEGER(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 3600))) || ':' ||
+                    LPAD(TO_VARCHAR(TO_INTEGER(FLOOR(MOD(COALESCE(T0.""DurationTotal"", 0), 3600) / 60))), 2, '0') AS ""DurationTotal_"",
                     CASE WHEN COALESCE(T2.""ActualHours"", 0) < 36000 THEN '0' ELSE '' END
-                        || TO_VARCHAR(FLOOR(COALESCE(T2.""ActualHours"", 0) / 3600))
+                        || TO_VARCHAR(TO_INTEGER(FLOOR(COALESCE(T2.""ActualHours"", 0) / 3600)))
                         || ':' ||
-                    LPAD(TO_VARCHAR(FLOOR(MOD(COALESCE(T2.""ActualHours"", 0), 3600) / 60)), 2, '0')
+                    LPAD(TO_VARCHAR(TO_INTEGER(FLOOR(MOD(COALESCE(T2.""ActualHours"", 0), 3600) / 60))), 2, '0')
                         AS ""ActualHours_"",
                     T2.""Comments"" AS ""TaskComments""
                     FROM ""Tx_ProcessCard_Detail"" T0
