@@ -417,8 +417,13 @@ namespace Models.Production
         {
             string ssql = @"
                 SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.*,
-                LPAD(CAST(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 60) AS NVARCHAR), 2, '0') || ':' || 
-                LPAD(CAST(MOD(COALESCE(T0.""DurationTotal"", 0), 60) AS NVARCHAR), 2, '0') AS ""DurationTotal_""
+                -- ""DurationTotal"" disimpan dalam DETIK, diformat jadi HH:MM.
+                -- Jam TIDAK di-LPAD: LPAD memotong kalau string lebih panjang dari target,
+                -- jadi 100 jam akan jadi ""10"". Nol di depan ditambah manual lewat CASE
+                -- (36000 detik = 10 jam), sehingga 100+ jam tetap utuh.
+                CASE WHEN COALESCE(T0.""DurationTotal"", 0) < 36000 THEN '0' ELSE '' END
+                    || TO_VARCHAR(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 3600)) || ':' ||
+                LPAD(TO_VARCHAR(FLOOR(MOD(COALESCE(T0.""DurationTotal"", 0), 3600) / 60)), 2, '0') AS ""DurationTotal_""
                 FROM ""Tx_ProcessCard_Detail"" T0  
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
