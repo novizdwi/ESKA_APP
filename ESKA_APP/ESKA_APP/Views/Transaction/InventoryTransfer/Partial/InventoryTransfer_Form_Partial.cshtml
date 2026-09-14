@@ -185,7 +185,7 @@
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 230;
     });
-      
+
     groupItem_Col1.Items.Add(itemSettings =>
     {
 
@@ -218,26 +218,31 @@
         txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e);  } }";
         txt.Width = 230;
     });
-     
 
-    if (!string.IsNullOrEmpty(Model.DocNum))
+    groupItem_Col1.Items.Add(itemSettings =>
     {
-        groupItem_Col2.Items.Add(itemSettings =>
-        {
-            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-            itemSettings.Caption = "Transfer No";
-            itemSettings.FieldName = "DocNum";
 
-            var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
-            txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-            txt.Name = "DocNum";
-            txt.ShowModelErrors = true;
-            txt.ReadOnly = true;
-            txt.ControlStyle.CssClass = "editornoimage";
-            txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-            txt.Width = 230;
-        });
-    }
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+        itemSettings.Caption = "Posting Date";
+        itemSettings.FieldName = "PostingDate";
+        itemSettings.ClientVisible = Model.Status == "Posted" ? true : false;
+
+        var txt = (DateEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "PostingDate";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Properties.NullText = "dd/MM/yyyy";
+        txt.Properties.EditFormat = EditFormat.Custom;
+        txt.Properties.EditFormatString = "dd/MM/yyyy";
+        txt.Properties.EditFormat = EditFormat.Date;
+
+        txt.Properties.ClientSideEvents.ParseDate = "function (s,e){ { ParseDateEdit(s,e);  } }";
+        txt.Width = 230;
+    });
+
 
     groupItem_Col1.Items.Add(itemSettings =>
     {
@@ -332,6 +337,26 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Width = 230;
     });
+
+
+    if (!string.IsNullOrEmpty(Model.DocNum))
+    {
+        groupItem_Col2.Items.Add(itemSettings =>
+        {
+            itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+            itemSettings.Caption = "Transfer No.";
+            itemSettings.FieldName = "DocNum";
+
+            var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+            txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+            txt.Name = "DocNum";
+            txt.ShowModelErrors = true;
+            txt.ReadOnly = true;
+            txt.ControlStyle.CssClass = "editornoimage";
+            txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            txt.Width = 230;
+        });
+    }
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
@@ -549,7 +574,7 @@
 
             });
 
-        });         
+        });
 
     });
 

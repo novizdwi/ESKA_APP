@@ -229,7 +229,7 @@
         column.ColumnType = MVCxGridViewColumnType.TextBox;
         column.Width = 150;
 
-        column.ReadOnly = !ViewBag.ReadOnly;
+        column.ReadOnly = true;
 
         var txt = column.PropertiesEdit as TextBoxProperties;
         txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
