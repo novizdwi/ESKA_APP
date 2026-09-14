@@ -1,0 +1,26 @@
+﻿@using (Ajax.BeginForm("mantap", "AdjustmentIn", null,
+new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnBegin = "OnBegin",
+    OnSuccess = "OnSuccessMsgBox",
+    OnFailure = "OnFailure",
+    OnComplete = "OnComplete",
+    UpdateTargetId = "CancelReason_contentForm",
+    InsertionMode = InsertionMode.Replace,
+
+},
+new
+{
+    id = "CancelReason_formDetail",
+    @class = "edit_form",
+    style = "height: 200px; width: 100%;",
+    autocomplete = "off"
+}))
+{
+    <div id="CancelReason_contentForm">
+        @Html.Partial("Partial/CancelReason/CancelReason_Panel_Partial")
+
+    </div>
+}
+

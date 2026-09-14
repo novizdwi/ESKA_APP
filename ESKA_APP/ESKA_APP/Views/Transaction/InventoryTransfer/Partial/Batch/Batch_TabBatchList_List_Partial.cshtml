@@ -1,0 +1,204 @@
+﻿@using Models;
+@using Models.Transaction;
+@model List<Models.Transaction.InventoryTransferBatchModel>
+
+@{
+    var Id = Convert.ToInt64(Request["cbId"]);
+    var DetId = Convert.ToInt64(Request["cbDetId"]);
+    int userId = (int)Session["userId"];
+
+    if (ViewBag.Id != null)
+    {
+        Id = ViewBag.Id;
+    }
+    if (ViewBag.DetId != null)
+    {
+        DetId = ViewBag.DetId;
+    }
+
+    ViewBag.ReadOnly = false;
+    string status = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>("SELECT TOP 1 T0.\"Status\" FROM \"Tx_InventoryTransfer\" T0 WHERE T0.\"Id\"=:p0", Id).FirstOrDefault();
+    if (status != "Draft")
+    {
+        ViewBag.ReadOnly = true;
+    }
+
+    // Batch hanya boleh dipilih dari batch SAP yang benar-benar ada untuk item ini di
+    // gudang asal -- nomor batch yang diketik bebas ditolak SAP saat post (-5002).
+    string batchItemCode = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"ItemCode\" FROM \"Tx_InventoryTransfer_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+    string batchFromWhsCode = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T1.\"FromWhsCode\" FROM \"Tx_InventoryTransfer_Item\" T0 INNER JOIN \"Tx_InventoryTransfer\" T1 ON T0.\"Id\" = T1.\"Id\" WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+
+    System.Data.DataTable obtnBatchList = new System.Data.DataTable();
+    if (!string.IsNullOrEmpty(batchItemCode) && !string.IsNullOrEmpty(batchFromWhsCode))
+    {
+        obtnBatchList = Models._Utils.GeneralGetList.GetBatch(batchItemCode, batchFromWhsCode);
+    }
+}
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvContentBatchList";
+    settings.KeyFieldName = "DetDetId";
+    settings.Width = Unit.Percentage(100);
+    settings.CallbackRouteValues = new { Controller = "InventoryTransfer", Action = "TabBatchListPartial", Id = Id, DetId = DetId };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "InventoryTransfer", Action = "TabBatchListAddNewRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "InventoryTransfer", Action = "TabBatchListUpdateRow", Id = Id, DetId = DetId };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "InventoryTransfer", Action = "TabBatchListDeleteRow", Id = Id, DetId = DetId };
+
+    settings.SettingsBehavior.ConfirmDelete = true;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 200;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.NewItemRowPosition = GridViewNewItemRowPosition.Bottom;
+
+    settings.CommandColumn.Visible = !ViewBag.ReadOnly;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CommandColumn.ShowDeleteButton = true;
+    settings.CommandColumn.ShowEditButton = true;
+
+    settings.CommandColumn.Width = 100;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+
+    settings.Columns.Add("DetDetId", "DetDetId").Visible = false;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Id";
+        column.Caption = "Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DetId";
+        column.Caption = "Det Id";
+        column.Width = 0;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RowNo";
+        column.Caption = "Row No";
+        column.Width = 60;
+        column.ReadOnly = true;
+
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Batch";
+        column.Name = "Batch";
+        column.Caption = "Batch";
+
+        // Dropdown batch SAP (OBTN) untuk ItemCode + gudang asal transfer.
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+        column.Width = 200;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        var cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.DataSource = obtnBatchList;
+        cbo.TextField = "Code";
+        cbo.ValueField = "Code";
+        cbo.ValueType = typeof(string);
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
+        cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        cbo.ValidationSettings.RequiredField.IsRequired = true;
+        cbo.ValidationSettings.RequiredField.ErrorText = "Batch is required";
+        cbo.ValidationSettings.Display = Display.Dynamic;
+        cbo.ClientInstanceName = settings.Name + "_" + column.FieldName;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "AdmissionDate";
+        column.Name = "AdmissionDate";
+        column.Caption = "Admission Date";
+
+        column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        column.Width = 100;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        var txt = column.PropertiesEdit as DateEditProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ReadOnlyStyle.BackColor = System.Drawing.Color.Lavender;
+        txt.DisplayFormatString = "dd/MM/yyyy";
+        txt.EditFormatString = "dd/MM/yyyy";
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Netto";
+        column.Name = "Netto";
+        column.Caption = "Netto";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        //column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "N0";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+    });
+
+    settings.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{ gvContentBatchListOnBeginCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.EndCallback = string.Format("function(s, e) {{ gvContentBatchListOnEndCallback(s, e, {0}, {1}); }}", Id, DetId);
+    settings.ClientSideEvents.BatchEditRowInserting = string.Format("function(s, e) {{ gvContentBatchListOnRowInserting(s, e, {0}, {1}); }}", Id, DetId);
+
+    settings.InitNewRow = (s, e) =>
+    {
+        e.NewValues["Id"] = Id;
+        e.NewValues["DetId"] = DetId;
+
+        e.NewValues["AdmissionDate"] = DateTime.Today;
+    };
+
+}).Bind(Model).GetHtml()

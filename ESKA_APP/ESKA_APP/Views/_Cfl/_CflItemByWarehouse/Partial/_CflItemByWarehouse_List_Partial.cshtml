@@ -235,9 +235,15 @@
     string additionParam = "";
     additionParam += " e.customArgs['hidden_Id']=Id.GetValue(); ";
 
-    if (cpGvFind_CflType == "StockOpname")
+    if (cpGvFind_CflType == "StockOpname" || cpGvFind_CflType == "AdjustmentIn" || cpGvFind_CflType == "AdjustmentOut")
     {
         additionParam += " e.customArgs['hidden_WhsCode']=WhsCode.GetValue(); ";
+        settings.ClientSideEvents.SelectionChanged = "ItemByWarehouseSelectionChanged"+ cpGvFind_CflType;
+    }
+    else if (cpGvFind_CflType == "InventoryTransfer")
+    {
+        // Item diambil dari gudang asal transfer.
+        additionParam += " e.customArgs['hidden_WhsCode']=FromWhsCode.GetValue(); ";
         settings.ClientSideEvents.SelectionChanged = "ItemByWarehouseSelectionChanged"+ cpGvFind_CflType;
     }
 

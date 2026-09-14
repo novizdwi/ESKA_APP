@@ -118,9 +118,13 @@
     string additionParam = "";
     additionParam += " e.customArgs['hidden_Id']=Id.GetValue(); ";
 
-    if (Model.Type == "StockOpname")
+    if (Model.Type == "StockOpname" || Model.Type == "AdjustmentIn" || Model.Type == "AdjustmentOut")
     {
         additionParam += " e.customArgs['hidden_WhsCode']=WhsCode.GetValue(); ";
+    }
+    else if (Model.Type == "InventoryTransfer")
+    {
+        additionParam += " e.customArgs['hidden_WhsCode']=FromWhsCode.GetValue(); ";
     }
 
 

@@ -95,6 +95,14 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_ProcessCard_Detail> Tx_ProcessCard_Detail { get; set; }
         public virtual DbSet<Tx_ProductionTask_Activity> Tx_ProductionTask_Activity { get; set; }
         public virtual DbSet<Tx_ProductionTask_Activity_Log> Tx_ProductionTask_Activity_Log { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn> Tx_AdjustmentIn { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Item> Tx_AdjustmentIn_Item { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Item_Batch> Tx_AdjustmentIn_Item_Batch { get; set; }
+        public virtual DbSet<Tx_AdjustmentIn_Item_Batch_Scale> Tx_AdjustmentIn_Item_Batch_Scale { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut> Tx_AdjustmentOut { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Item> Tx_AdjustmentOut_Item { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Item_Batch> Tx_AdjustmentOut_Item_Batch { get; set; }
+        public virtual DbSet<Tx_AdjustmentOut_Item_Batch_Scale> Tx_AdjustmentOut_Item_Batch_Scale { get; set; }
         public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
         public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
         public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
@@ -105,5 +113,10 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_ProductionTask_Item> Tx_ProductionTask_Item { get; set; }
         public virtual DbSet<Tx_ProductionTask_Item_Batch> Tx_ProductionTask_Item_Batch { get; set; }
         public virtual DbSet<Tx_ProductionTask> Tx_ProductionTask { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item_BAK> Tx_GoodsReceiptPO_Item_BAK { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer> Tx_InventoryTransfer { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer_Item> Tx_InventoryTransfer_Item { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer_Item_Batch> Tx_InventoryTransfer_Item_Batch { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer_Item_Batch_Scale> Tx_InventoryTransfer_Item_Batch_Scale { get; set; }
     }
 }
