@@ -5,6 +5,12 @@ INSERT INTO "Ts_Menu" VALUES ('Position/Add', 'Add', 'Position/Add', 'Position',
 INSERT INTO "Ts_Menu" VALUES ('Position/Cancel', 'Cancel', 'Position/Cancel', 'Position', 100108);
 INSERT INTO "Ts_Menu" VALUES ('Position/Print', 'Print', 'Position/Print', 'Position', 100109);
 
+INSERT INTO "Ts_Menu" VALUES ('Machine', 'Machine', '', 'Master', 1002);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Detail#All', 'Machine - All', 'Machine/Detail', 'Machine', 100201);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Add', 'Add', 'Machine/Add', 'Machine', 100202);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Cancel', 'Cancel', 'Machine/Cancel', 'Machine', 100208);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Print', 'Print', 'Machine/Print', 'Machine', 100209);
+
 INSERT INTO "Ts_Menu" VALUES ('Production', 'Production', '', '', 20);
 
 INSERT INTO "Ts_Menu" VALUES ('ProcessCardMonitoring', 'Process Card Monitoring', '', 'Production', 2001);

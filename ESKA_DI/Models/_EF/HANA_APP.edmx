@@ -387,6 +387,20 @@
           <Property Name="ModifiedDate" Type="timestamp" />
           <Property Name="ModifiedUser" Type="int" />
         </EntityType>
+        <EntityType Name="Tm_Machine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MachineCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="MachineName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="varchar" MaxLength="1" />
+          <Property Name="CreatedDate" Type="timestamp" />
+          <Property Name="CreatedUser" Type="int" />
+          <Property Name="ModifiedDate" Type="timestamp" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
         <EntityType Name="Tm_MasterSetting">
           <Key>
             <PropertyRef Name="Id" />
@@ -1417,6 +1431,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <EntitySet Name="Tm_Layout" EntityType="Self.Tm_Layout" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Layout_Role" EntityType="Self.Tm_Layout_Role" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Layout_User" EntityType="Self.Tm_Layout_User" Schema="ESKA_APP_TEST" store:Type="Tables" />
+          <EntitySet Name="Tm_Machine" EntityType="Self.Tm_Machine" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_MasterSetting" EntityType="Self.Tm_MasterSetting" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Position" EntityType="Self.Tm_Position" Schema="ESKA_APP_TEST" store:Type="Tables" />
           <EntitySet Name="Tm_Query" EntityType="Self.Tm_Query" Schema="ESKA_APP_TEST" store:Type="Tables" />
@@ -1572,6 +1587,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_ProductionTask_Item_Batch" EntityType="Model1.Tx_ProductionTask_Item_Batch" />
           <EntitySet Name="WeighbridgeTransactions" EntityType="Model1.WeighbridgeTransactions" />
           <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
+          <EntitySet Name="Tm_Machine" EntityType="Model1.Tm_Machine" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -2955,6 +2971,20 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="SenderId" Type="Int32" />
           <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="LastShowTime" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="Tm_Machine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MachineName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -4418,6 +4448,21 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="BaseId" ColumnName="BaseId" />
                 <ScalarProperty Name="BaseType" ColumnName="BaseType" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tm_Machine">
+            <EntityTypeMapping TypeName="Model1.Tm_Machine">
+              <MappingFragment StoreEntitySet="Tm_Machine">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="MachineCode" ColumnName="MachineCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

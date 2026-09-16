@@ -106,5 +106,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_ProductionTask_Item_Batch> Tx_ProductionTask_Item_Batch { get; set; }
         public virtual DbSet<WeighbridgeTransactions> WeighbridgeTransactions { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
+        public virtual DbSet<Tm_Machine> Tm_Machine { get; set; }
     }
 }
