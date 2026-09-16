@@ -308,14 +308,8 @@
     <Compile Include="Models\Transaction\ReProcessService.cs" />
     <Compile Include="Models\Transaction\GoodsReceiptPo__List_Model.cs" />
     <Compile Include="Models\Transaction\ReProcess__List_Model.cs" />
-    <Compile Include="Models\Transaction\AdjustmentInService.cs" />
-    <Compile Include="Models\Transaction\AdjustmentIn__List_Model.cs" />
-    <Compile Include="Models\Transaction\AdjustmentOutService.cs" />
-    <Compile Include="Models\Transaction\AdjustmentOut__List_Model.cs" />
     <Compile Include="Models\Transaction\InventoryTransferService.cs" />
     <Compile Include="Models\Transaction\InventoryTransfer__List_Model.cs" />
-    <Compile Include="Models\Transaction\StockOpnameService.cs" />
-    <Compile Include="Models\Transaction\StockOpname__List_Model.cs" />
     <Compile Include="Models\_BaseModel\FormModeEnum.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -501,6 +495,9 @@
     <Compile Include="Models\_EF\Tp_ScaleStaging.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\_EF\Tp_ScaleStaging_OLD.cs">
+      <DependentUpon>HANA_APP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\_EF\Tp_UserAlert.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
@@ -592,45 +589,6 @@
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tx_ProductionTask_Item_Batch.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn_Item_Batch.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentIn_Item_Batch_Scale.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut_Item_Batch.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_AdjustmentOut_Item_Batch_Scale.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Approval.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Item.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Item_Batch.cs">
-      <DependentUpon>HANA_APP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\_EF\Tx_StockOpname_Item_Batch_Scale.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\WeighbridgeTransactions.cs">

@@ -18,6 +18,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<long> Id { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
+        public Nullable<decimal> QuantityOpen { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> QuantityCreated { get; set; }
         public string Uom { get; set; }
@@ -34,6 +35,5 @@ namespace ESKA_DI.Models._EF
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public Nullable<decimal> QuantityOpen { get; set; }
     }
 }

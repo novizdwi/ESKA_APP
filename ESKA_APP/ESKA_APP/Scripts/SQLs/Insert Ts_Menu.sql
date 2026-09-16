@@ -31,23 +31,6 @@ INSERT INTO "Ts_Menu" VALUES ('ProductionTask/Detail#User', 'Detail - User', 'Pr
 INSERT INTO "Ts_Menu" VALUES ('ProductionTask/Detail#All', 'Detail - All', 'ProductionTask/Detail', 'ProductionTask', 2004);
 
 INSERT INTO "Ts_Menu" VALUES ('Transaction', 'Transaction', '', '', 30);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn', 'Adjustment In', '', 'Transaction', 3001);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Detail#User', 'Detail - User', 'AdjustmentIn/Detail', 'AdjustmentIn', 300101);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Detail#All', 'Detail - All', 'AdjustmentIn/Detail', 'AdjustmentIn', 300102);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Add', 'Add', 'AdjustmentIn/Add', 'AdjustmentIn', 300103);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Update', 'Update', 'AdjustmentIn/Update', 'AdjustmentIn', 300104);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Post', 'Post', 'AdjustmentIn/Post', 'AdjustmentIn', 300105);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Cancel', 'Cancel', 'AdjustmentIn/Cancel', 'AdjustmentIn', 300108);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentIn/Print', 'Print', 'AdjustmentIn/Print', 'AdjustmentIn', 300109);
-
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut', 'Adjustment Out', '', 'Transaction', 3002);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Detail#User', 'Detail - User', 'AdjustmentOut/Detail', 'AdjustmentOut', 300201);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Detail#All', 'Detail - All', 'AdjustmentOut/Detail', 'AdjustmentOut', 300202);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Add', 'Add', 'AdjustmentOut/Add', 'AdjustmentOut', 300203);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Update', 'Update', 'AdjustmentOut/Update', 'AdjustmentOut', 300204);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Post', 'Post', 'AdjustmentOut/Post', 'AdjustmentOut', 300205);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Cancel', 'Cancel', 'AdjustmentOut/Cancel', 'AdjustmentOut', 300208);
-INSERT INTO "Ts_Menu" VALUES ('AdjustmentOut/Print', 'Print', 'AdjustmentOut/Print', 'AdjustmentOut', 300209);
 
 INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer', 'Inventory Transfer', '', 'Transaction', 3003);
 INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Detail#User', 'Detail - User', 'InventoryTransfer/Detail', 'InventoryTransfer', 300301);
@@ -57,15 +40,6 @@ INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Update', 'Update', 'InventoryTr
 INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Post', 'Post', 'InventoryTransfer/Post', 'InventoryTransfer', 300305);
 INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Cancel', 'Cancel', 'InventoryTransfer/Cancel', 'InventoryTransfer', 300308);
 INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Print', 'Print', 'InventoryTransfer/Print', 'InventoryTransfer', 300309);
-     
-INSERT INTO "Ts_Menu" VALUES ('StockOpname', 'Stock Opname', '', 'Transaction', 3004);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Detail#User', 'Detail - User', 'StockOpname/Detail', 'StockOpname', 300401);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Detail#All', 'Detail - All', 'StockOpname/Detail', 'StockOpname', 300402);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Add', 'Add', 'StockOpname/Add', 'StockOpname', 300403);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Update', 'Update', 'StockOpname/Update', 'StockOpname', 300404);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Post', 'Post', 'StockOpname/Post', 'StockOpname', 300405);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Cancel', 'Cancel', 'StockOpname/Cancel', 'StockOpname', 300408);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Print', 'Print', 'StockOpname/Print', 'StockOpname', 300409);
 
 INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO', 'Goods Receipt PO', '', 'Transaction', 3005);
 INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Detail#User', 'Detail - User', 'GoodsReceiptPO/Detail', 'GoodsReceiptPO', 300501);

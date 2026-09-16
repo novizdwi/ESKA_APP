@@ -19,6 +19,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> OperatorId { get; set; }
         public string OperatorName { get; set; }
         public Nullable<decimal> Quantity { get; set; }
+        public Nullable<decimal> Netto { get; set; }
         public string Batch { get; set; }
         public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> EndTime { get; set; }
@@ -30,6 +31,5 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public Nullable<decimal> Netto { get; set; }
     }
 }

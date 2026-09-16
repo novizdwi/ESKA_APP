@@ -46,7 +46,7 @@ namespace Controllers.Transaction
         public ActionResult PopupCancelReasonLoadOnDemandPartial()
         {
             int userId = (int)Session["userId"];
-            var model = new StockOpnameModel();
+            var model = new GoodsReceiptPoModel();
 
             return PartialView(VIEW_PROGRESS_FORM_PARTIAL, model);
         }

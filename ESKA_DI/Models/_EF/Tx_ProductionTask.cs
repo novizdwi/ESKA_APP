@@ -31,6 +31,7 @@ namespace ESKA_DI.Models._EF
         public Nullable<System.DateTime> ActualDate { get; set; }
         public Nullable<decimal> QuantityPlanned { get; set; }
         public Nullable<decimal> QuantityActual { get; set; }
+        public Nullable<decimal> Netto { get; set; }
         public string IsRunningTask { get; set; }
         public Nullable<int> EstimatedHours { get; set; }
         public Nullable<int> ActualHours { get; set; }
@@ -40,6 +41,5 @@ namespace ESKA_DI.Models._EF
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
-        public Nullable<decimal> Netto { get; set; }
     }
 }
