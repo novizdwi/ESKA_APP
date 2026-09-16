@@ -419,6 +419,27 @@
         e.customArgs['cbId'] = Id.GetValue();
     }
 
+    // Dipanggil checkbox di header kolom '#' tab Routing.
+    // Hanya baris yang sedang tampil yang diubah, jadi kalau filter row dipakai,
+    // yang tercentang hanya baris hasil filter.
+    function gvUserRoutingDetailCheckAll(s, e) {
+        var grid = ASPxClientGridView.Cast('gvUserRoutingDetail');
+        if (grid == null) {
+            return;
+        }
+
+        var value = s.GetChecked() ? "Y" : "N";
+        var api = grid.batchEditApi;
+
+        // Tutup dulu baris yang sedang diedit supaya perubahannya tidak tertinggal.
+        api.EndEdit();
+
+        var rowCount = grid.GetVisibleRowsOnPage();
+        for (var i = 0; i < rowCount; i++) {
+            api.SetCellValue(i, "IsTick", value);
+        }
+    }
+
 </script>
 
 
