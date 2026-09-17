@@ -496,16 +496,17 @@ namespace Models.Production
                             {
                                 tx_ProductionTask_Activity.Status = "Finished";
 
-                                tx_ProductionTask_Activity.Quantity = model.Quantity;
+                                tx_ProductionTask_Activity.QuantityComplete = model.Quantity;
+                                tx_ProductionTask_Activity.QuantityReject = model.Quantity;
                                 tx_ProductionTask_Activity.Batch = model.FinishBatch;
                                 tx_ProductionTask_Activity.Comments = model.Comments;
 
                                 // Netto produk jadi disimpan per ACTIVITY. Akumulasinya ke
                                 // Tx_ProductionTask."Netto" diurus SpProductionTaskActivity_UpdateTask,
                                 // sama seperti Quantity -> QuantityActual.
-                                tx_ProductionTask_Activity.Netto = model.Netto;
-
-                                tx_ProductionTask_Activity.Quantity = model.Quantity;
+                                tx_ProductionTask_Activity.NettoComplete = model.Netto;
+                                tx_ProductionTask_Activity.NettoReject = model.Netto;
+                                
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
 

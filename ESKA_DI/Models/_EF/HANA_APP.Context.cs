@@ -51,6 +51,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_Layout> Tm_Layout { get; set; }
         public virtual DbSet<Tm_Layout_Role> Tm_Layout_Role { get; set; }
         public virtual DbSet<Tm_Layout_User> Tm_Layout_User { get; set; }
+        public virtual DbSet<Tm_Machine> Tm_Machine { get; set; }
         public virtual DbSet<Tm_MasterSetting> Tm_MasterSetting { get; set; }
         public virtual DbSet<Tm_Position> Tm_Position { get; set; }
         public virtual DbSet<Tm_Query> Tm_Query { get; set; }
@@ -106,6 +107,5 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_ProductionTask_Item_Batch> Tx_ProductionTask_Item_Batch { get; set; }
         public virtual DbSet<WeighbridgeTransactions> WeighbridgeTransactions { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
-        public virtual DbSet<Tm_Machine> Tm_Machine { get; set; }
     }
 }

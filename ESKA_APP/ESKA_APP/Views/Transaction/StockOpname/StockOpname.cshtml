@@ -1,4 +1,4 @@
-@using Models._Cfl;
+﻿@using Models._Cfl;
 
 
 @if (false)
@@ -8,14 +8,14 @@
     <script src="~/Scripts/Test/DXR.js"></script>
 }
 
-@model Models.Production.ProcessCardModel
+@model Models.Transaction.StockOpnameModel
 
 
 @{
     ViewBag.UserId = (int)Session["userId"];
-    ViewBag.Title = "Process Card";
+    ViewBag.Title = "Stock Opname";
 
-    string MenuCodePost = "ProcessCard/Post";
+    string MenuCodePost = "StockOpname/Post";
     string IsCanPost_ = "Y";
     if (ViewBag.UserId != 1)
     {
@@ -223,7 +223,7 @@
 
         $.ajax({
             type: "POST",
-            url: "@Url.Action("DetailPartial", "ProcessCard")",
+            url: "@Url.Action("DetailPartial", "StockOpname")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -268,7 +268,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Post", "ProcessCard")',
+                url: '@Url.Action("Post", "StockOpname")',
                 data: formData,
                 beforeSend: function () {
                     OnBegin();
@@ -294,7 +294,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Approve", "ProcessCard")',
+            url: '@Url.Action("Approve", "StockOpname")',
             data: { Id: key, ApprovalMessage: reason },
             beforeSend: function () {
                 OnBegin();
@@ -322,7 +322,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("RequestApproval", "ProcessCard")',
+            url: '@Url.Action("RequestApproval", "StockOpname")',
             data: { id: key, templateId: templateId, approvalMessage: reason },
             beforeSend: function () {
                 OnBegin();
@@ -349,7 +349,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Reject", "ProcessCard")',
+                url: '@Url.Action("Reject", "StockOpname")',
                 data: { Id: key, ApprovalMessage: reason },
                 beforeSend: function () {
                     OnBegin();
@@ -384,7 +384,7 @@
     function btnShowApprovalOnClick(s, e, Id) {
         var popup = ASPxClientPopupControl.Cast("popupApproval");
 
-        popup.callbackUrl = '@Url.Action("Approval_PopupListOnDemandPartial", "ProcessCard")' + '?Id=' + Id;
+        popup.callbackUrl = '@Url.Action("Approval_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + Id;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -416,7 +416,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Add", "ProcessCard")',
+            url: '@Url.Action("Add", "StockOpname")',
             data: formData,
             beforeSend: function () {
                 OnBegin();
@@ -445,7 +445,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Update", "ProcessCard")',
+            url: '@Url.Action("Update", "StockOpname")',
             data: formData,
             beforeSend: function () {
                 OnBegin();
@@ -474,7 +474,7 @@
     function OnClickBtnNavFirst(s, e) {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("NavFirst", "ProcessCard")",
+            url: "@Url.Action("NavFirst", "StockOpname")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -496,7 +496,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("NavPrevious", "ProcessCard")',
+            url: '@Url.Action("NavPrevious", "StockOpname")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -518,7 +518,7 @@
         key = Id.GetValue();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("NavNext", "ProcessCard")',
+            url: '@Url.Action("NavNext", "StockOpname")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -541,7 +541,7 @@
     function OnClickBtnNavLast(s, e) {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("NavLast", "ProcessCard")",
+            url: "@Url.Action("NavLast", "StockOpname")",
             beforeSend: function () {
                 OnBegin();
             },
@@ -565,7 +565,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("DetailPartial", "ProcessCard")',
+            url: '@Url.Action("DetailPartial", "StockOpname")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -589,7 +589,7 @@
     function OnClickBtnListFind(s, e) {
         var popup = ASPxClientPopupControl.Cast("popupList");
 
-        var gv = ASPxClientGridView.Cast('gvProcessCardList');
+        var gv = ASPxClientGridView.Cast('gvStockOpnameList');
         if (gv == null) {
             popup.Show();
         } else {
@@ -621,7 +621,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("Post", "ProcessCard")',
+                        url: '@Url.Action("Post", "StockOpname")',
                         data: formData,
                         beforeSend: function () {
                             OnBegin();
@@ -648,58 +648,6 @@
         }
     }
 
-
-    //pillars to project
-    function onPillarsChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            PillarsName.SetText(name);            // isi TextBox
-        } else {
-            PillarsName.SetText("");
-        }
-    }
-
-    function onClassChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            ClassName.SetText(name);            // isi TextBox
-        } else {
-            ClassName.SetText("");
-        }
-    }
-
-    function onSubClass1Changed(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            SubClass1Name.SetText(name);            // isi TextBox
-        } else {
-            SubClass1Name.SetText("");
-        }
-    }
-
-    function onSubClass2Changed(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            SubClass2Name.SetText(name);            // isi TextBox
-        } else {
-            SubClass2Name.SetText("");
-        }
-    }
-
-    function onProjectChanged(s, e) {
-        var item = s.GetSelectedItem();
-        if (item) {
-            var name = item.GetColumnText("Name");   // ambil kolom Name
-            ProjectName.SetText(name);            // isi TextBox
-        } else {
-            ProjectName.SetText("");
-        }
-    }
-
     function popupCancelReason_EndCallback(s, e) {
         $.validator.unobtrusive.parse("#CancelReason_formDetail");
 
@@ -713,7 +661,7 @@
     function btnShowCancelReasonOnClick(s, e, Id) {
         var popup = ASPxClientPopupControl.Cast("popupCancelReason");
 
-        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "ProcessCard")' + '?Id=' + Id;
+        popup.callbackUrl = '@Url.Action("CancelReason_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + Id;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -730,7 +678,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Cancel", "ProcessCard")',
+            url: '@Url.Action("Cancel", "StockOpname")',
             data: { Id: key, CancelReason: reason },
             beforeSend: function () {
                 OnBegin();
@@ -754,7 +702,7 @@
     function OnClickChoose(s, e, key) {
         $.ajax({
             type: "POST",
-            url: '@Url.Action("DetailPartial", "ProcessCard")',
+            url: '@Url.Action("DetailPartial", "StockOpname")',
             data: { Id: key },
             beforeSend: function () {
                 OnBegin();
@@ -776,14 +724,14 @@
     function OnClickbaseId(s, e, baseId) {
         var guid = CreateGuid();
         window.open('', guid);
-        SubmitForm(guid, '@Url.Action("Detail", "ProcessCardScan")', 'post', {
+        SubmitForm(guid, '@Url.Action("Detail", "StockOpnameScan")', 'post', {
             Id: baseId
         });
     }
 
     function BtnCflStatusOnClick(id) {
         var popup = ASPxClientPopupControl.Cast("popupViewApproval");
-        popup.callbackUrl = '@Url.Action("ViewApproval_PopupListOnDemandPartial", "ProcessCard")' + '?Id=' + id;
+        popup.callbackUrl = '@Url.Action("ViewApproval_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + id;
         popup.PerformCallback();
 
         if (!popup.IsVisible()) {
@@ -802,16 +750,16 @@
         }
     }
 
-    function BtnCflContractNoPopupListOnClick(s, e) {
+    function BtnCflQuantityPopupListOnClick(s, e, detId) {
+        key = Id.GetValue();
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
 
-    }
+        popup.callbackUrl = '@Url.Action("ViewBatch_PopupListOnDemandPartial", "StockOpname")' + '?Id=' + key + '&DetId=' + detId;
+        popup.PerformCallback();
 
-    function BtnCflCustomerCodePopupListOnClick(s, e) {
-        cflCardCodePopupListProcessCard.Show();
-    }
-
-    function BtnCflItemCodePopupListOnClick(s, e) {
-        cflItemPopupListProcessCard.Show();
+        if (!popup.IsVisible()) {
+            loadingPanel.Show();
+        }
     }
 
 </script>
@@ -849,61 +797,8 @@
     function gvDetailOnCustomButtonClick(s, e) {
     }
 
-    function Operator_BeginCallback(s, e) {
-        var rowIndex = gvDetail.GetFocusedRowIndex();
-        var routing = gvDetail.batchEditApi.GetCellValue(rowIndex, "RoutingCode");
-        e.customArgs["RoutingCode"] = routing;
-    }
 
     function gvDetailOnBatchEditStartEditing(s, e) {
-        if (e.focusedColumn.fieldName !== "OperatorId") return;
-        var routingCode = s.batchEditApi.GetCellValue(e.visibleIndex, "RoutingCode");
-
-            $.ajax({
-                url: '@Url.Action("GetOperatorByRouting", "ProcessCard")',
-                type: 'POST',
-                data: { routingCode: routingCode },
-                success: function (data) {
-
-                    var editor = s.GetEditor("OperatorId");
-
-                    editor.ClearItems();
-
-                    for (var i = 0; i < data.length; i++) {
-                        editor.AddItem(data[i].Name, data[i].Code);
-                    }
-                }
-            });
-    }
-
-    function gvProcessCardContentDetail_OperatorOnChanged(s, e) {
-        var visibleIndex = gvDetail.GetFocusedRowIndex();
-        var grid = gvDetail;
-        var text = s.GetText();
-        var value = s.GetValue();
-
-        grid.batchEditApi.SetCellValue(e.visibleIndex, "OperatorId", value);
-        gvProessCardContentDetail_OperatorName.SetValue(text);
-    }
-
-    var eskaMachineCodeToId = {};
-
-    $.ajax({
-        url: '@Url.Action("GetMachineList", "ProcessCard")',
-        type: 'POST',
-        success: function (data) {
-            for (var i = 0; i < data.length; i++) {
-                eskaMachineCodeToId[data[i].Name] = data[i].Code;
-            }
-        }
-    });
-
-    function gvProcessCardContentDetail_MachineOnChanged(s, e) {
-        var grid = gvDetail;
-        var text = s.GetText();
-
-        grid.batchEditApi.SetCellValue(e.visibleIndex, "MachineCode", text);
-        gvProcessCardContentDetail_MachineId.SetValue(eskaMachineCodeToId[text] || null);
     }
 
     function gvDetailOnBatchEditEndEditing(s, e) {
@@ -918,7 +813,6 @@
     function gvRefOnBeginCallback(s, e) {
         e.customArgs['cbId'] = Id.GetValue();
     }
-
 
     function gvRefOnEndCallback(s, e) {
 
@@ -942,15 +836,15 @@
         gvDetail_QtyVariance_.SetValue(qtyVariance);
 
         var lineTotal = gvDetail_UnitPriceTc.GetValue() * gvDetail_Quantity.GetValue();
-        gvDetail_LineTotal.SetValue(lineTotal);
+        gvDetail_LineTotal.SetValue(lineTotal );
     }
 
 
 </script>
 
-@Html.Partial("Partial/ProcessCard_Form_Btn_Partial")
+@Html.Partial("Partial/StockOpname_Form_Btn_Partial")
 
-@using (Ajax.BeginForm("mantap", "ProcessCard", null,
+@using (Ajax.BeginForm("mantap", "StockOpname", null,
 new AjaxOptions
 {
     HttpMethod = "POST",
@@ -971,62 +865,147 @@ new
 }))
 {
     <div id="contentForm" style="padding-top:79px">
-        @Html.Partial("Partial/ProcessCard_Form_Partial")
+        @Html.Partial("Partial/StockOpname_Form_Partial")
 
     </div>
 }
 
 
 @*
-    -----------------------------------------------------------------------------
-    gvCflCardCodeList
-    -----------------------------------------------------------------------------
+    ----------------------------------------------------------------------------
+        CflWarehouse
+    ----------------------------------------------------------------------------
 *@
 
 @{
-    var cflCardCode_ParamModel = new CflCardCode_ParamModel();
-    cflCardCode_ParamModel.Name = "ProcessCard";
-    cflCardCode_ParamModel.Type = "ProcessCard";
-    cflCardCode_ParamModel.Header = "Business Partner";
-    cflCardCode_ParamModel.SqlWhere = "AND T0.\"CardType\" ='C' ";
-    cflCardCode_ParamModel.IsMulti = "N";
+    var cflWarehouse_ParamModel = new CflWarehouse_ParamModel();
+    cflWarehouse_ParamModel.Name = "StockOpname";
+    cflWarehouse_ParamModel.Type = "StockOpname";
+    cflWarehouse_ParamModel.SqlWhere = "   ";
+    cflWarehouse_ParamModel.Header = "";
+
+    cflWarehouse_ParamModel.IsMulti = "N";
 }
 
 <script type="text/javascript">
 
-    function OnClickChoose_CflCardCodeProcessCard(s, e, data) {
-        CardCode.SetValue(data.CardCode);
-        CardName.SetValue(data.CardName);
-        cflCardCodePopupListProcessCard.Hide();
+    function BtnCflWarehousePopupListStockOpnameOnClick(s, e) {
+        var popup = ASPxClientPopupControl.Cast("cflWarehousePopupListStockOpname");
+
+        var gv = ASPxClientGridView.Cast('gvCflWarehouseListStockOpname');
+
+        if (gv == null) {
+            popup.Show();
+        } else {
+            popup.SetContentHtml("");
+            popup.PerformCallback();
+            popup.Show();
+        }
+
+    }
+
+    function OnClickChoose_CflWarehouseStockOpname(s, e, data) {
+        WhsCode.SetValue(data.WhsCode);
+        WhsName.SetValue(data.WhsName);
+
+        cflWarehousePopupListStockOpname.Hide();
+
     }
 
 </script>
-@Html.Partial("~/Views/_Cfl/_CflCardCode/Partial/_CflCardCode_Panel_List_Partial.cshtml", cflCardCode_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflWarehouse/Partial/_CflWarehouse_Panel_List_Partial.cshtml", cflWarehouse_ParamModel)
+
+
 
 @*
     -----------------------------------------------------------------------------
-    gvCflItemList
+    gvCflItemByWarehouseList
     -----------------------------------------------------------------------------
 *@
 
+
 @{
-    var cflItem_ParamModel = new CflItem_ParamModel();
-    cflItem_ParamModel.Name = "ProcessCard";
-    cflItem_ParamModel.Type = "ProcessCard";
-    cflItem_ParamModel.Header = " ";
-    cflItem_ParamModel.SqlWhere = " ";
-    cflItem_ParamModel.IsMulti = "N";
+    var cflItemByWarehouse_ParamModel = new CflItemByWarehouse_ParamModel();
+    cflItemByWarehouse_ParamModel.Name = "StockOpname";
+    cflItemByWarehouse_ParamModel.Type = "StockOpname";
+    cflItemByWarehouse_ParamModel.SqlWhere = "    ";
+    cflItemByWarehouse_ParamModel.Header = "";
+
+    cflItemByWarehouse_ParamModel.IsMulti = "Y";
 }
 
-<script type="text/javascript">
-    function OnClickChoose_CflItemProcessCard(s, e, data) {
-        ItemCode.SetValue(data.ItemCode);
-        ItemName.SetValue(data.ItemName);
 
-        cflItemPopupListProcessCard.Hide();
+
+<script type="text/javascript">
+
+    function BtnCflItemByWarehousePopupListStockOpnameOnClick(s, e) {
+
+        var popup = ASPxClientPopupControl.Cast("cflItemByWarehousePopupListStockOpname");
+
+        var gv = ASPxClientGridView.Cast('gvCflItemByWarehouseListStockOpname');
+
+        if (gv == null) {
+            popup.Show();
+        } else {
+            popup.SetContentHtml("");
+            popup.PerformCallback();
+            popup.Show();
+        }
     }
+
+    function ItemByWarehouseSelectionChangedStockOpname(s, e) {
+        var key = s.GetRowKey(e.visibleIndex);
+        if (s.IsRowSelectedOnPage(e.visibleIndex)) {
+            if (SortingItemStockOpname.GetValue() == null) {
+                SortingItemStockOpname.SetValue(key);
+            } else {
+                SortingItemStockOpname.SetValue(SortingItemStockOpname.GetValue() + ',' + key);
+            }
+        } else {
+            var sort = SortingItemStockOpname.GetValue();
+            sort = sort.replace(key, "");
+            sort = sort.replace(",,", ", ");
+            SortingItemStockOpname.SetValue(sort);
+        }
+    }
+
+    function OnClickChoose_CflItemByWarehouseStockOpname(s, e) {
+        gvCflItemByWarehouseListStockOpname.GetSelectedFieldValues('ItemCode', GetSelectedFieldValuesCallback_CflItemByWarehouse);
+    }
+
+    function GetSelectedFieldValuesCallback_CflItemByWarehouse(values) {
+        cflItemByWarehousePopupListStockOpname.Hide();
+
+        key = Id.GetValue();
+        console.log(SortingItemStockOpname.GetValue());
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChooseItem", "StockOpname")',
+            data: {
+                Id: key,
+                Data: values,
+                Sorting: SortingItemStockOpname.GetValue(),
+            },
+            beforeSend: function () {
+                OnBegin();
+            },
+            success: function (response) {
+                gvDetail.PerformCallback();
+                OnSuccessMsgBox();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                OnFailure(jqXhr, textStatus, errorThrown)
+            },
+            complete: function () {
+                OnComplete();
+            }
+        });
+
+    }
+
 </script>
-@Html.Partial("~/Views/_Cfl/_CflItem/Partial/_CflItem_Panel_List_Partial.cshtml", cflItem_ParamModel)
+@Html.Partial("~/Views/_Cfl/_CflItemByWarehouse/Partial/_CflItemByWarehouse_Panel_List_Partial.cshtml", cflItemByWarehouse_ParamModel)
 
 @*
     -----------------------------------------------------------------------------
@@ -1082,10 +1061,87 @@ new
     -----------------------------------------------------------------------------
 *@
 
-@Html.Partial("Partial/ProcessCard_Form_BtnBottom_Partial")
+@Html.Partial("Partial/StockOpname_Form_BtnBottom_Partial")
 
 
-@Html.Partial("Partial/ProcessCard_Panel_List_Partial")
+@Html.Partial("Partial/StockOpname_Panel_List_Partial")
 
 
 @Html.Partial("~/Views/_CrystalReport/Layout/Print_Panel_Partial.cshtml")
+
+@*-------------------------------------------------
+    ViewBatch
+    -------------------------------------------------*@
+<script>
+    function gvContentBatchListOnCustomButtonClick(s, e, Id, DetId) {
+
+        //if (e.buttonID == "deleteButton") {
+        //    //console.log(s);
+        //    //console.log(s.batchEditApi);
+        //    //console.log(s.batchEditHelper);
+        //    var detDetId = s.batchEditApi.GetCellValue(e.visibleIndex, "DetDetId");
+        //    console.log(detDetId);
+        //    if (detDetId == null || detDetId == "" || detDetId == 0) { 
+        //        s.DeleteRow(e.visibleIndex);
+        //        return;
+        //    }
+        //    else {
+        //        // soft delete atau callback ke server
+        //    }
+
+        //    //s.batchEditApi.StartEdit(e.visibleIndex);
+        //    //var rowValues = s.batchEditHelper.GetRowValues(e.visibleIndex); 
+        //    //s.DeleteRow(e.visibleIndex);
+        //    //s.GetBatchEditHelper().CanUpdate();
+        //}
+    }
+
+    function gvContentBatchListOnBeginCallback(s, e, Id, DetId) {
+
+    }
+
+    function gvContentBatchListOnEndCallback(s, e, Id, DetId) {
+        if (s.IsNewRowEditing && s.IsNewRowEditing()) {
+            s.FocusEditor("Batch");
+        }
+    }
+
+    function gvContentBatchListOnBatchEditStartEditing(s, e, Id, DetId) {
+    }
+
+    function gvContentBatchListOnBatchEditEndEditing(s, e, Id, DetId) {
+
+    } 
+
+    function gvContentBatchListOnBatchEditRowValidating(s, e, Id, DetId) {
+
+    }
+
+    function btnAddBatchOnClick(s, e, id, detId) {
+        console.log(id);
+        console.log(detId);
+    }
+
+    function popupBatch_EndCallback(s, e) {
+        $.validator.unobtrusive.parse("#Batch_formDetail");
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        if (!popup.IsVisible()) {
+            loadingPanel.Hide();
+            popup.ShowAtPos(400, 100);
+        }
+    }
+
+    function ViewBatch_OnClickBtnCancel(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+
+        gvDetail.PerformCallback();
+    }
+
+    function ViewBatch_OnClickBtnSaveChange(s, e) {
+        var popup = ASPxClientPopupControl.Cast("popupBatch");
+        popup.Hide();
+    }
+</script>
+
+@Html.Partial("Partial/Batch/Batch_Partial")

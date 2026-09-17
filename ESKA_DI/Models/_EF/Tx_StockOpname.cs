@@ -12,26 +12,24 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProductionTask_Item
+    public partial class Tx_StockOpname
     {
-        public Nullable<long> Id { get; set; }
-        public long DetId { get; set; }
-        public string ItemCode { get; set; }
-        public string ItemName { get; set; }
+        public long Id { get; set; }
+        public string TransType { get; set; }
+        public string TransNo { get; set; }
+        public Nullable<int> DocEntry { get; set; }
+        public string DocNum { get; set; }
+        public Nullable<System.DateTime> TransDate { get; set; }
+        public Nullable<System.DateTime> PostingDate { get; set; }
         public string WhsCode { get; set; }
         public string WhsName { get; set; }
-        public Nullable<int> LineNum { get; set; }
-        public string Direction { get; set; }
-        public string Batch { get; set; }
-        public Nullable<int> UomEntry { get; set; }
-        public string Uom { get; set; }
-        public string IsActive { get; set; }
-        public Nullable<decimal> QuantityPlanned { get; set; }
-        public Nullable<decimal> QuantityActual { get; set; }
-        public Nullable<decimal> QuantitySession { get; set; }
-        public Nullable<decimal> NettoTotal { get; set; }
-        public Nullable<decimal> NettoSession { get; set; }
+        public string Status { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string IsAfterPosted { get; set; }
         public string Comments { get; set; }
+        public string CancelReason { get; set; }
+        public string IsApproval { get; set; }
+        public string ApprovalMessages { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

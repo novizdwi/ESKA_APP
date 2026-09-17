@@ -12,26 +12,22 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProductionTask_Item
+    public partial class Tx_StockOpname_Item
     {
         public Nullable<long> Id { get; set; }
         public long DetId { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public string WhsCode { get; set; }
-        public string WhsName { get; set; }
-        public Nullable<int> LineNum { get; set; }
-        public string Direction { get; set; }
-        public string Batch { get; set; }
+        public Nullable<decimal> Quantity { get; set; }
+        public Nullable<decimal> QtyVariance { get; set; }
         public Nullable<int> UomEntry { get; set; }
         public string Uom { get; set; }
-        public string IsActive { get; set; }
-        public Nullable<decimal> QuantityPlanned { get; set; }
-        public Nullable<decimal> QuantityActual { get; set; }
-        public Nullable<decimal> QuantitySession { get; set; }
-        public Nullable<decimal> NettoTotal { get; set; }
-        public Nullable<decimal> NettoSession { get; set; }
-        public string Comments { get; set; }
+        public string AcctCode { get; set; }
+        public string AcctName { get; set; }
+        public Nullable<decimal> UnitPriceTc { get; set; }
+        public Nullable<decimal> LineTotal { get; set; }
+        public string FreeText { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

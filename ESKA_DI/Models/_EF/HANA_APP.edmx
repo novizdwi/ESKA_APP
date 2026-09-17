@@ -1268,7 +1268,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="ProcessingDate" Type="timestamp" />
           <Property Name="EndDate" Type="timestamp" />
           <Property Name="MachineId" Type="int" />
-          <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
+          <Property Name="MachineCode" Type="nvarchar" MaxLength="50" />
           <Property Name="DurationPerItem" Type="int" />
           <Property Name="DurationTotal" Type="int" />
           <Property Name="Comments" Type="nvarchar" MaxLength="254" />
@@ -1297,8 +1297,10 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="PlannedDate" Type="timestamp" />
           <Property Name="ActualDate" Type="timestamp" />
           <Property Name="QuantityPlanned" Type="decimal" Precision="16" Scale="4" />
-          <Property Name="QuantityActual" Type="decimal" Precision="16" Scale="4" />
-          <Property Name="Netto" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityComplete" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="NettoComplete" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityReject" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="NettoReject" Type="decimal" Precision="16" Scale="4" />
           <Property Name="IsRunningTask" Type="varchar" MaxLength="1" />
           <Property Name="EstimatedHours" Type="int" />
           <Property Name="ActualHours" Type="int" />
@@ -1317,8 +1319,10 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="DetId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OperatorId" Type="int" />
           <Property Name="OperatorName" Type="nvarchar" MaxLength="100" />
-          <Property Name="Quantity" Type="decimal" Precision="16" Scale="4" />
-          <Property Name="Netto" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityComplete" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="NettoComplete" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityReject" Type="decimal" Precision="16" Scale="4" />
+          <Property Name="NettoReject" Type="decimal" Precision="16" Scale="4" />
           <Property Name="Batch" Type="nvarchar" MaxLength="50" />
           <Property Name="StartTime" Type="timestamp" />
           <Property Name="EndTime" Type="timestamp" />
@@ -1363,7 +1367,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="Batch" Type="nvarchar" MaxLength="50" />
           <Property Name="UomEntry" Type="int" />
           <Property Name="Uom" Type="nvarchar" MaxLength="100" />
-          <Property Name="IsLocked" Type="varchar" MaxLength="1" />
+          <Property Name="IsActive" Type="varchar" MaxLength="1" />
           <Property Name="QuantityPlanned" Type="decimal" Precision="16" Scale="4" />
           <Property Name="QuantityActual" Type="decimal" Precision="16" Scale="4" />
           <Property Name="QuantitySession" Type="decimal" Precision="16" Scale="4" />
@@ -1532,6 +1536,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tm_Layout" EntityType="Model1.Tm_Layout" />
           <EntitySet Name="Tm_Layout_Role" EntityType="Model1.Tm_Layout_Role" />
           <EntitySet Name="Tm_Layout_User" EntityType="Model1.Tm_Layout_User" />
+          <EntitySet Name="Tm_Machine" EntityType="Model1.Tm_Machine" />
           <EntitySet Name="Tm_MasterSetting" EntityType="Model1.Tm_MasterSetting" />
           <EntitySet Name="Tm_Position" EntityType="Model1.Tm_Position" />
           <EntitySet Name="Tm_Query" EntityType="Model1.Tm_Query" />
@@ -1587,7 +1592,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <EntitySet Name="Tx_ProductionTask_Item_Batch" EntityType="Model1.Tx_ProductionTask_Item_Batch" />
           <EntitySet Name="WeighbridgeTransactions" EntityType="Model1.WeighbridgeTransactions" />
           <EntitySet Name="Tp_UserAlert" EntityType="Model1.Tp_UserAlert" />
-          <EntitySet Name="Tm_Machine" EntityType="Model1.Tm_Machine" />
         </EntityContainer>
         <EntityType Name="Tm_Alert">
           <Key>
@@ -1966,6 +1970,20 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="DetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="IsTick" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="CreatedUser" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" />
+          <Property Name="ModifiedUser" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Tm_Machine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MachineName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedUser" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" />
@@ -2821,7 +2839,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="ProcessingDate" Type="DateTime" />
           <Property Name="EndDate" Type="DateTime" />
           <Property Name="MachineId" Type="Int32" />
-          <Property Name="MachineName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MachineCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DurationPerItem" Type="Int32" />
           <Property Name="DurationTotal" Type="Int32" />
           <Property Name="Comments" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
@@ -2850,8 +2868,10 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="PlannedDate" Type="DateTime" />
           <Property Name="ActualDate" Type="DateTime" />
           <Property Name="QuantityPlanned" Type="Decimal" Precision="16" Scale="4" />
-          <Property Name="QuantityActual" Type="Decimal" Precision="16" Scale="4" />
-          <Property Name="Netto" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityComplete" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="NettoComplete" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityReject" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="NettoReject" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="IsRunningTask" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="EstimatedHours" Type="Int32" />
           <Property Name="ActualHours" Type="Int32" />
@@ -2870,8 +2890,10 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="DetId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OperatorId" Type="Int32" />
           <Property Name="OperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Decimal" Precision="16" Scale="4" />
-          <Property Name="Netto" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityComplete" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="NettoComplete" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="QuantityReject" Type="Decimal" Precision="16" Scale="4" />
+          <Property Name="NettoReject" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StartTime" Type="DateTime" />
           <Property Name="EndTime" Type="DateTime" />
@@ -2916,7 +2938,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UomEntry" Type="Int32" />
           <Property Name="Uom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="IsLocked" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="QuantityPlanned" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="QuantityActual" Type="Decimal" Precision="16" Scale="4" />
           <Property Name="QuantitySession" Type="Decimal" Precision="16" Scale="4" />
@@ -2971,20 +2993,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="SenderId" Type="Int32" />
           <Property Name="IsRead" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="LastShowTime" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="Tm_Machine">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MachineCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MachineName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <Property Name="CreatedUser" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" />
-          <Property Name="ModifiedUser" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -3393,6 +3401,21 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="IsTick" ColumnName="IsTick" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tm_Machine">
+            <EntityTypeMapping TypeName="Model1.Tm_Machine">
+              <MappingFragment StoreEntitySet="Tm_Machine">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="MachineCode" ColumnName="MachineCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -4286,7 +4309,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="DurationTotal" ColumnName="DurationTotal" />
                 <ScalarProperty Name="DurationPerItem" ColumnName="DurationPerItem" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="MachineCode" ColumnName="MachineCode" />
                 <ScalarProperty Name="MachineId" ColumnName="MachineId" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="ProcessingDate" ColumnName="ProcessingDate" />
@@ -4315,8 +4338,10 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="ActualHours" ColumnName="ActualHours" />
                 <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
                 <ScalarProperty Name="IsRunningTask" ColumnName="IsRunningTask" />
-                <ScalarProperty Name="Netto" ColumnName="Netto" />
-                <ScalarProperty Name="QuantityActual" ColumnName="QuantityActual" />
+                <ScalarProperty Name="NettoReject" ColumnName="NettoReject" />
+                <ScalarProperty Name="QuantityReject" ColumnName="QuantityReject" />
+                <ScalarProperty Name="NettoComplete" ColumnName="NettoComplete" />
+                <ScalarProperty Name="QuantityComplete" ColumnName="QuantityComplete" />
                 <ScalarProperty Name="QuantityPlanned" ColumnName="QuantityPlanned" />
                 <ScalarProperty Name="ActualDate" ColumnName="ActualDate" />
                 <ScalarProperty Name="PlannedDate" ColumnName="PlannedDate" />
@@ -4350,8 +4375,10 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="Batch" ColumnName="Batch" />
-                <ScalarProperty Name="Netto" ColumnName="Netto" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="NettoReject" ColumnName="NettoReject" />
+                <ScalarProperty Name="QuantityReject" ColumnName="QuantityReject" />
+                <ScalarProperty Name="NettoComplete" ColumnName="NettoComplete" />
+                <ScalarProperty Name="QuantityComplete" ColumnName="QuantityComplete" />
                 <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
                 <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
                 <ScalarProperty Name="DetId" ColumnName="DetId" />
@@ -4390,7 +4417,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="QuantitySession" ColumnName="QuantitySession" />
                 <ScalarProperty Name="QuantityActual" ColumnName="QuantityActual" />
                 <ScalarProperty Name="QuantityPlanned" ColumnName="QuantityPlanned" />
-                <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Uom" ColumnName="Uom" />
                 <ScalarProperty Name="UomEntry" ColumnName="UomEntry" />
                 <ScalarProperty Name="Batch" ColumnName="Batch" />
@@ -4448,21 +4475,6 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="BaseId" ColumnName="BaseId" />
                 <ScalarProperty Name="BaseType" ColumnName="BaseType" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tm_Machine">
-            <EntityTypeMapping TypeName="Model1.Tm_Machine">
-              <MappingFragment StoreEntitySet="Tm_Machine">
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="MachineCode" ColumnName="MachineCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

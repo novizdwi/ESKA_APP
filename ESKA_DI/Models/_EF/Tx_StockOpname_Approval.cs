@@ -12,23 +12,16 @@ namespace ESKA_DI.Models._EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Tx_ProductionTask_Activity
+    public partial class Tx_StockOpname_Approval
     {
-        public Nullable<long> Id { get; set; }
-        public long DetId { get; set; }
-        public Nullable<int> OperatorId { get; set; }
-        public string OperatorName { get; set; }
-        public Nullable<decimal> QuantityComplete { get; set; }
-        public Nullable<decimal> NettoComplete { get; set; }
-        public Nullable<decimal> QuantityReject { get; set; }
-        public Nullable<decimal> NettoReject { get; set; }
-        public string Batch { get; set; }
-        public Nullable<System.DateTime> StartTime { get; set; }
-        public Nullable<System.DateTime> EndTime { get; set; }
-        public Nullable<long> TotalWorkDuration { get; set; }
-        public Nullable<long> TotalPauseDuration { get; set; }
+        public Nullable<int> Id { get; set; }
+        public int DetId { get; set; }
+        public Nullable<int> StageId { get; set; }
+        public Nullable<int> UserId { get; set; }
+        public Nullable<int> Step { get; set; }
         public string Status { get; set; }
         public string Comments { get; set; }
+        public Nullable<System.DateTime> ActionDate { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }

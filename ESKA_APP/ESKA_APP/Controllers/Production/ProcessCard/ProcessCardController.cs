@@ -1,4 +1,4 @@
-﻿using Models;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -146,7 +146,7 @@ namespace Controllers.Production
             ProcessCardModel._UserId = (int)Session["userId"];
             processCardService = new ProcessCardService();
             ProcessCardModel._FormMode = FormModeEnum.Edit;
-            
+
             processCardService.Post(userId, ProcessCardModel);
             ProcessCardModel = processCardService.GetById(userId, ProcessCardModel.Id);
 
@@ -270,6 +270,13 @@ namespace Controllers.Production
         public JsonResult GetOperatorByRouting( string routingCode )
         {
             var list = Models._Utils.GeneralGetList .GetUserRoutingList(routingCode);
+            return Json(list);
+        }
+
+        [HttpPost]
+        public JsonResult GetMachineList()
+        {
+            var list = Models._Utils.GeneralGetList.GetMachineList();
             return Json(list);
         }
     }

@@ -314,7 +314,7 @@ CREATE COLUMN TABLE "Tx_ProcessCard_Detail" (
     "EndDate" TIMESTAMP,
 	
     "MachineId" INTEGER,
-    "MachineName" NVARCHAR(100),
+    "MachineCode" NVARCHAR(50),
 
     "DurationPerItem" INT,
     "DurationTotal" INT,
@@ -372,8 +372,10 @@ CREATE COLUMN TABLE "Tx_ProductionTask" (
     "ActualDate" TIMESTAMP,
 
     "QuantityPlanned" DECIMAL(16,4),
-    "QuantityActual" DECIMAL(16,4),
-	"Netto" DECIMAL(16,4),
+	"QuantityComplete" DECIMAL(16,4),
+	"NettoComplete" DECIMAL(16,4),
+    "QuantityReject" DECIMAL(16,4),
+	"NettoReject" DECIMAL(16,4),
 	
 	"IsRunningTask" CHAR(1),
 	
@@ -406,7 +408,7 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Item" (
 	"Batch" NVARCHAR(50),
 	"UomEntry" INT,
     "Uom" NVARCHAR(100), 
-    "IsLocked" CHAR(1),
+    "IsActive" CHAR(1),
 	
     "QuantityPlanned" DECIMAL(16,4),
     "QuantityActual" DECIMAL(16,4),
@@ -452,8 +454,11 @@ CREATE COLUMN TABLE "Tx_ProductionTask_Activity" (
     "OperatorId" INTEGER, 
     "OperatorName" NVARCHAR(100),
     
-    "Quantity" DECIMAL(16,4),
-	"Netto" DECIMAL(16,4),
+    "QuantityComplete" DECIMAL(16,4),
+	"NettoComplete" DECIMAL(16,4),
+    "QuantityReject" DECIMAL(16,4),
+	"NettoReject" DECIMAL(16,4),
+	
 	"Batch" NVARCHAR(50),
 		
     "StartTime" TIMESTAMP,
