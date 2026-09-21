@@ -155,6 +155,22 @@
 
     });
 
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+        itemSettings.Caption = "Comments";
+        itemSettings.FieldName = "Comments";
+        itemSettings.Name = "grpComments";
+
+        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Comments";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 280;
+        txt.Height = 120;
+    });
+
     groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
@@ -204,15 +220,17 @@
     groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
-        itemSettings.Caption = "Quantity";
-        itemSettings.FieldName = "GrpQuantity";
+        itemSettings.Caption = "Quantity Complete";
+        itemSettings.FieldName = "QuantityComplete";
 
         var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
         txt.Properties.NumberType = SpinEditNumberType.Float;
         txt.Properties.DisplayFormatString = "#,###";
         txt.Properties.DisplayFormatInEditMode = true;
-        txt.Name = "Quantity";
+        txt.Name = "QuantityComplete";
         txt.Properties.AllowMouseWheel = false;
+        txt.Properties.MinValue = 0;
+        txt.Properties.MaxValue = 999999999;
 
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editornoimage";
@@ -221,26 +239,22 @@
         txt.Width = 230;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
         txt.Properties.SpinButtons.ShowIncrementButtons = false;
-
-        txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
-        txt.Properties.ValidationSettings.RequiredField.ErrorText = "Quantity is required";
-        txt.Properties.ValidationSettings.Display = Display.Dynamic;
-
     });
 
-    // Netto produk jadi -> Tx_ProductionTask."Netto". Diletakkan tepat di bawah Quantity.
     groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
-        itemSettings.Caption = "Netto";
-        itemSettings.FieldName = "Netto";
+        itemSettings.Caption = "Netto Complete";
+        itemSettings.FieldName = "NettoComplete";
 
         var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
         txt.Properties.NumberType = SpinEditNumberType.Float;
-        txt.Properties.DisplayFormatString = "#,###";
+        txt.Properties.DisplayFormatString = "#,##0.00";
         txt.Properties.DisplayFormatInEditMode = true;
-        txt.Name = "Netto";
+        txt.Name = "NettoComplete";
         txt.Properties.AllowMouseWheel = false;
+        txt.Properties.MinValue = 0;
+        txt.Properties.MaxValue = 999999999;
 
         txt.ShowModelErrors = true;
         txt.ControlStyle.CssClass = "editornoimage";
@@ -251,21 +265,52 @@
         txt.Properties.SpinButtons.ShowIncrementButtons = false;
     });
 
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Quantity Reject";
+        itemSettings.FieldName = "QuantityReject";
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.NumberType = SpinEditNumberType.Float;
+        txt.Properties.DisplayFormatString = "#,###";
+        txt.Properties.DisplayFormatInEditMode = true;
+        txt.Name = "QuantityReject";
+        txt.Properties.AllowMouseWheel = false;
+        txt.Properties.MinValue = 0;
+        txt.Properties.MaxValue = 999999999;
+
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Width = 230;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
+    });
 
     groupItem_Col2.Items.Add(itemSettings =>
     {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
-        itemSettings.Caption = "Comments";
-        itemSettings.FieldName = "Comments";
-        itemSettings.Name = "grpComments";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Netto Reject";
+        itemSettings.FieldName = "NettoReject";
 
-        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Comments";
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.NumberType = SpinEditNumberType.Float;
+        txt.Properties.DisplayFormatString = "#,##0.00";
+        txt.Properties.DisplayFormatInEditMode = true;
+        txt.Name = "NettoReject";
+        txt.Properties.AllowMouseWheel = false;
+        txt.Properties.MinValue = 0;
+        txt.Properties.MaxValue = 999999999;
+
         txt.ShowModelErrors = true;
-        txt.ControlStyle.CssClass = "editor";
+        txt.ControlStyle.CssClass = "editornoimage";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 280;
-        txt.Height = 120;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Width = 230;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
     });
 
     groupItem_2.Items.AddTabbedGroupItem(group =>

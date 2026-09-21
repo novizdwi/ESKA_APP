@@ -643,10 +643,13 @@ new
             return;
         }
 
-        // Quantity wajib
-        if (data.Quantity == null || data.Quantity === "") {
-            var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
+        // Quantity Complete atau Quantity Reject minimal salah satu harus terisi > 0
+        var qtyComplete = parseFloat(data.QuantityComplete) || 0;
+        var qtyReject = parseFloat(data.QuantityReject) || 0;
+        if (qtyComplete <= 0 && qtyReject <= 0) {
+            var eQuantity = ASPxClientSpinEdit.Cast("QuantityComplete");
             if (eQuantity != null) { eQuantity.Focus(); }
+            alert("Quantity Actual atau Quantity Reject harus diisi lebih dari 0");
             return;
         }
 
@@ -709,8 +712,10 @@ new
         var eId = ASPxClientTextBox.Cast("Id");
         var eDetId = ASPxClientTextBox.Cast("DetId");
         var eBatch = ASPxClientTextBox.Cast("Batch");
-        var eQuantity = ASPxClientSpinEdit.Cast("Quantity");
-        var eNetto = ASPxClientSpinEdit.Cast("Netto");
+        var eQuantityComplete = ASPxClientSpinEdit.Cast("QuantityComplete");
+        var eNettoComplete = ASPxClientSpinEdit.Cast("NettoComplete");
+        var eQuantityReject = ASPxClientSpinEdit.Cast("QuantityReject");
+        var eNettoReject = ASPxClientSpinEdit.Cast("NettoReject");
         var eComments = ASPxClientMemo.Cast("Comments");
 
         return {
@@ -720,8 +725,10 @@ new
             // Editor bernama "Batch", tapi properti model nya "FinishBatch".
             FinishBatch: eBatch != null ? eBatch.GetValue() : null,
 
-            Quantity: eQuantity != null ? eQuantity.GetValue() : null,
-            Netto: eNetto != null ? eNetto.GetValue() : null,
+            QuantityComplete: eQuantityComplete != null ? eQuantityComplete.GetValue() : null,
+            NettoComplete: eNettoComplete != null ? eNettoComplete.GetValue() : null,
+            QuantityReject: eQuantityReject != null ? eQuantityReject.GetValue() : null,
+            NettoReject: eNettoReject != null ? eNettoReject.GetValue() : null,
             Comments: eComments != null ? eComments.GetValue() : null,
 
             //ListItem_: Details_

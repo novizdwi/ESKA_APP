@@ -11,9 +11,9 @@
 
     ViewBag.Id = Model.Id ?? 0;
 
-    // ---- WAKTU MULAI : ambil jam dari ActivityDate ----
+    // ---- WAKTU MULAI : tanggal + jam CreatedDate Tx_ProductionTask_Activity (ActivityDate), contoh 21/09/2026 14:52 ----
     string waktuMulai = Model.ActivityDate.HasValue
-        ? Model.ActivityDate.Value.ToString("HH:mm")
+        ? Model.ActivityDate.Value.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)
         : "-";
 
     // ---- DURASI : jam saat ini dikurang ActivityDate ----
@@ -121,6 +121,18 @@
     }).SetNestedContent(() =>
     {
         ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.ItemName) + "</div>"));
+    });
+
+    groupHeader.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>Due Date</span>";
+    }).SetNestedContent(() =>
+    {
+        string dueDate = Model.DueDate.HasValue
+            ? Model.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+            : "-";
+
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + dueDate + "</div>"));
     });
 
     settings.Items.AddEmptyItem().Height = 12;

@@ -73,6 +73,22 @@
         column.Caption = "Item Name";
     });
 
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DueDate";
+        column.Name = "DueDate";
+        column.Caption = "Due Date";
+        column.SetDataItemTemplateContent(c =>
+        {
+            var dueDate = DataBinder.Eval(c.DataItem, "DueDate");
+            string dueDateText = (dueDate == null || dueDate == DBNull.Value)
+                ? "-"
+                : Convert.ToDateTime(dueDate).ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            ViewContext.Writer.Write(dueDateText);
+        });
+    });
+
 
     settings.Columns.Add(column =>
     {
