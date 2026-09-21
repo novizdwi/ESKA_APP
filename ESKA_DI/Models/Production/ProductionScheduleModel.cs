@@ -104,13 +104,17 @@ namespace Models.Production
         
         public TimeSpan? PracticeHours { get; set; }
         
-        public int MachineNo { get; set; }
+        public int? MachineId { get; set; }
+
+        public string MachineCode { get; set; }
 
         public string ProductionStatus { get; set; }
 
         public decimal? PlannedQty { get; set; }
 
-        public decimal? Quantity { get; set; }
+        public decimal? QuantityComplete { get; set; }
+
+        public decimal? QuantityReject { get; set; }
 
         public string ActualHours_ { get; set; }
 
@@ -142,6 +146,8 @@ namespace Models.Production
         public string ProductionTaskStatus { get; set; }
         public int? OperatorId { get; set; }
         public string OperatorName { get; set; }
+        public int? MachineId { get; set; }
+        public string MachineCode { get; set; }
     }
     #endregion
 
@@ -286,7 +292,8 @@ namespace Models.Production
                     T2.""Id"" AS ""ProductionTaskId"",
                     T2.""TransNo"" AS ""ProductionTaskTransNo"",
                     T2.""Status"" AS ""ProductionStatus"",
-                    T2.""QuantityActual"" AS ""Quantity"",
+                    T2.""QuantityComplete"" AS ""QuantityComplete"",
+                    T2.""QuantityReject"" AS ""QuantityReject"",
                     T2.""ActualHours"" AS ""ActualHours"",
                     -- ""DurationTotal"" dan ""ActualHours"" dua-duanya disimpan dalam DETIK
                     -- (""ActualHours"" diisi SpProductionTaskActivity_UpdateTask dari
@@ -358,6 +365,8 @@ namespace Models.Production
                                 // RULE 2 & 3: update Tx_ProcessCard_Detail
                                 detail.OperatorId = op.OperatorId;
                                 detail.OperatorName = op.OperatorName;
+                                detail.MachineId = op.MachineId;
+                                detail.MachineCode = op.MachineCode;
                                 detail.ModifiedDate = dtModified;
                                 detail.ModifiedUser = userId;
 

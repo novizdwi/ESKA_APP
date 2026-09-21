@@ -74,5 +74,12 @@ namespace Controllers.Production
             var refreshed = productionScheduleService.GetNewModel(userId);
             return PartialView(VIEW_FORM_PARTIAL, refreshed);
         }
+
+        [HttpPost]
+        public JsonResult GetMachineList()
+        {
+            var list = Models._Utils.GeneralGetList.GetMachineList();
+            return Json(list);
+        }
     }
 }

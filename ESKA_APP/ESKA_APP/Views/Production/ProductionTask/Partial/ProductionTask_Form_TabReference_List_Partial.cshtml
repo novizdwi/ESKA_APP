@@ -80,7 +80,7 @@
         column.Caption = "Target";
         column.SetDataItemTemplateContent(c =>
         {
-            var qtyActual = DataBinder.Eval(c.DataItem, "QuantityActual_");
+            var qtyActual = DataBinder.Eval(c.DataItem, "QuantityComplete_");
             var qty = DataBinder.Eval(c.DataItem, "QuantityPlanned");
             var uom = DataBinder.Eval(c.DataItem, "Uom");
             ViewContext.Writer.Write(

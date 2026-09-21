@@ -225,6 +225,34 @@
 
     settings.Columns.Add(column =>
     {
+        column.FieldName = "MachineId";
+        column.Name = "MachineId";
+        column.Caption = "MachineId";
+        column.Width = 0;
+        column.ColumnType = MVCxGridViewColumnType.TextBox;
+        column.ReadOnly = false;
+        var txt = column.PropertiesEdit as TextBoxProperties;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "MachineCode";
+        column.Name = "MachineCode";
+        column.Caption = "Machine";
+        column.Width = 150;
+        column.ColumnType = MVCxGridViewColumnType.ComboBox;
+
+        ComboBoxProperties cbo = column.PropertiesEdit as ComboBoxProperties;
+        cbo.TextField = "Name";
+        cbo.ValueField = "Name";
+        cbo.ValueType = typeof(string);
+        cbo.DataSource = Models._Utils.GeneralGetList.GetMachines(); // Code=Id, Name=MachineCode
+        cbo.ClientSideEvents.SelectedIndexChanged = "function(s, e){ gvMachineOnChanged(s, e, '" + gridName + "'); }";
+    });
+
+    settings.Columns.Add(column =>
+    {
         column.FieldName = "PlannedQty";
         column.Name = "PlannedQty";
         column.Caption = "Planned Qty";
@@ -249,9 +277,9 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "Quantity";
-        column.Name = "Quantity";
-        column.Caption = "Finished Qty";
+        column.FieldName = "QuantityComplete";
+        column.Name = "QuantityComplete";
+        column.Caption = "Quantity Complete";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 100;
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
@@ -261,7 +289,30 @@
 
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.NumberType = SpinEditNumberType.Float;
-        txt.DisplayFormatString = "#,###.00";
+        txt.DisplayFormatString = "#,###";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+        txt.Width = 120;
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "QuantityReject";
+        column.Name = "QuantityReject";
+        column.Caption = "Quantity Reject";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = true;
+        column.PropertiesEdit.Style.BackColor = System.Drawing.Color.FromName("#EDEDED");
+
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Float;
+        txt.DisplayFormatString = "#,###";
         txt.DisplayFormatInEditMode = true;
         txt.AllowMouseWheel = false;
         txt.Width = 120;

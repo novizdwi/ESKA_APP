@@ -467,7 +467,7 @@
     }
 
     function gvDetailBatchStartEditing(s, e) {
-        if (e.focusedColumn && e.focusedColumn.fieldName === "OperatorId") {
+        if (e.focusedColumn && (e.focusedColumn.fieldName === "OperatorId" || e.focusedColumn.fieldName === "MachineCode")) {
             var taskId = s.batchEditApi.GetCellValue(e.visibleIndex, "ProductionTaskId");
             var status = s.batchEditApi.GetCellValue(e.visibleIndex, "ProductionStatus");
             var hasTask = (taskId !== null && taskId !== "" && typeof taskId !== "undefined");
@@ -486,19 +486,59 @@
         grid.batchEditApi.SetCellValue(idx, "OperatorId", s.GetValue());
         grid.batchEditApi.SetCellValue(idx, "OperatorName", s.GetText());
 
+        CaptureLineChange(grid, idx, { OperatorId: s.GetValue(), OperatorName: s.GetText() });
+    }
+
+    // Peta MachineCode -> MachineId, diisi sekali dari master Tm_Machine.
+    window.eskaMachineCodeToId = window.eskaMachineCodeToId || {};
+    $.ajax({
+        url: '@Url.Action("GetMachineList", "ProductionSchedule")',
+        type: 'POST',
+        success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                window.eskaMachineCodeToId[data[i].Name] = parseInt(data[i].Code, 10);
+            }
+        }
+    });
+
+    // TANGKAP machine ke map saat combo berubah; MachineId ikut terisi otomatis
+    function gvMachineOnChanged(s, e, gridName) {
+        var grid = ASPxClientGridView.Cast(gridName);
+        if (!grid) return;
+        var idx = window.curEditIndex;
+        if (idx === null || typeof idx === "undefined" || idx < 0) return;
+
+        var code = s.GetText();
+        var machineId = window.eskaMachineCodeToId[code];
+        if (typeof machineId === "undefined") machineId = null;
+
+        grid.batchEditApi.SetCellValue(idx, "MachineCode", code);
+        grid.batchEditApi.SetCellValue(idx, "MachineId", machineId);
+
+        CaptureLineChange(grid, idx, { MachineId: machineId, MachineCode: code });
+    }
+
+    // Satu entri per baris (Id_DetId) berisi operator DAN machine. Field yang tidak
+    // berubah diambil dari nilai sel saat ini, supaya tidak menimpa dengan kosong.
+    function CaptureLineChange(grid, idx, overrides) {
         var id = grid.batchEditApi.GetCellValue(idx, "Id");
         var detId = grid.batchEditApi.GetCellValue(idx, "DetId");
-        var taskId = grid.batchEditApi.GetCellValue(idx, "ProductionTaskId");
-        var taskStat = grid.batchEditApi.GetCellValue(idx, "ProductionStatus");
 
-        window.operatorChanges[id + "_" + detId] = {
+        var entry = {
             Id: id,
             DetId: detId,
-            ProductionTaskId: taskId,
-            ProductionTaskStatus: taskStat,
-            OperatorId: s.GetValue(),
-            OperatorName: s.GetText()
+            ProductionTaskId: grid.batchEditApi.GetCellValue(idx, "ProductionTaskId"),
+            ProductionTaskStatus: grid.batchEditApi.GetCellValue(idx, "ProductionStatus"),
+            OperatorId: grid.batchEditApi.GetCellValue(idx, "OperatorId"),
+            OperatorName: grid.batchEditApi.GetCellValue(idx, "OperatorName"),
+            MachineId: grid.batchEditApi.GetCellValue(idx, "MachineId"),
+            MachineCode: grid.batchEditApi.GetCellValue(idx, "MachineCode")
         };
+        for (var k in overrides) {
+            if (overrides.hasOwnProperty(k)) entry[k] = overrides[k];
+        }
+
+        window.operatorChanges[id + "_" + detId] = entry;
     }
 
 

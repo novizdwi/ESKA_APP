@@ -39,7 +39,9 @@ namespace Models.Production
 
         public decimal? QuantityPlanned { get; set; }
 
-        public decimal? QuantityActual { get; set; }
+        public decimal? QuantityComplete { get; set; }
+
+        public decimal? QuantityReject { get; set; }
 
         public decimal? QuantityRemain { get; set; }
 
@@ -277,8 +279,9 @@ namespace Models.Production
 	        T0.""DocNum"",
 	        T2.""RoutingName"",
 	        T0.""QuantityPlanned"",
-	        T0.""QuantityActual"",
-	        COALESCE(T0.""QuantityPlanned"", 0 ) - COALESCE(T0.""QuantityActual"", 0) AS ""QuantityRemain"",
+	        T0.""QuantityComplete"",
+	        T0.""QuantityReject"",
+	        COALESCE(T0.""QuantityPlanned"", 0 ) - COALESCE(T0.""QuantityComplete"", 0) AS ""QuantityRemain"",
 	        T0.""EstimatedHours"",
 	        T0.""ActualHours"",
             (   

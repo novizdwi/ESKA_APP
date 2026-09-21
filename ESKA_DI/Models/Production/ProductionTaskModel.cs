@@ -56,9 +56,9 @@ namespace Models.Production
 
         public DateTime? PlannedDate { get; set; }
 
-        public decimal? QuantityActual { get; set; }
+        public decimal? QuantityComplete { get; set; }
 
-        public decimal? QuantityActual_ { get; set; }
+        public decimal? QuantityComplete_ { get; set; }
  
         public decimal? QuantityPlanned { get; set; }
 
@@ -150,7 +150,7 @@ namespace Models.Production
         private static string SqlSelect = @"SELECT 
             T0.*,
             T2.""RoutingName"",
-            COALESCE(T0.""QuantityActual"",0) AS ""QuantityActual_""
+            COALESCE(T0.""QuantityComplete"",0) AS ""QuantityComplete_""
             FROM ""Tx_ProductionTask"" T0 
             INNER JOIN ""Tx_ProcessCard"" T1 ON T0.""BaseId"" = T1.""Id"" 
             INNER JOIN ""Tx_ProcessCard_Detail"" T2 ON T0.""BaseId"" = T2.""Id"" AND T0.""BaseDetId"" = T2.""DetId""  
