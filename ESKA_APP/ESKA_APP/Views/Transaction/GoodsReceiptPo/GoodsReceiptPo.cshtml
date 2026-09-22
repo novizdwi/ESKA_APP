@@ -690,6 +690,7 @@
                 BaseLine: data.LineNum,
                 ItemCode: data.ItemCode,
                 ItemName: data.ItemName,
+                QuantityOpen: data.OpenQty ? data.OpenQty : null,
                 Quantity: data.OpenQty ? Math.floor(data.OpenQty) : 0,
                 Uom: data.UomCode,
                 UomEntry: data.IUoMEntry,

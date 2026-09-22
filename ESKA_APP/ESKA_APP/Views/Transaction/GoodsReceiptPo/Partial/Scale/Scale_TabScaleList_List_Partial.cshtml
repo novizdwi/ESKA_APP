@@ -144,7 +144,8 @@
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         var txt = column.PropertiesEdit as SpinEditProperties;
         txt.NumberType = SpinEditNumberType.Float;
-        txt.DisplayFormatString = "N2";
+        // Tanpa desimal, seragam dengan Quantity & angka lain di GRPO (item, batch).
+        txt.DisplayFormatString = "N0";
         txt.DisplayFormatInEditMode = true;
         txt.AllowMouseWheel = false;
 

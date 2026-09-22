@@ -16,6 +16,8 @@ namespace Models._Utils
         public long? DetDetDetId { get; set; }
         public string TransNo { get; set; }
         public string DocNum { get; set; }
+        public string VendorCode { get; set; }
+        public string VendorName { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public string WhsCode { get; set; }
@@ -34,7 +36,8 @@ namespace Models._Utils
         public string Batch;
         public string Scale;
         public string WhseCol;   // "Whse" (GRPO) atau "WhsCode" (Re-Process)
-        public bool HasDocNum;   // header punya kolom DocNum?
+        public bool HasDocNum;   // header punya nomor PO ("BaseDocNum") untuk kolom DocNum staging?
+        public bool HasVendor;   // header punya kolom VendorCode/VendorName?
     }
 
     public class ScaleStagingService
@@ -52,7 +55,8 @@ namespace Models._Utils
                         Batch = "Tx_GoodsReceiptPO_Item_Batch",
                         Scale = "Tx_GoodsReceiptPO_Item_Batch_Scale",
                         WhseCol = "Whse",
-                        HasDocNum = true
+                        HasDocNum = true,
+                        HasVendor = true
                     };
                 case "IssueAndReceiptIssue":
                     return new ScaleStagingTableSet
@@ -93,13 +97,18 @@ namespace Models._Utils
                     try
                     {
                         // 1. Gather data dari baris Scale ke atas.
-                        string docNumExpr = t.HasDocNum ? "T0.\"DocNum\"" : "CAST(NULL AS NVARCHAR(50))";
+                        // GRPO: DocNum staging = nomor PO (header "BaseDocNum"), bukan DocNum GRPO yang baru terisi setelah posting.
+                        string docNumExpr = t.HasDocNum ? "T0.\"BaseDocNum\"" : "CAST(NULL AS NVARCHAR(50))";
+                        string vendorCodeExpr = t.HasVendor ? "T0.\"VendorCode\"" : "CAST(NULL AS NVARCHAR(50))";
+                        string vendorNameExpr = t.HasVendor ? "T0.\"VendorName\"" : "CAST(NULL AS NVARCHAR(100))";
                         string sqlGather = string.Format(@"SELECT T0.""Id"",
                                     T1.""DetId"",
                                     T2.""DetDetId"",
                                     T3.""DetDetDetId"",
                                     T0.""TransNo"",
                                     {0} AS ""DocNum"",
+                                    {6} AS ""VendorCode"",
+                                    {7} AS ""VendorName"",
                                     T1.""ItemCode"",
                                     T1.""ItemName"",
                                     T1.""{1}"" AS ""WhsCode"",
@@ -113,7 +122,7 @@ namespace Models._Utils
                                 INNER JOIN ""{4}"" T2 ON T1.""DetId"" = T2.""DetId""
                                 INNER JOIN ""{5}"" T3 ON T2.""DetDetId"" = T3.""DetDetId""
                                 WHERE T3.""DetDetDetId"" = :p0 ",
-                                docNumExpr, t.WhseCol, t.Header, t.Item, t.Batch, t.Scale);
+                                docNumExpr, t.WhseCol, t.Header, t.Item, t.Batch, t.Scale, vendorCodeExpr, vendorNameExpr);
 
                         ScaleStagingRow row = CONTEXT.Database.SqlQuery<ScaleStagingRow>(sqlGather, detDetDetId).FirstOrDefault();
                         if (row == null)
@@ -171,6 +180,8 @@ namespace Models._Utils
                             DetDetDetId = row.DetDetDetId,
                             TransNo = row.TransNo,
                             DocNum = row.DocNum,
+                            VendorCode = row.VendorCode,
+                            VendorName = row.VendorName,
                             ItemCode = row.ItemCode,
                             ItemName = row.ItemName,
                             WhsCode = row.WhsCode,

@@ -157,6 +157,8 @@
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        // Tanpa desimal, seragam dengan angka qty di grid item/batch/scale GRPO.
+        txt.Properties.DisplayFormatString = "N0";
         txt.Width = 250;
     });
 
@@ -172,6 +174,7 @@
             txt.ReadOnly = true;
             txt.ControlStyle.CssClass = "editor";
             txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            txt.Properties.DisplayFormatString = "N0";
             txt.Width = 250;
         });
 

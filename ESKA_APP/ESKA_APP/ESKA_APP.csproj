@@ -498,10 +498,12 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\SQLs\Alter_GoodsReceiptPO_Item_QuantityOpen.sql" />
     <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
     <Content Include="Scripts\SQLs\Create Schema.sql" />
     <Content Include="Scripts\SQLs\Insert Into.sql" />
     <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
+    <Content Include="Scripts\SQLs\Rebuild_Tp_ScaleStaging_AddVendor.sql" />
     <Content Include="Scripts\Test\DXR.js" />
     <Content Include="Views\Web.config" />
   </ItemGroup>

@@ -109,6 +109,9 @@ namespace Models.Transaction
 
         public string ItemName { get; set; }
 
+        // Sisa qty PO yang masih open (POR1."OpenQty") saat item ditambahkan.
+        public decimal? QuantityOpen { get; set; }
+
         public int? Quantity { get; set; }
 
         public int? QuantityCreated { get; set; }

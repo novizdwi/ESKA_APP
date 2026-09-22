@@ -700,6 +700,8 @@
           <Property Name="DetDetDetId" Type="bigint" />
           <Property Name="TransNo" Type="nvarchar" MaxLength="50" />
           <Property Name="DocNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="VendorName" Type="nvarchar" MaxLength="100" />
           <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="200" />
           <Property Name="WhsCode" Type="nvarchar" MaxLength="50" />
@@ -822,6 +824,7 @@ warning 6002: The table/view 'HDB.ESKA_APP_TEST.Tp_UserAlert' does not have a pr
           <Property Name="Id" Type="bigint" />
           <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="250" />
+          <Property Name="QuantityOpen" Type="decimal" Precision="21" Scale="2" />
           <Property Name="Quantity" Type="int" />
           <Property Name="QuantityCreated" Type="int" />
           <Property Name="Uom" Type="nvarchar" MaxLength="50" />
@@ -2212,6 +2215,8 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="DetDetDetId" Type="Int64" />
           <Property Name="TransNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DocNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VendorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="WhsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -2317,6 +2322,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
           <Property Name="Id" Type="Int64" />
           <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="QuantityOpen" Type="Decimal" Precision="21" Scale="2" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="QuantityCreated" Type="Int32" />
           <Property Name="Uom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3605,6 +3611,8 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="WhsCode" ColumnName="WhsCode" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
                 <ScalarProperty Name="DocNum" ColumnName="DocNum" />
                 <ScalarProperty Name="TransNo" ColumnName="TransNo" />
                 <ScalarProperty Name="DetDetDetId" ColumnName="DetDetDetId" />
@@ -3713,6 +3721,7 @@ FROM "ESKA_APP_TEST"."Tp_UserAlert" AS "Tp_UserAlert"</DefiningQuery>
                 <ScalarProperty Name="Uom" ColumnName="Uom" />
                 <ScalarProperty Name="QuantityCreated" ColumnName="QuantityCreated" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="QuantityOpen" ColumnName="QuantityOpen" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

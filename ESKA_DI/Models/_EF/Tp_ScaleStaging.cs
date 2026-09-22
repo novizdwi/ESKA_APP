@@ -22,6 +22,8 @@ namespace ESKA_DI.Models._EF
         public Nullable<long> DetDetDetId { get; set; }
         public string TransNo { get; set; }
         public string DocNum { get; set; }
+        public string VendorCode { get; set; }
+        public string VendorName { get; set; }
         public string ItemCode { get; set; }
         public string ItemName { get; set; }
         public string WhsCode { get; set; }

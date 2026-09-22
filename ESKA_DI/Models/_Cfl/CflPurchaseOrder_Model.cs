@@ -75,18 +75,19 @@ namespace Models._Cfl
                                         T0.""DocStatus"" AS ""Status"",
                                         T0.""DocDate""
                                     FROM ""{DbSap}"".""OPOR"" T0
-                                    JOIN ""{DbSap}"".""POR1"" T1 
-                                        ON T1.""DocEntry"" = T0.""DocEntry""
-                                    JOIN ""{DbSap}"".""PDN1"" T2 
-                                        ON T2.""BaseEntry"" = T1.""DocEntry"" 
-                                        AND T2.""BaseType"" = T1.""ObjType"" 
-                                        AND T2.""BaseLine"" = T1.""LineNum""
-                                    JOIN ""{DbSap}"".""OPDN"" T3 
-                                        ON T3.""DocEntry"" = T2.""DocEntry""
+                                    JOIN ""{DbSap}"".""POR1"" T1
+                                      ON T1.""DocEntry"" = T0.""DocEntry""
                                     WHERE T0.""DocStatus"" = 'O'
-                                    ORDER BY T0.""DocEntry"" ASC
                                 ";
 
+        //JOIN ""{DbSap}"".""PDN1"" T2 
+        //    ON T2.""BaseEntry"" = T1.""DocEntry"" 
+        //    AND T2.""BaseType"" = T1.""ObjType"" 
+        //    AND T2.""BaseLine"" = T1.""LineNum""
+        //JOIN ""{DbSap}"".""OPDN"" T3 
+        //    ON T3.""DocEntry"" = T2.""DocEntry""
+        //WHERE T0.""DocStatus"" = 'O'
+        //ORDER BY T0.""DocEntry"" ASC
         public static void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e, int userId, CflPurchaseOrder_ParamModel cflPurchaseOrderParam)
         {
             var Cfl_Sql = CflPurchaseOrder_Model.ssql;
