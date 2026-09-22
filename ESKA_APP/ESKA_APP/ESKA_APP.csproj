@@ -501,6 +501,7 @@
     <Content Include="Scripts\SQLs\Alter_GoodsReceiptPO_Item_QuantityOpen.sql" />
     <Content Include="Scripts\SQLs\Backfill_GoodsReceiptPO_Item_Batch_LineNum.sql" />
     <Content Include="Scripts\SQLs\Create Schema.sql" />
+    <Content Include="Scripts\SQLs\Drop_Unused_Backup_Tables.sql" />
     <Content Include="Scripts\SQLs\Insert Into.sql" />
     <Content Include="Scripts\SQLs\Insert Ts_Menu.sql" />
     <Content Include="Scripts\SQLs\Rebuild_Tp_ScaleStaging_AddVendor.sql" />

@@ -69,6 +69,16 @@ namespace Models._Cfl
 
         // Dipakai saat SourceType berisi DocEntry PO: ambil item dari baris PO yang masih Open ({DocEntry}).
         // Kolom output SAMA PERSIS dengan ssql agar wrapper SELECT, kriteria filter grid, dan mapping view tetap jalan.
+        //
+        // "OpenQty" yang dikembalikan BUKAN POR1.OpenQty mentah, melainkan SISA yang sudah
+        // dikurangi total Quantity dari GRPO lain yang MASIH DRAFT untuk baris PO yang sama --
+        // supaya popup ini mendukung partial receipt (1 PO -> banyak dokumen GRPO). Hanya GRPO
+        // Draft yang dikurangkan: GRPO Posted sudah otomatis mengurangi POR1.OpenQty di SAP
+        // sendiri (mengurangkannya lagi di sini akan memotong dua kali), dan GRPO Draft yang
+        // di-Cancel tidak pernah tercatat di SAP sehingga tidak pernah ikut terhitung.
+        // Baris yang sisanya sudah habis (<=0) tidak lagi ditawarkan (bukan NOT EXISTS biner
+        // seperti sebelumnya, yang menyembunyikan baris SELAMANYA begitu pernah dipakai GRPO
+        // apa pun -- termasuk yang sudah Cancel atau baru ambil sebagian kecil).
         public static string ssqlPo = @"
                                         SELECT
                                             T2.""ItemCode"",
@@ -83,7 +93,7 @@ namespace Models._Cfl
                                             T2.""U_IDU_RoutingGroup"",
                                             T1.""LineNum"",
                                             T1.""Quantity"",
-                                            T1.""OpenQty"",
+                                            T1.""OpenQty"" - IFNULL(TSUB.""SudahDipakaiDraft"", 0) AS ""OpenQty"",
                                             T1.""WhsCode"",
                                             T1.""Price"" AS ""UnitPrice""
                                         FROM ""{DbSap}"".""OPOR"" T0
@@ -95,21 +105,24 @@ namespace Models._Cfl
                                             ON T2.""ItmsGrpCod"" = T3.""ItmsGrpCod""
                                         LEFT JOIN ""{DbSap}"".""OUOM"" T4
                                             ON T2.""IUoMEntry"" = T4.""UomEntry""
+                                        LEFT JOIN
+                                        (
+                                            SELECT T6.""BaseEntry"" AS ""BE"", T6.""ItemCode"" AS ""IC"", T6.""BaseLine"" AS ""BL"",
+                                                   SUM(T6.""Quantity"") AS ""SudahDipakaiDraft""
+                                            FROM ""Tx_GoodsReceiptPO"" T5
+                                            INNER JOIN ""Tx_GoodsReceiptPO_Item"" T6
+                                                ON T5.""Id"" = T6.""Id""
+                                            WHERE T5.""Status"" = 'Draft'
+                                            GROUP BY T6.""BaseEntry"", T6.""ItemCode"", T6.""BaseLine""
+                                        ) TSUB
+                                            ON TSUB.""BE"" = T0.""DocEntry""
+                                            AND TSUB.""IC"" = T2.""ItemCode""
+                                            AND TSUB.""BL"" = T1.""LineNum""
                                         WHERE
                                             T0.""DocStatus"" = 'O'
                                             AND T1.""LineStatus"" = 'O'
                                             AND T0.""DocEntry"" = {DocEntry}
-                                            AND NOT EXISTS
-                                            (
-                                                SELECT 1
-                                                FROM ""Tx_GoodsReceiptPO"" T5
-                                                INNER JOIN ""Tx_GoodsReceiptPO_Item"" T6
-                                                    ON T5.""Id"" = T6.""Id""
-                                                WHERE
-                                                    T5.""BaseEntry"" = T0.""DocEntry""
-                                                    AND T6.""ItemCode"" = T2.""ItemCode""
-                                                    AND T6.""BaseLine"" = T1.""LineNum""
-                                            )
+                                            AND (T1.""OpenQty"" - IFNULL(TSUB.""SudahDipakaiDraft"", 0)) > 0
                                         ORDER BY
                                             T2.""ItemCode"" ASC
                                         ";

@@ -183,6 +183,55 @@
     }
 
 
+    // Tutup editor sel grid item yang sedang terbuka (kalau ada), supaya nilainya
+    // dipindahkan dari editor ke edit-state batch.
+    function EndEditGvDetail() {
+        if (typeof (gvDetail) != 'undefined' && gvDetail != null && gvDetail.batchEditApi) {
+            gvDetail.batchEditApi.EndEdit();
+        }
+    }
+
+    // Cegah Post selagi grid Item (gvDetail) masih punya perubahan yang belum di-Update.
+    // Quantity yang dikirim ke SAP saat Post dibaca ulang dari DB (Post TIDAK ikut menyimpan
+    // grid), jadi ketikan yang masih ada di buffer browser tidak boleh diam-diam terlewat.
+    // Dicek dengan HasChanges() -- BUKAN IsEditing(): BeforeSave() sudah memanggil EndEdit()
+    // lebih dulu, sehingga tidak ada lagi sel "sedang diedit", tetapi perubahannya tetap
+    // belum tersimpan ke DB. HasChanges() tanpa argumen = ada insert/update/delete tertunda.
+    function HasUnsavedGvDetailChanges() {
+        if (typeof (gvDetail) == 'undefined' || gvDetail == null || !gvDetail.batchEditApi) {
+            return false;
+        }
+
+        EndEditGvDetail();
+
+        if (gvDetail.batchEditApi.HasChanges()) {
+            alert('Masih ada perubahan pada tabel Item yang belum disimpan. Klik "Update" untuk menyimpannya, lalu coba Post lagi.');
+            return true;
+        }
+
+        return false;
+    }
+
+    // Quantity per baris tidak boleh melebihi Qty Open (sisa PO yang masih boleh diterima).
+    // Cek ini hanya untuk memberi tahu user lebih awal; penjaga sebenarnya ada di server
+    // (GoodsReceiptPoService.Detail_Update dan PostSAP), yang menghitung ulang sisanya --
+    // Qty Open di grid hanyalah snapshot saat item ditambahkan dan bisa basi kalau ada
+    // GRPO Draft lain untuk baris PO yang sama.
+    function ValidateGvDetailQuantity() {
+        if (typeof (gvDetail) == 'undefined' || gvDetail == null || !gvDetail.batchEditApi) {
+            return true;
+        }
+
+        EndEditGvDetail();
+
+        if (!gvDetail.batchEditApi.ValidateRows()) {
+            alert('Quantity tidak boleh melebihi Qty Open. Perbaiki baris yang ditandai.');
+            return false;
+        }
+
+        return true;
+    }
+
     function BeforeSave() {
 
         var tab = ASPxClientTabControl.Cast("TabDetail");
@@ -199,6 +248,10 @@
                 }
                 return false;
             }
+        }
+
+        if (!ValidateGvDetailQuantity()) {
+            return false;
         }
 
         return true;
@@ -251,6 +304,10 @@
 
     function OnClickBtnPost(s, e) {
         if (BeforeSave() == false) {
+            return;
+        }
+
+        if (HasUnsavedGvDetailChanges()) {
             return;
         }
 
@@ -312,8 +369,21 @@
     function GetFormData() {
         var formData = $('#formDetail').serializeObject();
 
-        //var Details_ = GetGvDetails('gvGoodsReceiptPoDetail');
-        //$.extend(formData, { Details_: Details_ });
+        // Commit dulu sel yang MASIH dalam mode edit. Selama editor sebuah sel masih terbuka,
+        // angka yang baru diketik (mis. Quantity) belum masuk ke edit-state batch, sehingga
+        // GetGvDetails tidak melihatnya dan nilainya hilang begitu tombol Add/Update diklik --
+        // user harus klik ke baris lain dulu supaya qty-nya ikut tersimpan. EndEdit() menutup
+        // editor itu lebih dulu (API ASPxClientGridViewBatchEditApi, ada di DevExpress v20.1).
+        EndEditGvDetail();
+
+        // Perubahan batch-edit grid item (gvDetail) TIDAK otomatis ikut ter-serialize oleh
+        // serializeObject() biasa -- grid ini tidak dikonfigurasi dengan Update/Insert/DeleteRowRouteValues
+        // sendiri, jadi perubahannya harus dijembatani manual ke Details_ (dibaca server via
+        // Update()/Detail_Update). Sebelumnya baris ini dinonaktifkan (comment) dan salah nama grid
+        // ("gvGoodsReceiptPoDetail", padahal nama asli grid = "gvDetail") -- akibatnya Quantity (dan
+        // kolom lain) yang diedit di grid tidak pernah tersimpan walau tombol Update diklik.
+        var Details_ = GetGvDetails('gvDetail');
+        $.extend(formData, { Details_: Details_ });
         return formData;
     }
 
@@ -518,6 +588,10 @@
                 break;
             case 'btnMenuSetStatusPost':
                 if (BeforeSave() == false) {
+                    return;
+                }
+                // Jalur Post lewat menu "Other" -- penjaga yang sama dengan tombol Post.
+                if (HasUnsavedGvDetailChanges()) {
                     return;
                 }
                 var formData = GetFormData();
@@ -742,7 +816,27 @@
     function gvDetailOnBatchEditEndEditing(s, e) {
     }
 
+    // Tolak Quantity yang melebihi Qty Open pada baris yang sama.
+    // e.validationInfo di-key oleh INDEX kolom (bukan nama field), jadi index-nya diambil
+    // lewat GetColumnByField. Qty Open = sisa PO yang masih boleh diterima -- sudah
+    // memperhitungkan GRPO Draft lain dari baris PO yang sama (1 PO bisa banyak GRPO).
     function gvDetailOnBatchEditRowValidating(s, e) {
+        var colQuantity = s.GetColumnByField("Quantity");
+        if (colQuantity == null) return;
+
+        var info = e.validationInfo[colQuantity.index];
+        if (info == null || !info.isValid) return;
+
+        var qty = parseFloat(info.value);
+        if (isNaN(qty)) return; // Quantity kosong ditangani validasi server saat Post
+
+        var qtyOpen = parseFloat(s.batchEditApi.GetCellValue(e.visibleIndex, "QuantityOpen"));
+        if (isNaN(qtyOpen)) return; // baris tanpa acuan PO -> tidak ada batas yang bisa dicek
+
+        if (qty > qtyOpen) {
+            info.isValid = false;
+            info.errorText = 'Quantity (' + qty + ') melebihi Qty Open (' + qtyOpen + ')';
+        }
     }
 
     function gvDetailCalculateSummary(grid, rowValues, visibleIndex, isDeleting) {

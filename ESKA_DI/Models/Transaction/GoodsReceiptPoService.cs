@@ -988,6 +988,36 @@ namespace Models.Transaction
             }
         }
 
+        // Sisa qty yang masih boleh diterima untuk SATU baris PO (BaseEntry + BaseLine):
+        // POR1."OpenQty" dikurangi total Quantity baris GRPO Draft LAIN pada baris PO yang sama.
+        //
+        // Satu PO bisa diterima bertahap lewat beberapa dokumen GRPO, jadi jatah tiap baris
+        // harus dibagi antar dokumen. Yang dikurangkan HANYA GRPO Draft: GRPO Posted sudah
+        // menurunkan POR1."OpenQty" di SAP sendiri (mengurangkannya lagi = potong dua kali),
+        // dan GRPO yang di-Cancel tidak pernah tercatat di SAP. Baris yang sedang divalidasi
+        // dikecualikan lewat excludeDetId supaya nilai lamanya tidak mengurangi jatahnya sendiri.
+        //
+        // Formula ini sengaja kembar dengan CflItem_Model.ssqlPo dan SpGoodsReceiptPo_AddItemDetail
+        // -- ketiganya harus diubah bersamaan bila aturan sisa qty berubah.
+        private decimal GetSisaQtyOpen(HANA_APP CONTEXT, long baseEntry, int baseLine, long excludeDetId)
+        {
+            string sql = @"SELECT CAST(IFNULL(T0.""OpenQty"", 0) - IFNULL(TSUB.""SudahDipakaiDraft"", 0) AS DECIMAL(21,6)) AS ""IDU""
+                            FROM """ + DbProvider.dbSap_Name + @""".""POR1"" T0
+                            LEFT JOIN
+                            (
+                                SELECT SUM(T2.""Quantity"") AS ""SudahDipakaiDraft""
+                                FROM ""Tx_GoodsReceiptPO"" T1
+                                INNER JOIN ""Tx_GoodsReceiptPO_Item"" T2 ON T1.""Id"" = T2.""Id""
+                                WHERE T1.""Status"" = 'Draft'
+                                  AND T2.""BaseEntry"" = :p0
+                                  AND T2.""BaseLine"" = :p1
+                                  AND T2.""DetId"" <> :p2
+                            ) TSUB ON 1 = 1
+                            WHERE T0.""DocEntry"" = :p3 AND T0.""LineNum"" = :p4 ";
+
+            return CONTEXT.Database.SqlQuery<decimal>(sql, baseEntry, baseLine, excludeDetId, baseEntry, baseLine).FirstOrDefault();
+        }
+
         public void Detail_Update(HANA_APP CONTEXT, GoodsReceiptPoItem model, int UserId)
         {
             if (model != null)
@@ -997,6 +1027,27 @@ namespace Models.Transaction
 
                 if (Tx_GoodsReceiptPO_Item != null)
                 {
+                    // Quantity tidak boleh melebihi sisa qty PO yang masih open.
+                    // Sisanya dihitung ULANG di sini, bukan memakai snapshot kolom "QuantityOpen":
+                    // GRPO Draft lain untuk baris PO yang sama bisa dibuat SETELAH baris ini
+                    // ditambahkan, sehingga snapshot-nya bisa sudah basi saat user menekan Update.
+                    if (model.Quantity.HasValue
+                        && Tx_GoodsReceiptPO_Item.BaseEntry.HasValue
+                        && Tx_GoodsReceiptPO_Item.BaseLine.HasValue)
+                    {
+                        decimal sisa = GetSisaQtyOpen(CONTEXT,
+                            Tx_GoodsReceiptPO_Item.BaseEntry.Value,
+                            Tx_GoodsReceiptPO_Item.BaseLine.Value,
+                            Tx_GoodsReceiptPO_Item.DetId);
+
+                        if (model.Quantity.Value > sisa)
+                        {
+                            throw new Exception(string.Format(
+                                "[VALIDATION] - {0}: Quantity {1:N0} melebihi sisa Qty Open PO ({2:N0})",
+                                Tx_GoodsReceiptPO_Item.ItemCode, model.Quantity.Value, sisa));
+                        }
+                    }
+
                     var exceptColumns = new string[] { "DetId", "Id", "QuantityOpen" };
                     CopyProperty.CopyProperties(model, Tx_GoodsReceiptPO_Item, false, exceptColumns);
 
@@ -1212,6 +1263,43 @@ namespace Models.Transaction
                         if (syncGRPO.ListDetails_.All(q => q.Quantity == 0))
                         {
                             throw new Exception($"[VALIDATION] - No record created");
+                        }
+
+                        // Validasi: Quantity WAJIB diisi manual oleh user (sejak SP AddItemDetail
+                        // tidak lagi mengisi Quantity otomatis -- hanya QuantityOpen yang diisi
+                        // sebagai acuan sisa PO). Tanpa cek ini, baris ber-Quantity NULL akan lolos
+                        // diam-diam dari validasi "Total Created" di bawah (filter .Where menyaring
+                        // Quantity==null sebagai 0), berisiko ikut terkirim ke SAP tanpa qty yang benar.
+                        var emptyQtyErrors = syncGRPO.ListDetails_
+                            .Where(x => x.Quantity == null)
+                            .Select(x => x.ItemCode)
+                            .ToList();
+                        if (emptyQtyErrors.Any())
+                        {
+                            throw new Exception(BuildValidationMessage("Quantity belum diisi", emptyQtyErrors));
+                        }
+
+                        // Validasi: Quantity tiap baris tidak boleh melebihi sisa qty PO yang masih open.
+                        // Dicek ulang di sini (bukan cukup saat Update) karena satu PO bisa diterima lewat
+                        // beberapa GRPO -- dokumen Draft lain untuk baris PO yang sama bisa dibuat atau
+                        // diubah setelah dokumen ini terakhir disimpan, dan yang dikirim ke SAP adalah
+                        // qty dari DB pada detik ini.
+                        var openQtyErrors = new List<string>();
+                        foreach (var item in syncGRPO.ListDetails_.Where(x => (x.Quantity ?? 0) > 0))
+                        {
+                            if (item.BaseEntry == null || item.BaseLine == null) continue;
+
+                            decimal sisa = GetSisaQtyOpen(CONTEXT, item.BaseEntry.Value, item.BaseLine.Value, item.DetId);
+
+                            if (item.Quantity.Value > sisa)
+                            {
+                                openQtyErrors.Add(string.Format("{0}: Quantity {1:N0} > sisa Qty Open {2:N0}",
+                                    item.ItemCode, item.Quantity.Value, sisa));
+                            }
+                        }
+                        if (openQtyErrors.Any())
+                        {
+                            throw new Exception(BuildValidationMessage("Quantity melebihi sisa Qty Open PO", openQtyErrors));
                         }
 
                         // Validasi: Total Created (QuantityCreated) harus SAMA dengan Total Needed (Quantity) tiap item.
