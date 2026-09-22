@@ -1048,9 +1048,37 @@ namespace Models.Transaction
                         }
                     }
 
-                    var exceptColumns = new string[] { "DetId", "Id", "QuantityOpen" };
-                    CopyProperty.CopyProperties(model, Tx_GoodsReceiptPO_Item, false, exceptColumns);
+                    // "UomEntry" dikecualikan dari CopyProperties: di model bertipe string,
+                    // tetapi di tabel (entity) bertipe int?. CopyProperties memakai reflection
+                    // SetValue TANPA konversi, sehingga string non-null ke int? melempar
+                    // "Object of type 'System.String' cannot be converted to type
+                    // 'System.Nullable`1[System.Int32]'". Dikonversi manual setelah copy,
+                    // pola yang sama dengan penanganan di Detail_Add.
+                    var exceptColumns = new List<string> { "DetId", "Id", "QuantityOpen", "UomEntry" };
 
+                    // Properti yang datang NULL juga dikecualikan. CopyProperties menyalin semua
+                    // properti yang namanya cocok termasuk yang null, sedangkan satu baris grid
+                    // hanya membawa kolom yang tampil di grid -- field lain (BaseEntry, BaseLine,
+                    // UnitPrice, QuantityCreated, LineNum, LineStatus, ...) tiba sebagai null dan
+                    // akan MENGHAPUS isi kolom aslinya di DB. BaseEntry/BaseLine khususnya adalah
+                    // penghubung ke baris PO: kalau ternull, perhitungan sisa Qty Open dan link
+                    // dokumen ke SAP saat Post ikut rusak. Perilaku "lewati null" ini sama dengan
+                    // yang sudah dipakai Update() untuk header.
+                    foreach (var sourceProp in model.GetType().GetProperties())
+                    {
+                        if (sourceProp.GetValue(model, null) == null && !exceptColumns.Contains(sourceProp.Name))
+                        {
+                            exceptColumns.Add(sourceProp.Name);
+                        }
+                    }
+
+                    CopyProperty.CopyProperties(model, Tx_GoodsReceiptPO_Item, false, exceptColumns.ToArray());
+
+                    int uomEntryInt;
+                    if (int.TryParse(model.UomEntry, out uomEntryInt))
+                    {
+                        Tx_GoodsReceiptPO_Item.UomEntry = uomEntryInt;
+                    }
 
                     DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
