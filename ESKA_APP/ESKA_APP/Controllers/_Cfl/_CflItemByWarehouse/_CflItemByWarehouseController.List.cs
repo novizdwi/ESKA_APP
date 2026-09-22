@@ -29,13 +29,16 @@ namespace Controllers._Cfl
 
             var hidden_Id = (string)Request["hidden_Id"];
 
-            if (cflParam.Type == "StockOpname")
+            // Tipe CFL = nama modul, jadi tabel item-nya "Tx_<Type>_Item".
+            if (cflParam.Type == "StockOpname" || cflParam.Type == "AdjustmentIn" || cflParam.Type == "AdjustmentOut" || cflParam.Type == "InventoryTransfer")
             {
-                var hidden_WhsCode = (string)Request["hidden_WhsCode"];
+                long headerId;
+                long.TryParse(hidden_Id, out headerId);
+
+                var hidden_WhsCode = (string)Request["hidden_WhsCode"] ?? "";
                 hidden_WhsCode = hidden_WhsCode.Replace("'", "''");
                 cflParam.SqlWhere = string.Format(" AND T0.\"WhsCode\"= '{1}'  " +
-                    "AND NOT EXISTS (SELECT 1 FROM \"Tx_StockOpname_Item\" Tx WHERE Tx.\"Id\" = {0} AND Tx.\"ItemCode\" = T0.\"ItemCode\" )", hidden_Id, hidden_WhsCode);
-
+                    "AND NOT EXISTS (SELECT 1 FROM \"Tx_{2}_Item\" Tx WHERE Tx.\"Id\" = {0} AND Tx.\"ItemCode\" = T0.\"ItemCode\" )", headerId, hidden_WhsCode, cflParam.Type);
             }
 
 

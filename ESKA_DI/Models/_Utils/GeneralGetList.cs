@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -36,10 +36,10 @@ namespace Models._Utils
         public static DataTable GetMenuUrls(int userId)
         {
             string ssql = @"SELECT DISTINCT T3.""Url""
-                            FROM ""Tm_User"" T0   
-                            INNER JOIN ""Tm_Role"" T1   ON T0.""RoleId""=T1.""Id"" 
-                            INNER JOIN ""Tm_Role_Auth"" T2   ON T1.""Id""=T2.""Id"" AND T2.""IsAccess""='Y' 
-                            INNER JOIN ""Ts_Menu"" T3   ON T2.""MenuCode""=T3.""MenuCode"" AND T3.""Url"" LIKE '%/Detail' 
+                            FROM ""Tm_User"" T0
+                            INNER JOIN ""Tm_Role"" T1   ON T0.""RoleId""=T1.""Id""
+                            INNER JOIN ""Tm_Role_Auth"" T2   ON T1.""Id""=T2.""Id"" AND T2.""IsAccess""='Y'
+                            INNER JOIN ""Ts_Menu"" T3   ON T2.""MenuCode""=T3.""MenuCode"" AND T3.""Url"" LIKE '%/Detail'
                             WHERE T0.""Id""=:p0";
 
             return EfIduHanaRsExtensionsApp.IduGetDataTable(ssql, userId);
@@ -59,10 +59,10 @@ namespace Models._Utils
             using (var CONTEXT = new HANA_APP())
             {
                 string ssql = @"
-                    SELECT TOP 1 COALESCE(T1.""IsAccess"",'N') 
-                    FROM ""Tm_User"" T0X 
+                    SELECT TOP 1 COALESCE(T1.""IsAccess"",'N')
+                    FROM ""Tm_User"" T0X
                     INNER JOIN  ""Tm_Role"" T0 ON T0.""Id"" = T0X.""RoleId""
-                    INNER JOIN ""Tm_Role_Auth"" T1 ON T1.""Id"" = T0.""Id"" 
+                    INNER JOIN ""Tm_Role_Auth"" T1 ON T1.""Id"" = T0.""Id""
                     WHERE T0X.""Id"" = {0} AND T1.""MenuCode"" = '{1}'
                 ";
 
@@ -76,7 +76,7 @@ namespace Models._Utils
             using (var CONTEXT = new HANA_APP())
             {
                 string ssql = @"
-                    SELECT COALESCE(T0.""IsApproval"",'N') 
+                    SELECT COALESCE(T0.""IsApproval"",'N')
                     FROM ""Tx_"+ ObjectCode + @""" T0
                     WHERE T0.""Id"" = {0}                ";
 
@@ -127,7 +127,7 @@ namespace Models._Utils
 
         public static string GetFormTransAuthorizeSqlWhere(HANA_APP CONTEXT, int userId, string formCode)
         {
-            string formAuthorize = GetFormTransAuthorize(CONTEXT, userId, formCode); 
+            string formAuthorize = GetFormTransAuthorize(CONTEXT, userId, formCode);
 
             string ssql = "";
 
@@ -170,19 +170,19 @@ namespace Models._Utils
 
         public static string GetAuthBranchCodeByUserId(HANA_APP CONTEXT, int userId)
         {
-//            string ssql = @" 
-//	                        SELECT TOP 1 ''''||IFNULL(T0_.""WhsCode"",'')||'''' AS ""WhsCode"" 
-//	                        FROM ""Tm_User"" T0_ 
+//            string ssql = @"
+//	                        SELECT TOP 1 ''''||IFNULL(T0_.""WhsCode"",'')||'''' AS ""WhsCode""
+//	                        FROM ""Tm_User"" T0_
 //                            WHERE T0_.""Id""=:p0 ";
 
             string ssql = @"SELECT STRING_AGG(''''||T0.""BranchCode""||'''', ', ') AS IDU
-                            FROM  ( 
-	                            SELECT TOP 1 IFNULL(T0_.""WhsCode"",'') AS ""BranchCode"" 
-	                            FROM ""Tm_User"" T0_ 
+                            FROM  (
+	                            SELECT TOP 1 IFNULL(T0_.""WhsCode"",'') AS ""BranchCode""
+	                            FROM ""Tm_User"" T0_
 	                            WHERE T0_.""Id""=:p0
-	                            UNION  
-	                            SELECT IFNULL(T0_.""BranchCode"",'') AS ""BranchCode"" 
-	                            FROM ""Tm_User_AuthBranch"" T0_ 
+	                            UNION
+	                            SELECT IFNULL(T0_.""BranchCode"",'') AS ""BranchCode""
+	                            FROM ""Tm_User_AuthBranch"" T0_
 	                            WHERE T0_.""Id""=:p1 AND T0_.""IsTick""='Y'
                             ) T0";
 
@@ -200,9 +200,9 @@ namespace Models._Utils
 
         public static string GetRegionalByUserId(HANA_APP CONTEXT, int userId)
         {
-            string ssql = @" 
-	                        SELECT TOP 1 T0_.""Regional"" AS ""Regional"" 
-	                        FROM ""Tm_User"" T0_ 
+            string ssql = @"
+	                        SELECT TOP 1 T0_.""Regional"" AS ""Regional""
+	                        FROM ""Tm_User"" T0_
                             WHERE T0_.""Id""=:p0 ";
 
             return GetValue<string>(CONTEXT, ssql, userId);
@@ -239,7 +239,7 @@ namespace Models._Utils
         public static DataTable GetAllOperators(HANA_APP CONTEXT, string routingCode)
         {
             var ssql = @"
-            SELECT DISTINCT T0.""Id"" ""Code"", T0.""FirstName"" AS ""Name"" 
+            SELECT DISTINCT T0.""Id"" ""Code"", T0.""FirstName"" AS ""Name""
                 FROM ""Tm_User"" T0
                 INNER JOIN ""Tm_User_Routing"" T1 ON T0.""Id"" = T1.""Id""
                 WHERE T1.""IsTick"" = 'Y'
@@ -251,7 +251,45 @@ namespace Models._Utils
             return GetDataTable(CONTEXT, ssql);
 
         }
-        
+
+        public static DataTable GetMachines()
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return GetMachines(CONTEXT);
+            }
+        }
+
+        public static DataTable GetMachines(HANA_APP CONTEXT)
+        {
+            var ssql = @"
+            SELECT T0.""Id"" ""Code"", T0.""MachineCode"" AS ""Name""
+                FROM ""Tm_Machine"" T0
+                WHERE IFNULL(T0.""IsActive"", '') = 'Y'
+                ORDER BY T0.""MachineCode"" ASC
+            ";
+            return GetDataTable(CONTEXT, ssql);
+        }
+
+        public static List<GetCodeNameModel> GetMachineList()
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return GetMachineList(CONTEXT);
+            }
+        }
+
+        public static List<GetCodeNameModel> GetMachineList(HANA_APP CONTEXT)
+        {
+            var ssql = @"
+            SELECT T0.""Id"" ""Code"", T0.""MachineCode"" AS ""Name""
+                FROM ""Tm_Machine"" T0
+                WHERE IFNULL(T0.""IsActive"", '') = 'Y'
+                ORDER BY T0.""MachineCode"" ASC
+            ";
+            return CONTEXT.Database.SqlQuery<GetCodeNameModel>(ssql).ToList();
+        }
+
         public static List<GetCodeNameModel> GetUserRoutingList(string routingCode)
         {
             using (var CONTEXT = new HANA_APP())
@@ -263,7 +301,7 @@ namespace Models._Utils
         public static List<GetCodeNameModel> GetUserRoutingList(HANA_APP CONTEXT, string routingCode)
         {
             var ssql = @"SELECT T0.""Id"" ""Code"", T1.""FirstName"" AS ""Name""
-                         FROM ""Tm_User_Routing"" T0 
+                         FROM ""Tm_User_Routing"" T0
                          INNER JOIN ""Tm_User"" T1 ON T0.""Id"" = T1.""Id""
                          WHERE T0.""RoutingCode""=:p0 AND IFNULL(T0.""IsTick"",'') = 'Y' ORDER BY T1.""FirstName"" ASC ";
             List<GetCodeNameModel> ret = CONTEXT.Database.SqlQuery<GetCodeNameModel>(ssql, routingCode).ToList<GetCodeNameModel>();
@@ -282,10 +320,10 @@ namespace Models._Utils
         public static DataTable GetUserRouting(HANA_APP CONTEXT, string routingCode)
         {
             var ssql = @"SELECT T0.""Id"" ""Id"", T1.""FirstName"" AS ""Name""
-                         FROM ""Tm_User_Routing"" T0 
+                         FROM ""Tm_User_Routing"" T0
                          INNER JOIN ""Tm_User"" T1 ON T0.""Id"" = T1.""Id""
                          WHERE T0.""RoutingCode""=:p0 AND IFNULL(T0.""IsTick"",'') = 'Y' ORDER BY T1.""FirstName"" ASC ";
-            return GetDataTable(CONTEXT, ssql, routingCode); 
+            return GetDataTable(CONTEXT, ssql, routingCode);
 
         }
 
@@ -299,8 +337,8 @@ namespace Models._Utils
 
         public static string GetApprovalActive(HANA_APP CONTEXT, string objectCode)
         {
-            var ssql = @"SELECT TOP 1 IFNULL(T0.""IsActive"",'N') AS ""IsActive"" 
-                         FROM ""Tm_ApprovalTemplate"" T0 
+            var ssql = @"SELECT TOP 1 IFNULL(T0.""IsActive"",'N') AS ""IsActive""
+                         FROM ""Tm_ApprovalTemplate"" T0
                          INNER JOIN ""Tm_ApprovalTemplate_User"" T1 ON T1.""Id"" = T0.""Id""
                          WHERE T0.""ObjectCode""=:p0 AND IFNULL(T1.""IsTick"",'') = 'Y' ORDER BY T0.""CreatedDate"" ASC "; //AND T1.""UserId"" =:p1
 
@@ -344,7 +382,7 @@ namespace Models._Utils
         }
 
         public static DataTable GetItemList(HANA_APP CONTEXT)
-        { 
+        {
             var ssql = @"SELECT DISTINCT ""ItemCode"" FROM ""Tm_Item"" ";
             return GetDataTable(CONTEXT, ssql);
         }
@@ -403,7 +441,7 @@ namespace Models._Utils
 
             return GetDataTable(CONTEXT, ssql, strType, strCategory);
 
-        } 
+        }
 
         public static DataTable GetPositions()
         {
@@ -413,13 +451,13 @@ namespace Models._Utils
                 SELECT NULL AS ""Id"", NULL AS ""Name"" FROM DUMMY
 
                 UNION ALL
-                
+
                 SELECT T0.""Id"", T0.""PositionName"" FROM ""Tm_Position"" T0 WHERE COALESCE(T0.""IsActive"",'N') = 'Y' ";
                 ssql = string.Format(ssql, DbProvider.dbSap_Name);
                 return GetDataTable(CONTEXT, ssql);
             }
         }
-        
+
 
         public static string GetWarehouseName(string whsCode)
         {
@@ -460,7 +498,7 @@ namespace Models._Utils
                     return GetUserNameByUserId(CONTEXT, userId);
                 }
             }
-            else 
+            else
             {
                 return "";
             }
@@ -626,14 +664,14 @@ namespace Models._Utils
 
         public static DataTable GetEmployees(HANA_APP CONTEXT)
         {
-            string ssql = @"SELECT T0.""empID"" AS ""empID"",T0.""ExtEmpNo"", T0.""firstName"" AS ""firstName"", T0.""lastName"" AS ""lastName"", T0.""middleName"" AS ""middleName"" 
-                            FROM  ""{0}"".""OHEM"" T0       
+            string ssql = @"SELECT T0.""empID"" AS ""empID"",T0.""ExtEmpNo"", T0.""firstName"" AS ""firstName"", T0.""lastName"" AS ""lastName"", T0.""middleName"" AS ""middleName""
+                            FROM  ""{0}"".""OHEM"" T0
                             ORDER BY T0.""firstName"", T0.""lastName"", T0.""middleName"" ";
 
             ssql = string.Format(ssql, DbProvider.dbSap_Name);
             return GetDataTable(CONTEXT, ssql);
         }
-        
+
         public static DataTable GetWarehouses()
         {
             using (var CONTEXT = new HANA_APP())
@@ -644,8 +682,8 @@ namespace Models._Utils
 
         public static DataTable GetWarehouses(HANA_APP CONTEXT)
         {
-            string ssql = @"SELECT T0.""WhsCode"", T0.""WhsName""  
-                            FROM  ""{0}"".""OWHS"" T0       
+            string ssql = @"SELECT T0.""WhsCode"", T0.""WhsName""
+                            FROM  ""{0}"".""OWHS"" T0
                             ORDER BY T0.""WhsCode"" ";
 
             ssql = string.Format(ssql, DbProvider.dbSap_Name);
@@ -662,8 +700,8 @@ namespace Models._Utils
 
         public static DataTable GetSeries(HANA_APP CONTEXT, string ObjType)
         {
-            string ssql = @"SELECT T0.""Series"", T0.""SeriesName""  
-                            FROM  ""{0}"".""NNM1"" T0  
+            string ssql = @"SELECT T0.""Series"", T0.""SeriesName""
+                            FROM  ""{0}"".""NNM1"" T0
                             WHERE T0.""ObjectCode"" = '" + ObjType + "' ORDER BY T0.\"ObjectCode\" DESC ";
 
 
@@ -682,8 +720,8 @@ namespace Models._Utils
 
         public static string GetCustomerCode(HANA_APP CONTEXT, string docEntry)
         {
-            string ssql = @"SELECT T0.""CardCode""  
-                            FROM  ""{0}"".""OINV"" T0   
+            string ssql = @"SELECT T0.""CardCode""
+                            FROM  ""{0}"".""OINV"" T0
                             WHERE T0.""DocEntry"" = " + docEntry + " ";
 
             ssql = string.Format(ssql, DbProvider.dbSap_Name);
@@ -700,14 +738,14 @@ namespace Models._Utils
 
         public static DataTable GetSalesmans(HANA_APP CONTEXT)
         {
-            string ssql = @"SELECT T0.""SlpCode"", T0.""SlpName"",T0.""U_SalesPersonCode""   
-                            FROM  ""{0}"".""OSLP"" T0       
+            string ssql = @"SELECT T0.""SlpCode"", T0.""SlpName"",T0.""U_SalesPersonCode""
+                            FROM  ""{0}"".""OSLP"" T0
                             ORDER BY T0.""U_SalesPersonCode"" ";
 
             ssql = string.Format(ssql, DbProvider.dbSap_Name);
             return GetDataTable(CONTEXT, ssql);
         }
-        
+
         public static DataTable GetReportGroups()
         {
             using (var CONTEXT = new HANA_APP())
@@ -797,10 +835,10 @@ namespace Models._Utils
         public static bool GetAuthAction(HANA_APP CONTEXT, int userId, string url)
         {
             string ssql = @"SELECT DISTINCT T0.""Id""
-                            FROM ""Tm_User"" T0   
-                            INNER JOIN ""Tm_Role"" T1   ON T0.""RoleId""=T1.""Id"" 
-                            INNER JOIN ""Tm_Role_Auth"" T2   ON T1.""Id""=T2.""Id"" AND T2.""IsAccess""='Y' 
-                            INNER JOIN ""Ts_Menu"" T3   ON T2.""MenuCode""=T3.""MenuCode"" AND T3.""Url"" =:p1 
+                            FROM ""Tm_User"" T0
+                            INNER JOIN ""Tm_Role"" T1   ON T0.""RoleId""=T1.""Id""
+                            INNER JOIN ""Tm_Role_Auth"" T2   ON T1.""Id""=T2.""Id"" AND T2.""IsAccess""='Y'
+                            INNER JOIN ""Ts_Menu"" T3   ON T2.""MenuCode""=T3.""MenuCode"" AND T3.""Url"" =:p1
                             WHERE T0.""Id""=:p0";
 
 
@@ -862,7 +900,7 @@ namespace Models._Utils
             }
             return dt;
         }
-        
+
         public static DataTable GetCostCenters(string dimCode)
         {
             using (var CONTEXT = new HANA_APP())
@@ -976,7 +1014,7 @@ namespace Models._Utils
                 return GetDataTable(CONTEXT, ssql);
             }
         }
-        
+
 
         public static DataTable GetSAPCodeOfAccountWithNull()
         {
@@ -994,7 +1032,7 @@ namespace Models._Utils
                 return GetDataTable(CONTEXT, ssql);
             }
         }
-        
+
         public static DataTable GetSAPUserFields(string TableId)
         {
             using (var CONTEXT = new HANA_APP())
@@ -1018,13 +1056,13 @@ namespace Models._Utils
                     INNER JOIN ""{0}"".""OBTQ"" T2 ON T0.""SysNumber"" = T2.""SysNumber"" AND T0.""ItemCode"" = T2.""ItemCode""
                     WHERE(T2.""Quantity"" - ""CommitQty"") > 0
                     AND T0.""ItemCode"" = '{1}'
-                    AND T1.""WhsCode"" = '{2}'                
+                    AND T1.""WhsCode"" = '{2}'
                 ";
 
                 ssql = string.Format(ssql, DbProvider.dbSap_Name, itemCode, whsCode);
                 return GetDataTable(CONTEXT, ssql);
             }
-        } 
+        }
 
     }
 

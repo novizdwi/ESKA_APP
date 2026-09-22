@@ -54,13 +54,20 @@ namespace Models.Production
 
         public string ItemName { get; set; }
 
+        // Tx_ProcessCard.DueDate (Tx_ProductionTask.BaseId = Tx_ProcessCard.Id).
+        public DateTime? DueDate { get; set; }
+
         public DateTime? PlannedDate { get; set; }
 
-        public decimal? QuantityActual { get; set; }
+        public decimal? QuantityComplete { get; set; }
 
-        public decimal? QuantityActual_ { get; set; }
+        public decimal? QuantityComplete_ { get; set; }
  
         public decimal? QuantityPlanned { get; set; }
+
+        public long? EstimatedHours { get; set; }
+
+        public long? ActualHours { get; set; }
 
         public string Uom { get; set; }
 
@@ -146,7 +153,8 @@ namespace Models.Production
         private static string SqlSelect = @"SELECT 
             T0.*,
             T2.""RoutingName"",
-            COALESCE(T0.""QuantityActual"",0) AS ""QuantityActual_""
+            T1.""DueDate"" AS ""DueDate"",
+            COALESCE(T0.""QuantityComplete"",0) AS ""QuantityComplete_""
             FROM ""Tx_ProductionTask"" T0 
             INNER JOIN ""Tx_ProcessCard"" T1 ON T0.""BaseId"" = T1.""Id"" 
             INNER JOIN ""Tx_ProcessCard_Detail"" T2 ON T0.""BaseId"" = T2.""Id"" AND T0.""BaseDetId"" = T2.""DetId""  
@@ -369,13 +377,15 @@ namespace Models.Production
                         SpNotif.SpSysControllerTransNotif((int)userId, "ProductionTask", CONTEXT, "before", "ProductionTask", "starttask", "Id", id.ToString() );
 
                         InsertProductionTaskActivity(CONTEXT, id, userId);
-                        
+
                         // Set flag IsRunningTask setelah activity & detail berhasil di-insert
                         Tx_ProductionTask tx_ProductionTask = CONTEXT.Tx_ProductionTask.Find(id);
                         if (tx_ProductionTask == null)
                         {
                             throw new Exception("[VALIDATION] Production task not found");
                         }
+
+                        GenerateProductionTaskItem(CONTEXT, userId, id, tx_ProductionTask.DocEntry);
 
                         DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
                         tx_ProductionTask.IsRunningTask = "Y";
@@ -464,7 +474,7 @@ namespace Models.Production
                     }
 
                     string errorMassage;
-                    if (ex.Message.Substring(12) == "[VALIDATION]")
+                    if (ex.Message.StartsWith("[VALIDATION]"))
                     {
                         errorMassage = ex.Message;
                     }
@@ -497,6 +507,14 @@ namespace Models.Production
                 if (!oPO.GetByKey(docEntry))
                 {
                     throw new Exception(string.Format("[VALIDATION] - Production Order DocEntry [{0}] tidak ditemukan di SAP (OWOR)", docEntry));
+                }
+
+                // Status SAP dicek DULU. Kalau Production Order nya memang sudah Closed,
+                // Update() akan ditolak SAP dan status Tx_ProductionTask tidak pernah ikut
+                // tersimpan. Cukup dilewati -- update status lokal tetap jalan di pemanggil.
+                if (oPO.ProductionOrderStatus == SAPbobsCOM.BoProductionOrderStatusEnum.boposClosed)
+                {
+                    return;
                 }
 
                 oPO.ProductionOrderStatus = SAPbobsCOM.BoProductionOrderStatusEnum.boposClosed;
@@ -539,7 +557,8 @@ namespace Models.Production
                 OperatorId = userId,
                 OperatorName = userName,
                 StartTime = dtModified,
-                Quantity = 0,
+                QuantityComplete = 0,
+                QuantityReject = 0,
                 Status = "OnProgress",
                 CreatedDate = dtModified,
                 CreatedUser = userId,
@@ -571,9 +590,91 @@ namespace Models.Production
             CONTEXT.Tx_ProductionTask_Activity_Log.Add(tx_ProductionTask_Activity_log);
             CONTEXT.SaveChanges();
 
-            // Generate item dari WOR1 sudah dipindah ke ProductionScheduleService
-            // (GenerateProductionTaskItem): item sekarang menempel pada TASK lewat
-            // Tx_ProductionTask_Item (level 2), bukan pada activity.
+        }
+
+        // Membuat / menyamakan Tx_ProductionTask_Item (item menempel pada TASK, level 2)
+        // dengan komponen WOR1 milik Production Order task. Dipanggil saat user klik Start.
+        // Pencocokan per baris memakai LineNum:
+        //   - LineNum WOR1 belum ada di Tx_ProductionTask_Item -> insert item baru
+        //     (task yang belum punya item sama sekali otomatis semua barisnya di-insert)
+        //   - LineNum ada di kedua sisi, ItemCode beda         -> ItemCode (+ ItemName) disamakan
+        //   - LineNum item tidak ada lagi di WOR1              -> item + batch-nya dihapus
+        // Item manual yang belum tersinkron ke SAP (LineNum kosong / -1) tidak disentuh.
+        private void GenerateProductionTaskItem(HANA_APP CONTEXT, int userId, long id, int? docEntry)
+        {
+            if ((docEntry ?? 0) == 0)
+            {
+                return;
+            }
+
+            string ssql = @"
+                SELECT T1.""LineNum"", T1.""ItemCode"", T1.""ItemName"",
+                       T1.""wareHouse"" AS ""WhsCode"", T2.""WhsName"",
+                       T1.""PlannedQty"", T1.""UomEntry"", T1.""UomCode""
+                FROM """ + DbProvider.dbSap_Name + @""".""WOR1"" T1
+                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWHS"" T2 ON T1.""wareHouse"" = T2.""WhsCode""
+                WHERE T1.""DocEntry"" = :p0
+                ORDER BY T1.""LineNum""
+            ";
+            List<ProductionTaskItemDetailModel> wor1Lines = CONTEXT.Database.SqlQuery<ProductionTaskItemDetailModel>(ssql, docEntry.Value).ToList();
+
+            List<Tx_ProductionTask_Item> items = CONTEXT.Tx_ProductionTask_Item.Where(x => x.Id == id).ToList();
+
+            DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
+
+            foreach (var line in wor1Lines)
+            {
+                Tx_ProductionTask_Item item = items.FirstOrDefault(x => x.LineNum == line.LineNum);
+
+                if (item == null)
+                {
+                    Tx_ProductionTask_Item newItem = new Tx_ProductionTask_Item
+                    {
+                        Id = id,
+                        ItemCode = line.ItemCode,
+                        ItemName = line.ItemName,
+                        WhsCode = line.WhsCode,
+                        WhsName = line.WhsName,
+                        LineNum = line.LineNum,
+                        Direction = "Out",
+                        UomEntry = line.UomEntry,
+                        Uom = line.UomCode,
+                        IsActive = "Y",
+                        QuantityPlanned = line.PlannedQty,
+                        CreatedDate = dtModified,
+                        CreatedUser = userId,
+                        ModifiedDate = dtModified,
+                        ModifiedUser = userId
+                    };
+
+                    CONTEXT.Tx_ProductionTask_Item.Add(newItem);
+                }
+                else if (!string.Equals(item.ItemCode, line.ItemCode, StringComparison.Ordinal))
+                {
+                    item.ItemCode = line.ItemCode;
+                    item.ItemName = line.ItemName;
+                    item.ModifiedDate = dtModified;
+                    item.ModifiedUser = userId;
+                }
+            }
+
+            HashSet<int> wor1LineNums = new HashSet<int>(wor1Lines.Where(x => x.LineNum.HasValue).Select(x => x.LineNum.Value));
+
+            foreach (var item in items)
+            {
+                if (!item.LineNum.HasValue || item.LineNum.Value == -1)
+                {
+                    continue;
+                }
+
+                if (!wor1LineNums.Contains(item.LineNum.Value))
+                {
+                    CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"ItemDetId\"=:p0", item.DetId);
+                    CONTEXT.Tx_ProductionTask_Item.Remove(item);
+                }
+            }
+
+            CONTEXT.SaveChanges();
         }
 
     }

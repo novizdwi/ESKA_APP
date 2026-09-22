@@ -18,7 +18,10 @@ namespace ESKA_DI.Models._EF
         public long DetId { get; set; }
         public Nullable<int> OperatorId { get; set; }
         public string OperatorName { get; set; }
-        public Nullable<decimal> Quantity { get; set; }
+        public Nullable<decimal> QuantityComplete { get; set; }
+        public Nullable<decimal> NettoComplete { get; set; }
+        public Nullable<decimal> QuantityReject { get; set; }
+        public Nullable<decimal> NettoReject { get; set; }
         public string Batch { get; set; }
         public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> EndTime { get; set; }

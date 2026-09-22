@@ -39,17 +39,23 @@ namespace Models.Production
 
         public decimal? QuantityPlanned { get; set; }
 
-        public decimal? QuantityActual { get; set; }
+        public decimal? QuantityComplete { get; set; }
+
+        public decimal? QuantityReject { get; set; }
 
         public decimal? QuantityRemain { get; set; }
 
         public long? EstimatedHours { get; set; }
 
         public long? ActualHours { get; set; }
+        public long? PauseHours { get; set; }
 
         public DateTime? ActivityDate { get; set; }
 
         public string ActivityStatus { get; set; }
+
+        // Tx_ProcessCard.DueDate (Tx_ProductionTask.BaseId = Tx_ProcessCard.Id).
+        public DateTime? DueDate { get; set; }
 
     }
 
@@ -82,10 +88,15 @@ namespace Models.Production
         [Required(ErrorMessage = "required")]
         public string FinishBatch { get; set; }
 
-        [Required(ErrorMessage = "required")]
-        public Decimal? Quantity { get; set; }
+        // Group Actual di popup Finish -> Tx_ProductionTask_Activity.QuantityComplete / NettoComplete.
+        public Decimal? QuantityComplete { get; set; }
+        public Decimal? NettoComplete { get; set; }
+
+        // Group Reject di popup Finish -> Tx_ProductionTask_Activity.QuantityReject / NettoReject.
+        public Decimal? QuantityReject { get; set; }
+        public Decimal? NettoReject { get; set; }
+
         public Decimal? QuantityPlanned { get; set; }
-        public Decimal? QuantityActual { get; set; }
         public Decimal? QuantityRemain { get; set; }
         public string Comments { get; set; }
 
@@ -116,8 +127,15 @@ namespace Models.Production
         public string Uom { get; set; }
         public string Batch { get; set; }
         public Decimal? QuantityPlanned { get; set; }
+
+        // QuantityActual / NettoTotal = kumulatif lintas SEMUA activity.
+        // QuantitySession / NettoSession = kontribusi activity yang sedang di-Finish saja,
+        // dihitung dari Tx_ProductionTask_Item_Batch (popup batch).
         public Decimal? QuantityActual { get; set; }
         public Decimal? QuantitySession { get; set; }
+        public Decimal? NettoTotal { get; set; }
+        public Decimal? NettoSession { get; set; }
+
         public string Comments { get; set; }
 
         // Batch per item (Tx_ProductionTask_Item_Batch, difilter ItemDetId + ActivityDetId) -> dipakai OIGE.
@@ -206,12 +224,17 @@ namespace Models.Production
         public string ItemName { get; set; }
         
         public decimal? Quantity { get; set; }
-        
+
         public int? DocEntry { get; set; }
-        
+
         public int? LineNum { get; set; }
-        
+
+        public decimal? Netto { get; set; }
+
         public string  BatchNumber { get; set; }
+
+        // "Complete" / "Reject" -> UDF baris produk jadi di Receipt from Production.
+        public string TransType { get; set; }
     }
 
 
@@ -231,12 +254,13 @@ namespace Models.Production
 
         // PK Tx_ProductionTask_Item_Batch (identity) -> KeyFieldName grid.
         public long BatchId { get; set; }
-
-        [Required(ErrorMessage = "required")]
+         
         public string Batch { get; set; }
 
-        // Read only: "QuantityPlanned" milik item induk, tidak disimpan di tabel batch.
-        public decimal? Quantity { get; set; }
+        // Kolom milik Tx_ProductionTask_Item_Batch sendiri, diinput user di popup batch
+        // (berlaku untuk Direction 'In' maupun 'Out').
+        [Required(ErrorMessage = "required")]
+        public int? Quantity { get; set; }
 
         // Default hari ini saat baris baru dibuat (lihat InitNewRow di grid).
         [Required(ErrorMessage = "required")]
@@ -262,15 +286,31 @@ namespace Models.Production
 	        T0.""DocNum"",
 	        T2.""RoutingName"",
 	        T0.""QuantityPlanned"",
-	        T0.""QuantityActual"",
-	        COALESCE(T0.""QuantityPlanned"", 0 ) - COALESCE(T0.""QuantityActual"", 0) AS ""QuantityRemain"",
+	        T0.""QuantityComplete"",
+	        T0.""QuantityReject"",
+	        COALESCE(T0.""QuantityPlanned"", 0 ) - COALESCE(T0.""QuantityComplete"", 0) AS ""QuantityRemain"",
 	        T0.""EstimatedHours"",
 	        T0.""ActualHours"",
-	        T0.""CreatedDate"" AS ""ActivityDate"",
-            T1.""Status"" AS ""ActivityStatus""
+            (   
+                SELECT COALESCE( 
+                SUM( SECONDS_BETWEEN(
+                    Tx.""StartTime"",
+                    Tx.""EndTime""
+                    )
+                    ), 0
+                )
+                FROM ""Tx_ProductionTask_Activity_Log"" Tx
+                WHERE Tx.""DetailType"" = 'Paused'
+                AND Tx.""Id"" = T0.""Id""
+            ) AS ""PauseHours"",
+
+	        T1.""CreatedDate"" AS ""ActivityDate"",
+            T1.""Status"" AS ""ActivityStatus"",
+            T3.""DueDate"" AS ""DueDate""
         FROM ""Tx_ProductionTask"" T0
         INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
         INNER JOIN ""Tx_ProcessCard_Detail"" T2 ON T0.""BaseId"" = T2.""Id"" AND T0.""BaseDetId"" = T2.""DetId""
+        INNER JOIN ""Tx_ProcessCard"" T3 ON T0.""BaseId"" = T3.""Id""
         WHERE T1.""Status"" NOT IN ('Finished')
         AND T0.""Id"" = :p0
         ";
@@ -380,8 +420,7 @@ namespace Models.Production
 	                    T0.""ItemCode"" AS ""FinsihItemCode"",
 	                    T0.""ItemName"" AS ""FinishItemName"",
 	                    T0.""QuantityPlanned"",
-	                    T0.""QuantityActual"",
-	                    COALESCE(T0.""QuantityPlanned"", 0) - COALESCE(T0.""QuantityActual"", 0) AS ""QuantityRemain""
+	                    COALESCE(T0.""QuantityPlanned"", 0) - COALESCE(T0.""QuantityComplete"", 0) AS ""QuantityRemain""
                     FROM ""Tx_ProductionTask"" T0
                     INNER JOIN  ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
                     INNER JOIN ""Tx_ProcessCard"" T2 ON  T0.""BaseId"" = T2.""Id""
@@ -398,6 +437,26 @@ namespace Models.Production
         // Item milik Tx_ProductionTask (level 2), kuncinya "Id" task.
         // activityDetId = kunci Tx_ProductionTask_Activity yang sedang di-Finish -> dipakai hitung
         // QuantitySession (kontribusi activity ini saja, bukan QuantityActual yang kumulatif).
+        // Item Direction 'Out' yang kuantitas ter-issue nya (QuantityActual + QuantitySession)
+        // MELEBIHI QuantityPlanned. Dipakai untuk konfirmasi sebelum Finish dijalankan.
+        // detId = kunci Tx_ProductionTask_Activity yang sedang di-Finish.
+        public List<string> GetOverIssuedItems(long detId)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return CONTEXT.Database.SqlQuery<string>(
+                    @"SELECT T0.""ItemCode""
+                      FROM ""Tx_ProductionTask_Item"" T0
+                      INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
+                      WHERE T1.""DetId"" = :p0
+                        AND T0.""Direction"" = 'Out'
+                        AND COALESCE(T0.""IsActive"", 'Y') = 'Y'
+                        AND COALESCE(T0.""QuantityActual"", 0) + COALESCE(T0.""QuantitySession"", 0)
+                            > COALESCE(T0.""QuantityPlanned"", 0)
+                      ORDER BY T0.""DetId""", detId).ToList();
+            }
+        }
+
         public List<ProductionTaskDetailItemModel> GetProductionTaskDetailItems(long? id, long activityDetId = 0)
         {
             List<ProductionTaskDetailItemModel> ret = new List<ProductionTaskDetailItemModel>();
@@ -407,6 +466,7 @@ namespace Models.Production
                     SELECT T0.* 
                     FROM ""Tx_ProductionTask_Item"" T0
                     WHERE T0.""Id"" = :p0
+                    AND COALESCE(T0.""IsActive"", 'Y') = 'Y'
                     ORDER BY T0.""DetId""
                 ";
 
@@ -449,11 +509,16 @@ namespace Models.Production
                             {
                                 tx_ProductionTask_Activity.Status = "Finished";
 
-                                tx_ProductionTask_Activity.Quantity = model.Quantity;
+                                // Quantity & Netto produk jadi disimpan per ACTIVITY, dipisah
+                                // Complete (group Actual) dan Reject. Akumulasinya ke Tx_ProductionTask
+                                // diurus SpProductionTaskActivity_UpdateTask.
+                                tx_ProductionTask_Activity.QuantityComplete = model.QuantityComplete ?? 0;
+                                tx_ProductionTask_Activity.NettoComplete = model.NettoComplete ?? 0;
+                                tx_ProductionTask_Activity.QuantityReject = model.QuantityReject ?? 0;
+                                tx_ProductionTask_Activity.NettoReject = model.NettoReject ?? 0;
                                 tx_ProductionTask_Activity.Batch = model.FinishBatch;
                                 tx_ProductionTask_Activity.Comments = model.Comments;
 
-                                tx_ProductionTask_Activity.Quantity = model.Quantity;
                                 tx_ProductionTask_Activity.ModifiedDate = dtModified;
                                 tx_ProductionTask_Activity.ModifiedUser = userId;
 
@@ -566,9 +631,10 @@ namespace Models.Production
                 @"SELECT
                       T0.""Id"", T0.""DetId"", T0.""LineNum"",
                       T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"", T0.""Direction"",
-                      T0.""QuantityActual""
+                      T0.""QuantityPlanned"", T0.""QuantityActual""
                   FROM ""Tx_ProductionTask_Item"" T0
                   WHERE T0.""Id"" = :p0
+                    AND COALESCE(T0.""IsActive"", 'Y') = 'Y'
                   ORDER BY T0.""DetId""", taskId).ToList();
 
             if (items.Count == 0)
@@ -593,7 +659,10 @@ namespace Models.Production
 
                 foreach (var item in items)
                 {
-                    double plannedQuantity = (double)(item.QuantityActual ?? 0);
+                    // PlannedQuantity WOR1 mengikuti "QuantityPlanned" milik ITEM.
+                    // Kalau dibiarkan 0/kosong, SAP menghitung sendiri dari planned quantity
+                    // HEADER production order -- itu sebabnya angkanya sempat ikut header.
+                    double plannedQuantity = (double)(item.QuantityPlanned ?? 0);
 
                     // Direction 'In' -> komponen masuk, kuantitas dibalik negatif.
                     if (string.Equals(item.Direction, "In", StringComparison.OrdinalIgnoreCase))
@@ -709,7 +778,7 @@ namespace Models.Production
                 @"SELECT TOP 1
                       T0.""Id"", T0.""TransNo"", T0.""DocEntry"", T0.""ItemCode"", T0.""ItemName"",
                       T1.""Id"" AS ""ActivityId"", T1.""DetId"" AS ""ActivityDetId"",
-                      T1.""Quantity"" AS ""ActivityQuantity"", T1.""Batch""
+                      T1.""QuantityComplete"" AS ""ActivityQuantity"", T1.""Batch""
                   FROM ""Tx_ProductionTask"" T0
                   INNER JOIN ""Tx_ProductionTask_Activity"" T1 ON T0.""Id"" = T1.""Id""
                   WHERE T1.""DetId"" = :p0", model.DetId).FirstOrDefault();
@@ -724,8 +793,79 @@ namespace Models.Production
                 throw new Exception("[VALIDATION] - Production Order belum punya DocEntry di SAP");
             }
 
-            string batchNo = model.FinishBatch;             
-            ProductionTaskReceiptIssueModel itemHeader = new ProductionTaskReceiptIssueModel{ 
+            // Produk jadi dipecah jadi dua baris Receipt from Production: Complete (group Actual)
+            // dan Reject. Keduanya memakai Batch No yang sama dengan inputan popup Finish.
+            // Baris dengan Quantity 0 tidak dibuat -- SAP menolak baris ber-Quantity 0.
+            List<ProductionTaskReceiptIssueModel> parentLines = new List<ProductionTaskReceiptIssueModel>();
+
+            if ((model.QuantityComplete ?? 0) > 0)
+            {
+                parentLines.Add(NewReceiptParentLine(model, task, "Complete", model.QuantityComplete, model.NettoComplete));
+            }
+
+            if ((model.QuantityReject ?? 0) > 0)
+            {
+                parentLines.Add(NewReceiptParentLine(model, task, "Reject", model.QuantityReject, model.NettoReject));
+            }
+
+            var items = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(
+                @"SELECT
+                      T0.""Id"", T0.""DetId"", T0.""LineNum"",
+                      T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"",
+                      T0.""Direction"", T0.""QuantitySession"", T0.""NettoSession""
+                  FROM ""Tx_ProductionTask_Item"" T0
+                  WHERE T0.""Id"" = :p0
+                    AND COALESCE(T0.""IsActive"", 'Y') = 'Y'
+                  ORDER BY T0.""DetId""", task.Id).ToList();
+
+
+            foreach (var item in items.Where(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)))
+            {
+                // Batch komponen (Direction 'Out') -> Tx_ProductionTask_Item_Batch, difilter per item + activity.
+                item.ListBatch_ = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(
+                    @"SELECT T0.""Id"", T0.""ItemDetId"", T0.""ActivityDetId"", T0.""BatchId"", T0.""Batch"",
+                             T0.""Quantity"", T0.""Netto""
+                        FROM ""Tx_ProductionTask_Item_Batch"" T0
+                        WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
+                        ORDER BY T0.""BatchId""", item.DetId, task.ActivityDetId).ToList();                
+            }
+
+            // ---- Validasi sebelum SAP disentuh ----
+            // Yang dikirim ke IGN1/IGE1 hanya item ber-QuantitySession > 0.
+
+            // Minimal satu item Direction 'Out' harus terisi -- tanpa komponen yang di-issue,
+            // Receipt from Production pasti ditolak SAP.
+            bool adaOut = items.Any(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)
+                                         && ((x.QuantitySession ?? 0) > 0));
+            if (!adaOut)
+            {
+                throw new Exception("[VALIDATION] - Minimal harus ada satu item Direction 'Out' dengan Quantity lebih dari 0");
+            }
+
+            // Item Direction 'In' boleh tidak ada sama sekali -- baris produk jadi tetap dibuat.
+            // Tapi Quantity Complete atau Quantity Reject di Finish wajib lebih dari 0.
+            if ((model.QuantityComplete ?? 0) < 0 || (model.QuantityReject ?? 0) < 0)
+            {
+                throw new Exception("[VALIDATION] - Quantity Complete / Reject pada Finish tidak boleh negatif");
+            }
+
+            if (parentLines.Count == 0)
+            {
+                throw new Exception("[VALIDATION] - Quantity Complete atau Quantity Reject pada Finish harus lebih dari 0");
+            }
+
+            // Issue DULU, baru Receipt. SAP menolak Receipt from Production selama work order
+            // belum punya IssuedQty ("Item Issued Qty in work order should be larger than zero").
+            // Urutannya juga mengikuti alur produksi nyata: komponen dikeluarkan dulu,
+            // barang jadi diterima kemudian.
+            AddIssueForProduction(oCompany, task, items);
+            AddReceiptFromProduction(oCompany, task, parentLines, items);
+        }
+
+        private ProductionTaskReceiptIssueModel NewReceiptParentLine(ProductionActivityFinishModel model, ProductionTaskSapHeaderModel task, string transType, decimal? quantity, decimal? netto)
+        {
+            return new ProductionTaskReceiptIssueModel
+            {
                 Id = model.Id,
                 TransNo = model.FinishTransNo,
                 DetId = model.DetId,
@@ -734,56 +874,31 @@ namespace Models.Production
                 ItemName = task.ItemName,
                 LineNum = null,
                 DocEntry = task.DocEntry,
+                Netto = netto,
                 BatchNumber = model.FinishBatch,
-                Quantity = model.Quantity
+                Quantity = quantity,
+                TransType = transType
             };
-
-            var items = CONTEXT.Database.SqlQuery<ProductionTaskDetailItemModel>(
-                @"SELECT
-                      T0.""Id"", T0.""DetId"", T0.""LineNum"",
-                      T0.""ItemCode"", T0.""ItemName"", T0.""WhsCode"",
-                      T0.""Direction"", T0.""QuantitySession""
-                  FROM ""Tx_ProductionTask_Item"" T0
-                  WHERE T0.""Id"" = :p0
-                  ORDER BY T0.""DetId""", task.Id).ToList();
-
-
-            foreach (var item in items.Where(x => string.Equals(x.Direction, "Out", StringComparison.OrdinalIgnoreCase)))
-            {
-                // Batch komponen (Direction 'Out') -> Tx_ProductionTask_Item_Batch, difilter per item + activity.
-                item.ListBatch_ = CONTEXT.Database.SqlQuery<ProductionTaskActivityBatchModel>(
-                    @"SELECT T0.""Id"", T0.""ItemDetId"", T0.""ActivityDetId"", T0.""BatchId"", T0.""Batch"", T0.""Netto""
-                        FROM ""Tx_ProductionTask_Item_Batch"" T0
-                        WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
-                        ORDER BY T0.""BatchId""", item.DetId, task.ActivityDetId).ToList();                
-            }
-
-            // Issue DULU, baru Receipt. SAP menolak Receipt from Production selama work order
-            // belum punya IssuedQty ("Item Issued Qty in work order should be larger than zero").
-            // Urutannya juga mengikuti alur produksi nyata: komponen dikeluarkan dulu,
-            // barang jadi diterima kemudian.
-            AddIssueForProduction(oCompany, task, items);
-            AddReceiptFromProduction(oCompany, task, itemHeader, items);
         }
 
-        // OIGN: baris produk jadi (dari Tx_ProductionTask) + item ber-Direction 'In'.
-        private void AddReceiptFromProduction(SAPbobsCOM.Company oCompany, ProductionTaskSapHeaderModel task, ProductionTaskReceiptIssueModel itemHeader, List<ProductionTaskDetailItemModel> items)
+        // IGN1.TranType: "Complete" -> botrntComplete, "Reject" -> botrntReject.
+        private static SAPbobsCOM.BoTransactionTypeEnum ToSapTransactionType(string transType)
+        {
+            return string.Equals(transType, "Reject", StringComparison.OrdinalIgnoreCase)
+                ? SAPbobsCOM.BoTransactionTypeEnum.botrntReject
+                : SAPbobsCOM.BoTransactionTypeEnum.botrntComplete;
+        }
+
+        // OIGN: dua baris produk jadi (Complete & Reject, dari Tx_ProductionTask) + item ber-Direction 'In'.
+        private void AddReceiptFromProduction(SAPbobsCOM.Company oCompany, ProductionTaskSapHeaderModel task, List<ProductionTaskReceiptIssueModel> parentLines, List<ProductionTaskDetailItemModel> items)
         {
             var inItems = items
                 .Where(x => string.Equals(x.Direction, "In", StringComparison.OrdinalIgnoreCase)
                             && ((x.QuantitySession ?? 0) > 0))
                 .ToList();
 
-            // Penjagaan qty 0: baris produk jadi memakai Quantity dari popup Finish,
-            // baris item Direction 'In' memakai QuantitySession (sudah difilter > 0 di atas).
-            // Kalau dua-duanya kosong, dokumen tidak dibuat -- SAP menolak dokumen tanpa baris
-            // dengan pesan yang tidak menjelaskan apa-apa.
-            bool hasParentLine = (itemHeader.Quantity ?? 0) > 0;
-
-            if (!hasParentLine && (inItems.Count == 0))
-            {
-                return;
-            }
+            // Baris produk jadi (Complete dan/atau Reject) SELALU ada -- sudah divalidasi minimal
+            // satu baris di PostInventoryDocuments. Item Direction 'In' sifatnya opsional.
 
             SAPbobsCOM.Documents oDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
 
@@ -795,20 +910,26 @@ namespace Models.Production
                 bool firstLine = true;
 
                 // Produk jadi: ItemCode dari Tx_ProductionTask, qty dari Tx_ProductionTask_Activity.
-                // Batch nya dari popup Finish (Direction 'In' pakai satu batch).
-                if (hasParentLine)
+                // Satu baris per TransType (Complete / Reject); Batch keduanya dari popup Finish.
+                foreach (var parent in parentLines)
                 {
+                    if (!firstLine)
+                    {
+                        oDoc.Lines.Add();
+                    }
+                    firstLine = false;
+
                     //oDoc.Lines.ItemCode = task.ItemCode;
 
-                    oDoc.Lines.Quantity = (double)(itemHeader.Quantity ?? 0);
+                    oDoc.Lines.Quantity = (double)(parent.Quantity ?? 0);
                     oDoc.Lines.BaseType = BASETYPE_PRODUCTION_ORDER;
-                    oDoc.Lines.BaseEntry = itemHeader.DocEntry ?? 0;
-                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = itemHeader.ActivityId.ToString();
+                    oDoc.Lines.BaseEntry = parent.DocEntry ?? 0;
+                    oDoc.Lines.UserFields.Fields.Item("U_IDU_WebId").Value = parent.ActivityId.ToString();
+                    oDoc.Lines.TransactionType = ToSapTransactionType(parent.TransType);
 
-                    oDoc.Lines.BatchNumbers.BatchNumber = itemHeader.BatchNumber;
-                    oDoc.Lines.BatchNumbers.Quantity = (double)(itemHeader.Quantity ?? 0);
-
-                    firstLine = false;
+                    oDoc.Lines.BatchNumbers.BatchNumber = parent.BatchNumber;
+                    oDoc.Lines.BatchNumbers.Quantity = (double)(parent.Quantity ?? 0);
+                    oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(parent.Netto ?? 0);
                 }
 
                 foreach (var item in inItems)
@@ -828,7 +949,8 @@ namespace Models.Production
                     oDoc.Lines.UserFields.Fields.Item("U_IDU_DetId").Value = (item.DetId ?? 0).ToString();
 
                     oDoc.Lines.BatchNumbers.BatchNumber = task.Batch;
-                    oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantitySession ?? 0);
+                    oDoc.Lines.BatchNumbers.Quantity = (double)(item.QuantitySession ?? 0); 
+                    oDoc.Lines.BatchNumbers.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(item.NettoSession ?? 0);
                 }
 
                 int result = oDoc.Add();
@@ -898,7 +1020,13 @@ namespace Models.Production
                             }
 
                             oDoc.Lines.BatchNumbers.BatchNumber = batch.Batch;
-                            oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Netto ?? 0);
+
+                            // WAJIB pakai Quantity, bukan Netto: SAP mengharuskan jumlah
+                            // BatchNumbers.Quantity sama persis dengan Lines.Quantity, dan
+                            // Lines.Quantity = QuantitySession = SUM(batch."Quantity").
+                            // Kalau dipakai Netto -> -4014 "Cannot add row without complete
+                            // selection of batch/serial numbers".
+                            oDoc.Lines.BatchNumbers.Quantity = (double)(batch.Quantity ?? 0); 
 
                             batchIndex++;
                         }
@@ -976,17 +1104,44 @@ namespace Models.Production
                 {
                     try
                     {
-                        Tx_ProductionTask_Item tx_ProductionTask_Item = new Tx_ProductionTask_Item();
-                        CopyProperty.CopyProperties(model, tx_ProductionTask_Item, false);
-
                         DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
 
-                        tx_ProductionTask_Item.CreatedDate = dtModified;
-                        tx_ProductionTask_Item.CreatedUser = model._UserId;
-                        tx_ProductionTask_Item.ModifiedDate = dtModified;
-                        tx_ProductionTask_Item.ModifiedUser = model._UserId;
+                        // Item yang sama pada task ini (ItemCode) yang sebelumnya "dihapus"
+                        // (IsActive = 'N') diaktifkan lagi, bukan di-insert ulang.
+                        Tx_ProductionTask_Item tx_ProductionTask_Item = CONTEXT.Tx_ProductionTask_Item.FirstOrDefault(x =>
+                            x.Id == model.Id
+                            && x.ItemCode == model.ItemCode
+                            && x.IsActive == "N");
 
-                        CONTEXT.Tx_ProductionTask_Item.Add(tx_ProductionTask_Item);
+                        if (tx_ProductionTask_Item != null)
+                        {
+                            tx_ProductionTask_Item.IsActive = "Y";
+
+                            // Gudang / UoM / catatan mengikuti isian terbaru; LineNum, QuantityPlanned
+                            // dan qty/batch lama dibiarkan seperti semula.
+                            tx_ProductionTask_Item.WhsCode = model.WhsCode;
+                            tx_ProductionTask_Item.WhsName = model.WhsName;
+                            if (model.UomEntry.HasValue) tx_ProductionTask_Item.UomEntry = model.UomEntry;
+                            if (!string.IsNullOrEmpty(model.Uom)) tx_ProductionTask_Item.Uom = model.Uom;
+                            if (!string.IsNullOrEmpty(model.Comments)) tx_ProductionTask_Item.Comments = model.Comments;
+
+                            tx_ProductionTask_Item.ModifiedDate = dtModified;
+                            tx_ProductionTask_Item.ModifiedUser = model._UserId;
+                        }
+                        else
+                        {
+                            tx_ProductionTask_Item = new Tx_ProductionTask_Item();
+                            CopyProperty.CopyProperties(model, tx_ProductionTask_Item, false);
+
+                            tx_ProductionTask_Item.IsActive = "Y";
+                            tx_ProductionTask_Item.CreatedDate = dtModified;
+                            tx_ProductionTask_Item.CreatedUser = model._UserId;
+                            tx_ProductionTask_Item.ModifiedDate = dtModified;
+                            tx_ProductionTask_Item.ModifiedUser = model._UserId;
+
+                            CONTEXT.Tx_ProductionTask_Item.Add(tx_ProductionTask_Item);
+                        }
+
                         CONTEXT.SaveChanges();
                         detId = tx_ProductionTask_Item.DetId;
 
@@ -1074,10 +1229,13 @@ namespace Models.Production
             }
         }
 
+        // Hapus item task:
+        //   - LineNum ada nilainya (item sudah terhubung ke baris WOR1) -> hanya IsActive diubah 'N'.
+        //     Baris item, batch, dan baris WOR1 di SAP dibiarkan; item nonaktif tidak tampil di grid
+        //     dan tidak ikut diposting. Add item yang sama nanti mengaktifkannya lagi.
+        //   - LineNum kosong / -1 (item manual yang belum ke SAP) -> dihapus permanen beserta batch nya.
         public void ProductionTaskActivity_DeleteItem(int _userId, long Id, long DetId)
         {
-            SAPbobsCOM.Company oCompany = null;
-
             using (var CONTEXT = new HANA_APP())
             {
                 using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
@@ -1088,54 +1246,32 @@ namespace Models.Production
                         {
                             SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "before", "ProductionTaskActivity", "deleteItem", "Id", Id.ToString());
 
-                            // LineNum + DocEntry harus dibaca SEBELUM barisnya dihapus,
-                            // sesudah itu informasinya hilang.
-                            var target = CONTEXT.Database.SqlQuery<ProductionTaskItemDeleteModel>(
-                                @"SELECT TOP 1 T0.""DetId"", T0.""LineNum"", T1.""DocEntry""
-                                  FROM ""Tx_ProductionTask_Item"" T0
-                                  INNER JOIN ""Tx_ProductionTask"" T1 ON T0.""Id"" = T1.""Id""
-                                  WHERE T0.""DetId"" = :p0", DetId).FirstOrDefault();
+                            int? lineNum = CONTEXT.Database.SqlQuery<int?>(
+                                @"SELECT TOP 1 T0.""LineNum"" FROM ""Tx_ProductionTask_Item"" T0 WHERE T0.""DetId"" = :p0", DetId).FirstOrDefault();
 
-                            bool adaDiWor1 = (target != null)
-                                             && ((target.LineNum ?? -1) != -1)
-                                             && ((target.DocEntry ?? 0) != 0);
-
-                            // Baris yang sudah ada di WOR1 ikut dihapus di SAP.
-                            if (adaDiWor1)
+                            if ((lineNum ?? -1) != -1)
                             {
-                                oCompany = SAPCachedCompany.GetCompany();
-                                oCompany.StartTransaction();
-
-                                DeleteProductionOrderLine(oCompany, target.DocEntry.Value, target.LineNum.Value);
+                                CONTEXT.Database.ExecuteSqlCommand(
+                                    @"UPDATE ""Tx_ProductionTask_Item""
+                                      SET ""IsActive"" = 'N',
+                                          ""ModifiedDate"" = CURRENT_TIMESTAMP,
+                                          ""ModifiedUser"" = :p0
+                                      WHERE ""DetId"" = :p1", _userId, DetId);
+                            }
+                            else
+                            {
+                                CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"ItemDetId\"=:p0", DetId);
+                                CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item\"  WHERE \"DetId\"=:p0", DetId);
                             }
 
-                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item_Batch\"  WHERE \"ItemDetId\"=:p0", DetId);
-                            CONTEXT.Database.ExecuteSqlCommand("DELETE FROM \"Tx_ProductionTask_Item\"  WHERE \"DetId\"=:p0", DetId);
                             CONTEXT.SaveChanges();
 
-                            // SAP menomori ulang baris sesudah ada yang dihapus, jadi LineNum
-                            // item lain pada task ini disamakan lagi dengan WOR1.
-                            if (adaDiWor1)
-                            {
-                                ResyncProductionOrderLineNum(CONTEXT, oCompany, _userId, Id, target.DocEntry.Value);
-                            }
-
                             SpNotif.SpSysControllerTransNotif(_userId, "ProductionTaskActivity", CONTEXT, "after", "ProductionTaskActivity", "deleteItem", "Id", Id.ToString());
-
-                            if ((oCompany != null) && (oCompany.InTransaction))
-                            {
-                                oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_Commit);
-                            }
 
                             CONTEXT_TRANS.Commit();
                         }
                         catch (Exception ex)
                         {
-                            if ((oCompany != null) && (oCompany.InTransaction))
-                            {
-                                oCompany.EndTransaction(SAPbobsCOM.BoWfTransOpt.wf_RollBack);
-                            }
-
                             CONTEXT_TRANS.Rollback();
 
                             string errorMassage;
@@ -1149,14 +1285,6 @@ namespace Models.Production
                             }
 
                             throw new Exception(errorMassage);
-                        }
-                        finally
-                        {
-                            // Wajib: GetCompany() menahan TransactionLock, Release() yang melepasnya.
-                            if (oCompany != null)
-                            {
-                                SAPCachedCompany.Release(oCompany);
-                            }
                         }
                     }
 
@@ -1273,11 +1401,10 @@ namespace Models.Production
                 T0.""ActivityDetId"",
                 T0.""BatchId"",
                 T0.""Batch"",
-                T1.""QuantityPlanned"" AS ""Quantity"",
+                T0.""Quantity"",
                 T0.""AdmissionDate"",
                 T0.""Netto""
             FROM ""Tx_ProductionTask_Item_Batch"" T0
-            INNER JOIN ""Tx_ProductionTask_Item"" T1 ON T0.""ItemDetId"" = T1.""DetId""
             WHERE T0.""ItemDetId"" = :p0 AND T0.""ActivityDetId"" = :p1
             ORDER BY T0.""BatchId""
         ";
@@ -1340,9 +1467,17 @@ namespace Models.Production
         // Netto item induk = jumlah Netto seluruh batch nya.
         private void UpdateItemQuantityActual(HANA_APP CONTEXT, int userId, long itemDetId, long activityDetId)
         {
+            // Batch sekarang punya Quantity DAN Netto sendiri, jadi keduanya dijumlahkan
+            // ke kolom session masing-masing.
             string sql = $@"
                 UPDATE ""Tx_ProductionTask_Item""
                 SET ""QuantitySession"" = COALESCE((
+                        SELECT SUM(""Quantity"")
+                        FROM ""Tx_ProductionTask_Item_Batch""
+                        WHERE ""ItemDetId"" = {itemDetId}
+                          AND ""ActivityDetId"" = {activityDetId}
+                    ), 0),
+                    ""NettoSession"" = COALESCE((
                         SELECT SUM(""Netto"")
                         FROM ""Tx_ProductionTask_Item_Batch""
                         WHERE ""ItemDetId"" = {itemDetId}

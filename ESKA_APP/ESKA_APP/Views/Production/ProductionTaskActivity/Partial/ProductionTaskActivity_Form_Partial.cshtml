@@ -11,9 +11,9 @@
 
     ViewBag.Id = Model.Id ?? 0;
 
-    // ---- WAKTU MULAI : ambil jam dari ActivityDate ----
+    // ---- WAKTU MULAI : tanggal + jam CreatedDate Tx_ProductionTask_Activity (ActivityDate), contoh 21/09/2026 14:52 ----
     string waktuMulai = Model.ActivityDate.HasValue
-        ? Model.ActivityDate.Value.ToString("HH:mm")
+        ? Model.ActivityDate.Value.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)
         : "-";
 
     // ---- DURASI : jam saat ini dikurang ActivityDate ----
@@ -123,6 +123,18 @@
         ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.ItemName) + "</div>"));
     });
 
+    groupHeader.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>Due Date</span>";
+    }).SetNestedContent(() =>
+    {
+        string dueDate = Model.DueDate.HasValue
+            ? Model.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+            : "-";
+
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + dueDate + "</div>"));
+    });
+
     settings.Items.AddEmptyItem().Height = 12;
 
     // ===================== ANGKA : TARGET / SELESAI / SISA =====================
@@ -147,7 +159,7 @@
         x.Caption = "<span style='font-size:150%;'>FINISHED</span>";
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityActual.HasValue ? Model.QuantityActual.Value.ToString("0.####") : "0") + "</b></div>"));
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityComplete.HasValue ? Model.QuantityComplete.Value.ToString("0.####") : "0") + "</b></div>"));
     });
 
     groupQty.Items.Add(x =>
@@ -176,6 +188,26 @@
     {
 
         ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + waktuMulai + "</b> </div>"));
+    });
+
+    groupTime.Items.Add(x =>
+    {
+        x.Caption = "<span style='font-size:150%;'>PAUSE DURATION</span>";
+    }).SetNestedContent(() =>
+    {
+        string pauseDuration = "00:00";
+        if (Model.PauseHours.HasValue)
+        {
+            TimeSpan pauseTs = TimeSpan.FromSeconds((double)Model.PauseHours.Value);
+
+            pauseDuration = string.Format(
+                "{0:00}:{1:00}",
+                (int)pauseTs.TotalHours,
+                pauseTs.Minutes
+            );
+        }
+
+        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + pauseDuration + "</b> </div>"));
     });
 
     groupTime.Items.Add(x =>
@@ -230,7 +262,7 @@
         btn.Name = "btnFinish";
         btn.Text = "Finish";
         btn.ControlStyle.Font.Size = new FontUnit(18);
-        btn.Enabled = ViewBag.Id == 0 ? false : true;
+        btn.Enabled = ViewBag.Id == 0 || Model.ActivityStatus == "Paused" ? false : true;
         btn.ClientSideEvents.Click = "OnClickBtnFinish";
         btn.Width = new Unit(28, UnitType.Em);
         btn.Height = new Unit(3, UnitType.Em);

@@ -51,6 +51,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_Layout> Tm_Layout { get; set; }
         public virtual DbSet<Tm_Layout_Role> Tm_Layout_Role { get; set; }
         public virtual DbSet<Tm_Layout_User> Tm_Layout_User { get; set; }
+        public virtual DbSet<Tm_Machine> Tm_Machine { get; set; }
         public virtual DbSet<Tm_MasterSetting> Tm_MasterSetting { get; set; }
         public virtual DbSet<Tm_Position> Tm_Position { get; set; }
         public virtual DbSet<Tm_Query> Tm_Query { get; set; }
@@ -73,6 +74,7 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tm_User_Routing> Tm_User_Routing { get; set; }
         public virtual DbSet<Tp_Approval> Tp_Approval { get; set; }
         public virtual DbSet<Tp_ScaleStaging> Tp_ScaleStaging { get; set; }
+        public virtual DbSet<Tp_ScaleStaging_OLD> Tp_ScaleStaging_OLD { get; set; }
         public virtual DbSet<Ts_FormatNumbering> Ts_FormatNumbering { get; set; }
         public virtual DbSet<Ts_LayoutForm> Ts_LayoutForm { get; set; }
         public virtual DbSet<Ts_List> Ts_List { get; set; }
@@ -80,8 +82,13 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Ts_ObjectApproval> Ts_ObjectApproval { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO> Tx_GoodsReceiptPO { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item> Tx_GoodsReceiptPO_Item { get; set; }
+        public virtual DbSet<Tx_GoodsReceiptPO_Item_BAK> Tx_GoodsReceiptPO_Item_BAK { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch> Tx_GoodsReceiptPO_Item_Batch { get; set; }
         public virtual DbSet<Tx_GoodsReceiptPO_Item_Batch_Scale> Tx_GoodsReceiptPO_Item_Batch_Scale { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer> Tx_InventoryTransfer { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer_Item> Tx_InventoryTransfer_Item { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer_Item_Batch> Tx_InventoryTransfer_Item_Batch { get; set; }
+        public virtual DbSet<Tx_InventoryTransfer_Item_Batch_Scale> Tx_InventoryTransfer_Item_Batch_Scale { get; set; }
         public virtual DbSet<Tx_IssueAndReceipt> Tx_IssueAndReceipt { get; set; }
         public virtual DbSet<Tx_IssueAndReceipt_Approval> Tx_IssueAndReceipt_Approval { get; set; }
         public virtual DbSet<Tx_IssueAndReceipt_Issue_Item> Tx_IssueAndReceipt_Issue_Item { get; set; }
@@ -98,11 +105,6 @@ namespace ESKA_DI.Models._EF
         public virtual DbSet<Tx_ProductionTask_Activity_Log> Tx_ProductionTask_Activity_Log { get; set; }
         public virtual DbSet<Tx_ProductionTask_Item> Tx_ProductionTask_Item { get; set; }
         public virtual DbSet<Tx_ProductionTask_Item_Batch> Tx_ProductionTask_Item_Batch { get; set; }
-        public virtual DbSet<Tx_StockOpname> Tx_StockOpname { get; set; }
-        public virtual DbSet<Tx_StockOpname_Approval> Tx_StockOpname_Approval { get; set; }
-        public virtual DbSet<Tx_StockOpname_Item> Tx_StockOpname_Item { get; set; }
-        public virtual DbSet<Tx_StockOpname_Item_Batch> Tx_StockOpname_Item_Batch { get; set; }
-        public virtual DbSet<Tx_StockOpname_Item_Batch_Scale> Tx_StockOpname_Item_Batch_Scale { get; set; }
         public virtual DbSet<WeighbridgeTransactions> WeighbridgeTransactions { get; set; }
         public virtual DbSet<Tp_UserAlert> Tp_UserAlert { get; set; }
     }

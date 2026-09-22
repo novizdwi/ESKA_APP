@@ -2,6 +2,10 @@ INSERT INTO "Ts_FormatNumbering" VALUES('StockOpname','StockOpname', 'STO-','YYM
 INSERT INTO "Ts_FormatNumbering" VALUES('ProcessCard','ProcessCard','PC-','YYMM',4);
 INSERT INTO "Ts_FormatNumbering" VALUES('ProductionTask','ProductionTask','PDT-','YYMM',4);
 
+INSERT INTO "Ts_FormatNumbering" VALUES('AdjustmentIn','AdjustmentIn','ADIN-','YYMM',4);
+INSERT INTO "Ts_FormatNumbering" VALUES('AdjustmentOut','AdjustmentOut','ADOU-','YYMM',4);
+INSERT INTO "Ts_FormatNumbering" VALUES('InventoryTransfer','InventoryTransfer','ITR-','YYMM',4);
+
 INSERT INTO "Ts_List" VALUES('BooleanActive',1,'Active','Active', NULL);
 INSERT INTO "Ts_List" VALUES('BooleanActive',2,'Inactive','Inactive', NULL);
 
@@ -17,5 +21,5 @@ INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 3, 'QC', 'QC Process', NULL)
 INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 4, 'Breaktime', 'Breaktime', NULL);
 INSERT INTO "Ts_List" VALUES('ActivityPauseReason', 5, 'Other', 'Other', NULL);
 
-INSERT INTO "Ts_List" VALUES('Direction', 1, 'In', 'In', NULL);
+INSERT INTO "Ts_List" VALUES('Direction', 1, 'In', 'In (Waste)', NULL);
 INSERT INTO "Ts_List" VALUES('Direction', 2, 'Out', 'Out', NULL);

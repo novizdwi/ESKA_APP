@@ -56,7 +56,10 @@
         column.Caption = "Vis Order";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
         column.Width = 70;
-        column.ReadOnly = !canUpdate;
+
+        // VisOrder hanya boleh diubah sistem lewat drag & drop baris, tidak pernah
+        // diketik manual -- karena itu read-only untuk semua user.
+        column.ReadOnly = true;
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         column.Settings.AllowSort = DefaultBoolean.False;
 

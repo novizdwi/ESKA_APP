@@ -149,6 +149,7 @@
                 {
                     node1.Text = "Master";
                     AddNode(dataTable, node1, "Position", "Position");
+                    AddNode(dataTable, node1, "Machine", "Machine");
                 });
 
                 settings.Nodes.Add(node1 =>
@@ -166,7 +167,6 @@
                 {
                     node1.Text = "Transaction";
                     AddNode(dataTable, node1, "Inventory Transfer", "InventoryTransfer");
-                    AddNode(dataTable, node1, "Stock Opname", "StockOpname");
                     AddNode(dataTable, node1, "Goods Receipt PO", "GoodsReceiptPO");
                     AddNode(dataTable, node1, "Re-Process", "ReProcess");
 

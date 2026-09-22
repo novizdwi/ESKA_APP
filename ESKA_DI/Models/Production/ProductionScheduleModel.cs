@@ -104,13 +104,17 @@ namespace Models.Production
         
         public TimeSpan? PracticeHours { get; set; }
         
-        public int MachineNo { get; set; }
+        public int? MachineId { get; set; }
+
+        public string MachineCode { get; set; }
 
         public string ProductionStatus { get; set; }
 
         public decimal? PlannedQty { get; set; }
 
-        public decimal? Quantity { get; set; }
+        public decimal? QuantityComplete { get; set; }
+
+        public decimal? QuantityReject { get; set; }
 
         public string ActualHours_ { get; set; }
 
@@ -142,6 +146,8 @@ namespace Models.Production
         public string ProductionTaskStatus { get; set; }
         public int? OperatorId { get; set; }
         public string OperatorName { get; set; }
+        public int? MachineId { get; set; }
+        public string MachineCode { get; set; }
     }
     #endregion
 
@@ -199,7 +205,65 @@ namespace Models.Production
             CALL ""SpProductionSchedule_GetReferences"" (
                 :p0 --userId
             )";
-            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql, userId).ToList();
+
+            // Urutan baris HARUS mengikuti VisOrder supaya hasil drag & drop tetap sama
+            // sesudah halaman di-refresh. Diurutkan di sini, bukan di procedure, supaya
+            // tidak bergantung pada ORDER BY di dalam SpProductionSchedule_GetReferences.
+            // Baris yang VisOrder nya masih kosong ditaruh paling belakang.
+            return CONTEXT.Database.SqlQuery<ProductionSchedule_ReferenceModel>(sql, userId)
+                .ToList()
+                .OrderBy(x => x.VisOrder.HasValue ? 0 : 1)
+                .ThenBy(x => x.VisOrder ?? 0)
+                .ThenBy(x => x.Id)
+                .ToList();
+        }
+
+        // Menyusun ulang VisOrder mengikuti urutan baris hasil drag & drop.
+        // ids = daftar Id Tx_ProcessCard sesuai urutan tampil terbaru; VisOrder diisi 1..N
+        // sehingga tidak ada nilai kembar maupun lompat.
+        public void UpdateVisOrder(int userId, List<long> ids)
+        {
+            if ((ids == null) || (ids.Count == 0))
+            {
+                return;
+            }
+
+            using (var CONTEXT = new HANA_APP())
+            {
+                using (var CONTEXT_TRANS = CONTEXT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        for (int i = 0; i < ids.Count; i++)
+                        {
+                            CONTEXT.Database.ExecuteSqlCommand(
+                                @"UPDATE ""Tx_ProcessCard""
+                                  SET ""VisOrder"" = :p0,
+                                      ""ModifiedDate"" = CURRENT_TIMESTAMP,
+                                      ""ModifiedUser"" = :p1
+                                  WHERE ""Id"" = :p2", i + 1, userId, ids[i]);
+                        }
+
+                        CONTEXT_TRANS.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        CONTEXT_TRANS.Rollback();
+
+                        string errorMassage;
+                        if (ex.Message.StartsWith("[VALIDATION]"))
+                        {
+                            errorMassage = ex.Message;
+                        }
+                        else
+                        {
+                            errorMassage = string.Format("[VALIDATION] {0} ", ex.Message);
+                        }
+
+                        throw new Exception(errorMassage);
+                    }
+                }
+            }
         }
 
         public List<ProductionScheduleDetailModel> ProductionSchedule_TabReferenceDetails(long id)
@@ -228,13 +292,24 @@ namespace Models.Production
                     T2.""Id"" AS ""ProductionTaskId"",
                     T2.""TransNo"" AS ""ProductionTaskTransNo"",
                     T2.""Status"" AS ""ProductionStatus"",
-                    T2.""QuantityActual"" AS ""Quantity"",
+                    T2.""QuantityComplete"" AS ""QuantityComplete"",
+                    T2.""QuantityReject"" AS ""QuantityReject"",
                     T2.""ActualHours"" AS ""ActualHours"",
-                    LPAD(CAST(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 60) AS NVARCHAR), 2, '0') || ':' || 
-                    LPAD(CAST(MOD(COALESCE(T0.""DurationTotal"", 0), 60) AS NVARCHAR), 2, '0') AS ""DurationTotal_"",
-                    LPAD(TO_VARCHAR(FLOOR(COALESCE(T2.""ActualHours"", 0) / 60)), 2, '0') 
-                        || ':' || 
-                    LPAD(TO_VARCHAR(MOD(COALESCE(T2.""ActualHours"", 0), 60)), 2, '0') 
+                    -- ""DurationTotal"" dan ""ActualHours"" dua-duanya disimpan dalam DETIK
+                    -- (""ActualHours"" diisi SpProductionTaskActivity_UpdateTask dari
+                    -- SECONDS_BETWEEN, meski namanya ""Hours""). Diformat jadi HH:MM.
+                    -- FLOOR di HANA mengembalikan DESIMAL, jadi TO_VARCHAR-nya menghasilkan
+                    -- ""0.000000"". Harus dibungkus TO_INTEGER dulu.
+                    -- Jam TIDAK di-LPAD: LPAD memotong kalau string lebih panjang dari
+                    -- target, jadi 100 jam akan jadi ""10"". Nol di depan ditambah manual
+                    -- lewat CASE (36000 detik = 10 jam), sehingga 100+ jam tetap utuh.
+                    CASE WHEN COALESCE(T0.""DurationTotal"", 0) < 36000 THEN '0' ELSE '' END
+                        || TO_VARCHAR(TO_INTEGER(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 3600))) || ':' ||
+                    LPAD(TO_VARCHAR(TO_INTEGER(FLOOR(MOD(COALESCE(T0.""DurationTotal"", 0), 3600) / 60))), 2, '0') AS ""DurationTotal_"",
+                    CASE WHEN COALESCE(T2.""ActualHours"", 0) < 36000 THEN '0' ELSE '' END
+                        || TO_VARCHAR(TO_INTEGER(FLOOR(COALESCE(T2.""ActualHours"", 0) / 3600)))
+                        || ':' ||
+                    LPAD(TO_VARCHAR(TO_INTEGER(FLOOR(MOD(COALESCE(T2.""ActualHours"", 0), 3600) / 60))), 2, '0')
                         AS ""ActualHours_"",
                     T2.""Comments"" AS ""TaskComments""
                     FROM ""Tx_ProcessCard_Detail"" T0
@@ -290,6 +365,8 @@ namespace Models.Production
                                 // RULE 2 & 3: update Tx_ProcessCard_Detail
                                 detail.OperatorId = op.OperatorId;
                                 detail.OperatorName = op.OperatorName;
+                                detail.MachineId = op.MachineId;
+                                detail.MachineCode = op.MachineCode;
                                 detail.ModifiedDate = dtModified;
                                 detail.ModifiedUser = userId;
 
@@ -329,47 +406,6 @@ namespace Models.Production
                     }
                 }
             }
-        }
-
-        // Mengisi Tx_ProductionTask_Item dari komponen WOR1 milik Production Order task.
-        //   Id        = Id Tx_ProductionTask
-        //   ItemCode / ItemName / LineNum  -> WOR1
-        //   WhsCode   -> WOR1."wareHouse"
-        //   WhsName   -> OWHS
-        //   Direction -> 'Out' (nilai awal)
-        //   IsLocked  -> 'N'
-        private void GenerateProductionTaskItem(HANA_APP CONTEXT, int userId, long id, int? docEntry)
-        {
-            if ((docEntry ?? 0) == 0)
-            {
-                return;
-            }
-
-            string ssql = @"
-                INSERT INTO ""Tx_ProductionTask_Item""
-                    (""Id"", ""ItemCode"", ""ItemName"", ""WhsCode"", ""WhsName"",
-                     ""LineNum"", ""Direction"", ""UomEntry"", ""Uom"", ""IsLocked"",
-                     ""QuantityPlanned"",
-                     ""CreatedDate"", ""CreatedUser"", ""ModifiedDate"", ""ModifiedUser"")
-                SELECT
-                    :p0,
-                    T1.""ItemCode"",
-                    T1.""ItemName"",
-                    T1.""wareHouse"",
-                    T2.""WhsName"",
-                    T1.""LineNum"",
-                    'Out',
-                    T1.""UomEntry"",
-                    T1.""UomCode"",
-                    'N',
-                    T1.""PlannedQty"",
-                    CURRENT_TIMESTAMP, :p1, CURRENT_TIMESTAMP, :p2
-                FROM """ + DbProvider.dbSap_Name + @""".""WOR1"" T1
-                LEFT JOIN """ + DbProvider.dbSap_Name + @""".""OWHS"" T2 ON T1.""wareHouse"" = T2.""WhsCode""
-                WHERE T1.""DocEntry"" = :p3
-            ";
-
-            CONTEXT.Database.ExecuteSqlCommand(ssql, id, userId, userId, docEntry.Value);
         }
 
         private void UpdateDetail(HANA_APP CONTEXT, int userId, ProductionSchedule_ReferenceModel model)
@@ -418,9 +454,9 @@ namespace Models.Production
                                     CONTEXT.Tx_ProductionTask.Add(tx_ProductionTask);
                                     CONTEXT.SaveChanges();
 
-                                    // Item task digenerate dari komponen WOR1 milik Production Order
-                                    // task ini. Item menempel pada TASK (level 2), bukan pada activity.
-                                    GenerateProductionTaskItem(CONTEXT, userId, tx_ProductionTask.Id, tx_ProductionTask.DocEntry);
+                                    // Item task (Tx_ProductionTask_Item) TIDAK digenerate di sini lagi:
+                                    // dibuat/disinkronkan dari WOR1 saat user klik Start di Task List
+                                    // (ProductionTaskService.GenerateProductionTaskItem).
                                 }
                             }
                         }

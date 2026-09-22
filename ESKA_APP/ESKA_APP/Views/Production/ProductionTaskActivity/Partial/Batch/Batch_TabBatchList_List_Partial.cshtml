@@ -44,6 +44,12 @@
     {
         obtnBatchList = Models._Utils.GeneralGetList.GetBatch(batchItemCode, batchWhsCode);
     }
+
+    // Item Direction 'In' belum punya batch di gudang (barangnya justru baru dihasilkan),
+    // jadi kolom Batch disembunyikan -- dan otomatis tidak boleh jadi wajib isi.
+    string batchDirection = Models._Ef.DbProvider.dbApp.Database.SqlQuery<string>(
+        "SELECT TOP 1 T0.\"Direction\" FROM \"Tx_ProductionTask_Item\" T0 WHERE T0.\"DetId\"=:p0", DetId).FirstOrDefault() ?? "";
+    bool isDirectionIn = string.Equals(batchDirection, "In", StringComparison.OrdinalIgnoreCase);
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -126,7 +132,9 @@
 
         // Dropdown daftar batch SAP (OBTN) per ItemCode + WhsCode item yang popup nya dibuka.
         column.ColumnType = MVCxGridViewColumnType.ComboBox;
-        column.Width = 200;
+
+        // Direction 'In' -> kolom disembunyikan (width 0).
+        column.Width = isDirectionIn ? 0 : 200;
 
         var cbo = column.PropertiesEdit as ComboBoxProperties;
         cbo.DataSource = obtnBatchList;
@@ -135,10 +143,40 @@
         cbo.ValueType = typeof(string);
         cbo.DropDownStyle = DropDownStyle.DropDownList;
         cbo.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-        cbo.ValidationSettings.RequiredField.IsRequired = true;
+
+        // Kalau kolomnya disembunyikan, jangan dijadikan wajib -- baris tidak akan pernah
+        // bisa disimpan karena user tidak punya cara mengisinya.
+        cbo.ValidationSettings.RequiredField.IsRequired = !isDirectionIn;
         cbo.ValidationSettings.RequiredField.ErrorText = "Batch is required";
         cbo.ValidationSettings.Display = Display.Dynamic;
         cbo.ClientInstanceName = settings.Name + "_" + column.FieldName;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        // Kolom milik tabel batch sendiri, bisa diinput untuk Direction 'In' maupun 'Out'.
+        column.FieldName = "Quantity";
+        column.Name = "Quantity";
+        column.Caption = "Quantity";
+        column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
+        column.Width = 100;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
+
+        column.ColumnType = MVCxGridViewColumnType.SpinEdit;
+        var txt = column.PropertiesEdit as SpinEditProperties;
+        txt.NumberType = SpinEditNumberType.Integer;
+        txt.DisplayFormatString = "#,###";
+        txt.DisplayFormatInEditMode = true;
+        txt.AllowMouseWheel = false;
+        txt.SpinButtons.ShowIncrementButtons = false;
+
+        txt.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+        txt.ValidationSettings.RequiredField.IsRequired = true;
+        txt.ValidationSettings.RequiredField.ErrorText = "Quantity is required";
+        txt.ValidationSettings.Display = Display.Dynamic;
+        txt.Style.HorizontalAlign = HorizontalAlign.Right;
+        txt.ClientInstanceName = settings.Name + "_" + column.FieldName;
     });
 
     settings.Columns.Add(column =>
@@ -161,12 +199,14 @@
 
     settings.Columns.Add(column =>
     {
+        // Bisa diinput untuk Direction 'In' maupun 'Out'.
         column.FieldName = "Netto";
         column.Name = "Netto";
         column.Caption = "Netto";
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Right;
         column.Width = 100;
-        column.Settings.AllowSort = DefaultBoolean.False; 
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.ReadOnly = ViewBag.ReadOnly;
 
         column.ColumnType = MVCxGridViewColumnType.SpinEdit;
         var txt = column.PropertiesEdit as SpinEditProperties;

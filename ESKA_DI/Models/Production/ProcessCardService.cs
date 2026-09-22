@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -68,7 +68,7 @@ namespace Models.Production
 
         public string ItemName { get; set; }
 
-        public decimal? Quantity { get; set; } 
+        public decimal? Quantity { get; set; }
 
         public string Status { get; set; }
 
@@ -117,7 +117,7 @@ namespace Models.Production
         public List<ProcessCard_ApprovalModel> insertedRowValues { get; set; }
         public List<ProcessCard_ApprovalModel> modifiedRowValues { get; set; }
     }
-    
+
     public class ProcessCard_ApprovalModel
     {
         private FormModeEnum _FormModeEnum = FormModeEnum.New;
@@ -162,7 +162,7 @@ namespace Models.Production
 
 
         public int? RowNo { get; set; }
-        
+
         public int? Sort { get; set; }
 
         public int _UserId { get; set; }
@@ -174,7 +174,7 @@ namespace Models.Production
         public string RoutingCode { get; set; }
 
         public string DocNum { get; set; }
-        
+
         public string RoutingName { get; set; }
 
         public string RoutingStatus { get; set; }
@@ -191,10 +191,10 @@ namespace Models.Production
 
         public int? MachineId { get; set; }
 
-        public string MachineName { get; set; }
+        public string MachineCode { get; set; }
 
         public int? DurationPerItem { get; set; }
-        
+
         public int? DurationTotal { get; set; }
 
         public int? ActualHours { get; set; }
@@ -279,7 +279,7 @@ namespace Models.Production
         public string TransNo { get; set; }   // Nomor transaksi web
 
         public int? OperatorId { get; set; }
-        
+
         public string OperatorName { get; set; }
 
         public string FG { get; set; }   // Root Finished Good
@@ -301,14 +301,14 @@ namespace Models.Production
         public string DocEntry { get; set; }   // DocEntry OWOR setelah Add()
 
         public string SapStatus { get; set; }   // null / "Posted" / "Error"
-        
-        public int? DurationPerItem { get; set; } 
 
-        public int? DurationTotal { get; set; } 
+        public int? DurationPerItem { get; set; }
+
+        public int? DurationTotal { get; set; }
 
         public List<ProductionOrder_DetailModel> ListDetails_ { get; set; } = new List<ProductionOrder_DetailModel>();
     }
-    
+
     public class ProductionOrder_DetailModel
     {
 
@@ -374,7 +374,7 @@ namespace Models.Production
                             TO_VARCHAR(T0.""CreatedDate"", 'DD/MM/YYYY') AS ""CreatedDate_"",
                             TO_VARCHAR(T0.""ModifiedDate"", 'DD/MM/YYYY') AS ""ModifiedDate_""
                             FROM ""Tx_ProcessCard"" T0
-                            WHERE T0.""Id"" = :p0 
+                            WHERE T0.""Id"" = :p0
                             ORDER BY T0.""Id"" ASC
                 ";
 
@@ -392,7 +392,7 @@ namespace Models.Production
                     string getDocNum = @"SELECT 'Y'
 			            FROM ""Tx_ProcessCard"" T0
 			            INNER JOIN  ""Tx_ProcessCard_Approval"" T1 ON T0.""Id"" = T1.""Id"" AND T1.""Status"" = 'Waiting'
-			            WHERE T0.""Id"" = :p0 
+			            WHERE T0.""Id"" = :p0
 			            AND T1.""UserId"" = :p1
 		            ";
                     model.IsEligibleApprove_ = CONTEXT.Database.SqlQuery<string>(getDocNum, id, userId).FirstOrDefault();
@@ -402,7 +402,7 @@ namespace Models.Production
 
             return model;
         }
-        
+
 
         public List<ProcessCard_DetailModel> ProcessCard_Details(long id = 0)
         {
@@ -417,13 +417,20 @@ namespace Models.Production
         {
             string ssql = @"
                 SELECT DISTINCT ROW_NUMBER() OVER (ORDER BY T0.""DetId"") AS ""RowNo"", T0.*,
-                LPAD(CAST(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 60) AS NVARCHAR), 2, '0') || ':' || 
-                LPAD(CAST(MOD(COALESCE(T0.""DurationTotal"", 0), 60) AS NVARCHAR), 2, '0') AS ""DurationTotal_""
-                FROM ""Tx_ProcessCard_Detail"" T0  
+                -- ""DurationTotal"" disimpan dalam DETIK, diformat jadi HH:MM.
+                -- FLOOR di HANA mengembalikan DESIMAL, jadi TO_VARCHAR-nya menghasilkan
+                -- ""0.000000"". Harus dibungkus TO_INTEGER dulu.
+                -- Jam TIDAK di-LPAD: LPAD memotong kalau string lebih panjang dari target,
+                -- jadi 100 jam akan jadi ""10"". Nol di depan ditambah manual lewat CASE
+                -- (36000 detik = 10 jam), sehingga 100+ jam tetap utuh.
+                CASE WHEN COALESCE(T0.""DurationTotal"", 0) < 36000 THEN '0' ELSE '' END
+                    || TO_VARCHAR(TO_INTEGER(FLOOR(COALESCE(T0.""DurationTotal"", 0) / 3600))) || ':' ||
+                LPAD(TO_VARCHAR(TO_INTEGER(FLOOR(MOD(COALESCE(T0.""DurationTotal"", 0), 3600) / 60))), 2, '0') AS ""DurationTotal_""
+                FROM ""Tx_ProcessCard_Detail"" T0
                 WHERE T0.""Id"" =:p0
                 ORDER BY T0.""DetId"" ASC
             ";
-            
+
             var ProcessCard = CONTEXT.Database.SqlQuery<ProcessCard_DetailModel>(ssql, id).ToList();
             return ProcessCard;
         }
@@ -561,7 +568,7 @@ namespace Models.Production
                             CopyProperty.CopyProperties(model, tx_ProcessCard, false);
 
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                            
+
                             tx_ProcessCard.TransType = "ProcessCard";
                             tx_ProcessCard.CreatedDate = dtModified;
                             tx_ProcessCard.CreatedUser = model._UserId;
@@ -578,7 +585,7 @@ namespace Models.Production
 
                             String keyValue;
                             keyValue = tx_ProcessCard.Id.ToString();
-                            
+
                             CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_AddDetail\"(:p0,:p1, 'add')", model._UserId, Id );
                             SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "add", "Id", keyValue);
                             CONTEXT_TRANS.Commit();
@@ -623,13 +630,13 @@ namespace Models.Production
                             {
                                 String keyValue;
                                 keyValue = model.Id.ToString();
-                                
+
                                 SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "before", "ProcessCard", "update", "Id", keyValue);
 
                                 Tx_ProcessCard tx_ProcessCard = CONTEXT.Tx_ProcessCard.Find(model.Id);
                                 changeItem = model.ItemCode != tx_ProcessCard.ItemCode ? 1 : 0;
                                 DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
-                             
+
                                 if (tx_ProcessCard != null)
                                 {
                                     var exceptColumns = new string[] { "Id", "TransNo", "CreatedUser" };
@@ -667,7 +674,7 @@ namespace Models.Production
                                             }
                                         }
                                     }
-                                    
+
                                     CONTEXT.SaveChanges();
                                     //if change item then repopulate detail
                                     if (changeItem == 1)
@@ -675,7 +682,7 @@ namespace Models.Production
                                         CONTEXT.Database.ExecuteSqlCommand("CALL \"SpProcessCard_AddDetail\"(:p0,:p1, 'update')", model._UserId, model.Id );
                                     }
                                     SpNotif.SpSysControllerTransNotif(model._UserId, "ProcessCard", CONTEXT, "after", "ProcessCard", "update", "Id", keyValue);
-                                    
+
                                 }
 
                                 CONTEXT_TRANS.Commit();
@@ -1056,9 +1063,9 @@ namespace Models.Production
                     oPO.PlannedQuantity = (double)po.PlannedQty;
                     oPO.DueDate = dueDate;
                     oPO.StartDate = startDate;
-                    oPO.ProductionOrderType = SAPbobsCOM.BoProductionOrderTypeEnum.bopotStandard; 
+                    oPO.ProductionOrderType = SAPbobsCOM.BoProductionOrderTypeEnum.bopotStandard;
                     oPO.Remarks = string.Format( "Routing: {0} | Level: {1} | FG: {2} | Ref: {3}", po.RoutingName, po.RoutingLevel, po.FG, po.TransNo);
-                    
+
                     //oPO.ProductionOrderStatus = BoProductionOrderStatusEnum.boposReleased;
                     oPO.UserFields.Fields.Item("U_IDU_WebId").Value = id.ToString();
                     oPO.UserFields.Fields.Item("U_IDU_WebTransNo").Value = po.TransNo;
@@ -1101,7 +1108,7 @@ namespace Models.Production
                     string newDocEntry = oCompany.GetNewObjectKey();
                     string newDocNum = string.Empty;
                     //update to released
-                    
+
                     ProductionOrders oProd = (ProductionOrders)oCompany.GetBusinessObject(BoObjectTypes.oProductionOrders);
                     oProd.GetByKey(Convert.ToInt32(newDocEntry) );
                     oProd.ProductionOrderStatus = BoProductionOrderStatusEnum.boposReleased;
@@ -1151,8 +1158,8 @@ namespace Models.Production
                 Tx_ProcessCard_Detail txDetail = CONTEXT.Tx_ProcessCard_Detail.Find(po.DetId);
                 if (txDetail == null) continue;
 
-                txDetail.DocEntry = po.DocEntry; 
-                txDetail.DocNum = po.DocNum;  
+                txDetail.DocEntry = po.DocEntry;
+                txDetail.DocNum = po.DocNum;
 
                 txDetail.DurationPerItem = po.DurationPerItem;
                 txDetail.DurationTotal = po.DurationTotal;
@@ -1260,9 +1267,9 @@ namespace Models.Production
 
                         CONTEXT_TRANS.Commit();
                         string strApprovalStatus = @"
-                            SELECT T0.""ApprovalStatus"" 
+                            SELECT T0.""ApprovalStatus""
                             FROM ""Tx_ProcessCard"" T0
-                            WHERE T0.""Id"" = :p0 
+                            WHERE T0.""Id"" = :p0
                         ";
 
                         approvalStatus = CONTEXT.Database.SqlQuery<string>(strApprovalStatus, id).FirstOrDefault();
@@ -1297,10 +1304,10 @@ namespace Models.Production
             {
                 string sql = @"
                     SELECT TOP 1 T0.""Id"", T0.""Status"", T0.""ApprovalMessages"", T1.""CreatedDate"", T2.""FirstName""
-                    FROM ""Tx_ProcessCard"" T0 
-                    LEFT JOIN ""Tx_ProcessCard_Approval"" T1 ON T0.""Id"" = T1.""Id"" 
+                    FROM ""Tx_ProcessCard"" T0
+                    LEFT JOIN ""Tx_ProcessCard_Approval"" T1 ON T0.""Id"" = T1.""Id""
                     LEFT JOIN ""Tm_User"" T2 ON T0.""CreatedUser"" = T2.""Id""
-                    WHERE T0.""Id""=:p0 
+                    WHERE T0.""Id""=:p0
                 ";
 
                 model = CONTEXT.Database.SqlQuery<ProcessCardApprovalView___>(sql, id).FirstOrDefault();

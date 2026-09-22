@@ -20,7 +20,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -675,30 +675,39 @@
     <Content Include="Views\Setting\ApprovalTemplate\Partial\ApprovalTemplate_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflTag\Partial\_CflTag_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Master\Machine\Machine.cshtml" />
+    <Content Include="Views\Master\Machine\Partial\Machine_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Master\Machine\Partial\Machine_Form_Partial.cshtml" />
+    <Content Include="Views\Master\Machine\Partial\Machine_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Master\Machine\Partial\Machine_List_Partial.cshtml" />
     <Content Include="Views\Master\Position\Position.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Panel_List_Partial.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Form_TabDetail_List_Partial.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Form_Partial.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_Form_Btn_Partial.cshtml" />
     <Content Include="Views\Master\Position\Partial\Position_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Approval\Approval_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Approval\Approval_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Approval\Approval_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\CancelReason\CancelReason_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\StockOpname_Form_BtnBottom_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\StockOpname_Form_Btn_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\StockOpname_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\StockOpname_Form_TabDetail_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\StockOpname_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\StockOpname_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\StockOpname.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Approval\Approval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Approval\Approval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Approval\Approval_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\CancelReason\CancelReason_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\CancelReason\CancelReason_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\CancelReason\CancelReason_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\InventoryTransfer_Form_BtnBottom_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\InventoryTransfer_Form_Btn_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\InventoryTransfer_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\InventoryTransfer_Form_TabDetail_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\InventoryTransfer_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\InventoryTransfer_Panel_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\ViewApproval\ViewApproval_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\ViewApproval\ViewApproval_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\ViewApproval\ViewApproval_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\ViewApproval\ViewApproval_TabContent_List_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\InventoryTransfer.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Batch\Batch_Form_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Batch\Batch_Panel_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Batch\Batch_Partial.cshtml" />
+    <Content Include="Views\Transaction\InventoryTransfer\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflItemByWarehouse\Partial\_CflItemByWarehouse_Panel_List_Partial.cshtml" />
     <Content Include="Views\Transaction\GoodsReceiptPo\Partial\GoodsReceiptPo_Form_Btn_Partial.cshtml" />
@@ -710,10 +719,6 @@
     <Content Include="Views\Transaction\GoodsReceiptPo\GoodsReceiptPo.cshtml" />
     <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_List_Partial.cshtml" />
     <Content Include="Views\_Cfl\_CflGoodsReceiptPo\Partial\_CflGoodsReceiptPo_Panel_List_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Form_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Panel_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_Partial.cshtml" />
-    <Content Include="Views\Transaction\StockOpname\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Form_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Form_TabApproval_Partial.cshtml" />
     <Content Include="Views\Production\ProcessCard\Partial\Approval\Approval_Panel_Partial.cshtml" />
@@ -822,6 +827,9 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonFileHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Master\Machine\MachineController.List.cs" />
+    <Compile Include="Controllers\Master\Machine\MachineController.Nav.cs" />
+    <Compile Include="Controllers\Master\Machine\MachineController.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.List.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.Nav.cs" />
     <Compile Include="Controllers\Master\Position\PositionController.cs" />
@@ -911,14 +919,14 @@
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.List.cs" />
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.CancelReason.cs" />
     <Compile Include="Controllers\Transaction\ReProcess\ReProcessController.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Approval.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.CancelReason.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.List.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Nav.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.Tab.Detail.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewApproval.cs" />
-    <Compile Include="Controllers\Transaction\StockOpname\StockOpnameController.ViewBatch.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.Approval.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.CancelReason.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.List.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.Nav.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.Tab.Detail.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.ViewApproval.cs" />
+    <Compile Include="Controllers\Transaction\InventoryTransfer\InventoryTransferController.ViewBatch.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflBp\_CflBpController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflCardCode\_CflCardCodeController.List.cs" />

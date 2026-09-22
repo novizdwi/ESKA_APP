@@ -5,6 +5,12 @@ INSERT INTO "Ts_Menu" VALUES ('Position/Add', 'Add', 'Position/Add', 'Position',
 INSERT INTO "Ts_Menu" VALUES ('Position/Cancel', 'Cancel', 'Position/Cancel', 'Position', 100108);
 INSERT INTO "Ts_Menu" VALUES ('Position/Print', 'Print', 'Position/Print', 'Position', 100109);
 
+INSERT INTO "Ts_Menu" VALUES ('Machine', 'Machine', '', 'Master', 1002);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Detail#All', 'Machine - All', 'Machine/Detail', 'Machine', 100201);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Add', 'Add', 'Machine/Add', 'Machine', 100202);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Cancel', 'Cancel', 'Machine/Cancel', 'Machine', 100208);
+INSERT INTO "Ts_Menu" VALUES ('Machine/Print', 'Print', 'Machine/Print', 'Machine', 100209);
+
 INSERT INTO "Ts_Menu" VALUES ('Production', 'Production', '', '', 20);
 
 INSERT INTO "Ts_Menu" VALUES ('ProcessCardMonitoring', 'Process Card Monitoring', '', 'Production', 2001);
@@ -32,43 +38,32 @@ INSERT INTO "Ts_Menu" VALUES ('ProductionTask/Detail#All', 'Detail - All', 'Prod
 
 INSERT INTO "Ts_Menu" VALUES ('Transaction', 'Transaction', '', '', 30);
 
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt', 'Issue And Receipt', '', 'Transaction', 3001);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Detail#User', 'Detail - User', 'StockOpname/Detail', 'IssueAndReceipt', 300101);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Detail#All', 'Detail - All', 'StockOpname/Detail', 'IssueAndReceipt', 300102);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Add', 'Add', 'IssueAndReceipt/Add', 'IssueAndReceipt', 300103);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Update', 'Update', 'IssueAndReceipt/Update', 'IssueAndReceipt', 300104);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Post', 'Post', 'IssueAndReceipt/Post', 'IssueAndReceipt', 300105);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Cancel', 'Cancel', 'IssueAndReceipt/Cancel', 'IssueAndReceipt', 300108);
-INSERT INTO "Ts_Menu" VALUES ('IssueAndReceipt/Print', 'Print', 'IssueAndReceipt/Print', 'IssueAndReceipt', 300109);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer', 'Inventory Transfer', '', 'Transaction', 3003);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Detail#User', 'Detail - User', 'InventoryTransfer/Detail', 'InventoryTransfer', 300301);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Detail#All', 'Detail - All', 'InventoryTransfer/Detail', 'InventoryTransfer', 300302);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Add', 'Add', 'InventoryTransfer/Add', 'InventoryTransfer', 300303);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Update', 'Update', 'InventoryTransfer/Update', 'InventoryTransfer', 300304);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Post', 'Post', 'InventoryTransfer/Post', 'InventoryTransfer', 300305);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Cancel', 'Cancel', 'InventoryTransfer/Cancel', 'InventoryTransfer', 300308);
+INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Print', 'Print', 'InventoryTransfer/Print', 'InventoryTransfer', 300309);
 
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer', 'Inventory Transfer', '', 'Transaction', 3002);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Detail#User', 'Detail - User', 'InventoryTransfer/Detail', 'InventoryTransfer', 300201);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Detail#All', 'Detail - All', 'InventoryTransfer/Detail', 'InventoryTransfer', 300202);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Add', 'Add', 'InventoryTransfer/Add', 'InventoryTransfer', 300203);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Update', 'Update', 'InventoryTransfer/Update', 'InventoryTransfer', 300204);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Post', 'Post', 'InventoryTransfer/Post', 'InventoryTransfer', 300205);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Cancel', 'Cancel', 'InventoryTransfer/Cancel', 'InventoryTransfer', 300208);
-INSERT INTO "Ts_Menu" VALUES ('InventoryTransfer/Print', 'Print', 'InventoryTransfer/Print', 'InventoryTransfer', 300209);
-     
-INSERT INTO "Ts_Menu" VALUES ('StockOpname', 'Stock Opname', '', 'Transaction', 3003);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Detail#User', 'Detail - User', 'StockOpname/Detail', 'StockOpname', 300301);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Detail#All', 'Detail - All', 'StockOpname/Detail', 'StockOpname', 300302);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Add', 'Add', 'StockOpname/Add', 'StockOpname', 300303);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Update', 'Update', 'StockOpname/Update', 'StockOpname', 300304);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Post', 'Post', 'StockOpname/Post', 'StockOpname', 300305);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Cancel', 'Cancel', 'StockOpname/Cancel', 'StockOpname', 300308);
-INSERT INTO "Ts_Menu" VALUES ('StockOpname/Print', 'Print', 'StockOpname/Print', 'StockOpname', 300309);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO', 'Goods Receipt PO', '', 'Transaction', 3005);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Detail#User', 'Detail - User', 'GoodsReceiptPO/Detail', 'GoodsReceiptPO', 300501);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Detail#All', 'Detail - All', 'GoodsReceiptPO/Detail', 'GoodsReceiptPO', 300502);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Add', 'Add', 'GoodsReceiptPO/Add', 'GoodsReceiptPO', 300503);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Update', 'Update', 'GoodsReceiptPO/Update', 'GoodsReceiptPO', 300504);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Post', 'Post', 'GoodsReceiptPO/Post', 'GoodsReceiptPO', 300505);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Cancel', 'Cancel', 'GoodsReceiptPO/Cancel', 'GoodsReceiptPO', 300508);
+INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Print', 'Print', 'GoodsReceiptPO/Print', 'GoodsReceiptPO', 300509);
 
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO', 'Goods Receipt PO', '', 'Transaction', 3004);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Detail#User', 'Detail - User', 'StockOpname/Detail', 'GoodsReceiptPO', 300401);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Detail#All', 'Detail - All', 'StockOpname/Detail', 'GoodsReceiptPO', 300402);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Add', 'Add', 'GoodsReceiptPO/Add', 'GoodsReceiptPO', 300403);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Update', 'Update', 'GoodsReceiptPO/Update', 'GoodsReceiptPO', 300404);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Post', 'Post', 'GoodsReceiptPO/Post', 'GoodsReceiptPO', 300405);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Cancel', 'Cancel', 'GoodsReceiptPO/Cancel', 'GoodsReceiptPO', 300408);
-INSERT INTO "Ts_Menu" VALUES ('GoodsReceiptPO/Print', 'Print', 'GoodsReceiptPO/Print', 'GoodsReceiptPO', 300409);
-
-
+INSERT INTO "Ts_Menu" VALUES ('ReProcess', 'Issue And Receipt', '', 'Transaction', 3006);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Detail#User', 'Detail - User', 'ReProcess/Detail', 'ReProcess', 300601);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Detail#All', 'Detail - All', 'ReProcess/Detail', 'ReProcess', 300602);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Add', 'Add', 'ReProcess/Add', 'ReProcess', 300603);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Update', 'Update', 'ReProcess/Update', 'ReProcess', 300604);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Post', 'Post', 'ReProcess/Post', 'ReProcess', 300605);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Cancel', 'Cancel', 'ReProcess/Cancel', 'ReProcess', 300608);
+INSERT INTO "Ts_Menu" VALUES ('ReProcess/Print', 'Print', 'ReProcess/Print', 'ReProcess', 300609);
 
 
 INSERT INTO "Ts_Menu" VALUES ('Reports', 'Report', '', '', 70);

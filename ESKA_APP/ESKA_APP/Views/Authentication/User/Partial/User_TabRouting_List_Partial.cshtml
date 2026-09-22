@@ -55,6 +55,19 @@
         chk.ValueType = typeof(string);
         chk.ValueChecked = "Y";
         chk.ValueUnchecked = "N";
+
+        // Checkbox di header: centang / hapus centang semua baris yang tampil.
+        column.SetHeaderTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+                Html.DevExpress().CheckBox(chkAll =>
+                {
+                    chkAll.Name = "chkUserRoutingCheckAll";
+                    chkAll.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { gvUserRoutingDetailCheckAll(s, e); }";
+                    chkAll.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                }).GetHtml()
+            );
+        });
     });
 
     settings.Columns.Add(column =>
