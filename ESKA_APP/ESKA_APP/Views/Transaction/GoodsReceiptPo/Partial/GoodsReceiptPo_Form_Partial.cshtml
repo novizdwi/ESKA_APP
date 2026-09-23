@@ -229,11 +229,33 @@
     {
         itemSettings.Name = "grpDocnum";
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
-        itemSettings.Caption = "No";
+        itemSettings.Caption = "Purchase Order No";
         itemSettings.FieldName = "BaseDocNum";
+        // Sembunyikan seluruh item (caption + editor) selama PO belum dipilih --
+        // BaseDocNum baru terisi setelah user memilih PO lewat cfl.
+        itemSettings.ClientVisible = string.IsNullOrWhiteSpace(Model.BaseDocNum) ? false : true;
         var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Name = "BaseDocNum";
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 230;
+    });
+
+    groupItem_Col3.Items.Add(itemSettings =>
+    {
+        itemSettings.Name = "grpDocNumGrpo";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Goods Receipt Po No";
+        itemSettings.FieldName = "DocNum";
+        // Sembunyikan seluruh item (caption + editor) sebelum Post -- DocNum GRPO
+        // baru terisi setelah dokumen berhasil dikirim ke SAP.
+        itemSettings.ClientVisible = string.IsNullOrWhiteSpace(Model.DocNum) ? false : true;
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Name = "DocNum";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
         txt.ControlStyle.CssClass = "editor";
