@@ -54,10 +54,11 @@ namespace Models.Production
 
         public string ItemName { get; set; }
 
-        // Tx_ProcessCard.DueDate (Tx_ProductionTask.BaseId = Tx_ProcessCard.Id).
-        public DateTime? DueDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         public DateTime? PlannedDate { get; set; }
+
+        public DateTime? DueDate { get; set; }
 
         public decimal? QuantityComplete { get; set; }
 
