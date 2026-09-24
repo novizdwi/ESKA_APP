@@ -431,10 +431,10 @@
     <Compile Include="Models\_EF\Tm_Layout_User.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_MasterSetting.cs">
+    <Compile Include="Models\_EF\Tm_Machine.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\_EF\Tm_Machine.cs">
+    <Compile Include="Models\_EF\Tm_MasterSetting.cs">
       <DependentUpon>HANA_APP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\_EF\Tm_Position.cs">
