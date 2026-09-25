@@ -279,5 +279,12 @@ namespace Controllers.Production
             var list = Models._Utils.GeneralGetList.GetMachineList();
             return Json(list);
         }
+
+        [HttpPost]
+        public JsonResult GetMachineByRouting(string routingCode)
+        {
+            var list = Models._Utils.GeneralGetList.GetMachineList(routingCode);
+            return Json(list);
+        }
     }
 }

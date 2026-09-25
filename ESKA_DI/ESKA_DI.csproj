@@ -327,6 +327,7 @@
     <Compile Include="Models\_Cfl\CflDynamic_Model.cs" />
     <Compile Include="Models\_Cfl\CflGoodsReceiptPo_Model.cs" />
     <Compile Include="Models\_Cfl\CflItemByWarehouse_Model.cs" />
+    <Compile Include="Models\_Cfl\CflRouting_Model.cs" />
     <Compile Include="Models\_Cfl\CflTag_Model.cs" />
     <Compile Include="Models\_Cfl\CflItem_Model.cs" />
     <Compile Include="Models\_Cfl\CflCoa_Model.cs" />

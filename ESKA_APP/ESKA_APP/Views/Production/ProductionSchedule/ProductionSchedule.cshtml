@@ -473,6 +473,39 @@
             var hasTask = (taskId !== null && taskId !== "" && typeof taskId !== "undefined");
             if (hasTask && status !== "Closed") { e.cancel = true; return; }
         }
+
+        // Daftar pilihan MachineCode diisi ulang lewat AJAX (bukan hanya andalkan
+        // CellEditorInitialize server-side) supaya benar-benar dibatasi RoutingCode
+        // baris ini, sama seperti pola OperatorId di ProcessCard.
+        if (e.focusedColumn && e.focusedColumn.fieldName === "MachineCode") {
+            var routingCode = s.batchEditApi.GetCellValue(e.visibleIndex, "RoutingCode");
+            // Nilai MachineCode yang sudah tersimpan di baris ini -- ClearItems() di bawah
+            // mengosongkan editornya, jadi nilai ini harus di-set lagi sesudah AddItem
+            // supaya sel tidak kelihatan kosong begitu diklik.
+            var currentMachineCode = s.batchEditApi.GetCellValue(e.visibleIndex, "MachineCode");
+
+            $.ajax({
+                url: '@Url.Action("GetMachineByRouting", "ProductionSchedule")',
+                type: 'POST',
+                data: { routingCode: routingCode },
+                success: function (data) {
+                    var editor = s.GetEditor("MachineCode");
+                    if (!editor) return;
+
+                    editor.ClearItems();
+
+                    // ValueField/TextField MachineCode sama-sama "Name" (kode mesin sendiri).
+                    for (var i = 0; i < data.length; i++) {
+                        editor.AddItem(data[i].Name, data[i].Name);
+                    }
+
+                    if (currentMachineCode) {
+                        editor.SetValue(currentMachineCode);
+                    }
+                }
+            });
+        }
+
         window.curEditIndex = e.visibleIndex;
     }
 

@@ -1,4 +1,4 @@
-﻿@using Models.Transaction;
+@using Models.Transaction;
 @using System.Web.Script.Serialization;
 @using System.Web.UI.WebControls;
 @using System.Drawing
@@ -10,11 +10,6 @@
 @{
 
     ViewBag.Id = Model.Id ?? 0;
-
-    // ---- WAKTU MULAI : tanggal + jam CreatedDate Tx_ProductionTask_Activity (ActivityDate), contoh 21/09/2026 14:52 ----
-    string waktuMulai = Model.ActivityDate.HasValue
-        ? Model.ActivityDate.Value.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)
-        : "-";
 
     // ---- DURASI : jam saat ini dikurang ActivityDate ----
     string durasi = "-";
@@ -28,6 +23,31 @@
         durasi = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
     }
 
+    // ---- PAUSE DURATION ----
+    string pauseDuration = "00:00";
+    if (Model.PauseHours.HasValue)
+    {
+        TimeSpan pauseTs = TimeSpan.FromSeconds((double)Model.PauseHours.Value);
+        pauseDuration = string.Format("{0:00}:{1:00}", (int)pauseTs.TotalHours, pauseTs.Minutes);
+    }
+
+    string dueDate = Model.DueDate.HasValue
+        ? Model.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+        : "-";
+
+    // START TIME dipecah tanggal/jam jadi 2 kolom terpisah, supaya kolom jamnya sejajar
+    // dengan PAUSE DURATION dan DURATION (sama-sama format jam).
+    string startDateOnly = Model.ActivityDate.HasValue
+        ? Model.ActivityDate.Value.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)
+        : "-";
+    string startTimeOnly = Model.ActivityDate.HasValue
+        ? Model.ActivityDate.Value.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture)
+        : "";
+
+    string activityIso = Model.ActivityDate.HasValue
+        ? Model.ActivityDate.Value.ToString("yyyy/MM/dd HH:mm:ss")
+        : "";
+
     // ---- Status: tentukan tombol Pause / Start ----
     bool isPaused = string.Equals(Model.ActivityStatus, "Paused", StringComparison.OrdinalIgnoreCase);
     string pauseText = isPaused ? "Start" : "Pause";
@@ -35,12 +55,8 @@
     // Pause hanya enabled saat OnProgres; saat Paused tombolnya jadi Start (tetap enabled).
 }
 
-@* ======= PADDING via CSS (agar tidak mepet ke tepi, seperti Process Card) ======= *@
-<style>
-    #formLayout {
-        padding: 0 20px;
-    }
-</style>
+@* Style dipindah ke Content/Styles.css, di-scope lewat #formLayoutActivity karena
+   nama "formLayout" dipakai ulang di banyak form lain (~28 view). *@
 
 <br />
 
@@ -68,7 +84,7 @@
 
 @Html.DevExpress().FormLayout(settings =>
 {
-    settings.Name = "formLayout";
+    settings.Name = "formLayoutActivity";
     settings.EncodeHtml = false;
     settings.Width = Unit.Percentage(100);
     settings.AlignItemCaptionsInAllGroups = true;
@@ -107,165 +123,117 @@
     // spacer
     groupHeader.Items.AddEmptyItem().Height = 12;
 
+    // ===================== INFO ACTIVITY : semua sebagai satu table =====================
+    // Dirender manual (bukan caption/content item FormLayout satu-satu) supaya label
+    // dan isi pasti sejajar, tidak bergantung ke layout adaptif DevExpress.
     groupHeader.Items.Add(x =>
     {
-        x.Caption = "<span style='font-size:150%;'>Work Order No</span>";
+        x.ShowCaption = DefaultBoolean.False;
     }).SetNestedContent(() =>
     {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.DocNum) + " - " + Html.Encode(Model.RoutingName) + "</div>"));
-    });
-
-    groupHeader.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>Item</span>";
-    }).SetNestedContent(() =>
-    {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + Html.Encode(Model.ItemName) + "</div>"));
-    });
-
-    groupHeader.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>Due Date</span>";
-    }).SetNestedContent(() =>
-    {
-        string dueDate = Model.DueDate.HasValue
-            ? Model.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-            : "-";
-
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + dueDate + "</div>"));
-    });
-
-    settings.Items.AddEmptyItem().Height = 12;
-
-    // ===================== ANGKA : TARGET / SELESAI / SISA =====================
-    var groupQty = settings.Items.AddGroupItem(g =>
-    {
-        g.Caption = "";
-        g.GroupBoxDecoration = GroupBoxDecoration.None;
-        g.ShowCaption = DefaultBoolean.False;
-        g.ColCount = 1;
-    });
-
-    groupQty.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>TARGET</span>";
-    }).SetNestedContent(() =>
-    {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + (Model.QuantityPlanned.HasValue ? Model.QuantityPlanned.Value.ToString("0.####") : "0") + "</b> </div>"));
-    });
-
-    groupQty.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>FINISHED</span>";
-    }).SetNestedContent(() =>
-    {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityComplete.HasValue ? Model.QuantityComplete.Value.ToString("0.####") : "0") + "</b></div>"));
-    });
-
-    groupQty.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>REMAINING</span>";
-    }).SetNestedContent(() =>
-    {
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'><b>" + (Model.QuantityRemain.HasValue ? Model.QuantityRemain.Value.ToString("0.####") : "0") + "</b></div>"));
-    });
-
-    settings.Items.AddEmptyItem().Height = 12;
-
-    // ===================== WAKTU MULAI / DURASI =====================
-    var groupTime = settings.Items.AddGroupItem(g =>
-    {
-        g.Caption = "";
-        g.GroupBoxDecoration = GroupBoxDecoration.None;
-        g.ShowCaption = DefaultBoolean.False;
-        g.ColCount = 1;
-    });
-
-    groupTime.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>START TIME</span>";
-    }).SetNestedContent(() =>
-    {
-
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + waktuMulai + "</b> </div>"));
-    });
-
-    groupTime.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>PAUSE DURATION</span>";
-    }).SetNestedContent(() =>
-    {
-        string pauseDuration = "00:00";
-        if (Model.PauseHours.HasValue)
-        {
-            TimeSpan pauseTs = TimeSpan.FromSeconds((double)Model.PauseHours.Value);
-
-            pauseDuration = string.Format(
-                "{0:00}:{1:00}",
-                (int)pauseTs.TotalHours,
-                pauseTs.Minutes
-            );
-        }
-
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'> <b>" + pauseDuration + "</b> </div>"));
-    });
-
-    groupTime.Items.Add(x =>
-    {
-        x.Caption = "<span style='font-size:150%;'>DURATION</span>";
-    }).SetNestedContent(() =>
-    {
-        var activityIso = Model.ActivityDate.HasValue
-            ? Model.ActivityDate.Value.ToString("yyyy/MM/dd HH:mm:ss")
-            : "";
-
-        ViewContext.Writer.Write(new HtmlString("<div class='item-padding-top' style='font-size:150%;'>" + "<b id='lblDurasi' data-start='" + activityIso + "'>" + durasi + "</b>" + "</div>"));
-    });
-
-    settings.Items.AddEmptyItem().Height = 16;
-
-    // ===================== TOMBOL : PAUSE/START & FINISH =====================
-    var groupBtn = settings.Items.AddGroupItem(g =>
-    {
-        g.Caption = "";
-        g.GroupBoxDecoration = GroupBoxDecoration.None;
-        g.ShowCaption = DefaultBoolean.False;
-        g.ColCount = 2;
-    });
-
-    // Tombol Pause / Start (teks & handler berubah sesuai status)
-    groupBtn.Items.Add(item =>
-    {
-        item.ShowCaption = DefaultBoolean.False;
-        item.HorizontalAlign = FormLayoutHorizontalAlign.Center;
-        item.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
-
-        var btn = (ButtonSettings)item.NestedExtensionSettings;
-        btn.Name = "btnPause";
-        btn.Text = pauseText;
-        btn.ControlStyle.Font.Size = new FontUnit(18);
-        btn.Enabled = ViewBag.Id == 0 ? false : true;
-        btn.ClientSideEvents.Click = pauseClientHandler;
-        btn.Width = new Unit(28, UnitType.Em);
-        btn.Height = new Unit(3, UnitType.Em);
-        btn.ControlStyle.BackColor = isPaused == false ? System.Drawing.Color.IndianRed : System.Drawing.Color.FromName("#2D9966");
-    });
-
-    // Tombol Finish -> munculkan popup
-    groupBtn.Items.Add(item =>
-    {
-        item.ShowCaption = DefaultBoolean.False;
-        item.HorizontalAlign = FormLayoutHorizontalAlign.Center;
-        item.NestedExtensionType = FormLayoutNestedExtensionItemType.Button;
-
-        var btn = (ButtonSettings)item.NestedExtensionSettings;
-        btn.Name = "btnFinish";
-        btn.Text = "Finish";
-        btn.ControlStyle.Font.Size = new FontUnit(18);
-        btn.Enabled = ViewBag.Id == 0 || Model.ActivityStatus == "Paused" ? false : true;
-        btn.ClientSideEvents.Click = "OnClickBtnFinish";
-        btn.Width = new Unit(28, UnitType.Em);
-        btn.Height = new Unit(3, UnitType.Em);
+        ViewContext.Writer.Write(new HtmlString(@"
+            <table class='activityInfoTable'>
+                <colgroup>
+                    <col style='width:230px' />
+                    <col style='width:140px' />
+                    <col />
+                </colgroup>
+                <tr>
+                    <td class='cap'>Work Order No</td>
+                    <td colspan='2'>" + Html.Encode(Model.DocNum) + @" - " + Html.Encode(Model.RoutingName) + @"</td>
+                </tr>
+                <tr>
+                    <td class='cap'>Item</td>
+                    <td colspan='2'>" + Html.Encode(Model.ItemName) + @"</td>
+                </tr>
+                <tr>
+                    <td class='cap'>Due Date</td>
+                    <td colspan='2'>" + dueDate + @"</td>
+                </tr>
+                <tr class='spacer'><td colspan='3'></td></tr>
+                <tr>
+                    <td class='cap'>TARGET</td>
+                    <td colspan='2'><b>" + (Model.QuantityPlanned.HasValue ? Model.QuantityPlanned.Value.ToString("0.####") : "0") + @"</b></td>
+                </tr>
+                <tr>
+                    <td class='cap'>FINISHED</td>
+                    <td colspan='2'><b>" + (Model.QuantityComplete.HasValue ? Model.QuantityComplete.Value.ToString("0.####") : "0") + @"</b></td>
+                </tr>
+                <tr>
+                    <td class='cap'>REMAINING</td>
+                    <td colspan='2'><b>" + (Model.QuantityRemain.HasValue ? Model.QuantityRemain.Value.ToString("0.####") : "0") + @"</b></td>
+                </tr>
+                <tr class='spacer'><td colspan='3'></td></tr>
+                <tr>
+                    <td class='cap'>START TIME</td>
+                    <td class='val-date'>" + startDateOnly + @"</td>
+                    <td class='val-time'><b>" + startTimeOnly + @"</b></td>
+                </tr>
+                <tr>
+                    <td class='cap'>PAUSE DURATION</td>
+                    <td class='val-date'></td>
+                    <td class='val-time'><b>" + pauseDuration + @"</b></td>
+                </tr>
+                <tr>
+                    <td class='cap'>DURATION</td>
+                    <td class='val-date'></td>
+                    <td class='val-time'><b id='lblDurasi' data-start='" + activityIso + @"'>" + durasi + @"</b></td>
+                </tr>
+            </table>
+        "));
     });
 
 }).GetHtml()
+
+@* ======= TOMBOL : PAUSE/START & FINISH =======
+   Dirender manual (bukan lewat FormLayout ColCount=2) supaya kedua tombol dijamin
+   sama besar (flexbox), bukan tebak-tebakan lebar kolom DevExpress. Sticky di bawah
+   layar (position:fixed, lihat .activityStickyButtons di Styles.css) -- dipakai tablet.
+   btnPause/btnFinish di sini bukan ASPxClientButton, tapi OnClickBtnPause/OnClickBtnStart/
+   OnClickBtnFinish di ProductionTaskActivity.cshtml tidak memakai parameter s/e-nya,
+   jadi aman dipanggil langsung dari onclick biasa. *@
+@{
+    bool pauseBtnEnabled = ViewBag.Id != 0;
+    bool finishBtnEnabled = ViewBag.Id != 0 && Model.ActivityStatus != "Paused";
+    string pauseBg = isPaused ? "#2D9966" : "#CD5C5C";
+}
+<div class="activityStickyButtons">
+    <button type="button" id="btnPause" class="activityBtn" style="background-color:@pauseBg;" onclick="@(pauseClientHandler)(this, event)" @(pauseBtnEnabled ? "" : "disabled")>@pauseText</button>
+    <button type="button" id="btnFinish" class="activityBtn" style="background-color:#0b64c5;" onclick="OnClickBtnFinish(this, event)" @(finishBtnEnabled ? "" : "disabled")>Finish</button>
+</div>
+
+@* ======= DURATION: running clock, jalan sendiri tanpa perlu refresh ======= *@
+<script type="text/javascript">
+    (function () {
+        // Partial ini di-render ulang tiap Pause/Start/Finish/Refresh lewat
+        // $("#contentForm").html(response), jadi interval lama wajib dibersihkan
+        // dulu supaya tidak menumpuk jadi banyak timer berjalan bersamaan.
+        if (window.eskaDurasiTimerId) {
+            clearInterval(window.eskaDurasiTimerId);
+            window.eskaDurasiTimerId = null;
+        }
+
+        var el = document.getElementById('lblDurasi');
+        if (!el) return;
+
+        var startStr = el.getAttribute('data-start');
+        if (!startStr) return;
+
+        var startDate = new Date(startStr);
+        if (isNaN(startDate.getTime())) return;
+
+        function tick() {
+            var diffMs = new Date().getTime() - startDate.getTime();
+            if (diffMs < 0) diffMs = 0;
+
+            var totalMinutes = Math.floor(diffMs / 60000);
+            var hours = Math.floor(totalMinutes / 60);
+            var minutes = totalMinutes % 60;
+
+            el.textContent = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+        }
+
+        tick();
+        window.eskaDurasiTimerId = setInterval(tick, 1000);
+    })();
+</script>

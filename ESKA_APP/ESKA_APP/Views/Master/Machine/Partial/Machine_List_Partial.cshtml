@@ -59,7 +59,7 @@
         column.FieldName = "MachineCode";
         column.Caption = "Machine Code";
         column.Name = "MachineCode";
-        column.Width = Unit.Percentage(20);
+        column.Width = Unit.Percentage(15);
     });
 
     settings.Columns.Add(column =>
@@ -67,7 +67,23 @@
         column.FieldName = "MachineName";
         column.Caption = "Machine Name";
         column.Name = "MachineName";
-        column.Width = Unit.Percentage(30);
+        column.Width = Unit.Percentage(20);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RoutingCode";
+        column.Caption = "Routing Code";
+        column.Name = "RoutingCode";
+        column.Width = Unit.Percentage(15);
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "RoutingName";
+        column.Caption = "Routing Name";
+        column.Name = "RoutingName";
+        column.Width = Unit.Percentage(20);
     });
 
     settings.Columns.Add(column =>
@@ -75,7 +91,7 @@
         column.FieldName = "Description";
         column.Caption = "Description";
         column.Name = "Description";
-        column.Width = Unit.Percentage(35);
+        column.Width = Unit.Percentage(20);
     });
 
     settings.Columns.Add(column =>

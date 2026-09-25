@@ -252,24 +252,31 @@ namespace Models._Utils
 
         }
 
-        public static DataTable GetMachines()
+        public static DataTable GetMachines(string routingCode = "")
         {
             using (var CONTEXT = new HANA_APP())
             {
-                return GetMachines(CONTEXT);
+                // BUG lama di sini: "routingCode = """ menimpa argumennya sendiri jadi
+                // string kosong, sehingga filter RoutingCode tidak pernah kepakai sama
+                // sekali walau nilainya sudah benar dikirim dari pemanggil.
+                return GetMachines(CONTEXT, routingCode);
             }
         }
 
-        public static DataTable GetMachines(HANA_APP CONTEXT)
+        public static DataTable GetMachines(HANA_APP CONTEXT, string routingCode = "")
         {
             var ssql = @"
             SELECT T0.""Id"" ""Code"", T0.""MachineCode"" AS ""Name""
                 FROM ""Tm_Machine"" T0
                 WHERE IFNULL(T0.""IsActive"", '') = 'Y'
-                ORDER BY T0.""MachineCode"" ASC
             ";
+            if (!string.IsNullOrEmpty(routingCode))
+            {
+                ssql += @" AND T0.""RoutingCode"" = '"+routingCode+"' ";
+            }
+            ssql += @"ORDER BY T0.""MachineCode"" ASC";
             return GetDataTable(CONTEXT, ssql);
-        }
+        }         
 
         public static List<GetCodeNameModel> GetMachineList()
         {
@@ -287,6 +294,31 @@ namespace Models._Utils
                 WHERE IFNULL(T0.""IsActive"", '') = 'Y'
                 ORDER BY T0.""MachineCode"" ASC
             ";
+            return CONTEXT.Database.SqlQuery<GetCodeNameModel>(ssql).ToList();
+        }
+
+        public static List<GetCodeNameModel> GetMachineList(string routingCode)
+        {
+            using (var CONTEXT = new HANA_APP())
+            {
+                return GetMachineList(CONTEXT, routingCode);
+            }
+        }
+
+        // Dipakai endpoint AJAX GetMachineByRouting -- daftar Machine dibatasi RoutingCode
+        // baris yang sedang diedit, sama seperti GetUserRoutingList untuk Operator.
+        public static List<GetCodeNameModel> GetMachineList(HANA_APP CONTEXT, string routingCode)
+        {
+            var ssql = @"
+            SELECT T0.""Id"" ""Code"", T0.""MachineCode"" AS ""Name""
+                FROM ""Tm_Machine"" T0
+                WHERE IFNULL(T0.""IsActive"", '') = 'Y'
+            ";
+            if (!string.IsNullOrEmpty(routingCode))
+            {
+                ssql += @" AND T0.""RoutingCode"" = '" + routingCode + @"' ";
+            }
+            ssql += @" ORDER BY T0.""MachineCode"" ASC ";
             return CONTEXT.Database.SqlQuery<GetCodeNameModel>(ssql).ToList();
         }
 

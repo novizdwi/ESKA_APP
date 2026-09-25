@@ -601,6 +601,9 @@
         });
     }
 
+    function BtnCflRoutingPopupListOnClick(s, e) {
+        cflRoutingPopupListMachine.Show();
+    }
 
 </script>
 
@@ -659,3 +662,27 @@ new
 *@
 
 @Html.Partial("Partial/Machine_Panel_List_Partial")
+
+@*
+    -----------------------------------------------------------------------------
+    gvCflRoutingList
+    -----------------------------------------------------------------------------
+*@
+
+@{
+    var cflRouting_ParamModel = new CflRouting_ParamModel();
+    cflRouting_ParamModel.Name = "Machine";
+    cflRouting_ParamModel.Type = "Machine";
+    cflRouting_ParamModel.Header = " ";
+    cflRouting_ParamModel.SqlWhere = " ";
+    cflRouting_ParamModel.IsMulti = "N";
+}
+
+<script type="text/javascript">
+    function OnClickChoose_CflRoutingMachine(s, e, data) {
+        RoutingCode.SetValue(data.RoutingCode);
+        RoutingName.SetValue(data.RoutingName);
+        cflRoutingPopupListMachine.Hide();
+    }
+</script>
+@Html.Partial("~/Views/_Cfl/_CflRouting/Partial/_CflRouting_Panel_List_Partial.cshtml", cflRouting_ParamModel)

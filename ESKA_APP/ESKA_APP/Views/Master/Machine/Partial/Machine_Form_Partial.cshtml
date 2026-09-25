@@ -83,6 +83,22 @@
         itemSettings.CssClass = "groupCol";
     });
 
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+        itemSettings.Caption = "Description";
+        itemSettings.FieldName = "Description";
+
+        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Description";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Height = Unit.Pixel(55);
+        txt.Width = 250;
+    });
+
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
@@ -123,20 +139,49 @@
 
     groupItem_Col1.Items.Add(itemSettings =>
     {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
-        itemSettings.Caption = "Description";
-        itemSettings.FieldName = "Description";
-
-        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Description";
+        itemSettings.Name = "grpRoutingCode";
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.ComboBox;
+        itemSettings.Caption = "Routing Code";
+        itemSettings.FieldName = "RoutingCode";
+        var txt = (ComboBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "RoutingCode";
+        txt.ReadOnly = true;
         txt.ShowModelErrors = true;
+
         txt.ControlStyle.CssClass = "editornoimage";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
-        txt.Height = Unit.Pixel(55);
+        txt.Properties.ValidationSettings.Display = Display.Dynamic;
+
+        // Hide the default DropDown button
+        txt.Properties.DropDownButton.Visible = false;
+        txt.Properties.ButtonStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 250;
+
+        EditButton lookUpButton = new EditButton();
+        lookUpButton.Text = "";
+        lookUpButton.Image.Url = "~/Content/Images/buttonnew/find-hitam.png";
+        lookUpButton.Image.Width = 15;
+
+        txt.Properties.Buttons.Add(lookUpButton);
+        txt.Properties.ClientSideEvents.ButtonClick = "BtnCflRoutingPopupListOnClick";
     });
 
+    groupItem_Col1.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.Caption = "Routing Name";
+        itemSettings.FieldName = "RoutingName";
+
+        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "RoutingName";
+        txt.ReadOnly = true;
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
+        txt.Width = 250;
+    });
 
     groupItem_Col1.Items.Add(m => Model.IsActive, itemSettings =>
     {

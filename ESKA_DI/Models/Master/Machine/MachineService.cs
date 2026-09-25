@@ -31,6 +31,10 @@ namespace Models.Master.Machine
         [Required(ErrorMessage = "required")]
         public string MachineName { get; set; }
 
+        public string RoutingCode { get; set; }
+
+        public string RoutingName { get; set; }
+
         public string Description { get; set; }
 
         public string IsActive { get; set; }
@@ -106,6 +110,8 @@ namespace Models.Master.Machine
                             DateTime dtModified = CONTEXT.Database.SqlQuery<DateTime>("SELECT CURRENT_TIMESTAMP AS IDU FROM DUMMY").FirstOrDefault();
                             Tm_Machine.MachineCode = model.MachineCode;
                             Tm_Machine.MachineName = model.MachineName;
+                            Tm_Machine.RoutingCode = model.RoutingCode;
+                            Tm_Machine.RoutingName = model.RoutingName;
                             Tm_Machine.Description = model.Description;
                             Tm_Machine.IsActive = model.IsActive;
                             Tm_Machine.CreatedDate = dtModified;

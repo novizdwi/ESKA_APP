@@ -856,8 +856,8 @@
     }
 
     function gvDetailOnBatchEditStartEditing(s, e) {
-        if (e.focusedColumn.fieldName !== "OperatorId") return;
-        var routingCode = s.batchEditApi.GetCellValue(e.visibleIndex, "RoutingCode");
+        if (e.focusedColumn.fieldName === "OperatorId") {
+            var routingCode = s.batchEditApi.GetCellValue(e.visibleIndex, "RoutingCode");
 
             $.ajax({
                 url: '@Url.Action("GetOperatorByRouting", "ProcessCard")',
@@ -874,6 +874,37 @@
                     }
                 }
             });
+        }
+        else if (e.focusedColumn.fieldName === "MachineCode") {
+            var routingCode = s.batchEditApi.GetCellValue(e.visibleIndex, "RoutingCode");
+            // Nilai MachineCode yang sudah tersimpan di baris ini -- ClearItems() di bawah
+            // mengosongkan editornya, jadi nilai ini harus di-set lagi sesudah AddItem
+            // supaya sel tidak kelihatan kosong begitu diklik.
+            var currentMachineCode = s.batchEditApi.GetCellValue(e.visibleIndex, "MachineCode");
+
+            $.ajax({
+                url: '@Url.Action("GetMachineByRouting", "ProcessCard")',
+                type: 'POST',
+                data: { routingCode: routingCode },
+                success: function (data) {
+
+                    var editor = s.GetEditor("MachineCode");
+                    if (!editor) return;
+
+                    editor.ClearItems();
+
+                    // ValueField/TextField MachineCode sama-sama "Name" (kode mesin sendiri),
+                    // jadi text dan value yang di-AddItem juga sama.
+                    for (var i = 0; i < data.length; i++) {
+                        editor.AddItem(data[i].Name, data[i].Name);
+                    }
+
+                    if (currentMachineCode) {
+                        editor.SetValue(currentMachineCode);
+                    }
+                }
+            });
+        }
     }
 
     function gvProcessCardContentDetail_OperatorOnChanged(s, e) {

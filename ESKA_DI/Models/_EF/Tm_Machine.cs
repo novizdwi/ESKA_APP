@@ -17,6 +17,8 @@ namespace ESKA_DI.Models._EF
         public int Id { get; set; }
         public string MachineCode { get; set; }
         public string MachineName { get; set; }
+        public string RoutingCode { get; set; }
+        public string RoutingName { get; set; }
         public string Description { get; set; }
         public string IsActive { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }

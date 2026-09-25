@@ -155,22 +155,6 @@
 
     });
 
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
-        itemSettings.Caption = "Comments";
-        itemSettings.FieldName = "Comments";
-        itemSettings.Name = "grpComments";
-
-        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
-        txt.Name = "Comments";
-        txt.ShowModelErrors = true;
-        txt.ControlStyle.CssClass = "editor";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.Width = 280;
-        txt.Height = 120;
-    });
-
     groupItem_Col2.Items.Add(itemSettings =>
     {
         itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
@@ -311,6 +295,22 @@
         txt.Width = 230;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
         txt.Properties.SpinButtons.ShowIncrementButtons = false;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
+        itemSettings.Caption = "Comments";
+        itemSettings.FieldName = "Comments";
+        itemSettings.Name = "grpComments";
+
+        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
+        txt.Name = "Comments";
+        txt.ShowModelErrors = true;
+        txt.ControlStyle.CssClass = "editor";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.Width = 280;
+        txt.Height = 120;
     });
 
     groupItem_2.Items.AddTabbedGroupItem(group =>

@@ -37,7 +37,6 @@
         <EntityTypeShape EntityType="Model1.Tm_Layout" Width="1.5" PointX="6.75" PointY="12.75" />
         <EntityTypeShape EntityType="Model1.Tm_Layout_Role" Width="1.5" PointX="8.75" PointY="12.75" />
         <EntityTypeShape EntityType="Model1.Tm_Layout_User" Width="1.5" PointX="12.75" PointY="9.75" />
-        <EntityTypeShape EntityType="Model1.Tm_Machine" Width="1.5" PointX="10.75" PointY="13.75" />
         <EntityTypeShape EntityType="Model1.Tm_MasterSetting" Width="1.5" PointX="12.75" PointY="13.75" />
         <EntityTypeShape EntityType="Model1.Tm_Position" Width="1.5" PointX="14.75" PointY="0.75" />
         <EntityTypeShape EntityType="Model1.Tm_Query" Width="1.5" PointX="14.75" PointY="4.75" />
@@ -91,6 +90,7 @@
         <EntityTypeShape EntityType="Model1.Tx_ProductionTask_Item_Batch" Width="1.5" PointX="26.75" PointY="12.75" />
         <EntityTypeShape EntityType="Model1.WeighbridgeTransactions" Width="1.5" PointX="26.75" PointY="17.75" />
         <EntityTypeShape EntityType="Model1.Tp_UserAlert" Width="1.5" PointX="26.75" PointY="21.75" />
+        <EntityTypeShape EntityType="Model1.Tm_Machine" Width="1.5" PointX="0.75" PointY="27.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -796,6 +796,8 @@
     <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_Panel_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_Partial.cshtml" />
     <Content Include="Views\Production\ProductionTaskActivity\Partial\Batch\Batch_TabBatchList_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflRouting\Partial\_CflRouting_List_Partial.cshtml" />
+    <Content Include="Views\_Cfl\_CflRouting\Partial\_CflRouting_Panel_List_Partial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -942,6 +944,8 @@
     <Compile Include="Controllers\_Cfl\_CflItemByWarehouse\_CflItemByWarehouseController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflGoodsReceiptPo\_CflGoodsReceiptPoController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflGoodsReceiptPo\_CflGoodsReceiptPoController.List.Export.cs" />
+    <Compile Include="Controllers\_Cfl\_CflRouting\_CflRoutingController.List.cs" />
+    <Compile Include="Controllers\_Cfl\_CflRouting\_CflRoutingController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.cs" />
     <Compile Include="Controllers\_Cfl\_CflTag\_CflTagController.List.Export.cs" />
     <Compile Include="Controllers\_Cfl\_CflItem\_CflItemController.List.cs" />

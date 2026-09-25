@@ -1484,3 +1484,87 @@ span.dxtv-elbNoLn {
 .item-padding-top {
     padding-top: 0.3em;
 }
+
+/* Production/ProductionTaskActivity/Partial/ProductionTaskActivity_Form_Partial.cshtml */
+/* Dipakai di tablet -- ukuran huruf dibuat besar & eksplisit (bukan relatif %) supaya
+   tidak ikut mengecil kalau font-size dasar halaman kecil. Padding bawah disediakan
+   supaya isi tidak ketutup tombol Pause/Finish yang sticky di bawah (.activityStickyButtons). */
+/* box-sizing: border-box -- tanpa ini, padding kiri/kanan menambah lebar elemen
+   sampai melebihi 100% dan memicu horizontal scroll di halaman. */
+/* padding-bottom 110px yang dulu ada di sini sudah dilepas -- itu reservasi ruang untuk
+   .activityStickyButtons yang WAKTU MASIH position:fixed keluar dari alur dokumen. Sekarang
+   .activityStickyButtons position:sticky, jadi dia tetap ada di alur dokumen dan otomatis
+   makan tempatnya sendiri; kalau padding ini dibiarkan, tingginya dihitung dua kali dan
+   halaman jadi lebih tinggi dari layar -> muncul vertical scroll yang tidak diinginkan. */
+#formLayoutActivity {
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+
+/* table-layout: fixed + colgroup (lihat cshtml) -- lebar tiap kolom jadi tetap,
+   tidak lagi ikut melebar/menyempit gara-gara baris lain yang isinya panjang
+   (mis. Item, Work Order No) pakai colspan pada kolom yang sama. */
+.activityInfoTable {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    font-size: 22px;
+}
+
+.activityInfoTable td {
+    vertical-align: top;
+    padding: 7px 16px 7px 0;
+}
+
+.activityInfoTable td.cap {
+    color: #656565;
+    white-space: nowrap;
+}
+
+/* Jarak antara tanggal (val-date) dan jam (val-time) pada START TIME, supaya tidak
+   nempel walau lebar kolom tanggalnya pas-pasan dengan teks tanggal. */
+    .activityInfoTable td.val-time {
+        padding-left: 2px;
+    }
+
+.activityInfoTable tr.spacer td {
+    padding: 2px 0 0 0;
+}
+
+/* Tombol Pause/Finish menempel di bawah, tidak ikut discroll, dan dijamin sama besar
+   lewat flexbox (bukan FormLayout ColCount=2 lagi -- lebar kolomnya dulu tidak persis
+   50/50 dan padding sisi kiri/kanan tidak ikut kepakai).
+   position: sticky (BUKAN fixed) -- "fixed" itu relatif ke seluruh viewport, jadi lebarnya
+   ikut menjorok ke bawah #leftPanel (menu kiri, fixed 272px, lihat _LayoutX.cshtml) dan
+   sebagian baris ketutup menu, membuat tombol Pause kelihatan lebih sempit dari Finish.
+   "sticky" tetap mengikuti lebar parent-nya sendiri (area konten, sudah otomatis di
+   sebelah kanan menu), jadi dua tombol pasti simetris -- termasuk saat menu collapse
+   di layar sempit/tablet. */
+.activityStickyButtons {
+    box-sizing: border-box;
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 12px;
+    background: #fff;
+    padding: 14px 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.12);
+    z-index: 500;
+}
+
+.activityStickyButtons .activityBtn {
+    flex: 1 1 0;
+    box-sizing: border-box;
+    height: 3.2em;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.activityStickyButtons .activityBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

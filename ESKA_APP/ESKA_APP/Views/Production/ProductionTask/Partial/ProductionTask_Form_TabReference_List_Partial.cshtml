@@ -76,21 +76,15 @@
     {
         column.FieldName = "DueDate";
         column.Name = "DueDate";
-        column.Caption = "Planned / Due Date"; 
+        column.Caption = "Due Date";
         column.SetDataItemTemplateContent(c =>
         {
-            var plannedDate = DataBinder.Eval(c.DataItem, "PlannedDate");
-            string plannedDateText = (plannedDate == null || plannedDate == DBNull.Value)
-                ? "-"
-                : Convert.ToDateTime(plannedDate).ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-
             var dueDate = DataBinder.Eval(c.DataItem, "DueDate");
             string dueDateText = (dueDate == null || dueDate == DBNull.Value)
                 ? "-"
-                : Convert.ToDateTime(dueDate).ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                : Convert.ToDateTime(dueDate).ToString("dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-
-            ViewContext.Writer.Write(plannedDateText + " / " + dueDateText);
+            ViewContext.Writer.Write(dueDateText);
         });
     });
 

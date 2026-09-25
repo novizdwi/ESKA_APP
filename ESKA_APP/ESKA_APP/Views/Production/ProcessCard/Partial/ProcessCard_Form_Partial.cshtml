@@ -280,10 +280,10 @@
     groupItem_Col1.Items.Add(itemSettings =>
     {
         itemSettings.Name = "ItemName";
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.TextBox;
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.Memo;
         itemSettings.Caption = "Item Name";
         itemSettings.FieldName = "ItemName";
-        var txt = (TextBoxSettings)itemSettings.NestedExtensionSettings;
+        var txt = (MemoSettings)itemSettings.NestedExtensionSettings;
         txt.Name = "ItemName";
         txt.ShowModelErrors = true;
         txt.ReadOnly = true;
@@ -291,29 +291,7 @@
         txt.ControlStyle.CssClass = "editor";
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Width = 320;
-    });
-
-    groupItem_Col1.Items.Add(itemSettings =>
-    {
-        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
-        itemSettings.Caption = "Quantity";
-        itemSettings.FieldName = "Quantity";
-
-        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
-        txt.Properties.NumberType = SpinEditNumberType.Float;
-        txt.Properties.DisplayFormatString = "#,###";
-        txt.Properties.DisplayFormatInEditMode = true;
-        txt.Name = "Quantity";
-        txt.Properties.AllowMouseWheel = false;
-
-        txt.ShowModelErrors = true;
-        txt.ReadOnly = ViewBag.ReadOnly;
-        txt.ControlStyle.CssClass = "editornoimage";
-        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
-        txt.Width = 180;
-        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
-        txt.Properties.SpinButtons.ShowIncrementButtons = false;
+        txt.Height = Unit.Pixel(44);
     });
 
     groupItem_Col1.Items.Add(itemSettings =>
@@ -469,6 +447,29 @@
         txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#EDEDED");
         txt.Width = 230;
+    });
+
+    groupItem_Col2.Items.Add(itemSettings =>
+    {
+        itemSettings.NestedExtensionType = FormLayoutNestedExtensionItemType.SpinEdit;
+        itemSettings.Caption = "Quantity";
+        itemSettings.FieldName = "Quantity";
+
+        var txt = (SpinEditSettings)itemSettings.NestedExtensionSettings;
+        txt.Properties.NumberType = SpinEditNumberType.Float;
+        txt.Properties.DisplayFormatString = "#,###";
+        txt.Properties.DisplayFormatInEditMode = true;
+        txt.Name = "Quantity";
+        txt.Properties.AllowMouseWheel = false;
+
+        txt.ShowModelErrors = true;
+        txt.ReadOnly = ViewBag.ReadOnly;
+        txt.ControlStyle.CssClass = "editornoimage";
+        txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+        txt.ControlStyle.HorizontalAlign = HorizontalAlign.Right;
+        txt.Width = 180;
+        txt.Properties.ReadOnlyStyle.BackColor = System.Drawing.Color.FromName("#E0E0E0");
+        txt.Properties.SpinButtons.ShowIncrementButtons = false;
     });
 
     /*

@@ -240,7 +240,7 @@
         column.FieldName = "MachineCode";
         column.Name = "MachineCode";
         column.Caption = "Machine";
-        column.Width = 150;
+        column.Width = 250;
         column.ColumnType = MVCxGridViewColumnType.ComboBox;
 
         ComboBoxProperties cbo = column.PropertiesEdit as ComboBoxProperties;
@@ -248,6 +248,9 @@
         cbo.ValueField = "Name";
         cbo.ValueType = typeof(string);
         cbo.DataSource = Models._Utils.GeneralGetList.GetMachines(); // Code=Id, Name=MachineCode
+        // DropDownList (bukan DropDown default) -- tanpa ini user bisa mengetik bebas,
+        // memilih Machine di luar daftar yang sudah difilter RoutingCode.
+        cbo.DropDownStyle = DropDownStyle.DropDownList;
         cbo.ClientSideEvents.SelectedIndexChanged = "function(s, e){ gvMachineOnChanged(s, e, '" + gridName + "'); }";
     });
 
@@ -397,6 +400,24 @@
                 cbo.TextField = "Name";
                 cbo.ValueField = "Code";
                 cbo.DataSource = Models._Utils.GeneralGetList.GetAllOperators(routingCode); // filtered, buat editing
+                cbo.DataBind();
+                cbo.Value = currentValue;
+            }
+        }
+        else if (e.Column.FieldName == "MachineCode")
+        {
+            MVCxGridView grid = sender as MVCxGridView;
+            string routingCode = grid.GetRowValues(e.VisibleIndex, "RoutingCode") as string;
+            object currentValue = grid.GetRowValues(e.VisibleIndex, "MachineCode");
+
+            ASPxComboBox cbo = e.Editor as ASPxComboBox;
+            if (cbo != null)
+            {
+                cbo.ValueType = typeof(string);
+                cbo.TextField = "Name";
+                cbo.ValueField = "Name";
+                cbo.DropDownStyle = DropDownStyle.DropDownList;
+                cbo.DataSource = Models._Utils.GeneralGetList.GetMachines(routingCode); // Machine dibatasi RoutingCode baris ini
                 cbo.DataBind();
                 cbo.Value = currentValue;
             }
