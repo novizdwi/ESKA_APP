@@ -127,6 +127,31 @@
         $("#lastRefreshed").text('Terakhir diperbarui: ' + t);
     }
 
+    // ====== Jam berjalan (live clock) ======
+    // Independen dari auto-refresh data di atas: jam ini cuma menampilkan waktu
+    // browser saat ini dan harus tetap berdetak walau checkbox auto-refresh mati
+    // (auto-refresh mengatur pengambilan DATA, bukan jam dinding).
+    var liveClockTimer = null;
+
+    function updateLiveClock() {
+        var now = new Date();
+        var h = ('0' + now.getHours()).slice(-2);
+        var m = ('0' + now.getMinutes()).slice(-2);
+        var s = ('0' + now.getSeconds()).slice(-2);
+        $("#liveClock").text(h + ':' + m + ':' + s);
+    }
+
+    function startLiveClock() {
+        stopLiveClock();
+        updateLiveClock();
+        // Cukup sampai detik (tanpa milidetik) -> cek tiap detik sudah pas.
+        liveClockTimer = setInterval(updateLiveClock, 1000);
+    }
+
+    function stopLiveClock() {
+        if (liveClockTimer) { clearInterval(liveClockTimer); liveClockTimer = null; }
+    }
+
     function startAutoRefresh() {
         if (autoRefreshTimer) clearInterval(autoRefreshTimer);
         autoRefreshTimer = setInterval(function () { loadChart(true); }, AUTO_REFRESH_MS);
@@ -167,10 +192,10 @@
         if ($("#chkAutoRefresh").is(":checked")) startAutoRefresh();
     }
 
-    $(function () { initRealtime(); });
+    $(function () { initRealtime(); startLiveClock(); });
 
     // Hentikan timer saat halaman ditinggalkan
-    $(window).on('unload', stopAutoRefresh);
+    $(window).on('unload', function () { stopAutoRefresh(); stopLiveClock(); });
 
 </script>
 
@@ -298,6 +323,7 @@
             Auto refresh (realtime) tiap 30 detik
         </label>
         <span id="lastRefreshed" style="margin-left: 12px;"></span>
+        <span id="liveClock" style="margin-left: 12px; font-family: monospace;"></span>
     </div>
 
     <div id="contentChart" style="padding: 10px;">

@@ -2538,6 +2538,10 @@ namespace Models.Transaction
                 }
                 oDoc.Lines.Quantity = (double)(item.Quantity ?? 0);
 
+                // Bawa Netto (kg) dari Tx_IssueAndReceipt_Issue_Item ke UDF baris IGE1, sama
+                // seperti U_IDU_TotalKg pada GRPO (GoodsReceiptPoService.AddGoodsReceiptPO).
+                oDoc.Lines.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(item.Netto ?? 0);
+
                 if (item.ListBatch_ != null && item.ListBatch_.Any())
                 {
                     int batchIndex = 0;
@@ -2605,6 +2609,10 @@ namespace Models.Transaction
                 {
                     oDoc.Lines.UnitPrice = (double)item.Price.Value;
                 }
+
+                // Bawa Netto (kg) dari Tx_IssueAndReceipt_Receipt_Item ke UDF baris IGN1, sama
+                // seperti U_IDU_TotalKg pada GRPO (GoodsReceiptPoService.AddGoodsReceiptPO).
+                oDoc.Lines.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(item.Netto ?? 0);
 
                 if (item.ListBatch_ != null && item.ListBatch_.Any())
                 {

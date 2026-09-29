@@ -95,6 +95,38 @@
         $("#grpoSummaryLastRefreshed").text('Terakhir diperbarui: ' + t);
     }
 
+    // ====== Jam berjalan (live clock), independen dari auto-refresh data ======
+    // Timer disimpan di `window` (BUKAN variabel lokal): script file ini dieksekusi
+    // ULANG setiap kali partial ini disuntik AJAX ke tree Custom Report. Variabel lokal
+    // akan ter-reset padahal timer lama masih jalan di background, menumpuk tiap kali
+    // user buka-tutup node yang sama -- pola sama persis dengan window.grpoSummaryAutoTimer
+    // di atas untuk auto-refresh data.
+    window.grpoSummaryLiveClockTimer = window.grpoSummaryLiveClockTimer || null;
+
+    function updateGrpoSummaryLiveClock() {
+        // Elemen sudah hilang (user pindah ke node report lain) -> matikan diri sendiri.
+        var el = document.getElementById("grpoSummaryLiveClock");
+        if (!el) { stopGrpoSummaryLiveClock(); return; }
+        var now = new Date();
+        el.textContent = ('0' + now.getHours()).slice(-2) + ':' +
+                          ('0' + now.getMinutes()).slice(-2) + ':' +
+                          ('0' + now.getSeconds()).slice(-2);
+    }
+
+    function startGrpoSummaryLiveClock() {
+        stopGrpoSummaryLiveClock();
+        updateGrpoSummaryLiveClock();
+        // Cukup sampai detik (tanpa milidetik) -> cek tiap detik sudah pas.
+        window.grpoSummaryLiveClockTimer = setInterval(updateGrpoSummaryLiveClock, 1000);
+    }
+
+    function stopGrpoSummaryLiveClock() {
+        if (window.grpoSummaryLiveClockTimer) {
+            clearInterval(window.grpoSummaryLiveClockTimer);
+            window.grpoSummaryLiveClockTimer = null;
+        }
+    }
+
     function startGrpoSummaryAutoRefresh() {
         stopGrpoSummaryAutoRefresh();
         window.grpoSummaryAutoTimer = setInterval(function () { loadGrpoSummary(true); }, GRPO_SUMMARY_REFRESH_MS);
@@ -139,8 +171,12 @@
     }
 
     // Hentikan timer lama (mis. node diklik ulang) lalu mulai proses init.
+    // Jam TIDAK perlu menunggu kesiapan editor DevExpress seperti initGrpoSummaryRealtime --
+    // ia cuma baca Date() browser, jadi langsung start begitu elemennya ada di DOM.
     stopGrpoSummaryAutoRefresh();
+    stopGrpoSummaryLiveClock();
     initGrpoSummaryRealtime();
+    startGrpoSummaryLiveClock();
 
 </script>
 
@@ -223,6 +259,7 @@
         Auto refresh (realtime) tiap 30 detik
     </label>
     <span id="grpoSummaryLastRefreshed" style="margin-left: 12px;"></span>
+    <span id="grpoSummaryLiveClock" style="margin-left: 12px; font-family: monospace;"></span>
 </div>
 
 <div id="contentChartGrpoSummary" style="padding: 10px;">

@@ -1575,6 +1575,13 @@ namespace Models.Transaction
                     oDocument.Lines.UoMEntry = Convert.ToInt32(item.UomEntry);
                 }
 
+                // Bawa Netto (kg) dari Tx_GoodsReceiptPO_Item ke UDF baris PDN1, supaya SAP
+                // punya berat total tanpa perlu join balik ke DB aplikasi. Pola sama dengan
+                // Lines.UserFields di InventoryTransferService.AddInventoryTransfer, dan nama
+                // UDF-nya sama dengan yang sudah dipakai ProductionTaskActivityModel (level
+                // BatchNumbers di sana; di sini level Lines, sesuai kebutuhan per baris item).
+                oDocument.Lines.UserFields.Fields.Item("U_IDU_TotalKg").Value = (double)(item.Netto ?? 0);
+
                 // Isi Batch
                 if (item.ListItemBatch_ != null && item.ListItemBatch_.Any())
                 {
